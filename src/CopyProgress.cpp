@@ -1,7 +1,7 @@
-﻿#include <stdhdr.h>
+﻿#include "../framework/stdhdr.h"
 #include "common.h"
 #include "copyprogress.h"
-#include "strutils.h"
+#include "../framework/strutils.h"
 
 const int W = 64, H = 13, MG = 5;
 

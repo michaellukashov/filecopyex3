@@ -1,6 +1,6 @@
 #pragma once
-#include "objstring.h"
-#include "valuelist.h"
+#include "../framework/objstring.h"
+#include "../framework/valuelist.h"
 
 #define ATTR_OFF 0
 #define ATTR_ON 1

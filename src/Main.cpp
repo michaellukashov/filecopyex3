@@ -1,13 +1,13 @@
-#include <stdhdr.h>
-#include "lowlevelstr.h"
+#include "../framework/stdhdr.h"
+#include "../framework/lowlevelstr.h"
 #include "common.h"
 #include "engine.h"
-#include "far/farplugin.h"
+#include "../framework/far/farplugin.h"
 #include "filecopyex.h"
-#include "strutils.h"
-#include "fileutils.h"
+#include "../framework/strutils.h"
+#include "../framework/fileutils.h"
 #include "EngineTools.h"
-#include "fwcommon.h"
+#include "../framework/fwcommon.h"
 
 #define EXCEPTION_ABORT_BY_ESC  0x0F
 

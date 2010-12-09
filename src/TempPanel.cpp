@@ -1,9 +1,9 @@
-#include <stdhdr.h>
+#include "../framework/stdhdr.h"
 #include "temppanel.h"
-#include "strutils.h"
+#include "../framework/strutils.h"
 #include "filecopyex.h"
 #include "common.h"
-#include "FwCommon.h"
+#include "../framework/FwCommon.h"
 
 StringList TempFiles;
 

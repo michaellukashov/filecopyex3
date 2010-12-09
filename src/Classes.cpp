@@ -1,7 +1,7 @@
-#include <stdhdr.h>
+#include "../framework/stdhdr.h"
 #include "classes.h"
 #include "common.h"
-#include "fwcommon.h"
+#include "../framework/fwcommon.h"
 
 wchar_t* FileNameStoreEnum::GetNext()
 {

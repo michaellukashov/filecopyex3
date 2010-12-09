@@ -1,10 +1,10 @@
-#include <stdhdr.h>
+#include "../framework/stdhdr.h"
 
 #include "common.h"
 #include "FileCopyEx.h"
 #include "engine.h"
 #include "EngineTools.h"
-#include "FwCommon.h"
+#include "../framework/FwCommon.h"
 
 void* Alloc(int size)
 {

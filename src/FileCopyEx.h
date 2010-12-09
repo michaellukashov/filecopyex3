@@ -1,6 +1,6 @@
 #pragma once
-#include "properties.h"
-#include "far/farplugin.h"
+#include "../framework/properties.h"
+#include "../framework/far/farplugin.h"
 
 #define MRES_NONE         0
 #define MRES_STDCOPY      1

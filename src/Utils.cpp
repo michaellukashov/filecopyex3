@@ -1,8 +1,8 @@
-#include <stdhdr.h>
-#include "lowlevelstr.h"
+#include "../framework/stdhdr.h"
+#include "../framework/lowlevelstr.h"
 #include "common.h"
-#include "fileutils.h"
-#include "fwcommon.h"
+#include "../framework/fileutils.h"
+#include "../framework/fwcommon.h"
 
 
 // axxie: special HDD ID inmplementation for NT4

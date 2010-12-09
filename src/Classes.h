@@ -1,7 +1,7 @@
 #pragma once
-#include "store.h"
-#include "fileutils.h"
-#include "valuelist.h"
+#include "../framework/store.h"
+#include "../framework/fileutils.h"
+#include "../framework/valuelist.h"
 
 class FileNameStoreEnum;
 

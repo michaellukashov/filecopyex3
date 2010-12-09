@@ -1,5 +1,5 @@
 #pragma once
-#include "far/farprogress.h"
+#include "../framework/far/farprogress.h"
 
 __int64 GetTime();
 

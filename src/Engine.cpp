@@ -1,13 +1,13 @@
-#include <stdhdr.h>
-#include "lowlevelstr.h"
+#include "../framework/stdhdr.h"
+#include "../framework/lowlevelstr.h"
 #include "filecopyex.h"
 #include "engine.h"
 #include "common.h"
-#include "fileutils.h"
-#include "strutils.h"
+#include "../framework/fileutils.h"
+#include "../framework/strutils.h"
 
 #include "enginetools.h"
-#include "FwCommon.h"
+#include "../framework/FwCommon.h"
 
 #define AllocAlign  65536
 

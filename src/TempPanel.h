@@ -1,5 +1,5 @@
 #pragma once
-#include "far/farplugin.h"
+#include "../framework/far/farplugin.h"
 
 class TempPanel : public FarPanel
 {

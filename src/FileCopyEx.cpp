@@ -1,9 +1,9 @@
-#include <stdhdr.h>
+#include "../framework/stdhdr.h"
 #include "common.h"
 #include "engine.h"
 #include "filecopyex.h"
 #include "temppanel.h"
-#include "far/interface/farkeys.hpp"
+#include "../framework/far/interface/farkeys.hpp"
 
 StringList DescFiles;
 

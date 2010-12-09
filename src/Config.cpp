@@ -1,7 +1,7 @@
-#include <stdhdr.h>
-#include "lowlevelstr.h"
+#include "../framework/stdhdr.h"
+#include "../framework/lowlevelstr.h"
 #include "filecopyex.h"
-#include "far/interface/farkeys.hpp"
+#include "../framework/far/interface/farkeys.hpp"
 
 void reloadmacro();
 void getcolors();
