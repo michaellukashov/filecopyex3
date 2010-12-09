@@ -1,0 +1,17 @@
+EXPORTS
+
+  GetMinFarVersion
+  SetStartupInfo
+  GetPluginInfo
+  OpenPlugin
+  ClosePlugin
+  Configure
+
+  GetOpenPluginInfo
+  SetDirectory
+  GetFindData
+  FreeFindData
+  DeleteFiles
+  PutFiles
+  GetFiles
+  MakeDirectory

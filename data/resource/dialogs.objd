@@ -1,0 +1,543 @@
+
+object CopyDialog: FarDialog
+  HelpTopic=CopyDialog
+  object Label1: FarDlgLabel
+    FitWidth=1
+    Shorten=1
+    ShowAmpersand=1
+  end
+  object DestPath: FarDlgEdit
+    FitWidth=1
+    Focus=1
+    History=1
+  end
+  object Sep1: FarDlgLine
+  end
+  object ParallelCopy: FarDlgCheckbox
+    NoBreak=1
+  end
+  object SkipIfNewer: FarDlgCheckbox
+  end
+  object Sep2: FarDlgLine
+  end
+  object Label2: FarDlgLabel
+    NoBreak=1
+  end
+  object Panel1: FarDlgPanel
+    NoBreak=1
+    object Ask: FarDlgRadioButton
+      Selected=1
+    end
+    object Skip: FarDlgRadioButton
+    end
+  end
+  object Panel2: FarDlgPanel
+    NoBreak=1
+    object Overwrite: FarDlgRadioButton
+    end
+    object Append: FarDlgRadioButton
+    end
+  end
+  object Panel3: FarDlgPanel
+    object Rename: FarDlgRadioButton
+    end
+  end
+  object Sep3: FarDlgLine
+  end
+  object Start: FarDlgButton
+    NoBreak=1
+    CenterGroup=1
+    Default=1
+    Result=0
+  end
+  object Cancel: FarDlgButton
+    NoBreak=1
+    CenterGroup=1
+    Result=-1
+  end
+  object Advanced: FarDlgButton
+    NoBreak=1
+    CenterGroup=1
+    Result=1
+  end
+  object Settings: FarDlgButton
+    CenterGroup=1
+    Result=2
+  end
+end
+
+object AdvCopyDialog: FarDialog
+  HelpTopic=AdvCopyDialog
+  object Panel1: FarDlgPanel
+    object Rights: FarDlgCheckbox
+    end
+    object Streams: FarDlgCheckbox
+    end
+    NoBreak=1
+  end
+  object Panel2: FarDlgPanel
+    object Compress: FarDlgCheckbox
+      3State=1
+      Selected=2
+    end
+    object Encrypt: FarDlgCheckbox
+      3State=1
+      Selected=2
+    end
+  end
+  object Sep1: FarDlgLine
+  end
+  object SkippedToTemp: FarDlgCheckbox
+    Disable=1
+  end
+  object Sep2: FarDlgLine
+  end
+  object ReadSpeedLimit: FarDlgCheckbox
+    NoBreak=1  
+  end
+  object ReadSpeedLimitValue: FarDlgEdit
+    NoBreak=1  
+    FitWidth=1
+  end
+  object Label3: FarDlgLabel
+  end
+  object WriteSpeedLimit: FarDlgCheckbox
+    NoBreak=1  
+  end
+  object WriteSpeedLimitValue: FarDlgEdit
+    NoBreak=1  
+    FitWidth=1
+  end
+  object Label4: FarDlgLabel
+  end
+  object ResumeFiles: FarDlgCheckbox
+  end
+  object Sep3: FarDlgLine
+  end
+  object OK: FarDlgButton
+    NoBreak=1
+    CenterGroup=1
+    Default=1
+    Result=0
+  end
+  object Cancel: FarDlgButton
+    CenterGroup=1
+    Result=-1
+  end
+end
+
+object SetupDialog: FarDialog
+  HelpTopic=ConfigDialog
+  object Label1: FarDlgLabel
+    NoBreak=1
+  end
+  object Panel1: FarDlgPanel  
+    NoBreak=1
+    object BufPercent: FarDlgRadioButton
+      Persistent=1
+      Focus=1
+    end
+    object BufSize: FarDlgRadioButton
+      Persistent=1
+    end
+  end
+  object Panel2: FarDlgPanel    
+    object BufPercentVal: FarDlgEdit
+      Width=8
+      Persistent=1
+    end    
+    object BufSizeVal: FarDlgEdit
+      Width=8
+      Persistent=1
+    end
+  end
+;  object Sep1: FarDlgLine
+;  end
+  object OverwriteDef: FarDlgCheckbox
+    Persistent=1
+  end
+  object CopyStreamsDef: FarDlgCheckbox
+    Persistent=1
+  end
+  object CopyRightsDef: FarDlgCheckbox
+    Persistent=1
+  end
+  object AllowParallel: FarDlgCheckbox
+    Persistent=1
+  end
+  object DefParallel: FarDlgCheckbox
+    Persistent=1
+  end
+  object ConfirmBreak: FarDlgCheckbox
+    Persistent=1
+  end
+  object ReadFilesOpenedForWriting: FarDlgCheckbox
+    Persistent=1
+  end
+  object CheckFreeDiskSpace: FarDlgCheckbox
+    Persistent=1
+  end
+;  object Sep2: FarDlgLine
+;  end
+;  object Label3: FarDlgLabel
+;    NoBreak=1
+;  end
+;  object Label6: FarDlgLabel
+;    NoBreak=1
+;  end
+;  object Sep6: FarDlgLine
+;  end
+  object CopyDescs: FarDlgCheckbox
+    Persistent=1
+    NoBreak=0
+  end
+  object DescsInSubdirs: FarDlgCheckbox
+    Persistent=1
+  end
+;  object Sep3: FarDlgLine
+;  end
+  object ConnectLikeBars: FarDlgCheckbox
+    Persistent=1
+  end
+  object Sound: FarDlgCheckbox
+    FitWidth=1
+    NoBreak=1
+    Persistent=1
+  end
+  object TestSound: FarDlgButton
+    Result=3
+  end
+  object Label2: FarDlgLabel
+    NoBreak=1
+  end
+  object PreallocMin: FarDlgEdit
+    Persistent=1
+    NoBreak=1
+    FitWidth=1
+    Width=6
+  end
+  object Label4: FarDlgLabel
+  end  
+  object Label5: FarDlgLabel
+    NoBreak=1
+  end  
+  object UnbuffMin: FarDlgEdit
+    Persistent=1
+    NoBreak=1
+    FitWidth=1
+    Width=6
+  end  
+  object Label7: FarDlgLabel
+  end  
+  object Sep4: FarDlgLine
+  end
+;  object Sep5: FarDlgLine
+;  end
+  object OK: FarDlgButton
+    Default=1
+    NoBreak=1
+    CenterGroup=1
+    Result=0
+  end
+  object Cancel: FarDlgButton
+    NoBreak=1
+    CenterGroup=1
+    Result=-1
+  end
+  object Keys: FarDlgButton
+    NoBreak=1
+    CenterGroup=1
+    Result=1
+  end
+  object About: FarDlgButton
+    CenterGroup=1
+    Result=2
+  end
+end
+
+object KeysDialog: FarDialog
+  HelpTopic=HotkeysDialog
+  object BindToF5: FarDlgCheckbox
+    Focus=1
+  end
+  object Sep1: FarDlgLine
+  end
+  object Label1: FarDlgLabel
+  end
+  object AltShiftF5: FarDlgRadiobutton
+  end
+  object CtrlShiftF5: FarDlgRadiobutton
+  end
+  object CtrlAltF5: FarDlgRadiobutton
+  end
+  object Sep2: FarDlgLine
+  end
+  object BindAddToQueue: FarDlgCheckbox
+  end
+  object BindShowQueue: FarDlgCheckbox
+  end
+  object Sep3: FarDlgLine
+  end
+  object OK: FarDlgButton
+    Default=1
+    NoBreak=1
+    CenterGroup=1
+    Result=0
+  end
+  object Cancel: FarDlgButton
+    CenterGroup=1
+    Result=-1
+  end
+end
+
+object AboutDialog: FarDialog
+  HelpTopic=AboutDialog
+  object Label1: FarDlgLabel
+  end
+  object Label2: FarDlgLabel
+  end
+  object Sep1: FarDlgLine
+  end
+  object Label3: FarDlgLabel
+    ShowAmpersand=1
+  end
+  object Label4: FarDlgLabel
+  end
+  object Label5: FarDlgLabel
+  end
+  object Label6: FarDlgLabel
+  end
+  object Sep1: FarDlgLine
+  end
+  object Label7: FarDlgLabel
+  end
+  object Label8: FarDlgLabel
+  end  
+  object Label9: FarDlgLabel
+  end  
+;  object Label10: FarDlgLabel
+;  end  
+  object Sep1: FarDlgLine
+  end
+  object OK: FarDlgButton
+    Default=1
+    CenterGroup=1
+  end
+end
+
+object OverwriteDialog: FarDialog
+  HelpTopic=OverwriteDialog
+  Warning=1
+  object Panel1: FarDlgPanel
+    object Label1: FarDlgLabel
+    end
+    object Label2: FarDlgLabel
+      ShowAmpersand=1
+      FitWidth=1
+      Shorten=1
+    end
+    object Sep1: FarDlgLine
+    end
+    object Source: FarDlgLabel
+      NoBreak=1
+    end
+    object Label3: FarDlgLabel
+    end
+    object Destination: FarDlgLabel
+      NoBreak=1
+    end
+    object Label4: FarDlgLabel
+    end
+    object Sep2: FarDlgLine
+    end
+    object AcceptForAll: FarDlgCheckbox
+      NoBreak=1
+      Focus=1      
+    end
+    object SkipIfNewer: FarDlgCheckbox
+    end
+    object SkippedToTemp: FarDlgCheckbox
+      Visible=0
+    end
+  end
+  object Panel2: FarDlgPanel
+    object Sep3: FarDlgLine
+    end
+    object Overwrite: FarDlgButton
+      NoBreak=1
+      Result=0
+      Default=1
+    end
+    object Skip: FarDlgButton
+      NoBreak=1
+      Result=1
+    end
+    object Append: FarDlgButton
+      NoBreak=1
+      Result=2
+    end
+    object Rename: FarDlgButton
+      NoBreak=1
+      Result=3
+    end
+    object Cancel: FarDlgButton
+      Result=-1
+    end
+  end
+end
+
+object RenameDialog: FarDialog
+  HelpTopic=RenameDialog
+  object Label1: FarDlgLabel
+  end
+  object Edit: FarDlgEdit
+    Width=50
+    History=1
+    Focus=1
+  end
+  object Sep1: FarDlgLine
+  end
+  object OK: FarDlgButton
+    Default=1
+    NoBreak=1
+    CenterGroup=1
+    Result=0
+  end
+  object Cancel: FarDlgButton
+    CenterGroup=1
+    Result=-1
+  end
+end
+
+object CopyError: FarDialog
+  HelpTopic=CopyErrorDialog
+  Warning=1
+  object Label1: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Label2: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Label3: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Label4: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Label5: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Label6: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Label7: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Label8: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Label9: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Label10: FarDlgLabel
+    CenterGroup=1
+    Visible=0
+  end
+  object Sep1: FarDlgLine
+  end
+  object Reopen: FarDlgCheckbox
+    Visible=0
+  end
+  object KeepFiles: FarDlgCheckbox
+    Visible=0
+  end
+  object Sep2: FarDlgLine
+  end
+  object YesNo: FarDlgPanel
+    Visible=0
+    object Yes: FarDlgButton
+      Default=1
+      NoBreak=1
+      CenterGroup=1
+      Result=0
+    end
+    object No: FarDlgButton
+      CenterGroup=1
+      Result=-1
+    end
+  end
+  object RetrySkipAbort: FarDlgPanel
+    Visible=0
+    object Retry: FarDlgButton
+      Default=1
+      NoBreak=1
+      CenterGroup=1
+      Result=0
+    end
+    object Skip: FarDlgButton
+      CenterGroup=1
+      NoBreak=1
+      Result=1
+    end
+    object SkipAll: FarDlgButton
+      Visible=0
+      CenterGroup=1
+      NoBreak=1
+      Result=2
+    end
+    object Abort: FarDlgButton
+      CenterGroup=1
+      Result=-1
+    end
+  end
+end
+
+
+object FreeSpaceErrorDialog: FarDialog
+  HelpTopic=FreeSpaceErrorDialog
+  Warning=1
+  object Label1: FarDlgLabel
+    CenterGroup=1
+    Visible=1
+  end
+  object Sep1: FarDlgLine
+  end  
+  object Label2: FarDlgLabel
+    CenterGroup=1
+    Visible=1
+  end
+  object Label3: FarDlgLabel
+    CenterGroup=1
+    Visible=1
+  end
+  object Sep2: FarDlgLine
+  end  
+  object Label4: FarDlgLabel
+    CenterGroup=1
+    Visible=1
+  end
+  object Sep3: FarDlgLine
+  end
+  object YesNo: FarDlgPanel
+    Visible=1
+    object Yes: FarDlgButton
+      Default=1
+      NoBreak=1
+      CenterGroup=1
+      Result=0
+    end
+    object No: FarDlgButton
+      CenterGroup=1
+      Result=-1
+    end
+  end
+end

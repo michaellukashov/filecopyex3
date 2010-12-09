@@ -1,0 +1,234 @@
+<HTML>
+    <HEAD>
+    <TITLE>FileCopyEx - version history</TITLE>
+    <META http-equiv="Content-Type" content="text/html; charset=windows-1251">
+    <LINK rel="stylesheet" href="text.css">
+  </HEAD>
+  <BODY>
+    <A href="history.rus.html">Русская версия</A>
+    <H1>FileCopyEx - version history</H1>
+        <H2>Version 1.9.0 beta (bugfixes by Axxie & slst)</H2>
+        <UL>
+            <LI>Implemented checking of Esc press during directories scanning. Now Esc cancels operation.</LI>
+            <LI>Progress indication has been added to the directories scanning dialog. The dialog show number and total size of scanned files.</LI>
+            <LI>Free space on the destination drive is checked before copying.</LI>
+            <LI>Hot keys in copy and overwrite dialogs are now similar to the standard hot keys.</LI>
+            <LI>Directories scanning is now faster than before.</LI>
+            <LI>After rename cursor is moved to the new file name.</LI>
+            <LI>Quotes are completely ignored in destination path.</LI>
+            <LI>Bug with help is fixed. Only Russian help is available.</LI>
+            <LI>Bug with network target paths is fixed again. Previous fix didn't work for network share top-level directories.</LI>
+            <LI>Bug with streams copying in NT4 is fixed.</LI>
+            <LI>Bug with silent copy dialog closing if source and destination paths were the same is fixed. Now error message appears in this case.</LI>
+            <LI>Plugin was not able to start from directory with non-ANSI name. Fixed.</LI>
+            <LI>Now plugin correctly works with files, which are opened by another process. If a file is open for writing by another process, plugin shows error message. The new option that allows reading files opened for writing from other processes has been added.</LI>
+            <LI>Bug with incorrect time estimation in copying in parallel mode is fixed.</LI>
+            <LI>File names were displayed incorrectly during copying. Fixed.</LI>
+            <LI>Waiting for the user reply was added to the elapsed time, but not to the total time. Fixed.</LI>
+            <LI>Plugin was not able to copy directory to the nul in 9x. Fixed.</LI>
+            <LI>Now plugin does not break hard links.</LI>
+            <LI>Volume Mount Points were not handled correctly. Fixed.</LI>
+            <LI>Plugin was not able to copy file if access to one of the parent directories was not granted. Fixed.</LI>
+            <LI>Plugin was not able to copy symbolic link from different machine on the network. Fixed.</LI>
+            <LI>Bug with encoding in 9x is fixed. Plugin sometimes was not able to copy files in 9x because of this bug.</LI>
+            <LI>Bug with attributes cleaning if file is renamed with case changing only is fixed.</LI>
+            <LI>Bug with description entry deletion if file is renamed with case changing only is fixed.</LI>
+            <LI>Bug with description entry doubling if file with description was overwritten is fixed.</LI>
+            <LI>If while copying files, some of them were skipped, it could lead plugin to skip other files, which needed to be copied. Fixed.</LI>
+        </UL>
+        <H2>Version 1.8.2 beta (bugfixes by Axxie [ axxie-no-spam@filecopyex.org.ua ])</H2>
+        <UL>
+            <LI>Initial state auto-detection of the &quot;Allow parallel copy&quot; checkbox now works in NT4.</LI>
+            <LI>&quot;Allow parallel copy&quot; was allowed by default when user pressed Shift-F5/Shift-F6. Fixed.</LI>
+            <LI>Denis Porfiryev has kindly allowed to include his FileCopyEx AutoAW plugin in the package.</LI>
+            <LI>Visual Studio 6 project has been added.</LI>
+            <LI>Fixed bug with network target paths.</LI>
+            <LI>Fixed bug with setting &quot;Encrypted&quot; attribute.</LI>
+            <LI>Changed hotkeys for &quot;Rename&quot; action (thanks to CDK).</LI>
+            <LI>Fixed bug with error message during moving file with streams from one partition to another (thanks to CDK).</LI>
+            <LI>[experimental] Thousands delimiter is now space (previously comma was used).</LI>
+        </UL>
+        <H2>Version 1.8.1 alpha (bugfixes by CDK)</H2>
+        <UL>
+            <LI>Improved compatibility with FAR plugin panels containing real file names (TempPanel, Branch).</LI>
+            <LI>[experimental] Fixed low speed issue when copying to Flash media.</LI>
+            <LI>[experimental] Color of the progress dialog labels is changed to dark-blue.</LI>
+        </UL>
+        <H2>Version 1.8 beta (bugfixes by slst [ slst-remove-me@mail333.com ])</H2>
+        <UL>
+            <LI>Plugin hanged during copying of symbolic links. Fixed.</LI>
+            <LI>Sometimes copying of recursive symbolic links resulted in stack overflow. Fixed.</LI>
+            <LI>Quotes in destination name/path resulted in &quot;error creating output file&quot;. Fixed.</LI>
+            <LI>&quot;Allow parallel copy&quot; checkbox initial state auto-detection didn't work in Windows 2000. Fixed.</LI>
+            <LI>FDLG_WARNING style added for &quot;ask for overwrite&quot; dialog (red background color).</LI>
+        </UL>
+        <UL>
+            <LI>FileCopyExW.dll (Unicode version) was tested on Windows 2000 SP4 / Far v1.70 alpha 6 build 2039.</LI>
+            <LI>FileCopyExA.dll (ANSI version) was not tested.</LI>
+        </UL>
+        <H2>Version 1.7 beta (author of versions prior to 1.8 - craZZy [ crazzy-remove-me@magnusoft.com ])</H2>
+        <UL>
+            <LI>Description files with spaces and russian characters in file names correctly processed.</LI>
+            <LI>Fixed bugs with copying files from queue in Far 1.70b5.</LI>
+            <LI>ESC correctly handled during confirmation of copying termination.</LI>
+        </UL>
+        <H2>Version 1.6 beta</H2>
+        <UL>
+            <LI>Disk space preallocation for large files (threshold is adjustable).</LI>
+            <LI>Added "Confirm termination by ESC" setting.</LI>
+            <LI>"GetSectorSize failed" fixed.</LI>
+            <LI>Fixed parallel copy crash bug.</LI>
+            <LI>More accurate time calculation.</LI>
+            <LI>A little bit improvement of small files copying.</LI>
+            <LI>Added "Append" feature (always works in buffered mode).</LI>
+            <LI>Small fixes.</LI>
+            <LI>Included plugin source code.</LI>
+        </UL>
+    <H2>Version 1.5 beta</H2>
+    <B>New features:</B>
+    <UL>
+      <LI>UNICODE support.
+      <LI>Fixed bug with calling Extended Copy from plugin panels (e.g., archive).
+      <LI>Copy queue, which is a more convinient&nbsp;implementation of temporary panel.
+      <LI>Unbuffered read and write, which should speed up copy operation even more.
+      <LI>Option to limit reading/writing speed.
+      <LI>Resuming after copying was cancelled by user or interrupted due to an error.
+      <LI>Extended error handling: "Skip All" button, an option to reopen the file before 
+      retrying (for recovering after network failures).
+      <LI>Precise detection of different physical devices on Windows XP.
+      <LI>Bugs with descriptions are hopefully fixed :)
+      <LI>Option to use CONNECT-like progressbars.
+      <LI>Many other features...</LI>
+    </UL>
+    <B><B>This version was totally rewritten, many old bugs were fixed, but new ones 
+        might have been introduced.<BR><BR>
+      </B>Bugs found in this beta:<BR>
+      <BR>
+      (please note bugs marked with <FONT color="#ff0000">(?)</FONT>. These bugs were 
+      hopefully fixed and should not appear. If one of them do appear, please let me 
+      know about it. Don't forget to give a detailed description of the situation 
+      that caused the bug. Also, let me know if you find a bug which is not in this 
+      list)</B>
+    <UL>
+      <LI>
+      Some descriptions may not be copied if copying was aborted by the user.
+      <LI>
+      Append mode not implemented.
+      <LI>
+      Putting skipped files to temporary panel not implemented.
+      <LI>
+      Renaming files in Win9x may be too slow.
+      <LI>
+      Auto-rename mode is not always working.
+      <LI>
+        <FONT color="#ff0000">(?)</FONT>
+      Copying to NUL on Win9x may not work.
+      <LI>
+        <FONT color="#ff0000">(?)</FONT>
+      Sometimes (rarely) plugin crashes when "Parallel Copy" is on.
+      <LI>
+        <FONT color="#ff0000">(?)</FONT>
+      "Invalid buffer" error may appear when using "Resume" mode.
+      <LI>
+        <FONT color="#ff0000">(?)</FONT>
+      File contents may become broken after "Reopen and Retry".
+      <LI>
+      After moving, some empty directories may remain.
+      <LI>
+        The Help system&nbsp;is not yet updated.</LI>
+    </UL>
+    <H2>Version 1.34</H2>
+    <UL>
+      <LI>
+      Renaming directories didn't work when some file inside them were opened (plugin 
+      copied and deleted then instead of just renaming).
+      <LI>
+      Multiline description support.
+      <LI>
+      Buffer size can now be specified both in percent of RAM size or in kilobytes.
+      <LI>
+      Options to confirm interruption by ESC and to beep after long operations.
+      <LI>
+      Copy progress window uses FAR colors in FAR 1.70 or higher.
+      <LI>
+      Copying of NTFS streams now works.
+      <LI>
+      Read-only volume warning doesn't appear anymore when copying to CD-RW.
+      <LI>
+      Plugin now correctly works with files larger than 2GB.
+      <LI>
+      Correct write errors handling (file is not being read after write error).
+      <LI>
+      Some more options for description handling.
+      <LI>
+        Descriptions were lost after renaming without moving to another directory.</LI>
+    </UL>
+    <B>Bugs found in this version (will be fixed in next release):</B>
+    <UL>
+      <LI>
+      Description handling doesn't always work properly and sometimes causes the 
+      descriptions to be lost. So, it is better to turn this option off.
+      <LI>
+      Plugin crashes when summary size of copied files is zero.
+      <LI>
+        When activating plugin from archive or other plugin panel, standard copy dialog 
+        must be shown, but it doesn''t.</LI>
+    </UL>
+    <H2>Version 1.33</H2>
+    (bugfix of 1.3)
+    <UL>
+      <LI>
+      Doesn't show "Memory allocation error" on machines with more than 128 MB of 
+      RAM.
+      <LI>
+      Removes directories with read-only attribute.
+      <LI>
+        Correctly saves "Clear read-only from CDs" option.</LI>
+    </UL>
+    <H2>Version 1.3</H2>
+    <UL>
+      <LI>
+      New copy options - "Skip if destination is same or newer" and "Place skipped 
+      files to temporary panel". These options are located in Copy and Overwrite 
+      dialogs.
+      <LI>
+      Buffer size is now specified in percent of total memory size.
+      <LI>
+      New configuration options - "Parallel copy by default", "Clear Read-only 
+      attribute from CD", "Show advanced NTFS options".
+      <LI>
+      NTFS-specific options are shown only in Windows NT/2000, and only if 
+      corresponding checkbox is turned on in configuration dialog.
+      <LI>
+      There is no more need to register plugin with FileCopyEx.reg - hotkeys are set 
+      up in configuration dialog.
+      <LI>
+      Full-featured description management, including updating descriptions in 
+      subdirectories (see help).
+      <LI>
+      Showing total size of files currently copying.
+      <LI>
+      Showing copy progress in console title.
+      <LI>
+      Understanding environment variables in Copy dialog.
+      <LI>
+      Warning when it's not possible to copy streams, rights, or to set compression 
+      and encryption attributes on destination volume, or if destination path is 
+      invalid.
+      <LI>
+      Quick move within one device (via renaming) now works in Windows 95/98.
+      <LI>Russian and English interface.
+      <LI>Small bugs fixed.</LI>
+    </UL>
+    <H2>Version 1.02</H2>
+    <UL>
+      <LI>
+        Access Denied now doesn't occur when overwriting files on FAT32 drives.</LI>
+    </UL>
+         Bugfixes: slst, CDK, Ivanych, Alter, Axxie and Nsky<BR>
+         Building and site support: Axxie
+         <A href="mailto:axxie-no-spam@filecopyex.org.ua">axxie-no-spam@filecopyex.org.ua</A><BR>
+         Author: Serge Cheperis aka craZZy, e-mail: crazzy at magnusoft.com<BR>
+         Special thanks to Vitaliy Tsubin<BR>
+  </BODY>
+</HTML>
