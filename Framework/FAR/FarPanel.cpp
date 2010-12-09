@@ -1,6 +1,6 @@
-#include <stdhdr.h>
-#include "far/farplugin.h"
-#include "far/farpanel.h"
+#include "../stdhdr.h"
+#include "farplugin.h"
+#include "farpanel.h"
 
 FarPanel::FarPanel()
 {

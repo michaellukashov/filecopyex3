@@ -1,6 +1,6 @@
-#include <stdhdr.h>
-#include "lowlevelstr.h"
-#include "far/farplugin.h"
+#include "../stdhdr.h"
+#include "../lowlevelstr.h"
+#include "farplugin.h"
 
 FarMenu::FarMenu(void)
 {

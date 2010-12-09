@@ -1,9 +1,9 @@
-#include <stdhdr.h>
-#include "lowlevelstr.h"
-#include "fwcommon.h"
-#include "valuelist.h"
-#include "properties.h"
-#include "far/farplugin.h"
+#include "../stdhdr.h"
+#include "../lowlevelstr.h"
+#include "../fwcommon.h"
+#include "../valuelist.h"
+#include "../properties.h"
+#include "farplugin.h"
 
 PluginStartupInfo Info;
 String PluginRootKey;

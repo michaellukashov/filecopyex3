@@ -1,8 +1,8 @@
-﻿#include <stdhdr.h>
-#include "../FileCopyEx/Common.h"
-#include "lowlevelstr.h"
-#include "strutils.h"
-#include "far/farprogress.h"
+﻿#include "../stdhdr.h"
+#include "../../src/common.h"
+#include "../lowlevelstr.h"
+#include "../strutils.h"
+#include "farprogress.h"
 
 FarProgress::FarProgress(void)
 {

@@ -1,13 +1,13 @@
 #pragma once
-#include "valuelist.h"
-#include "stringlist.h"
-#include "far/interface/plugin.hpp"
-#include "far/interface/farcolor.hpp"
-#include "far/fardialog.h"
-#include "far/farregistry.h"
-#include "far/farui.h"
-#include "far/farprogress.h"
-#include "far/farpanel.h"
+#include "../valuelist.h"
+#include "../stringlist.h"
+#include "interface/plugin.hpp"
+#include "interface/farcolor.hpp"
+#include "fardialog.h"
+#include "farregistry.h"
+#include "farui.h"
+#include "farprogress.h"
+#include "farpanel.h"
 
 class FarPlugin
 {

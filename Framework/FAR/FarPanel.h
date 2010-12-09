@@ -1,8 +1,8 @@
 #pragma once
-#include "far/interface/plugin.hpp"
-#include "array.h"
-#include "objstring.h"
-#include "fileutils.h"
+#include "interface/plugin.hpp"
+#include "../array.h"
+#include "../objstring.h"
+#include "../fileutils.h"
 
 class FarPanel
 {

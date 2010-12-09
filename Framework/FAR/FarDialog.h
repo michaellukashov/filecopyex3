@@ -1,4 +1,4 @@
 #pragma once
-#include "far/fardlgobject.h"
-#include "far/fardlgclass.h"
+#include "fardlgobject.h"
+#include "fardlgclass.h"
 

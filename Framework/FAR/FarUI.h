@@ -1,6 +1,6 @@
 #pragma once
-#include "array.h"
-#include "far/interface/plugin.hpp"
+#include "../array.h"
+#include "interface/plugin.hpp"
 
 class FarMenu
 {

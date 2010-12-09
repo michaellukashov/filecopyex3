@@ -1,4 +1,4 @@
-#include <stdhdr.h>
+#include "stdhdr.h"
 #include "lowlevelstr.h"
 #include "properties.h"
 #include "valuelist.h"

@@ -1,12 +1,12 @@
-#include <stdhdr.h>
+#include "stdhdr.h"
 #include "fileutils.h"
 #include "strutils.h"
 #include "fwcommon.h"
 
-#include "..\FileCopyEx\Common.h"
-#include "..\FileCopyEx\FileCopyEx.h"
-#include "..\FileCopyEx\engine.h"
-#include "..\FileCopyEx\EngineTools.h"
+#include "..\src\Common.h"
+#include "..\src\FileCopyEx.h"
+#include "..\src\engine.h"
+#include "..\src\EngineTools.h"
 
 inline String ExtractFileName(const String& v)
 {

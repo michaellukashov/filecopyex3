@@ -1,7 +1,7 @@
-#include <stdhdr.h>
-#include "valuelist.h"
-#include "far/fardlgobject.h"
-#include "far/fardlgclass.h"
+#include "../stdhdr.h"
+#include "../valuelist.h"
+#include "fardlgobject.h"
+#include "fardlgclass.h"
 
 extern LocaleList *Locale;
 #define LOC(s) ((*Locale)[s])

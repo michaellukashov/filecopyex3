@@ -1,5 +1,5 @@
 #pragma once
-#include "stringlist.h"
+#include "../stringlist.h"
 
 class FarRegistry
 {

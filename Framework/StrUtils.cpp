@@ -1,4 +1,4 @@
-#include <stdhdr.h>
+#include "stdhdr.h"
 #include <stdarg.h>
 //#include "../FileCopyEx/Common.h"
 #include "FAR/FarPlugin.h"

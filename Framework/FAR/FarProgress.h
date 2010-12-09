@@ -1,5 +1,5 @@
 #pragma once
-#include "far/farplugin.h"
+#include "farplugin.h"
 
 #define WIN_NONE          0
 #define WIN_MESSAGE       1

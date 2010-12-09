@@ -1,7 +1,7 @@
 #pragma once
-#include "object.h"
-#include "valuelist.h"
-#include "far/interface/plugin.hpp"
+#include "../object.h"
+#include "../valuelist.h"
+#include "interface/plugin.hpp"
 
 class FarDlgObject;
 class FarDialog;

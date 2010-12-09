@@ -1,9 +1,9 @@
-#include <stdhdr.h>
-#include "fwcommon.h"
-#include "object.h"
-#include "array.h"
-#include "strutils.h"
-#include "far/farplugin.h"
+#include "../stdhdr.h"
+#include "../fwcommon.h"
+#include "../object.h"
+#include "../array.h"
+#include "../strutils.h"
+#include "farplugin.h"
 
 extern PluginStartupInfo Info;
 

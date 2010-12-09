@@ -18,313 +18,9 @@
 	</ToolFiles>
 	<Configurations>
 		<Configuration
-			Name="Debug|Win32"
-			ConfigurationType="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Debug|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-				TypeLibraryName="$(IntDir)/$(InputName).tlb"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				Optimization="0"
-				AdditionalIncludeDirectories="..\framework"
-				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
-				BasicRuntimeChecks="3"
-				RuntimeLibrary="1"
-				BufferSecurityCheck="true"
-				DefaultCharIsUnsigned="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="stdhdr.h"
-				PrecompiledHeaderFile="$(IntDir)/vc70.pch"
-				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile="$(IntDir)/"
-				ProgramDataBaseFileName="$(IntDir)/"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-				DebugInformationFormat="3"
-				ForcedIncludeFiles=""
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="_DEBUG"
-				Culture="1049"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="mpr.lib"
-				LinkIncremental="2"
-				SuppressStartupBanner="true"
-				LinkDLL="true"
-				ModuleDefinitionFile="out\plugin.def"
-				TypeLibraryFile="$(IntDir)/$(InputName).tlb"
-				GenerateDebugInformation="true"
-				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
-				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="$(IntDir)/$(InputName).lib"
-				TargetMachine="17"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|Win32"
-			ConfigurationType="1"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
-			Name="Release|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
-			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
-			ConfigurationType="2"
-			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
-			UseOfMFC="0"
-			ATLMinimizesCRunTimeLibraryUsage="false"
-			CharacterSet="2"
-			>
-			<Tool
-				Name="VCPreBuildEventTool"
-			/>
-			<Tool
-				Name="VCCustomBuildTool"
-			/>
-			<Tool
-				Name="VCXMLDataGeneratorTool"
-			/>
-			<Tool
-				Name="VCWebServiceProxyGeneratorTool"
-			/>
-			<Tool
-				Name="VCMIDLTool"
-				TargetEnvironment="3"
-				TypeLibraryName="$(IntDir)/$(InputName).tlb"
-			/>
-			<Tool
-				Name="VCCLCompilerTool"
-				InlineFunctionExpansion="1"
-				EnableIntrinsicFunctions="true"
-				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\framework"
-				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
-				StringPooling="true"
-				RuntimeLibrary="0"
-				EnableFunctionLevelLinking="true"
-				DefaultCharIsUnsigned="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="stdhdr.h"
-				PrecompiledHeaderFile="$(IntDir)/vc70.pch"
-				AssemblerListingLocation="$(IntDir)/"
-				ObjectFile=".\Release/"
-				ProgramDataBaseFileName=".\Release/"
-				WarningLevel="3"
-				SuppressStartupBanner="true"
-				ForcedIncludeFiles=""
-			/>
-			<Tool
-				Name="VCManagedResourceCompilerTool"
-			/>
-			<Tool
-				Name="VCResourceCompilerTool"
-				PreprocessorDefinitions="NDEBUG"
-				Culture="1049"
-			/>
-			<Tool
-				Name="VCPreLinkEventTool"
-			/>
-			<Tool
-				Name="VCLinkerTool"
-				AdditionalDependencies="mpr.lib"
-				LinkIncremental="1"
-				SuppressStartupBanner="true"
-				LinkDLL="true"
-				ModuleDefinitionFile="out\plugin.def"
-				TypeLibraryFile="$(IntDir)/$(InputName).tlb"
-				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
-				SubSystem="1"
-				RandomizedBaseAddress="1"
-				DataExecutionPrevention="0"
-				ImportLibrary="$(IntDir)/$(InputName).lib"
-				TargetMachine="17"
-			/>
-			<Tool
-				Name="VCALinkTool"
-			/>
-			<Tool
-				Name="VCManifestTool"
-			/>
-			<Tool
-				Name="VCXDCMakeTool"
-			/>
-			<Tool
-				Name="VCBscMakeTool"
-			/>
-			<Tool
-				Name="VCFxCopTool"
-			/>
-			<Tool
-				Name="VCAppVerifierTool"
-			/>
-			<Tool
-				Name="VCPostBuildEventTool"
-			/>
-		</Configuration>
-		<Configuration
 			Name="Debug Unicode|Win32"
-			OutputDirectory=".\Debug Unicode"
-			IntermediateDirectory=".\Debug Unicode"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -350,7 +46,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\framework"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -385,7 +81,7 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				LinkDLL="true"
-				ModuleDefinitionFile="out\plugin.def"
+				ModuleDefinitionFile="plugin.def"
 				TypeLibraryFile="$(IntDir)/$(InputName).tlb"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
@@ -418,7 +114,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug Unicode|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
@@ -446,7 +142,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\framework"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
@@ -480,7 +176,7 @@
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				LinkDLL="true"
-				ModuleDefinitionFile="out\plugin.def"
+				ModuleDefinitionFile="plugin.def"
 				TypeLibraryFile="$(IntDir)/$(InputName).tlb"
 				GenerateDebugInformation="true"
 				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
@@ -514,8 +210,8 @@
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|Win32"
-			OutputDirectory=".\Release Unicode"
-			IntermediateDirectory=".\Release Unicode"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
 			UseOfMFC="0"
@@ -543,7 +239,7 @@
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\framework"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -576,7 +272,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				LinkDLL="true"
-				ModuleDefinitionFile="out\plugin.def"
+				ModuleDefinitionFile="plugin.def"
 				TypeLibraryFile="$(IntDir)/$(InputName).tlb"
 				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
 				SubSystem="1"
@@ -609,7 +305,7 @@
 		</Configuration>
 		<Configuration
 			Name="Release Unicode|x64"
-			OutputDirectory="$(PlatformName)\$(ConfigurationName)"
+			OutputDirectory="$(SolutionDir)$(PlatformName)\$(ConfigurationName)"
 			IntermediateDirectory="$(PlatformName)\$(ConfigurationName)"
 			ConfigurationType="2"
 			InheritedPropertySheets="$(VCInstallDir)VCProjectDefaults\UpgradeFromVC71.vsprops"
@@ -639,7 +335,7 @@
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
-				AdditionalIncludeDirectories="..\framework"
+				AdditionalIncludeDirectories=""
 				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
 				StringPooling="true"
 				RuntimeLibrary="0"
@@ -671,7 +367,7 @@
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				LinkDLL="true"
-				ModuleDefinitionFile="out\plugin.def"
+				ModuleDefinitionFile="plugin.def"
 				TypeLibraryFile="$(IntDir)/$(InputName).tlb"
 				ProgramDatabaseFile="$(IntDir)/$(InputName).pdb"
 				SubSystem="1"
@@ -707,66 +403,66 @@
 	</References>
 	<Files>
 		<Filter
-			Name="Sources"
+			Name="sources"
 			>
 			<File
-				RelativePath="Classes.cpp"
+				RelativePath=".\src\classes.cpp"
 				>
 			</File>
 			<File
-				RelativePath="Classes.h"
+				RelativePath=".\src\classes.h"
 				>
 			</File>
 			<File
-				RelativePath="Common.h"
+				RelativePath=".\src\common.h"
 				>
 			</File>
 			<File
-				RelativePath="Config.cpp"
+				RelativePath=".\src\config.cpp"
 				>
 			</File>
 			<File
-				RelativePath="CopyProgress.cpp"
+				RelativePath=".\src\copyprogress.cpp"
 				>
 			</File>
 			<File
-				RelativePath="CopyProgress.h"
+				RelativePath=".\src\copyprogress.h"
 				>
 			</File>
 			<File
-				RelativePath="Engine.cpp"
+				RelativePath=".\src\engine.cpp"
 				>
 			</File>
 			<File
-				RelativePath="Engine.h"
+				RelativePath=".\src\engine.h"
 				>
 			</File>
 			<File
-				RelativePath=".\EngineTools.cpp"
+				RelativePath=".\src\enginetools.cpp"
 				>
 			</File>
 			<File
-				RelativePath="EngineTools.h"
+				RelativePath=".\src\enginetools.h"
 				>
 			</File>
 			<File
-				RelativePath="FileCopyEx.cpp"
+				RelativePath=".\src\filecopyex.cpp"
 				>
 			</File>
 			<File
-				RelativePath="FileCopyEx.h"
+				RelativePath=".\src\filecopyex.h"
 				>
 			</File>
 			<File
-				RelativePath="Main.cpp"
+				RelativePath=".\src\main.cpp"
 				>
 			</File>
 			<File
-				RelativePath="TempPanel.cpp"
+				RelativePath=".\src\temppanel.cpp"
 				>
 			</File>
 			<File
-				RelativePath="Utils.cpp"
+				RelativePath=".\src\utils.cpp"
 				>
 			</File>
 		</Filter>
@@ -777,23 +473,19 @@
 				Name="base"
 				>
 				<File
-					RelativePath="..\Framework\Array.h"
+					RelativePath=".\Framework\array.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\FwCommon.cpp"
+					RelativePath=".\Framework\fwcommon.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\FwCommon.h"
+					RelativePath=".\Framework\fwcommon.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\LowLevelStr.h"
-					>
-				</File>
-				<File
-					RelativePath="..\Framework\StdHdr.h"
+					RelativePath=".\Framework\stdhdr.h"
 					>
 				</File>
 			</Filter>
@@ -801,27 +493,27 @@
 				Name="objects"
 				>
 				<File
-					RelativePath="..\Framework\Object.cpp"
+					RelativePath=".\Framework\object.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\Object.h"
+					RelativePath=".\Framework\object.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\Properties.cpp"
+					RelativePath=".\Framework\properties.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\Properties.h"
+					RelativePath=".\Framework\properties.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\Store.cpp"
+					RelativePath=".\Framework\store.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\Store.h"
+					RelativePath=".\Framework\store.h"
 					>
 				</File>
 			</Filter>
@@ -829,39 +521,43 @@
 				Name="strings"
 				>
 				<File
-					RelativePath="..\Framework\LowLevelStr.cpp"
+					RelativePath=".\Framework\lowlevelstr.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\ObjString.cpp"
+					RelativePath=".\Framework\lowlevelstr.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\ObjString.h"
+					RelativePath=".\Framework\objstring.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\StringList.cpp"
+					RelativePath=".\Framework\objstring.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\StringList.h"
+					RelativePath=".\Framework\stringlist.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\StrUtils.cpp"
+					RelativePath=".\Framework\stringlist.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\StrUtils.h"
+					RelativePath=".\Framework\strutils.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\ValueList.cpp"
+					RelativePath=".\Framework\strutils.h"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\ValueList.h"
+					RelativePath=".\Framework\valuelist.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Framework\valuelist.h"
 					>
 				</File>
 			</Filter>
@@ -869,11 +565,11 @@
 				Name="file_system"
 				>
 				<File
-					RelativePath="..\Framework\FileUtils.cpp"
+					RelativePath=".\Framework\fileutils.cpp"
 					>
 				</File>
 				<File
-					RelativePath="..\Framework\FileUtils.h"
+					RelativePath=".\Framework\fileutils.h"
 					>
 				</File>
 			</Filter>
@@ -881,70 +577,86 @@
 				Name="far"
 				>
 				<File
-					RelativePath="..\Framework\FAR\FarPanel.cpp"
+					RelativePath=".\Framework\FAR\farpanel.cpp"
 					>
 				</File>
 				<Filter
-					Name="Dialogs"
+					Name="dialogs"
 					>
 					<File
-						RelativePath="..\Framework\FAR\FarDialog.cpp"
+						RelativePath=".\Framework\FAR\fardialog.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarDialog.h"
+						RelativePath=".\Framework\FAR\fardialog.h"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarDlgClass.cpp"
+						RelativePath=".\Framework\FAR\fardlgclass.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarDlgClass.h"
+						RelativePath=".\Framework\FAR\fardlgclass.h"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarDlgObject.cpp"
+						RelativePath=".\Framework\FAR\fardlgobject.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarDlgObject.h"
+						RelativePath=".\Framework\FAR\fardlgobject.h"
 						>
 					</File>
 				</Filter>
 				<Filter
-					Name="Common"
+					Name="common"
 					>
 					<File
-						RelativePath="..\Framework\FAR\FarPlugin.cpp"
+						RelativePath=".\Framework\FAR\farplugin.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarPlugin.h"
+						RelativePath=".\Framework\FAR\farplugin.h"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarProgress.cpp"
+						RelativePath=".\Framework\FAR\farprogress.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarProgress.h"
+						RelativePath=".\Framework\FAR\farprogress.h"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarRegistry.cpp"
+						RelativePath=".\Framework\FAR\farregistry.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarRegistry.h"
+						RelativePath=".\Framework\FAR\farregistry.h"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarUI.cpp"
+						RelativePath=".\Framework\FAR\farui.cpp"
 						>
 					</File>
 					<File
-						RelativePath="..\Framework\FAR\FarUI.h"
+						RelativePath=".\Framework\FAR\farui.h"
+						>
+					</File>
+				</Filter>
+				<Filter
+					Name="interface"
+					>
+					<File
+						RelativePath=".\framework\FAR\interface\farcolor.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\framework\FAR\interface\farkeys.hpp"
+						>
+					</File>
+					<File
+						RelativePath=".\framework\FAR\interface\plugin.hpp"
 						>
 					</File>
 				</Filter>
@@ -961,11 +673,11 @@
 				Name="english"
 				>
 				<File
-					RelativePath="..\data\doc\history.eng.html"
+					RelativePath=".\data\doc\history.eng.html"
 					>
 				</File>
 				<File
-					RelativePath="..\data\doc\readme.eng.html"
+					RelativePath=".\data\doc\readme.eng.html"
 					>
 				</File>
 			</Filter>
@@ -973,11 +685,11 @@
 				Name="russian"
 				>
 				<File
-					RelativePath="..\data\doc\history.rus.html"
+					RelativePath=".\data\doc\history.rus.html"
 					>
 				</File>
 				<File
-					RelativePath="..\data\doc\readme.rus.html"
+					RelativePath=".\data\doc\readme.rus.html"
 					>
 				</File>
 			</Filter>
@@ -985,25 +697,25 @@
 				Name="resources"
 				>
 				<File
-					RelativePath="..\data\resource\dialogs.objd"
+					RelativePath=".\data\resource\dialogs.objd"
 					>
 				</File>
 				<File
-					RelativePath="..\data\resource\english.locd"
+					RelativePath=".\data\resource\english.locd"
 					>
 				</File>
 				<File
-					RelativePath="..\data\resource\russian.locd"
+					RelativePath=".\data\resource\russian.locd"
 					>
 				</File>
 			</Filter>
 		</Filter>
 		<File
-			RelativePath=".\FileCopyEx.rc"
+			RelativePath=".\filecopyex.rc"
 			>
 		</File>
 		<File
-			RelativePath=".\Out\plugin.def"
+			RelativePath=".\plugin.def"
 			>
 		</File>
 		<File

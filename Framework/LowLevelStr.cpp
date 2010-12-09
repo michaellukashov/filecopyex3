@@ -1,4 +1,4 @@
-#include <stdhdr.h>
+#include "stdhdr.h"
 #include "lowlevelstr.h"
 
 void _wtoacs(char *d, const wchar_t *s, size_t size)

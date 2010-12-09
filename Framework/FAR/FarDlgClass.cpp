@@ -1,7 +1,7 @@
-#include <stdhdr.h>
-#include "far/interface/plugin.hpp"
-#include "far/fardlgobject.h"
-#include "far/fardlgclass.h"
+#include "../stdhdr.h"
+#include "interface/plugin.hpp"
+#include "fardlgobject.h"
+#include "fardlgclass.h"
 #include "farplugin.h"
 
 void FarDlgObjectClass::DefineProperties()

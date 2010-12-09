@@ -1,7 +1,7 @@
 #pragma once
-#include "array.h"
-#include "object.h"
-#include "far/interface/plugin.hpp"
+#include "../array.h"
+#include "../object.h"
+#include "interface/plugin.hpp"
 
 class FarDlgObjectClass;
 class FarDialogClass;

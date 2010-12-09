@@ -1,4 +1,4 @@
-#include <stdhdr.h>
+#include "stdhdr.h"
 #include "fwcommon.h"
 #include "objstring.h"
 
