@@ -9,12 +9,12 @@ void fixbind();
 
 void FileCopyExPlugin::MiscInit()
 {
-  DescFiles.LoadFromString(Registry.GetString("\\Software\\Far\\Descriptions", "ListNames", 
+  DescFiles.LoadFromString(Registry.GetString("\\Software\\Far2\\Descriptions", "ListNames", 
                             "Descript.ion,Files.bbs"), ',');
 //  DescFiles.SetOptions(slSorted | slIgnoreCase);
 }
 
-String regkey = "\\Software\\Far\\KeyMacros\\Shell";
+String regkey = "\\Software\\Far2\\KeyMacros\\Shell";
 
 int isour(const String &key)
 {

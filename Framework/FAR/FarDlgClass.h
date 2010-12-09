@@ -128,10 +128,7 @@ class FarDlgCheckboxClass : public FarDlgObjectClass
     item.X2=item.X1+lablen(item)+4-1;
     item.Selected=obj("Selected");
   }
-  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
-  {
-    obj("Selected")=items[obj.DialogItem].Selected;
-  }
+  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg);
   void LoadState(PropertyList &state, FarDlgObject& obj)
   {
     obj("Selected")=state[obj.Name()];
@@ -192,11 +189,7 @@ class FarDlgComboboxClass : public FarDlgObjectClass
     AddProperty("Items", "");
   }
   void InitItem(FarDialogItem& item, FarDlgObject& obj);
-  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
-  {
-//    _toansi(items[obj.DialogItem].PtrData);
-    obj("Text")=items[obj.DialogItem].PtrData;
-  }
+  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg);
   void LoadState(PropertyList &state, FarDlgObject& obj)
   {
     obj("Text")=state[obj.Name()];

@@ -18,6 +18,11 @@ void FarDlgObjectClass::DefineProperties()
 
 FarDlgObjectReg *__FarDlgObjectReg;
 
+void FarDlgCheckboxClass::RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
+{
+	obj("Selected")=(int)Info.SendDlgMessage(dlg, DM_GETCHECK, obj.DialogItem, 0);
+}
+
 void FarDlgEditClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
 {
   item.Type=DI_EDIT;
@@ -34,13 +39,18 @@ void FarDlgEditClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
     }
   }
 }
+
+static String GetDlgText(HANDLE dlg, int id)
+{
+	size_t len = Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, NULL);
+	wchar_t* buf = (wchar_t*)_malloca((len + 1)*sizeof(wchar_t));
+	Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, (LONG_PTR)buf);
+	return buf;
+}
+
 void FarDlgEditClass::RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
 {
-	size_t len = Info.SendDlgMessage(dlg, DM_GETTEXTPTR, obj.DialogItem, NULL);
-	wchar_t* buf = (wchar_t*)_malloca((len + 1)*sizeof(wchar_t));
-	Info.SendDlgMessage(dlg, DM_GETTEXTPTR, obj.DialogItem, (LONG_PTR)buf);
-//	_toansi(items[obj.DialogItem].PtrData);
-	obj("Text")=buf;
+	obj("Text")=GetDlgText(dlg, obj.DialogItem);
 }
 
 void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
@@ -72,6 +82,10 @@ void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
         e.list.Items[i].Flags|=LIF_SELECTED;
     }
   }
+}
+void FarDlgComboboxClass::RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
+{
+	obj("Text")=GetDlgText(dlg, obj.DialogItem);
 }
 
 int lablen(FarDialogItem& item)
