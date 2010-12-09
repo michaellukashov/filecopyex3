@@ -1,10 +1,7 @@
 /*
 FileCopyEx - Extended File Copy plugin for Far 2 file manager
 
-Copyright (C) 2004 - 2010 Serge Cheperis aka craZZy
-Bugfixes: slst, CDK, Ivanych, Alter, Axxie and Nsky
-Special thanks to Vitaliy Tsubin
-Far 2 (32 & 64 bit) full unicode version by djdron
+Copyright (C) 2004 - 2010\nIdea & core: Max Antipin\nCoding: Serge Cheperis aka craZZy\nBugfixes: slst, CDK, Ivanych, Alter, Axxie and Nsky\nSpecial thanks to Vitaliy Tsubin\nFar 2 (32 & 64 bit) full unicode version by djdron
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by

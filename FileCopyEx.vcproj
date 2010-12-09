@@ -4,6 +4,7 @@
 	Version="9,00"
 	Name="FileCopyEx"
 	ProjectGUID="{497E8E61-0A70-4F9D-86A2-890A1A3CB98A}"
+	RootNamespace="FileCopyEx"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -669,10 +670,6 @@
 		<Filter
 			Name="docs"
 			>
-			<File
-				RelativePath=".\todo.txt"
-				>
-			</File>
 			<Filter
 				Name="english"
 				>
@@ -719,11 +716,19 @@
 			>
 		</File>
 		<File
+			RelativePath=".\LICENSE.txt"
+			>
+		</File>
+		<File
 			RelativePath=".\plugin.def"
 			>
 		</File>
 		<File
 			RelativePath=".\resource.h"
+			>
+		</File>
+		<File
+			RelativePath=".\todo.txt"
 			>
 		</File>
 	</Files>
