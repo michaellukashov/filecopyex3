@@ -25,7 +25,7 @@ void FarPlugin::InitLang()
 FarPlugin::FarPlugin(void)
 {
   // bug #15 fixed by Ivanych
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
   Prefix="";
   RootKey="UnknownPlugin";
   Flags=0;
@@ -72,78 +72,79 @@ void Init()
   Instance->LoadOptions();
 }
 
-void _export WINAPI SetStartupInfo(const struct PluginStartupInfo *Info)
+void _export WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   ::Info=*Info;
-  if (!Instance) Init();
-  SetFileApisToOEM();
+  if(!Instance)
+	  Init();
+//  SetFileApisToOEM();
 }
 
-HANDLE _export WINAPI OpenPlugin(int OpenFrom, int Item)
+HANDLE _export WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   Instance->InitLang();
-  FarPanel* p=Instance->OpenPlugin(OpenFrom, Item);
+  FarPanel* p=Instance->OpenPlugin(OpenFrom, (int)Item);
   if (!p) Instance->SaveOptions();
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
   if (p) return (HANDLE)p;
   else return INVALID_HANDLE_VALUE;
 }
 
-int _export WINAPI Configure(int ItemNumber)
+int _export WINAPI ConfigureW(int ItemNumber)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   Instance->InitLang();
   int res=Instance->Configure(ItemNumber);
   Instance->SaveOptions();
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
   return res;
 }
 
-char **menu=NULL, **config=NULL, *prefix=NULL;
+wchar_t **menu=NULL, **config=NULL, *prefix=NULL;
 
-void _export WINAPI GetPluginInfo(struct PluginInfo *Info)
+void _export WINAPI GetPluginInfoW(struct PluginInfo *Info)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   Instance->InitLang();
   memset(Info, 0, sizeof(struct PluginInfo));
   Info->StructSize=sizeof(struct PluginInfo);
   Info->Flags=Instance->Flags;
-  if (!prefix && Instance->Prefix!="") prefix=strdup(Instance->Prefix.aptr());
+  if (!prefix && Instance->Prefix!="") prefix=_wcsdup(Instance->Prefix.ptr());
   Info->CommandPrefix=prefix;
   Info->DiskMenuStringsNumber=0;
   Info->DiskMenuNumbers=NULL;
   if (!menu)
   {
-    menu=(char**)malloc(sizeof(char*)*Instance->MenuItems.Count());
+    menu=(wchar_t**)malloc(sizeof(wchar_t*)*Instance->MenuItems.Count());
     for (int i=0; i<Instance->MenuItems.Count(); i++)
-      menu[i]=strdup(Instance->MenuItems[i].optr());
+      menu[i]=_wcsdup(Instance->MenuItems[i].ptr());
   }
   if (!config)
   {
-    config=(char**)malloc(sizeof(char*)*Instance->ConfigItems.Count());
+    config=(wchar_t**)malloc(sizeof(wchar_t*)*Instance->ConfigItems.Count());
     for (int i=0; i<Instance->ConfigItems.Count(); i++)
-      config[i]=strdup(Instance->ConfigItems[i].optr());
+      config[i]=_wcsdup(Instance->ConfigItems[i].ptr());
   }
   Info->PluginMenuStringsNumber=Instance->MenuItems.Count();
   Info->PluginMenuStrings=menu;
   Info->PluginConfigStringsNumber=Instance->ConfigItems.Count();
   Info->PluginConfigStrings=config;
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
 }
 
-void _export WINAPI ClosePlugin(HANDLE hPlugin)
+void _export WINAPI ClosePluginW(HANDLE hPlugin)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   Instance->SaveOptions();
   delete (FarPanel*)hPlugin;
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
 }
 
-int _export WINAPI GetMinFarVersion(void)
+int _export WINAPI GetMinFarVersionW(void)
 {
-  return MAKEFARVERSION(1,70,1282);
+  return FARMANAGERVERSION;
 }
 
 int FarPlugin::Configure(int)
@@ -161,7 +162,7 @@ extern HANDLE hInstance;
 
 String GetDLLName()
 {
-  TCHAR buf[1024];
+  wchar_t buf[1024];
   GetModuleFileName((HMODULE)hInstance, buf, 1024);
   return buf;
 }
@@ -172,15 +173,11 @@ String GetDLLPath()
   return dlln.substr(0, dlln.crfind('\\'));
 }
 
-void FarErrorHandler(const TCHAR* s)
+void FarErrorHandler(const wchar_t* s)
 {
   /*if (ShowMessageEx("Error", s, "OK\nDebug", 0)==1)
     DebugBreak();*/
-  char text[1024];
-  _ttoacs(text, s, 1024);
-  const char* items[]={
-    "Framework Error", text, "OK", "Debug"
-  };
+  const wchar_t* items[]={ L"Framework Error", s, L"OK", L"Debug" };
   if (Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, items, 4, 2)==1)
     DebugBreak();
 }

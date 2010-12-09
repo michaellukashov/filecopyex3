@@ -2,7 +2,7 @@
 #include "fwcommon.h"
 #include "objstring.h"
 
-void FWError(const TCHAR *s)
+void FWError(const wchar_t *s)
 {
   if (errorHandler)
     errorHandler(s);
@@ -24,9 +24,9 @@ extern void InitObjMgr();
 int WinNT, Win2K, WinXP, Win98, WinNT4;
 HANDLE hInstance;
 
-TCHAR* AWErrMsgWinNT = _T("Remove FileCopyExA.dll file from plugins folder!\n\
+wchar_t* AWErrMsgWinNT = _T("Remove FileCopyExA.dll file from plugins folder!\n\
 it's intended to use on Win9x based operating systems.");
-TCHAR* AWErrMsgWin98 = _T("Remove FileCopyExW.dll file from plugins folder!\n\
+wchar_t* AWErrMsgWin98 = _T("Remove FileCopyExW.dll file from plugins folder!\n\
 it's intended to use on WinNT based operating systems.");
 
 BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID)
@@ -58,7 +58,7 @@ BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID)
             }
   #endif
 #endif
-    InitHeap();
+//    InitHeap();
     InitObjMgr();
   }
   return TRUE;

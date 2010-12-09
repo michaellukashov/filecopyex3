@@ -264,11 +264,11 @@ object KeysDialog: FarDialog
   end
   object Label1: FarDlgLabel
   end
-  object AltShiftF5: FarDlgRadiobutton
+  object AltShiftF5: FarDlgRadioButton
   end
-  object CtrlShiftF5: FarDlgRadiobutton
+  object CtrlShiftF5: FarDlgRadioButton
   end
-  object CtrlAltF5: FarDlgRadiobutton
+  object CtrlAltF5: FarDlgRadioButton
   end
   object Sep2: FarDlgLine
   end
@@ -315,8 +315,8 @@ object AboutDialog: FarDialog
   end  
   object Label9: FarDlgLabel
   end  
-;  object Label10: FarDlgLabel
-;  end  
+  object Label10: FarDlgLabel
+  end  
   object Sep1: FarDlgLine
   end
   object OK: FarDlgButton

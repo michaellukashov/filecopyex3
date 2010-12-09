@@ -40,4 +40,4 @@ String GetDLLPath();
 
 FarPlugin* InitInstance();
 
-void FarErrorHandler(const TCHAR*);
+void FarErrorHandler(const wchar_t*);

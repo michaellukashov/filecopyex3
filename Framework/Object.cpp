@@ -112,7 +112,7 @@ void Object::SaveToList(StringList &list, int clear, int level)
     list.Add(pfx+_class->PropertyNames[i]+"="
       +Properties[_class->PropertyNames.Values(i)]);
   }
-  for (i=0; i<Children.Count(); i++)
+  for (int i=0; i<Children.Count(); i++)
   {
     list.Add(pfx+"object "+Children[i].Name()+": "+Children[i].Type());
     Children[i].SaveToList(list, 0, level+1);

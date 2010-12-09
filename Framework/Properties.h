@@ -10,7 +10,7 @@ public:
   ValType Type;
   int Int;
   double Float;
-  Handle Str;
+  String Str;
 };
 
 class Property : private PropVal

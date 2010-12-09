@@ -21,10 +21,10 @@ void FarPanel::CallGetOpenPluginInfo(OpenPluginInfo *info)
   info->StructSize=sizeof(*info);
   info->Flags=Flags;
   info->HostFile=NULL;
-  (FormatName+":\\"+CurDir).ToOem(_CurDirBuf, MAX_FILENAME);
+  (FormatName+":\\"+CurDir).ToUnicode(_CurDirBuf, MAX_FILENAME);
   info->CurDir=_CurDirBuf;
-  FormatName.ToOem(_FormatBuf, sizeof(_FormatBuf)/sizeof(TCHAR));
-  PanelTitle.ToOem(_TitleBuf, sizeof(_TitleBuf)/sizeof(TCHAR));
+  FormatName.ToUnicode(_FormatBuf, sizeof(_FormatBuf)/sizeof(wchar_t));
+  PanelTitle.ToUnicode(_TitleBuf, sizeof(_TitleBuf)/sizeof(wchar_t));
   info->Format=_FormatBuf;
   info->PanelTitle=_TitleBuf;
 }
@@ -37,7 +37,7 @@ int FarPanel::CallSetDirectory(const String& _dir, int opmode)
     if (NewDir=="") 
     {
       if (Flags & OPIF_ADDDOTS) 
-        Info.Control(this, FCTL_CLOSEPLUGIN, NULL);
+        Info.Control(this, FCTL_CLOSEPLUGIN, 0, NULL);
       else 
         return FALSE;
     }
@@ -137,83 +137,83 @@ int FarPanel::MkDir(String &name, int silent)
   return FALSE;
 }
 
-void _export WINAPI GetOpenPluginInfo(HANDLE hPlugin, struct OpenPluginInfo *Info)
+void _export WINAPI GetOpenPluginInfoW(HANDLE hPlugin, struct OpenPluginInfo *Info)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   ((FarPanel*)hPlugin)->CallGetOpenPluginInfo(Info);
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
 }
 
-int _export WINAPI SetDirectory(HANDLE hPlugin, const char *Dir, int OpMode)
+int _export WINAPI SetDirectoryW(HANDLE hPlugin,const wchar_t *Dir,int OpMode)
 {
-  SetFileApisToANSI();
-  char *dir=(char*)_alloca(strlen(Dir)+1);
-  strcpy(dir, Dir);
-  _toansi(dir);
-  int res=((FarPanel*)hPlugin)->CallSetDirectory(dir, OpMode);
-  SetFileApisToOEM();
+//  SetFileApisToANSI();
+//   size_t l = wcslen(Dir)+1;
+//   char *dir=(char*)_alloca(l);
+//   strcpy_s(dir, l, Dir);
+//   _toansi(dir);
+  int res=((FarPanel*)hPlugin)->CallSetDirectory(Dir, OpMode);
+//  SetFileApisToOEM();
   return res;
 }
 
-int _export WINAPI GetFindData(HANDLE hPlugin,  struct PluginPanelItem **pPanelItem,
+int _export WINAPI GetFindDataW(HANDLE hPlugin,  struct PluginPanelItem **pPanelItem,
                                int *pItemsNumber, int OpMode)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   int res=((FarPanel*)hPlugin)->CallGetFindData(*pPanelItem, *pItemsNumber, OpMode);
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
   return res;
 }
 
-void _export WINAPI FreeFindData(HANDLE hPlugin, struct PluginPanelItem *PanelItem,
+void _export WINAPI FreeFindDataW(HANDLE hPlugin, struct PluginPanelItem *PanelItem,
                                  int ItemsNumber)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   ((FarPanel*)hPlugin)->CallFreeFindData(PanelItem, ItemsNumber);
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
 }
 
-int _export WINAPI DeleteFiles(HANDLE hPlugin, struct PluginPanelItem *PanelItem,
+int _export WINAPI DeleteFilesW(HANDLE hPlugin, struct PluginPanelItem *PanelItem,
                                int ItemsNumber, int OpMode)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   int res=((FarPanel*)hPlugin)->CallDeleteFiles(PanelItem, ItemsNumber, OpMode);
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
   return res;
 }
 
-int _export WINAPI PutFiles(HANDLE hPlugin, struct PluginPanelItem *PanelItem,
-                               int ItemsNumber, int Move, int OpMode)
+int _export WINAPI PutFilesW(HANDLE hPlugin,struct PluginPanelItem *PanelItem,int ItemsNumber,int Move,const wchar_t *SrcPath,int OpMode)
 {
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
   int res=((FarPanel*)hPlugin)->CallPutFiles(PanelItem, ItemsNumber, Move, OpMode);
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
   return res;
 }
 
-int _export WINAPI GetFiles(HANDLE hPlugin, struct PluginPanelItem *PanelItem,
-                            int ItemsNumber, int Move, char *DestPath,
-                            int OpMode)
+int _export WINAPI GetFilesW(HANDLE hPlugin,struct PluginPanelItem *PanelItem,int ItemsNumber,int Move,const wchar_t **DestPath,int OpMode)
 {
-  SetFileApisToANSI();
-  char *dp=(char*)_alloca(strlen(DestPath)+1);
-  strcpy(dp, DestPath);
-  _toansi(dp);
-  int res=((FarPanel*)hPlugin)->CallGetFiles(PanelItem, ItemsNumber, Move, 
-    dp, OpMode);
-  SetFileApisToOEM();
+//  SetFileApisToANSI();
+//   size_t l = strlen(DestPath)+1;
+//   char *dp=(char*)_alloca(l);
+//   strcpy_s(dp, l, DestPath);
+//   _toansi(dp);
+  int res=((FarPanel*)hPlugin)->CallGetFiles(PanelItem, ItemsNumber, Move, *DestPath, OpMode);
+//  SetFileApisToOEM();
   return res;
 }
 
-int _export WINAPI MakeDirectory(HANDLE hPlugin, char *Name, int OpMode)
+int _export WINAPI MakeDirectoryW(HANDLE hPlugin,const wchar_t **Name,int OpMode)
 {
-  SetFileApisToANSI();
-  char *dp=(char*)_alloca(strlen(Name)+1);
-  strcpy(dp, Name);
-  _toansi(dp);
-  String name=dp;
+//  SetFileApisToANSI();
+//   size_t l = strlen(Name)+1;
+//   char *dp=(char*)_alloca(l);
+//   strcpy_s(dp, l, Name);
+//   _toansi(dp);
+  String name=*Name;
   int res=((FarPanel*)hPlugin)->CallMakeDirectory(name, OpMode);
-  if (res==TRUE && name!=Name) name.ToOem(Name, MAX_PATH);
-  SetFileApisToOEM();
+//   if (res==TRUE && name!=Name)
+// 	  name.ToOem(Name, MAX_PATH);
+//  SetFileApisToOEM();
   return res;
 
 }

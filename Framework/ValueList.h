@@ -4,33 +4,34 @@
 class ValueList
 {
 public:
-  ValueList();
-  virtual ~ValueList();
+	ValueList();
+	virtual ~ValueList();
 
-  const String Name(int);
-  const String Value(int);
-  int Count();
-  void Clear();
+	const String Name(int);
+	const String Value(int);
+	int Count();
+	void Clear();
 
-  void Set(const String&, const String&);
-  void Set(const String&);
+	void Set(const String&, const String&);
+	void Set(const String&);
 
-  const String operator[](const String&); 
+	const String operator[](const String&); 
 
-  void LoadFromList(StringList&);
-  void SaveToList(StringList&);
+	void LoadFromList(StringList&);
+	void SaveToList(StringList&);
 
-  struct ListItem
-  {
-    Handle name, value;
-  };
+	struct ListItem
+	{
+		String name, value;
+	};
 
 private:
-  Array<ListItem> items;
+	int Find(const String& k);
+	Array<ListItem> items;
 };
 
 class LocaleList : public ValueList
 {
 public:
-  void Load(const String& fn);
+	void Load(const String& fn);
 };

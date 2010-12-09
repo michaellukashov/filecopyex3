@@ -11,7 +11,7 @@ void FileCopyExPlugin::MiscInit()
 {
   DescFiles.LoadFromString(Registry.GetString("\\Software\\Far\\Descriptions", "ListNames", 
                             "Descript.ion,Files.bbs"), ',');
-  DescFiles.SetOptions(slSorted | slIgnoreCase);
+//  DescFiles.SetOptions(slSorted | slIgnoreCase);
 }
 
 String regkey = "\\Software\\Far\\KeyMacros\\Shell";
@@ -131,10 +131,10 @@ void FileCopyExPlugin::KeyConfig()
 }
 
 
-#ifdef UNICODE
-#define VersionStr "version 1.9.0 beta (Win32 Unicode), " __DATE__
+#ifdef _WIN64
+#define VersionStr "version 2.0.0 beta (x64 Unicode), " __DATE__
 #else
-#define VersionStr "version 1.9.0 beta (Win32 ANSI), " __DATE__
+#define VersionStr "version 2.0.0 beta (x86 Unicode), " __DATE__
 #endif
 
 void FileCopyExPlugin::About()
@@ -187,56 +187,10 @@ rep:
 int clrFrame=0x7F, clrTitle=0x70, clrBar=0x70, 
   clrText=0x70, clrLabel=0x71;
 
-void sound95(int hz)
-{
-  __asm
-  {
-    push eax
-    push ebx
-    push edx
-    mov    ebx,hz
-    mov    eax,34DDh
-    mov    edx,0012h
-    div    bx
-    mov    bx,ax
-    in     al,61h
-    test   al,03h
-    jne    lab1
-    or     al,03h
-    out    61h,al
-    mov    al,0B6h
-    out    43h,al
-    lab1: mov    al,bl
-    out    42h,al
-    mov    al,bh
-    out    42h,al
-    pop edx
-    pop ebx
-    pop eax
-  }
-}
-
-void nosound95()
-{
-  __asm
-  {
-    push eax
-    in     al,61h
-    and    al,0FCh
-    out    61h,al
-    pop eax
-  }
-}
-
 void dobeep(int hz, int delay)
 {
-  if (WinNT) Beep(hz, delay);
-  else
-  {
-    sound95(hz);
-    Sleep(delay);
-    nosound95();
-  }
+  if(WinNT)
+	  Beep(hz, delay);
 }
 
 #pragma warning(disable:4305)

@@ -4,50 +4,50 @@
 
 StringList::StringList(void)
 {
-  InitHeap();
-  SetBlock(4096);
-  SetOptions(0);
+//   InitHeap();
+//   SetBlock(4096);
+//   SetOptions(0);
 }
 
 StringList::~StringList(void)
 {
-  Clear();
+//  Clear();
 }
 
-void StringList::SetBlock(int block)
-{
-  items.SetBlock(block/sizeof(ListItem));
-}
+// void StringList::SetBlock(int block)
+// {
+//   items.SetBlock(block/sizeof(ListItem));
+// }
 
-int Compare(const StringList::ListItem& s1, const StringList::ListItem& s2,
-            const void* p)
-{
-  int res=_tcsncmp(
-    heap->LockString(s1.hnd), 
-    heap->LockString(s2.hnd),
-    p?(size_t)p:0x7FFFFFFF);
-  heap->Unlock(s1.hnd);
-  heap->Unlock(s2.hnd);
-  return res;
-}
+// int Compare(const StringList::ListItem& s1, const StringList::ListItem& s2,
+//             const void* p)
+// {
+//   int res=_tcsncmp(
+//     heap->LockString(s1.hnd), 
+//     heap->LockString(s2.hnd),
+//     p?(size_t)p:0x7FFFFFFF);
+//   heap->Unlock(s1.hnd);
+//   heap->Unlock(s2.hnd);
+//   return res;
+// }
+// 
+// int ICompare(const StringList::ListItem& s1, const StringList::ListItem& s2,
+//              const void* p)
+// {
+//   int res=_tcsnicmp(
+//     heap->LockString(s1.hnd), 
+//     heap->LockString(s2.hnd),
+//     p?(size_t)p:0x7FFFFFFF);
+//   heap->Unlock(s1.hnd);
+//   heap->Unlock(s2.hnd);
+//   return res;
+// }
 
-int ICompare(const StringList::ListItem& s1, const StringList::ListItem& s2,
-             const void* p)
-{
-  int res=_tcsnicmp(
-    heap->LockString(s1.hnd), 
-    heap->LockString(s2.hnd),
-    p?(size_t)p:0x7FFFFFFF);
-  heap->Unlock(s1.hnd);
-  heap->Unlock(s2.hnd);
-  return res;
-}
-
-void StringList::SetOptions(int opt)
-{
-  items.SetSorted(opt & slSorted,
-    opt & slIgnoreCase ? ICompare:Compare);
-}
+// void StringList::SetOptions(int opt)
+// {
+//   items.SetSorted(opt & slSorted,
+//     opt & slIgnoreCase ? ICompare:Compare);
+// }
 
 int StringList::Count()
 {
@@ -56,19 +56,23 @@ int StringList::Count()
 
 const String StringList::operator[](int n)
 {
-  return String(items[n].hnd);
+  return items[n].str;
 }
 
 void StringList::Set(int n, const String& v)
 {
-  if (!items.IsSorted())
-    heap->ReallocString(items[n].hnd, v);
-  else
-  {
-    int val=Values(n);
-    Delete(n);
-    Add(v, val);
-  }
+	ListItem item;
+	item.str = v;
+	item.Data = 0;
+	items[n] = item;
+//   if (!items.IsSorted())
+//     heap->ReallocString(items[n].hnd, v);
+//   else
+//   {
+//     int val=Values(n);
+//     Delete(n);
+//     Add(v, val);
+//   }
 }
 
 int& StringList::Values(int n)
@@ -85,7 +89,7 @@ int StringList::Add(const String& v, int data)
 {
   ListItem itm;
   itm.Data=data;
-  itm.hnd=heap->AllocString(v);
+  itm.str=v;
   return items.Add(itm);
 }
 
@@ -93,7 +97,7 @@ void StringList::Insert(int n, const String& v, int data)
 {
   ListItem itm;
   itm.Data=data;
-  itm.hnd=heap->AllocString(v);
+  itm.str=v;
   items.Insert(n, itm);
 }
 
@@ -101,7 +105,7 @@ int StringList::Add(const String& v, void* data)
 {
   ListItem itm;
   itm.PtrData=data;
-  itm.hnd=heap->AllocString(v);
+  itm.str=v;
   return items.Add(itm);
 }
 
@@ -109,20 +113,20 @@ void StringList::Insert(int n, const String& v, void* data)
 {
   ListItem itm;
   itm.PtrData=data;
-  itm.hnd=heap->AllocString(v);
+  itm.str=v;
   items.Insert(n, itm);
 }
 
 void StringList::Delete(int n)
 {
-  heap->Free(items[n].hnd);
+//  heap->Free(items[n].hnd);
   items.Delete(n, 1);
 }
 
 void StringList::Clear()
 {
-  for (int i=0; i<Count(); i++)
-    heap->Free(items[i].hnd);
+//   for (int i=0; i<Count(); i++)
+//     heap->Free(items[i].hnd);
   items.Clear();
 }
 
@@ -149,7 +153,7 @@ int StringList::LoadFrom(FILE* f)
   int unicode=(read==2) && (sign.uc==0xFEFF || sign.uc==0xFFFE);
   int inv=(unicode) && (sign.uc==0xFFFE);
   const int bsize=4096, ssize=4096;
-  TCHAR buf[ssize];
+  wchar_t buf[ssize];
   if (unicode)
   {
     const wchar_t CR='\r', LF='\n';
@@ -167,7 +171,7 @@ int StringList::LoadFrom(FILE* f)
         if (buffer[i]==CR || buffer[i]==LF && oldc!=CR) 
         {
           string[spos]=0;
-          _wtotcs(buf, string, sizeof(buf)/sizeof(TCHAR));
+          _wtotcs(buf, string, sizeof(buf)/sizeof(wchar_t));
           Add(buf);
           spos=0;
         }
@@ -180,7 +184,7 @@ int StringList::LoadFrom(FILE* f)
     if (spos) 
     {
       string[spos]=0;
-      _wtotcs(buf, string, sizeof(buf)/sizeof(TCHAR));
+      _wtotcs(buf, string, sizeof(buf)/sizeof(wchar_t));
       Add(buf);
     }
   }
@@ -236,7 +240,7 @@ int StringList::SaveTo(FILE *f, TextFormat tf)
   }
   for (int i=0; i<Count(); i++)
   {
-    const TCHAR* s=(*this)[i].Lock();
+    const wchar_t* s=(*this)[i].Lock();
     const int ssize=4096;
     if (tf!=tfANSI)
     {
@@ -246,7 +250,7 @@ int StringList::SaveTo(FILE *f, TextFormat tf)
         for (int j=0; j<(int)wcslen(buf); j++)
           buf[j]=((buf[j]&0x00FF)<<8) | ((buf[j]&0xFF00) >> 8);
       fwrite(buf, sizeof(wchar_t), wcslen(buf), f);
-      wcscpy(buf, L"\r\n");
+      wcscpy_s(buf, ssize, L"\r\n");
       if (tf==tfUnicodeBE)
         for (int j=0; j<(int)wcslen(buf); j++)
           buf[j]=((buf[j]&0x00FF)<<8) | ((buf[j]&0xFF00) >> 8);
@@ -257,7 +261,7 @@ int StringList::SaveTo(FILE *f, TextFormat tf)
       char buf[ssize];
       _ttoacs(buf, s, ssize);
       fwrite(buf, sizeof(char), strlen(buf), f);
-      strcpy(buf, "\r\n");
+      strcpy_s(buf, ssize, "\r\n");
       fwrite(buf, sizeof(char), 2, f);
     }
     (*this)[i].Unlock();
@@ -267,7 +271,8 @@ int StringList::SaveTo(FILE *f, TextFormat tf)
 
 int StringList::Load(const String& fn)
 {
-  FILE *f=_tfopen(fn.ptr(), _T("rb"));
+  FILE *f = NULL;
+  _tfopen_s(&f, fn.ptr(), _T("rb"));
   if (!f) return 0;
   int res=LoadFrom(f);
   fclose(f);
@@ -278,7 +283,8 @@ int StringList::Save(const String& fn, TextFormat tf)
 {
   int attr=GetFileAttributes(fn.ptr());
   SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
-  FILE *f=_tfopen(fn.ptr(), _T("wb"));
+  FILE *f=NULL;
+  _tfopen_s(&f, fn.ptr(), _T("wb"));
   int res;
   if (!f) res=0;
   else
@@ -291,21 +297,21 @@ int StringList::Save(const String& fn, TextFormat tf)
   return res;
 }
 
-void StringList::LoadFromString(const String& s, TCHAR delim)
+void StringList::LoadFromString(const String& s, wchar_t delim)
 {
   LoadFromString(s.ptr(), delim);
 }
 
-void StringList::LoadFromString(const TCHAR* s, TCHAR delim)
+void StringList::LoadFromString(const wchar_t* s, wchar_t delim)
 {
   Clear();
-  TCHAR *p=(TCHAR*)s, *pp=p, buf[4096];
+  wchar_t *p=(wchar_t*)s, *pp=p, buf[4096];
   do
   {
     if (!*p || *p==delim)
     {
       int len=__min((int)(p-pp), 4095);
-      _tcsncpy(buf, pp, len);
+      _tcsncpy_s(buf, 4096, pp, len);
       buf[len]=0;
       pp=p+1;
       Add(buf);
@@ -315,25 +321,26 @@ void StringList::LoadFromString(const TCHAR* s, TCHAR delim)
 
 int StringList::Find(const String& v, int start)
 {
-  ListItem itm;
-  itm.hnd=v.handle();
-  int res=items.Find(itm, start, (const void*)0x7FFFFFFF);
-  return res;
+	for(int i = start; i < Count(); ++i)
+	{
+		if(items[i].str.cmp(v) == 0)
+			return i;
+	}
+  return -1;
 }
 
-int StringList::GFind(const String& v, int start)
-{
-  ListItem itm;
-  itm.hnd=v.handle();
-  int res=items.GFind(itm, start, (const void*)0x7FFFFFFF);
-  return res;
-}
-
-int StringList::PFind(const String& v, int start)
-{
-  ListItem itm;
-  itm.hnd=v.handle();
-  int res=items.Find(itm, start, (const void*)(size_t)v.len());
-  return res;
-}
-
+// int StringList::GFind(const String& v, int start)
+// {
+//   ListItem itm;
+//   itm.str=v;
+//   int res=items.GFind(itm, start, (const void*)0x7FFFFFFF);
+//   return res;
+// }
+// 
+// int StringList::PFind(const String& v, int start)
+// {
+//   ListItem itm;
+//   itm.str=v;
+//   int res=items.Find(itm, start, (const void*)(size_t)v.len());
+//   return res;
+// }

@@ -11,10 +11,10 @@ public:
   FileNameStore() { ; }
   ~FileNameStore() { ; }
 
-  int Add(TCHAR* ptr) { return StringStore::Add(ptr); }
-  int AddRel(TCHAR pc, TCHAR* ptr);
+  int Add(wchar_t* ptr) { return StringStore::Add(ptr); }
+  int AddRel(wchar_t pc, wchar_t* ptr);
   int Count() { return StringStore::Count(); }
-  TCHAR* GetNameByNum(int num);
+  wchar_t* GetNameByNum(int num);
 
   friend class FileNameStoreEnum;
 };
@@ -24,7 +24,7 @@ class FileNameStoreEnum
 private:
   FileNameStore* Store;
   int Cur;
-  TCHAR Buffer[MAX_FILENAME], CurPath[MAX_FILENAME];
+  wchar_t Buffer[MAX_FILENAME], CurPath[MAX_FILENAME];
 
 public:
   FileNameStoreEnum(FileNameStore& store)
@@ -37,8 +37,8 @@ public:
   int Count() { return Store->Count(); }
   void ToFirst();
   void Skip();
-  TCHAR* GetNext();
-  TCHAR* GetByNum(int num);
+  wchar_t* GetNext();
+  wchar_t* GetByNum(int num);
 
 };
 
@@ -47,7 +47,7 @@ class DescList
 public:
   DescList();
   int LoadFromFile(const String& fn);
-  int LoadFromString(TCHAR *ptr);
+  int LoadFromString(wchar_t *ptr);
   int LoadFromList(StringList& list);
   int SaveToFile(const String& fn);
   void Merge(DescList&);

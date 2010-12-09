@@ -22,7 +22,7 @@ public:
   virtual ~FarDlgObject(void);
 
   virtual void InitItem(FarDialogItem& item);
-  virtual void RetrieveProperties(Array<FarDialogItem>& items);
+  virtual void RetrieveProperties(Array<FarDialogItem>& items, HANDLE dlg);
   virtual void BeforeAdd(FarDialogItem& item);
   virtual void LoadState(PropertyList &state);
   virtual void SaveState(PropertyList &state);
@@ -48,7 +48,7 @@ protected:
 class FarDlgEdit : public FarDlgObject
 {
 public:
-  char HistoryId[64];
+  wchar_t HistoryId[64];
 };
 
 class FarDlgCombobox : public FarDlgObject
@@ -69,7 +69,7 @@ protected:
   FarDlgObject* FindChild(const String&);
   void LoadState(PropertyList &state);
   void SaveState(PropertyList &state);
-  void RetrieveProperties(Array<FarDialogItem>& items);
+  void RetrieveProperties(Array<FarDialogItem>& items, HANDLE dlg);
 
   int IsContainer() { return 1; }
 };

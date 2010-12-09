@@ -1,17 +1,17 @@
 EXPORTS
 
-  GetMinFarVersion
-  SetStartupInfo
-  GetPluginInfo
-  OpenPlugin
-  ClosePlugin
-  Configure
+  GetMinFarVersionW
+  SetStartupInfoW
+  GetPluginInfoW
+  OpenPluginW
+  ClosePluginW
+  ConfigureW
 
-  GetOpenPluginInfo
-  SetDirectory
-  GetFindData
-  FreeFindData
-  DeleteFiles
-  PutFiles
-  GetFiles
-  MakeDirectory
+  GetOpenPluginInfoW
+  SetDirectoryW
+  GetFindDataW
+  FreeFindDataW
+  DeleteFilesW
+  PutFilesW
+  GetFilesW
+  MakeDirectoryW

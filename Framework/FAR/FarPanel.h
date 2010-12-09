@@ -33,6 +33,6 @@ public:
   virtual int MkDir(String& name, int silent);
 
 private:
-  char _TitleBuf[128], _FormatBuf[128], _CurDirBuf[MAX_FILENAME];
+  wchar_t _TitleBuf[128], _FormatBuf[128], _CurDirBuf[MAX_FILENAME];
   int Rescan;
 };

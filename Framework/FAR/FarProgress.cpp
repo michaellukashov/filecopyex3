@@ -1,4 +1,4 @@
-#include <stdhdr.h>
+ï»¿#include <stdhdr.h>
 #include "../FileCopyEx/Common.h"
 #include "lowlevelstr.h"
 #include "strutils.h"
@@ -6,10 +6,10 @@
 
 FarProgress::FarProgress(void)
 {
-  clrFrame=Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOX);
-  clrTitle=Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOXTITLE);
-  clrBar=Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,   (void*)COL_DIALOGTEXT);
-  clrText=Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,  (void*)COL_DIALOGTEXT);
+  clrFrame=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOX);
+  clrTitle=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOXTITLE);
+  clrBar=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,   (void*)COL_DIALOGTEXT);
+  clrText=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,  (void*)COL_DIALOGTEXT);
   switch (clrFrame >> 4)
   {
     // [exp] color changed by CDK
@@ -32,41 +32,42 @@ FarProgress::~FarProgress(void)
 void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String& caption)
 {
   int W = X2-X1+1, H = Y2-Y1+1;
-  char buf[512];
+  wchar_t buf[512];
   int attr=clrFrame;
   buf[W]=0;
   for (int i=0; i<W; i++) buf[i]=' ';
   Info.Text(X1, Y1, attr, buf);
   Info.Text(X1, Y2, attr, buf);
-  buf[3]='É';
-  buf[W-4]='»';
-  for (i=4; i<W-4; i++) buf[i]='Í';
+  buf[3]=0x2554;//'â•”'
+  buf[W-4]=0x2557;//'â•—'
+  for (int i=4; i<W-4; i++) buf[i]=0x2550;//'â•'
   Info.Text(X1, Y1+1, attr, buf);
-  buf[3]='È';
-  buf[W-4]='¼';
+  buf[3]=0x255a;//'â•š'
+  buf[W-4]=0x255d;//'â•'
   Info.Text(X1, Y2-1, attr, buf);
-  buf[3]='º';
-  buf[W-4]='º';
-  for (i=4; i<W-4; i++) buf[i]=' ';
-  for (i=Y1+2; i<Y2-1; i++)
+  buf[3]=0x2551;//'â•‘'
+  buf[W-4]=0x2551;//'â•‘'
+  for (int i=4; i<W-4; i++) buf[i]=' ';
+  for (int i=Y1+2; i<Y2-1; i++)
     Info.Text(X1, i, attr, buf);
   if (caption!="")
   {
-    Info.Text(X1+(X2-X1-caption.len())/2, Y1+1, clrTitle, (" "+caption+" ").optr());
+    Info.Text(X1+(X2-X1-caption.len())/2, Y1+1, clrTitle, (String(" ")+caption+" ").ptr());
   }
+  Info.Text(0, 0, 0, NULL);
 
   HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
   WORD a[512];
   ULONG cb;
   COORD cd = { X1+2, Y2+1 };
   ReadConsoleOutputAttribute(h, a, W, cd, &cb);
-  for (i=0; i<(int)cb; i++) a[i] = a[i] & 0x7;
+  for (int i=0; i<(int)cb; i++) a[i] = a[i] & 0x7;
   WriteConsoleOutputAttribute(h, a, cb, cd, &cb);
   for (int j=Y1+1; j<=Y2+1; j++)
   {
     COORD cd = { X2+1, j };
     ReadConsoleOutputAttribute(h, a, 2, cd, &cb);
-    for (i=0; i<(int)cb; i++) a[i] = a[i] & 0x7;
+    for (int i=0; i<(int)cb; i++) a[i] = a[i] & 0x7;
     WriteConsoleOutputAttribute(h, a, cb, cd, &cb);
   }
 }
@@ -91,7 +92,7 @@ void FarProgress::ShowMessage(const String& msg)
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
   DrawWindow(X1, Y1, X2, Y2, "");
-  Info.Text(X1+6, Y1+2, clrText, FormatWidth(msg, X2-X1-11).optr());
+  Info.Text(X1+6, Y1+2, clrText, FormatWidth(msg, X2-X1-11).ptr());
   Info.Text(0, 0, 0, NULL);
   WinType=WIN_MESSAGE;
   TitleBuf=GetTitle();
@@ -110,7 +111,7 @@ void FarProgress::ShowProgress(const String& msg)
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
   DrawWindow(X1, Y1, X2, Y2, "");
-  Info.Text(X1+5, Y1+2, clrText, FormatWidth(msg, X2-X1-9).optr());
+  Info.Text(X1+5, Y1+2, clrText, FormatWidth(msg, X2-X1-9).ptr());
   ProgX1=X1+5; 
   ProgX2=X2-5;
   ProgY=Y1+3;
@@ -127,16 +128,16 @@ void FarProgress::ShowProgress(const String& msg)
 void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
 {
   int n=x2-x1+1, fn=(int)(pc*n), en=n-fn;
-  char buf[512], *bp=buf;
+  wchar_t buf[512], *bp=buf;
   if (!InverseBars)
   {
-    for (int i=0; i<fn; i++) *bp++=(char)0xDB;
-    for (i=0; i<en; i++) *bp++=(char)0xB0;
+    for (int i=0; i<fn; i++) *bp++=0x2588;//'â–ˆ'
+    for (int i=0; i<en; i++) *bp++=0x2591;//'â–‘'
   }
   else
   {
-    for (int i=0; i<en; i++) *bp++=(char)0xB0;
-    for (i=0; i<fn; i++) *bp++=(char)0xDB;
+    for (int i=0; i<en; i++) *bp++=0x2591;//'â–‘'
+    for (int i=0; i<fn; i++) *bp++=0x2588;//'â–ˆ'
   }
   *bp=0;
   Info.Text(x1, y, clrText, buf);
@@ -170,7 +171,7 @@ void FarProgress::Hide()
 
 void FarProgress::DrawText(int x, int y, int c, const String& msg)
 {
-  Info.Text(x, y, c, msg.optr());
+  Info.Text(x, y, c, msg.ptr());
 }
 
 void FarProgress::SetTitle(const String& v)
@@ -185,7 +186,7 @@ void FarProgress::SetTitle2(const String& v)
 
 String FarProgress::GetTitle()
 {
-  TCHAR buf[512];
+  wchar_t buf[512];
   GetConsoleTitle(buf, 512);
   return buf;
 }
@@ -211,7 +212,7 @@ void FarProgress::ShowScanProgress(const String& msg)
                             WindowCoordX2 + 2, WindowCoordY2 + 2);
   DrawWindow(WindowCoordX1, WindowCoordY1, WindowCoordX2, WindowCoordY2, "");
   Info.Text(WindowCoordX1 + 5, WindowCoordY1 + 2, clrText, 
-            FormatWidth(msg, WindowCoordX2 - WindowCoordX1 - 9).optr());
+            FormatWidth(msg, WindowCoordX2 - WindowCoordX1 - 9).ptr());
   ProgX1  = WindowCoordX1 + 5; 
   ProgX2  = WindowCoordX2 - 5;
   ProgY   = WindowCoordY1 + 3;
@@ -245,21 +246,22 @@ void FarProgress::SetScanProgressInfo(__int64 NumberOfFiles, __int64 TotalSize)
 void FarProgress::DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles, __int64 TotalSize)
 {
   String FilesFmtStr = LOC("Status.FilesString") + " %-6I64d";
-  char FilesStr[256];
-  _snprintf(FilesStr, sizeof(FilesStr), (const char*)FilesFmtStr.optr(), NumberOfFiles);
+  wchar_t FilesStr[256];
+  _snwprintf_s(FilesStr, 256, sizeof(FilesStr)/sizeof(wchar_t), (const wchar_t*)FilesFmtStr.ptr(), NumberOfFiles);
 
   String SizeFmtStr = LOC("Status.SizeString") + " %s";
-  char SizeStr[256];
-  _snprintf(SizeStr, sizeof(SizeStr), (const char*)SizeFmtStr.optr(), (const char*)FormatValue(TotalSize).optr());
+  wchar_t SizeStr[256];
+  _snwprintf_s(SizeStr, 256, sizeof(SizeStr)/sizeof(wchar_t), (const wchar_t*)SizeFmtStr.ptr(), (const wchar_t*)FormatValue(TotalSize).ptr());
 
-  DWORD SizeStrOffset = x2 - x1 - strlen(SizeStr) - strlen(FilesStr);
-  char Spacer[256];
+  size_t SizeStrOffset = x2 - x1 - wcslen(SizeStr) - wcslen(FilesStr);
+  wchar_t Spacer[256];
   if (SizeStrOffset+1 >= sizeof(Spacer)) SizeStrOffset = 2;
-  memset(Spacer, 0x20, sizeof(Spacer));
+  for(int i = 0; i < 256; ++i)
+	  Spacer[i] = 0x20;
   Spacer[SizeStrOffset] = 0x00;
 
-  char buf[256];
-  _snprintf(buf, sizeof(buf), "%s %s%s", FilesStr, Spacer, SizeStr);
+  wchar_t buf[256];
+  _snwprintf_s(buf, 256, sizeof(buf)/sizeof(wchar_t), L"%s %s%s", FilesStr, Spacer, SizeStr);
 
   Info.Text(x1, y + 1, clrText, buf);
 }

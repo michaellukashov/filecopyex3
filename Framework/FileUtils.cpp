@@ -1,9 +1,9 @@
 #include <stdhdr.h>
 #include "fileutils.h"
 #include "strutils.h"
+#include "fwcommon.h"
 
 #include "..\FileCopyEx\Common.h"
-#include "..\FileCopyEx\api.h"
 #include "..\FileCopyEx\FileCopyEx.h"
 #include "..\FileCopyEx\engine.h"
 #include "..\FileCopyEx\EngineTools.h"
@@ -123,26 +123,26 @@ BOOL GetPrimaryVolumeMountPoint(const String& VolumeMountPointForPath,
                                 String& PrimaryVolumeMountPoint)
 {
   BOOL result = FALSE;
-  TCHAR VolumeNameForPath[MAX_FILENAME];
+  wchar_t VolumeNameForPath[MAX_FILENAME];
 
   if (!Win2K) return result;
   int attr = GetFileAttributes(VolumeMountPointForPath.ptr());
   if (attr == 0xFFFFFFFF) return result;
   if (!(attr & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT))) return result;
 
-  if (pGetVolumeNameForVolumeMountPoint(AddEndSlash(VolumeMountPointForPath).ptr(),
+  if (GetVolumeNameForVolumeMountPoint(AddEndSlash(VolumeMountPointForPath).ptr(),
                                         VolumeNameForPath,
-                                        sizeof(VolumeNameForPath)/sizeof(TCHAR)))
+                                        sizeof(VolumeNameForPath)/sizeof(wchar_t)))
   {
-    TCHAR VolumeMountPoint[] = _T("?:\\");
-    TCHAR VolumeName[MAX_FILENAME];
+    wchar_t VolumeMountPoint[] = _T("?:\\");
+    wchar_t VolumeName[MAX_FILENAME];
 
     for (char drive = 'A'; drive < 'Z'; drive++)
     {
       VolumeMountPoint[0] = drive;
-      if (pGetVolumeNameForVolumeMountPoint(VolumeMountPoint,
+      if (GetVolumeNameForVolumeMountPoint(VolumeMountPoint,
                                             VolumeName,
-                                            sizeof(VolumeName)/sizeof(TCHAR)))
+                                            sizeof(VolumeName)/sizeof(wchar_t)))
       {
         if (_tcscmp(VolumeNameForPath, VolumeName) == 0)
         {
@@ -166,7 +166,7 @@ int GetSymLink(const String &_dir, String &res, int flg)
 {
   res = "";
   String dir=CutEndSlash(_dir);
-  TCHAR buf[MAX_FILENAME];
+  wchar_t buf[MAX_FILENAME];
   DWORD sz=MAX_FILENAME;
   res=dir;
 
@@ -176,7 +176,7 @@ int GetSymLink(const String &_dir, String &res, int flg)
     String r=buf;
     if (r.left(8)=="\\??\\UNC\\") 
     {
-      res=CutEndSlash("\\\\"+r.substr(8));
+      res=CutEndSlash(String("\\\\")+r.substr(8));
       return TRUE;
     }
     if (r.left(4)=="\\??\\") 
@@ -205,7 +205,7 @@ int GetSymLink(const String &_dir, String &res, int flg)
       if (hf!=INVALID_HANDLE_VALUE) 
       {
         unsigned char Data[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
-                memset(Data, 0, sizeof(Data));
+        memset(Data, 0, sizeof(Data));
         DWORD returnedLength = 0;
         if (DeviceIoControl(hf, FSCTL_GET_REPARSE_POINT, NULL, 0, 
                             Data, sizeof(Data), &returnedLength, NULL)) 
@@ -215,8 +215,8 @@ int GetSymLink(const String &_dir, String &res, int flg)
                (rd->ReparseTag==IO_REPARSE_TAG_MOUNT_POINT) && 
                (!memcmp(rd->ReparseGuid.Data4, L"\\??\\", 8)))
           {
-            TCHAR buf[MAX_FILENAME];
-                        memset(buf, 0, sizeof(buf));
+            wchar_t buf[MAX_FILENAME];
+            memset(buf, 0, sizeof(buf));
             _wtotcs(buf, (wchar_t*)&rd->GenericReparseBuffer, MAX_FILENAME);
             String r=buf;
             if (r.left(7)!="Volume{") 
@@ -280,8 +280,8 @@ String GetFileRoot(const String& _path)
   String path=GetRealFileName(_path), res;
   if (Win2K)
   {
-    TCHAR buf[MAX_FILENAME];
-    if (pGetVolumePathName(path.ptr(), buf, MAX_FILENAME))
+    wchar_t buf[MAX_FILENAME];
+    if (GetVolumePathName(path.ptr(), buf, MAX_FILENAME))
       res=AddEndSlash(buf);
     else
       res=GetFileNameRoot(path);
@@ -292,27 +292,27 @@ String GetFileRoot(const String& _path)
 
 String ExpandEnv(const String& v)
 {
-  TCHAR buf[MAX_FILENAME];
+  wchar_t buf[MAX_FILENAME];
   ExpandEnvironmentStrings(v.ptr(), buf, MAX_FILENAME);
   return buf;
 }
 
 String ApplyFileMask(const String& _name, const String& _mask)
 {
-  TCHAR *name=_name.Lock(), 
+  wchar_t *name=_name.Lock(), 
         *mask=_mask.Lock(),
         res[MAX_FILENAME]=_T("");
   int sz=MAX_FILENAME;
-  TCHAR *next = (TCHAR*)_tcsend(name)-1,
-        *mext = (TCHAR*)_tcsend(mask)-1; 
+  wchar_t *next = (wchar_t*)_tcsend(name)-1,
+        *mext = (wchar_t*)_tcsend(mask)-1; 
   while (next >= name && *next != '.') next--;
   if (next < name) next = name+_tcslen(name);
   else *next++ = 0;
   while (mext >= mask && *mext != '.') mext--;
   if (mext < mask) mext = mask+_tcslen(mask);
   else *mext++ = 0;
-  TCHAR sym[2] = { 0, 0 };
-  for (TCHAR *m = mask; *m; m++)
+  wchar_t sym[2] = { 0, 0 };
+  for (wchar_t *m = mask; *m; m++)
   {
     if (*m == '*') _tcat(res, name, sz);
     else if (*m == '?') _tcat(res, 
@@ -322,7 +322,7 @@ String ApplyFileMask(const String& _name, const String& _mask)
   if (mext[0])
   {
     _tcat(res, _T("."), sz);
-    for (TCHAR *m = mext; *m; m++)
+    for (wchar_t *m = mext; *m; m++)
     {
       if (*m == '*') _tcat(res, next, sz);
       else if (*m == '?') _tcat(res, 
@@ -343,7 +343,7 @@ String ApplyFileMaskPath(const String& name, const String& mask)
   if (a != 0xFFFFFFFF && a & FILE_ATTRIBUTE_DIRECTORY)
   {
     String res=mask;
-    if (name.icmp(mask)) res+="\\"+ExtractFileName(name);
+    if (name.icmp(mask)) res+=String("\\")+ExtractFileName(name);
     return res;
   }
   return ExtractFilePath(mask)+"\\"+
@@ -383,7 +383,7 @@ inline String TempName()
 
 String TempPath()
 {
-  TCHAR buf[MAX_FILENAME];
+  wchar_t buf[MAX_FILENAME];
   GetTempPath(MAX_FILENAME, buf);
   return CutEndSlash(buf);
 }
@@ -393,7 +393,7 @@ String TempPathName()
   return TempPath()+"\\"+TempName();
 }
 
-static int __MoveFile(TCHAR* src, TCHAR *dst)
+static int __MoveFile(wchar_t* src, wchar_t *dst)
 {
   int attr=GetFileAttributes(dst);
   SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
@@ -407,7 +407,7 @@ static int __MoveFile(TCHAR* src, TCHAR *dst)
   }
 }
 
-static int __MoveFileEx(TCHAR* src, TCHAR *dst, int flg)
+static int __MoveFileEx(wchar_t* src, wchar_t *dst, int flg)
 {
   int attr=GetFileAttributes(dst);
   // bug #41 fixed by axxie
@@ -510,12 +510,12 @@ int MoveFile(const String& _src, const String& _dst, int replace)
 
 void ForceDirectories(const String& s)
 {
-  TCHAR *ptr = s.Lock(), *sptr=ptr;
+  wchar_t *ptr = s.Lock(), *sptr=ptr;
   while (*ptr)
   {
     if (*ptr == '\\' || *ptr == '/')
     {
-      TCHAR t = *ptr;
+      wchar_t t = *ptr;
       *ptr = 0;
       CreateDirectory(sptr, NULL);
       *ptr = t;

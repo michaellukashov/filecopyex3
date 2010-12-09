@@ -11,7 +11,7 @@ String Format(const String& fmt,
               const FmtArg& a9, const FmtArg& a10, const FmtArg& a11, const FmtArg& a12, 
               const FmtArg& a13, const FmtArg& a14, const FmtArg& a15, const FmtArg& a16)
 {
-  TCHAR buf[8192], *p=fmt.Lock();
+  wchar_t buf[8192], *p=fmt.Lock();
   char *arglist=(char*)_alloca(__max(__max(sizeof(int), 
     sizeof(double)), sizeof(void*))*16),
     *argptr=arglist;
@@ -23,16 +23,16 @@ String Format(const String& fmt,
   ADD(a9); ADD(a10); ADD(a11); ADD(a12); ADD(a13); ADD(a14); ADD(a15); ADD(a16);
 #undef ADD
 #undef ROUND
-  _vsntprintf(buf, 8192, p, (va_list)arglist);
+  _vsntprintf_s(buf, 8192, p, (va_list)arglist);
   fmt.Unlock();
   return buf;
 }
 
 String FormatNum(__int64 n)
 {
-  TCHAR num[64], buf[64];
-  _stprintf(num, _T("%I64d"), n);
-  TCHAR *s=_tcsrev(num), *d=buf;
+  wchar_t num[64], buf[64];
+  _stprintf_s(num, 64, _T("%I64d"), n);
+  wchar_t *s=_tcsrev(num), *d=buf;
   int q=0;
   while (*s) 
   {

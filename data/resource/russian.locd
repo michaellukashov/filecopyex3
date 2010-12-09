@@ -108,6 +108,7 @@ AboutDialog.Label6=http://filecopyex.org.ua
 AboutDialog.Label7=Исправления: slst [slst@mail333.com], Ivanych,
 AboutDialog.Label8=CDK, Nsky, Alter и Axxie [axxie@filecopyex.org.ua]
 AboutDialog.Label9=Поддержка: slst и Axxie
+AboutDialog.Label10=Версия для Far2 + x64: djdron
 AboutDialog.OK=&ОК
 
 OverwriteDialog=Копирование/Перемещение

@@ -1,6 +1,5 @@
 #include <stdhdr.h>
 #include "lowlevelstr.h"
-#include "api.h"
 #include "filecopyex.h"
 #include "engine.h"
 #include "common.h"
@@ -8,6 +7,7 @@
 #include "strutils.h"
 
 #include "enginetools.h"
+#include "FwCommon.h"
 
 #define AllocAlign  65536
 
@@ -29,7 +29,7 @@ Engine::Engine(): FlushSrc(SrcNames), FlushDst(DstNames)
   GetSystemInfo(&si);
   ReadAlign=si.dwPageSize;
 
-  errTypes.SetOptions(slSorted | slIgnoreCase);
+//  errTypes.SetOptions(slSorted | slIgnoreCase);
 }
 
 int Engine::InitBuf(BuffInfo *bi)
@@ -645,7 +645,8 @@ void Engine::Copy()
     if (info.Flags & FLG_DIR_POST) 
     {
       CurDirStack.Delete(CurDirStack.Count()-1);
-      SectorSize=CurDirStack[CurDirStack.Count()-1].SectorSize;
+	  if(CurDirStack.Count())
+	      SectorSize=CurDirStack[CurDirStack.Count()-1].SectorSize;
       continue;
     }
 

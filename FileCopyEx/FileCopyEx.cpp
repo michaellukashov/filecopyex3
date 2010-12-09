@@ -114,10 +114,7 @@ void FileCopyExPlugin::InitOptions(PropertyList& options)
   options.Add("CheckFreeDiskSpace", 1);
 }
 
-extern Heap *heap;
-
 FarPlugin* InitInstance()
 {
-  heap->SetMultithreaded(1);
   return new FileCopyExPlugin;
 }

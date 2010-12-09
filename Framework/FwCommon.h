@@ -1,12 +1,12 @@
 #pragma once
 #include <tchar.h>
 
-typedef void (*ErrorHandler)(const TCHAR*);
+typedef void (*ErrorHandler)(const wchar_t*);
 
 class String;
 
 void FWError(const String&);
-void FWError(const TCHAR*);
+void FWError(const wchar_t*);
 extern ErrorHandler errorHandler;
 
 #define MAKEINT64(low, high) ((((__int64)(high))<<32)|((__int64)low))

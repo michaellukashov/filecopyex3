@@ -2,21 +2,21 @@
 #include "lowlevelstr.h"
 #include "valuelist.h"
 
-int Compare(const ValueList::ListItem& s1, const ValueList::ListItem& s2,
-            const void* p)
-{
-  int res=_tcsicmp(
-    heap->LockString(s1.name), 
-    heap->LockString(s2.name));
-  heap->Unlock(s1.name);
-  heap->Unlock(s2.name);
-  return res;
-}
+// int Compare(const ValueList::ListItem& s1, const ValueList::ListItem& s2,
+//             const void* p)
+// {
+//   int res=_tcsicmp(
+//     heap->LockString(s1.name), 
+//     heap->LockString(s2.name));
+//   heap->Unlock(s1.name);
+//   heap->Unlock(s2.name);
+//   return res;
+// }
 
 ValueList::ValueList()
 {
-  InitHeap();
-  items.SetSorted(1, Compare);
+//   InitHeap();
+//   items.SetSorted(1, Compare);
 }
 
 ValueList::~ValueList()
@@ -26,12 +26,12 @@ ValueList::~ValueList()
 
 const String ValueList::Name(int n)
 {
-  return String(items[n].name);
+  return items[n].name;
 }
 
 const String ValueList::Value(int n)
 {
-  return String(items[n].value);
+  return items[n].value;
 }
 
 int ValueList::Count()
@@ -41,17 +41,16 @@ int ValueList::Count()
 
 void ValueList::Set(const String& n, const String& v)
 {
-  ListItem itm;
-  itm.name=n.handle();
-  int i=items.Find(itm);
-  if (i!=-1) 
+  int i = Find(n);
+  if(i != -1)
   {
-    heap->ReallocString(items[i].value, v);
+    items[i].value = v;
   }
   else 
   {
-    itm.name=heap->AllocString(n);
-    itm.value=heap->AllocString(v);
+	  ListItem itm;
+    itm.name=n;
+    itm.value=v;
     items.Add(itm);
   }
 }
@@ -64,22 +63,30 @@ void ValueList::Set(const String& s)
       s.substr(p+1).trim().trimquotes());
 }
 
+//=============================================================================
+//	ValueList::Find
+//-----------------------------------------------------------------------------
+int ValueList::Find(const String& k)
+{
+	for(int i = 0; i < items.Count(); ++i)
+	{
+		if(items[i].name.icmp(k) == 0)
+			return i;
+	}
+	return -1;
+}
+
 const String ValueList::operator[](const String& n)
 {
-  ListItem itm;
-  itm.name=n.handle();
-  int i=items.Find(itm);
-  if (i!=-1) return Value(i);
-  else return String();
+  int i = Find(n);
+  if (i != -1)
+	  return Value(i);
+  else
+	  return String();
 }
 
 void ValueList::Clear()
 {
-  for (int i=0; i<Count(); i++)
-  {
-    heap->Free(items[i].name);
-    heap->Free(items[i].value);
-  }
   items.Clear();
 }
 

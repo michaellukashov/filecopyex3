@@ -1,10 +1,10 @@
 #include <stdhdr.h>
 
 #include "common.h"
-#include "api.h"
 #include "FileCopyEx.h"
 #include "engine.h"
 #include "EngineTools.h"
+#include "FwCommon.h"
 
 void* Alloc(int size)
 {
@@ -45,8 +45,8 @@ void Encrypt(const String& fn, int f)
   if (!Win2K || f==ATTR_INHERIT) return;
   int res;
   SetFileAttributes(fn.ptr(), 0);
-  if (f) res = pEncryptFile(fn.ptr());
-  else res = pDecryptFile(fn.ptr(), 0);
+  if (f) res = EncryptFile(fn.ptr());
+  else res = DecryptFile(fn.ptr(), 0);
   if (!res)
     Error2(LOC("Error.Encrypt"), fn, GetLastError());
 }
@@ -69,11 +69,11 @@ void *_ReadACL(const String& fn, SECURITY_INFORMATION si)
 {
   DWORD cb;
   PSECURITY_DESCRIPTOR secbuf = (PSECURITY_DESCRIPTOR)malloc(16384);
-  int res=pGetFileSecurity(fn.ptr(), si, secbuf, 16384, &cb);
+  int res=GetFileSecurity(fn.ptr(), si, secbuf, 16384, &cb);
   if (res && cb)
   {
     secbuf = (PSECURITY_DESCRIPTOR)realloc(secbuf, cb);
-    res=pGetFileSecurity(fn.ptr(), si, secbuf, 16384, &cb);
+    res=GetFileSecurity(fn.ptr(), si, secbuf, 16384, &cb);
   }
   if (res) return secbuf;
   else return NULL;
@@ -82,7 +82,7 @@ void *_ReadACL(const String& fn, SECURITY_INFORMATION si)
 void  _WriteACL(const String& fn, SECURITY_INFORMATION si, void *buf)
 {
   if (buf)
-    pSetFileSecurity(fn.ptr(), si, buf);
+    SetFileSecurity(fn.ptr(), si, buf);
 }
 
 void ReadACL(const String& fn, void **info1, void **info2)
@@ -105,14 +105,14 @@ void _CopyACL(const String& src, const String& dst, SECURITY_INFORMATION si)
 {
   DWORD cb;
   PSECURITY_DESCRIPTOR secbuf = (PSECURITY_DESCRIPTOR)malloc(16384);
-  int res=pGetFileSecurity(src.ptr(), si, secbuf, 16384, &cb);
+  int res=GetFileSecurity(src.ptr(), si, secbuf, 16384, &cb);
   if (res && cb)
   {
     secbuf = (PSECURITY_DESCRIPTOR)realloc(secbuf, cb);
-    res=pGetFileSecurity(src.ptr(), si, secbuf, 16384, &cb);
+    res=GetFileSecurity(src.ptr(), si, secbuf, 16384, &cb);
   }
   if (res)
-    pSetFileSecurity(dst.ptr(), si, secbuf);
+    SetFileSecurity(dst.ptr(), si, secbuf);
   free(secbuf);
 }
 
@@ -125,13 +125,13 @@ void CopyACL(const String& src, const String& dst)
     HANDLE hToken;
     LUID luid;
     TOKEN_PRIVILEGES tkp;
-    pOpenProcessToken(GetCurrentProcess(), 
+    OpenProcessToken(GetCurrentProcess(), 
       TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
-    pLookupPrivilegeValue(NULL, SE_SECURITY_NAME, &luid);
+    LookupPrivilegeValue(NULL, SE_SECURITY_NAME, &luid);
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Luid = luid;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    pAdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), NULL, NULL);
+    AdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), NULL, NULL);
     SACLPriv = 1;
   }
   _CopyACL(src, dst, DACL_SECURITY_INFORMATION 
@@ -312,7 +312,7 @@ int Engine::EngineError(const String& s, const String& fn, int code, int& flg,
     {
       if (i<=7)
       {
-        String name="Label"+String(i+3);
+        String name=String("Label")+String(i+3);
         dlg[name]("Visible")=1;
         dlg[name]("Text")=list[i];
       }

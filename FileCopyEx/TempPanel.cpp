@@ -3,6 +3,7 @@
 #include "strutils.h"
 #include "filecopyex.h"
 #include "common.h"
+#include "FwCommon.h"
 
 StringList TempFiles;
 
@@ -11,7 +12,7 @@ TempPanel::TempPanel()
   Flags |= OPIF_ADDDOTS | OPIF_REALNAMES | OPIF_EXTERNALGET;
   PanelTitle=" Copy queue ";
   FormatName="queue";
-  TempFiles.SetOptions(slIgnoreCase);
+//  TempFiles.SetOptions(slIgnoreCase);
 }
 
 TempPanel::~TempPanel()
@@ -28,18 +29,20 @@ void CopyFindData(const String& _fn, WIN32_FIND_DATA fd, PluginPanelItem& item,
     String name=FileHasUnicodeName(fn)? fd.cAlternateFileName: fd.cFileName;
     fn=ExtractFilePath(fn)+"\\"+name;
   }
-  fn.ToOem(item.FindData.cFileName, sizeof(item.FindData.cFileName));
-  item.FindData.cAlternateFileName[0]=0;
+  size_t len = (fn.len() + 1)*sizeof(wchar_t);
+  wchar_t* name = (wchar_t*)malloc(len);
+  fn.ToUnicode(name, fn.len());
+  item.FindData.lpwszFileName = name;
+  item.FindData.lpwszAlternateFileName = NULL;
   item.FindData.dwFileAttributes=fd.dwFileAttributes;
   item.FindData.ftCreationTime=fd.ftCreationTime;
   item.FindData.ftLastAccessTime=fd.ftLastAccessTime;
   item.FindData.ftLastWriteTime=fd.ftLastWriteTime;
-  item.FindData.nFileSizeHigh=fd.nFileSizeHigh;
-  item.FindData.nFileSizeLow=fd.nFileSizeLow;
-  if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-    item.PackSize=item.PackSizeHigh=0;
-  else
-    item.PackSize=GetCompressedFileSize(fn.ptr(), &item.PackSizeHigh);
+  item.FindData.nFileSize = MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh);
+//   if (fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+//     item.PackSize=item.PackSizeHigh=0;
+//   else
+//     item.PackSize=GetCompressedFileSize(fn.ptr(), &item.PackSizeHigh);
 }
 
 int TempPanel::ReadFileList(int silent)
@@ -92,12 +95,12 @@ int TempPanel::ChangeDir(String& dir, int silent, const String& suggest)
 {
   if (dir==".." || dir=="\\") CurDir=suggest;
   else if (CurDir=="") CurDir=Replace(suggest, "\\", "/");
-  else CurDir+="\\"+ExtractFileName(suggest);
+  else CurDir+=String("\\")+ExtractFileName(suggest);
 
   if (CurDir!="") 
   {
     String rd=Replace(CurDir, "/", "\\");
-    PanelTitle=" Queue: "+rd+" ";
+    PanelTitle=String(" Queue: ")+rd+" ";
     Flags |= OPIF_EXTERNALPUT | OPIF_EXTERNALDELETE 
       | OPIF_EXTERNALMKDIR;
   }
@@ -116,14 +119,11 @@ int TempPanel::DelFiles(PluginPanelItem* files, int count, int silent)
 {
   if (CurDir=="")
   {
-    char buf[MAX_FILENAME];
+    wchar_t buf[MAX_FILENAME];
     for (int i=0; i<count; i++)
     {
-      strcpy(buf, files[i].FindData.cFileName);
-      _toansi(buf);
-      TCHAR tbuf[MAX_FILENAME];
-      _atotcs(tbuf, buf, MAX_FILENAME);
-      int j=TempFiles.Find(tbuf);
+      wcscpy_s(buf, MAX_FILENAME, files[i].FindData.lpwszFileName);
+      int j=TempFiles.Find(buf);
       if (j!=-1) TempFiles.Delete(j);
     }
     SaveTemp();
@@ -139,17 +139,16 @@ int TempPanel::PutFiles(PluginPanelItem* files, int count, int move, int silent)
 {
   if (CurDir=="")
   {
-    TCHAR buf[MAX_FILENAME];
+    wchar_t buf[MAX_FILENAME];
     GetCurrentDirectory(MAX_FILENAME, buf);
     String cd=AddEndSlash(MyGetShortPathName(buf));
     for (int i=0; i<count; i++)
     {
-      char nbuf[MAX_FILENAME];
-      if (FileHasUnicodeName(files[i].FindData.cFileName))
-        strncpy(nbuf, files[i].FindData.cAlternateFileName, MAX_FILENAME);
+      wchar_t nbuf[MAX_FILENAME];
+      if (FileHasUnicodeName(files[i].FindData.lpwszFileName))
+        wcsncpy_s(nbuf, MAX_FILENAME, files[i].FindData.lpwszAlternateFileName, MAX_FILENAME);
       else
-        strncpy(nbuf, files[i].FindData.cFileName, MAX_FILENAME);
-      _toansi(nbuf);
+        wcsncpy_s(nbuf, MAX_FILENAME, files[i].FindData.lpwszFileName, MAX_FILENAME);
       String file=nbuf;
       if (file.cfind('\\')==-1) file=cd+file;
 

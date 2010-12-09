@@ -91,7 +91,7 @@ private:
               WIN32_FIND_DATA &fd, int Flags, int Level,
               int PanelIndex=-1);
   void AddTopLevelDir(const String &dir, const String &dstmask, 
-                      int Flags, TCHAR pc);
+                      int Flags, wchar_t pc);
   void RememberFile(const String& Src, const String& Dst, 
                     WIN32_FIND_DATA &fd, int Flags, int Level,
                     RememberStruct&);

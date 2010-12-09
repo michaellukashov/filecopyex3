@@ -7,6 +7,7 @@
 #include "strutils.h"
 #include "fileutils.h"
 #include "EngineTools.h"
+#include "fwcommon.h"
 
 #define EXCEPTION_ABORT_BY_ESC  0x0F
 
@@ -26,7 +27,7 @@ void ShowErrorMessage(const String& s)
   Info.Message(Info.ModuleNumber, 
                 FMSG_WARNING | FMSG_MB_OK | FMSG_ALLINONE, 
                 NULL, 
-                (const char**)(const char*)msgbuf.optr(), 0, 0);
+                (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, 0);
 }
 
 
@@ -39,9 +40,10 @@ __int64 GetPhysMemorySize()
 
 void AddToQueue(int curonly)
 {
+/*
   PanelInfo pi;
   SetFileApisToOEM();
-  Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, &pi);
+  Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
   // fixed by Nsky: bug #40
   SetFileApisToANSI();
   if (pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType== PTYPE_INFOPANEL ||
@@ -70,7 +72,7 @@ void AddToQueue(int curonly)
     if (data[i].FindData.cAlternateFileName[0])
     {
       char nbuf[MAX_FILENAME];
-      strncpy(nbuf, data[i].FindData.cAlternateFileName, MAX_FILENAME);
+      strncpy_s(nbuf, MAX_FILENAME, data[i].FindData.cAlternateFileName, MAX_FILENAME);
       _toansi(nbuf);
       file=nbuf;
       if (file.cfind('\\')==-1) file=AddEndSlash(srcpath)+file;
@@ -78,7 +80,7 @@ void AddToQueue(int curonly)
     if (file=="" || !FileHasUnicodeName(file))
     {
       char nbuf[MAX_FILENAME];
-      strncpy(nbuf, data[i].FindData.cFileName, MAX_FILENAME);
+      strncpy_s(nbuf, MAX_FILENAME, data[i].FindData.cFileName, MAX_FILENAME);
       _toansi(nbuf);
       file=nbuf;
       if (file.cfind('\\')==-1) file=AddEndSlash(srcpath)+file;
@@ -93,8 +95,9 @@ void AddToQueue(int curonly)
   Info.Control(INVALID_HANDLE_VALUE, FCTL_REDRAWANOTHERPANEL, NULL);
   // fixed by Nsky: bug #40
   SetFileApisToANSI();
+*/
 }
-
+/*
 static PluginPanelItem* SortData;
 
 int MyCompare(const int &i, const int &j, const void*)
@@ -108,13 +111,13 @@ int MyCompare(const int &i, const int &j, const void*)
   {
     char t1=*p1, t2=*p2;
     *p1=*p2=0;
-    int res=stricmp(SortData[i].FindData.cFileName,
+    int res=_stricmp(SortData[i].FindData.cFileName,
       SortData[j].FindData.cFileName);
     *p1=t1; *p2=t2;
     return res;
   }
 }
-
+*/
 String Engine::FindDescFile(const String& dir, int *idx)
 {
   for (int i=0; i<DescFiles.Count(); i++)
@@ -150,7 +153,7 @@ int Engine::AddFile(const String& Src, const String& Dst,
 }
 
 void Engine::AddTopLevelDir(const String &dir, const String &dstmask, 
-                            int Flags, TCHAR pc)
+                            int Flags, wchar_t pc)
 {
   HANDLE hf;
   WIN32_FIND_DATA fd;
@@ -206,9 +209,29 @@ void Engine::FarToWin32FindData(const FAR_FIND_DATA &fd, WIN32_FIND_DATA &wfd)
   wfd.ftCreationTime=fd.ftCreationTime;
   wfd.ftLastAccessTime=fd.ftLastAccessTime;
   wfd.ftLastWriteTime=fd.ftLastWriteTime;
-  wfd.nFileSizeHigh=fd.nFileSizeHigh;
-  wfd.nFileSizeLow=fd.nFileSizeLow;
+  LARGE_INTEGER x;
+  x.QuadPart = fd.nFileSize;
+  wfd.nFileSizeHigh=x.HighPart;
+  wfd.nFileSizeLow=x.LowPart;
 }
+
+struct TPanelItem
+{
+public:
+	TPanelItem(int idx, bool active = true, bool selected = false)
+	{
+		ppi = (PluginPanelItem*)malloc(Info.Control(active ? PANEL_ACTIVE : PANEL_PASSIVE, selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM, idx, NULL));
+		if(ppi)
+			Info.Control(active ? PANEL_ACTIVE : PANEL_PASSIVE, selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM, idx, (LONG_PTR)ppi);
+	}
+	~TPanelItem()
+	{
+		free(ppi);
+	}
+	PluginPanelItem* operator->() const { return ppi; }
+protected:
+	PluginPanelItem* ppi;
+};
 
 int Engine::Main(int move, int curonly)
 {
@@ -234,18 +257,20 @@ int Engine::Main(int move, int curonly)
   Move = move;
   int allowPlug=0, adv=0;
 
-  SetFileApisToOEM();
-  Info.Control(INVALID_HANDLE_VALUE, FCTL_GETANOTHERPANELINFO, &pi);
+  wchar_t cur_dir[MAX_FILENAME];
+  Info.Control(PANEL_PASSIVE, FCTL_GETPANELDIR, MAX_FILENAME, (LONG_PTR)cur_dir);
+//  SetFileApisToOEM();
+  Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
   // fixed by Nsky: bug #40
-  SetFileApisToANSI();
-  _toansi(pi.CurDir);
+//  SetFileApisToANSI();
+//  _toansi(pi.CurDir);
 
   if (pi.Plugin)
   {
-    if (!strncmp(pi.CurDir, "queue:\\", 7)) 
+    if (!wcsncmp(cur_dir, L"queue:\\", 7)) 
     {
-      if (!strcmp(pi.CurDir, "queue:\\")) dstpath="queue:"; 
-      else dstpath=Replace(String(pi.CurDir).substr(7), "/", "\\")+"\\";
+      if (!wcscmp(cur_dir, L"queue:\\")) dstpath="queue:"; 
+      else dstpath=Replace(String(cur_dir).substr(7), "/", "\\")+"\\";
     }
     else dstpath="plugin:";
     allowPlug=1;
@@ -254,13 +279,14 @@ int Engine::Main(int move, int curonly)
     if (pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType==PTYPE_INFOPANEL ||  !pi.Visible)
       dstpath="";
     else
-      dstpath=AddEndSlash(pi.CurDir);
+      dstpath=AddEndSlash(cur_dir);
 
-  SetFileApisToOEM();
-  Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, &pi);
+  Info.Control(PANEL_ACTIVE, FCTL_GETPANELDIR, MAX_FILENAME, (LONG_PTR)cur_dir);
+//  SetFileApisToOEM();
+  Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
   // fixed by Nsky: bug #40
-  SetFileApisToANSI();
-  _toansi(pi.CurDir);
+//  SetFileApisToANSI();
+//  _toansi(pi.CurDir);
   if (pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType== PTYPE_INFOPANEL ||
      !pi.ItemsNumber) return MRES_NONE;
   // Bug #5 fixed by CDK
@@ -273,11 +299,12 @@ int Engine::Main(int move, int curonly)
   }
   else
   {
-    char buf[MAX_FILENAME];
-    FAR_FIND_DATA &fd = pi.SelectedItemsNumber && !curonly ? pi.SelectedItems[0].FindData :
-                        pi.PanelItems[pi.CurrentItem].FindData;
-    strncpy(buf, fd.cFileName, MAX_FILENAME);
-    _toansi(buf);
+    wchar_t buf[MAX_FILENAME];
+	bool pit_sel = pi.SelectedItemsNumber && !curonly;
+	TPanelItem pit(pit_sel ? 0 : pi.CurrentItem, true, pit_sel);
+    FAR_FIND_DATA &fd = pit->FindData;
+    wcsncpy_s(buf, MAX_FILENAME, fd.lpwszFileName, MAX_FILENAME);
+//    _toansi(buf);
     String fn=ExtractFileName(buf);
     if (fn=="..") return MRES_NONE;
     String fmt;
@@ -290,7 +317,7 @@ int Engine::Main(int move, int curonly)
       && dstpath!="queue:" && dstpath!="plugin:")
         dstpath=AddEndSlash(dstpath)+fn;*/
   } 
-  srcpath=CutEndSlash(pi.CurDir);
+  srcpath=CutEndSlash(cur_dir);
   if (srcpath.left(7)=="queue:\\") srcpath=srcpath.substr(7);
   else if (srcpath=="queue:") srcpath="";
 
@@ -388,9 +415,9 @@ rep:
   String RelDstPath = ExpandEnv(Replace(dsttext, "/", "\\"));
   dstpath = "";
   
-  TCHAR CurrentDir[MAX_FILENAME];
-  TCHAR dstbuf[MAX_FILENAME];
-  TCHAR *FNCPtr;
+  wchar_t CurrentDir[MAX_FILENAME];
+  wchar_t dstbuf[MAX_FILENAME];
+  wchar_t *FNCPtr;
   memset(dstbuf, 0, sizeof(dstbuf));
   // Get absolute path for relative dstpath
   GetCurrentDirectory(MAX_FILENAME, CurrentDir);
@@ -501,26 +528,44 @@ rep:
   //progress.ShowMessage(LOC("Status.CreatingList"));
   ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
 
-  int s, e, 
-      curitem=curonly || !(pi.SelectedItems[0].Flags & PPIF_SELECTED);
-  if (curitem) 
+  int s, e, curitem=curonly;
+  if(!curitem)
+  {
+	curitem = !(TPanelItem(0, true, true)->Flags & PPIF_SELECTED);
+  }
+  if(curitem)
     s=e=pi.CurrentItem;
   else 
   {
     s=0;
     e=pi.ItemsNumber-1;
   }
-  PluginPanelItem *data = pi.PanelItems;
-
+//  PluginPanelItem *data = pi.PanelItems;
   int c=0;
   for (int i=s; i<=e; i++) 
-    if (curitem || data[i].Flags & PPIF_SELECTED) c++;
+  {
+    if(curitem)
+		++c;
+	else
+	{
+		if(TPanelItem(i)->Flags & PPIF_SELECTED)
+			++c;
+	}
+  }
   Array<int> SortIndex;
   SortIndex.Resize(c);
   c=0;
-  for (i=s; i<=e; i++) 
-    if (curitem || data[i].Flags & PPIF_SELECTED) SortIndex[c++]=i;
-  SortData=data;
+  for (int i=s; i<=e; i++)
+  {
+    if(curitem)
+		SortIndex[c++]=i;
+	else
+	{
+		if(TPanelItem(i)->Flags & PPIF_SELECTED)
+			SortIndex[c++]=i;
+	}
+  }
+//  SortData=data;
   //SortIndex.SetSorted(1, MyCompare);
 
   String curpath;
@@ -533,16 +578,17 @@ rep:
     for (int ii=0; ii<c; ii++)
     {
       int i=SortIndex[ii];
-      if (!strcmp(data[i].FindData.cFileName, "..")) 
+	  TPanelItem pit(i);
+      if(!wcscmp(pit->FindData.lpwszFileName, L"..")) 
         continue;
 
-      char nbuf[MAX_FILENAME];
-      if (data[i].FindData.cAlternateFileName[0]
-      && !strchr(data[i].FindData.cAlternateFileName, '\\'))
-        strncpy(nbuf, data[i].FindData.cAlternateFileName, MAX_FILENAME);
+      wchar_t nbuf[MAX_FILENAME];
+      if (pit->FindData.lpwszAlternateFileName[0]
+      && !wcschr(pit->FindData.lpwszAlternateFileName, '\\'))
+        wcsncpy_s(nbuf, MAX_FILENAME, pit->FindData.lpwszAlternateFileName, MAX_FILENAME);
       else
-        strncpy(nbuf, data[i].FindData.cFileName, MAX_FILENAME);
-      _toansi(nbuf);
+        wcsncpy_s(nbuf, MAX_FILENAME, pit->FindData.lpwszFileName, MAX_FILENAME);
+//      _toansi(nbuf);
       String file=nbuf;
 
       String filepath=ExtractFilePath(file);
@@ -571,7 +617,7 @@ rep:
       }
 
       String dst=ApplyFileMaskPath(file, dstpath);
-      FAR_FIND_DATA *fd = &data[i].FindData;
+      FAR_FIND_DATA *fd = &pit->FindData;
       WIN32_FIND_DATA wfd;
       FarToWin32FindData(*fd, wfd);
       if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, i)) 
@@ -583,13 +629,13 @@ rep:
     if (e == EXCEPTION_ABORT_BY_ESC)
     {
       ScanFoldersProgressBox.Hide();
-      SetFileApisToOEM();
-      Info.Control(INVALID_HANDLE_VALUE, FCTL_UPDATEPANEL, (void*)1);
-      Info.Control(INVALID_HANDLE_VALUE, FCTL_UPDATEANOTHERPANEL, (void*)1);
-      Info.Control(INVALID_HANDLE_VALUE, FCTL_REDRAWPANEL, NULL);
-      Info.Control(INVALID_HANDLE_VALUE, FCTL_REDRAWANOTHERPANEL, NULL);
+//      SetFileApisToOEM();
+      Info.Control(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
+      Info.Control(PANEL_PASSIVE, FCTL_UPDATEPANEL, 1, NULL);
+      Info.Control(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, NULL);
+      Info.Control(PANEL_PASSIVE, FCTL_REDRAWPANEL, 0, NULL);
       // fixed by Nsky: bug #40
-      SetFileApisToANSI();
+//      SetFileApisToANSI();
       return MRES_NONE;
     }
   }
@@ -658,7 +704,7 @@ rep:
 fin:
   ScanFoldersProgressBox.Hide();
 
-  SetFileApisToOEM();
+//  SetFileApisToOEM();
 
   if (!Move)
   {
@@ -679,26 +725,30 @@ fin:
             j++;
           }
           if (ok)
-            data[Files[i].PanelIndex].Flags &= ~PPIF_SELECTED;
+		  {
+//            data[Files[i].PanelIndex].Flags &= ~PPIF_SELECTED;
+		  }
           i=j-1;
         }
         else if (!(Files[i].Flags & FLG_DIR_POST) &&
           Files[i].Flags & FLG_COPIED)
-            data[Files[i].PanelIndex].Flags &= ~PPIF_SELECTED;
+		{
+//            data[Files[i].PanelIndex].Flags &= ~PPIF_SELECTED;
+		}
       }
       i++;
     }
-    Info.Control(INVALID_HANDLE_VALUE, FCTL_SETSELECTION, &pi);
+    Info.Control(PANEL_ACTIVE, FCTL_SETSELECTION, 0, (LONG_PTR)&pi);
     // fixed by Nsky: bug #40
-    SetFileApisToANSI();
+//    SetFileApisToANSI();
   }
   else
   {
     // Bugfixed by slst: bug #2
-    Info.Control(INVALID_HANDLE_VALUE, FCTL_UPDATEPANEL, (void*)1);
-    Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, &pi);
+    Info.Control(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
+    Info.Control(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
     // fixed by Nsky: bug #40
-    SetFileApisToANSI();
+//    SetFileApisToANSI();
     PanelRedrawInfo rpi;
     rpi.TopPanelItem = pi.TopPanelItem;
 
@@ -715,27 +765,28 @@ fin:
 
     for (int i=0; i<pi.ItemsNumber; i++)
     {
-      String NewPanelFilename = pi.PanelItems[i].FindData.cFileName;
-      NewPanelFilename = NewPanelFilename.toLower();
-      if (NewFileName == NewPanelFilename)
-      {
-        rpi.CurrentItem = i;
-        SetFileApisToOEM();
-        Info.Control(INVALID_HANDLE_VALUE, FCTL_REDRAWPANEL, &rpi);
-        // fixed by Nsky: bug #40
-        SetFileApisToANSI();
-        break;
-      }
+		TPanelItem pit(i);
+	  String NewPanelFilename = pit->FindData.lpwszFileName;
+	  NewPanelFilename = NewPanelFilename.toLower();
+	  if(NewFileName == NewPanelFilename)
+	  {
+		rpi.CurrentItem = i;
+//        SetFileApisToOEM();
+		Info.Control(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, (LONG_PTR)&rpi);
+		// fixed by Nsky: bug #40
+//        SetFileApisToANSI();
+		break;
+	  }
     }
   }
 
-  SetFileApisToOEM();
-  Info.Control(INVALID_HANDLE_VALUE, FCTL_UPDATEPANEL, (void*)1);
-  Info.Control(INVALID_HANDLE_VALUE, FCTL_UPDATEANOTHERPANEL, (void*)1);
-  Info.Control(INVALID_HANDLE_VALUE, FCTL_REDRAWPANEL, NULL);
-  Info.Control(INVALID_HANDLE_VALUE, FCTL_REDRAWANOTHERPANEL, NULL);
+//  SetFileApisToOEM();
+  Info.Control(PANEL_ACTIVE,	FCTL_UPDATEPANEL, 1, NULL);
+  Info.Control(PANEL_PASSIVE,	FCTL_UPDATEPANEL, 1, NULL);
+  Info.Control(PANEL_ACTIVE,	FCTL_REDRAWPANEL, 0, NULL);
+  Info.Control(PANEL_PASSIVE,	FCTL_REDRAWPANEL, 0, NULL);
   // fixed by Nsky: bug #40
-  SetFileApisToANSI();
+//  SetFileApisToANSI();
 
   return MRES_NONE;
 }
@@ -792,7 +843,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
   info.Modify=Modify;
   info.Level=Level;
   info.PanelIndex=PanelIndex;
-  TCHAR pc;
+  wchar_t pc;
   if (attr & FILE_ATTRIBUTE_DIRECTORY) 
   {
     info.Flags|=FLG_DIR_PRE;
@@ -987,7 +1038,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
             && sid.dwStreamNameSize)
           {
             strn[sid.dwStreamNameSize/2]=0;
-            TCHAR strnb[MAX_FILENAME];
+            wchar_t strnb[MAX_FILENAME];
             _wtotcs(strnb, strn, MAX_FILENAME);
             if (!AddFile(src+strnb, dst+strnb, attr, 
               sid.Size.QuadPart, Modify, flags | AF_STREAM, Level+1))

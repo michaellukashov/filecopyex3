@@ -6,7 +6,6 @@
 
 PropertyStore::PropertyStore(void)
 {
-  InitHeap();
 }
 
 PropertyStore::~PropertyStore(void)
@@ -38,7 +37,7 @@ Property::operator bool() const
   {
     case vtInt: return Int!=0;
     case vtFloat: return Float!=0;
-    case vtString: return String(Str)!="";
+    case vtString: return Str!=L"";
   }
   return 0;
 }
@@ -67,7 +66,7 @@ Property::operator const String() const
     case vtFloat: return String(Float);
     case vtString: return String(Str);
   }
-  return "";
+  return L"";
 }
 
 void Property::operator=(int v)
@@ -76,7 +75,7 @@ void Property::operator=(int v)
   {
     case vtInt: Int=v; break;
     case vtFloat: Float=(double)v; break;
-    case vtString: heap->ReallocString(Str, String(v)); 
+    case vtString: Str = String(v); 
   }
 }
 
@@ -86,7 +85,7 @@ void Property::operator=(double v)
   {
     case vtInt: Int=(int)v; break;
     case vtFloat: Float=v; break;
-    case vtString: heap->ReallocString(Str, String(v)); 
+    case vtString: Str = String(v); 
   }
 }
 
@@ -96,7 +95,7 @@ void Property::operator=(const String& v)
   {
     case vtInt: Int=v.AsInt(); break;
     case vtFloat: Float=v.AsFloat(); break;
-    case vtString: heap->ReallocString(Str, v);
+    case vtString: Str = v;
   }
 }
 
@@ -106,7 +105,7 @@ void Property::operator=(const Property& v)
   {
     case vtInt: Int=(int)v; break;
     case vtFloat: Float=(double)v; break;
-    case vtString: heap->ReallocString(Str, String(v));
+    case vtString: Str = String(v);
   }
 }
 
@@ -176,7 +175,7 @@ int PropertyStore::Add(const String& v)
 {
   PropVal val;
   val.Type=vtString;
-  val.Str=heap->AllocString(v);
+  val.Str=v;
   return Values.Add(val);
 }
 
@@ -187,11 +186,11 @@ int PropertyStore::Count()
 
 void PropertyStore::Clear()
 {
-  for (int i=0; i<Count(); i++)
-  {
-    if (Values[i].Type==vtString)
-      heap->Free(Values[i].Str);
-  }
+//   for (int i=0; i<Count(); i++)
+//   {
+//     if (Values[i].Type==vtString)
+//       heap->Free(Values[i].Str);
+//   }
   Values.Clear();
 }
 
@@ -222,8 +221,8 @@ void PropertyStore::CopyFrom(PropertyStore& src)
   for (int i=0; i<src.Count(); i++)
   {
     PropVal val=src.Values[i];
-    if (val.Type==vtString)
-      val.Str=heap->AllocString(String(val.Str));
+//     if (val.Type==vtString)
+//       val.Str=heap->AllocString(String(val.Str));
     Values[i]=val;
   }
 }

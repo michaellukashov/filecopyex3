@@ -1,23 +1,24 @@
 #include <stdhdr.h>
 #include "classes.h"
 #include "common.h"
+#include "fwcommon.h"
 
-TCHAR* FileNameStoreEnum::GetNext()
+wchar_t* FileNameStoreEnum::GetNext()
 {
   if (Cur>=Store->Count()) return NULL;
-  TCHAR *ptr=(*Store)[Cur++];
+  wchar_t *ptr=(*Store)[Cur++];
   if (*ptr=='+') 
   {
-    TCHAR *p=CurPath;
+    wchar_t *p=CurPath;
     while (*p) p++;
     if (p>CurPath) *p++='\\';
     _tcopy(p, ptr+1, MAX_FILENAME-(p-CurPath));
-    _tcscpy(Buffer, CurPath);
+    _tcscpy_s(Buffer, MAX_FILENAME, CurPath);
   }
   else if (*ptr=='-')
   {
-    _tcscpy(Buffer, CurPath);
-    TCHAR *p=CurPath;
+    _tcscpy_s(Buffer, MAX_FILENAME, CurPath);
+    wchar_t *p=CurPath;
     while (*p) p++;
     p--;
     while (p>CurPath && *p!='\\') p--;
@@ -25,12 +26,12 @@ TCHAR* FileNameStoreEnum::GetNext()
   }
   else if (*ptr=='*')
   {
-    _tcscpy(Buffer, CurPath);
+    _tcscpy_s(Buffer, MAX_FILENAME, CurPath);
     CurPath[0]=0;
   }
   else
   {
-    TCHAR *p=CurPath, *b=Buffer;
+    wchar_t *p=CurPath, *b=Buffer;
     while (*p) *b++=*p++;
     if (b>Buffer) *b++='\\';
     _tcopy(b, ptr+1, MAX_FILENAME-(b-Buffer));
@@ -41,17 +42,17 @@ TCHAR* FileNameStoreEnum::GetNext()
 void FileNameStoreEnum::Skip()
 {
   if (Cur>=Store->Count()) return;
-  TCHAR *ptr=(*Store)[Cur++];
+  wchar_t *ptr=(*Store)[Cur++];
   if (*ptr=='+') 
   {
-    TCHAR *p=CurPath;
+    wchar_t *p=CurPath;
     while (*p) p++;
     if (p>CurPath) *p++='\\';
     _tcopy(p, ptr+1, MAX_FILENAME-(p-CurPath));
   }
   else if (*ptr=='-')
   {
-    TCHAR *p=CurPath;
+    wchar_t *p=CurPath;
     while (*p) p++;
     p--; 
     while (p>CurPath && *p!='\\') p--;
@@ -69,7 +70,7 @@ void FileNameStoreEnum::ToFirst()
   Buffer[0]=CurPath[0]=0;
 }
 
-TCHAR* FileNameStoreEnum::GetByNum(int n)
+wchar_t* FileNameStoreEnum::GetByNum(int n)
 {
   if (n<Cur-1) 
   {
@@ -85,14 +86,14 @@ TCHAR* FileNameStoreEnum::GetByNum(int n)
   }
 }
 
-TCHAR* FileNameStore::GetNameByNum(int n)
+wchar_t* FileNameStore::GetNameByNum(int n)
 {
   return (*this)[n]+1;
 }
 
-int FileNameStore::AddRel(TCHAR pc, TCHAR* s)
+int FileNameStore::AddRel(wchar_t pc, wchar_t* s)
 {
-  TCHAR buf[MAX_FILENAME+1];
+  wchar_t buf[MAX_FILENAME+1];
   buf[0]=pc;
   _tcopy(buf+1, s, MAX_FILENAME);
   return Add(buf);
@@ -100,7 +101,7 @@ int FileNameStore::AddRel(TCHAR pc, TCHAR* s)
 
 DescList::DescList()
 {
-  Names.SetOptions(slSorted | slIgnoreCase);
+//  Names.SetOptions(slSorted | slIgnoreCase);
 }
 
 int DescList::LoadFromFile(const String& lfn)
@@ -110,7 +111,7 @@ int DescList::LoadFromFile(const String& lfn)
   return LoadFromList(temp);
 }
 
-int DescList::LoadFromString(TCHAR *ptr)
+int DescList::LoadFromString(wchar_t *ptr)
 {
   StringList temp;
   temp.LoadFromString(ptr, '\n');
@@ -123,12 +124,7 @@ int DescList::LoadFromList(StringList &list)
   for (int i=0; i<list.Count(); i++)
   {
     String s=list[i];
-    char *buf=(char*)_alloca(s.len()+1);
-    s.ToAnsi(buf, s.len()+1);
-    _toansi(buf);
-    s=buf;
-
-    TCHAR c=s[0];
+    wchar_t c=s[0];
     if (c!='\t' && c!=' ' && c!='>' && c)
     {
       if (fn!="")
@@ -148,7 +144,7 @@ int DescList::LoadFromList(StringList &list)
       }
       desc=s;
     }
-    else desc+="\n"+s;
+    else desc+=String("\n")+s;
   }
   if (fn!="") Names.Add(fn, Values.Add(desc));
   return TRUE;
@@ -164,10 +160,7 @@ int DescList::SaveToFile(const String& fn)
     if (!(Values.Values(i) & dlNoSave))
     {
       String s=Values[i];
-      char *buf=(char*)_alloca(s.len()+1);
-      s.ToAnsi(buf, s.len()+1);
-      _tooem(buf);
-      temp.Add(buf);
+      temp.Add(s);
     }
   if (temp.Count()>0)
     return temp.Save(fn);
@@ -225,7 +218,7 @@ void DescList::Rename(int i, const String& dst, int changeName)
   else
     str=str.substr(str.cfind(" \t\n"));
   Values.Set(Names.Values(i), 
-    ((dst.cfind(" ")!=-1)?("\""+dst+"\""):(dst))+str);
+    ((dst.cfind(" ")!=-1)?(String("\"")+dst+"\""):(dst))+str);
   if (changeName) Names.Set(i, dst);
 }
 

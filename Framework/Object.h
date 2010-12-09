@@ -10,7 +10,7 @@ class ObjectClass
 {
 protected:
   virtual Object* Create() { return NULL; }
-  virtual const String TypeName() { return ""; }
+  virtual const String TypeName() { return L""; }
   virtual void DefineProperties() { ; }
 
   void AddProperty(const String& name, int def);
@@ -120,7 +120,7 @@ class ObjectManager
 public:
   ObjectManager()
   {
-    NameList.SetOptions(slSorted | slIgnoreCase);
+//    NameList.SetOptions(slSorted | slIgnoreCase);
   }
   void RegisterClass(ObjectClass* cl) 
   {

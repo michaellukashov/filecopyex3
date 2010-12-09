@@ -13,7 +13,7 @@ protected:
 
 public:
   virtual void InitItem(FarDialogItem&, FarDlgObject&) { ; }
-  virtual void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject&) { ; }
+  virtual void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject&, HANDLE) { ; }
   virtual void BeforeAdd(FarDialogItem&, FarDlgObject&) { ; }
   virtual void LoadState(PropertyList &state, FarDlgObject&) { ; }
   virtual void SaveState(PropertyList &state, FarDlgObject&) { ; }
@@ -58,7 +58,7 @@ class FarDlgLineClass : public FarDlgObjectClass
   {
     item.Type=DI_TEXT;
     item.Flags|=DIF_SEPARATOR | DIF_BOXCOLOR;
-    item.Data[0]=0;
+    item.PtrData=L"";
   }
 };
 
@@ -76,14 +76,15 @@ class FarDlgLabelClass : public FarDlgObjectClass
   void InitItem(FarDialogItem& item, FarDlgObject& obj)
   {
     item.Type=DI_TEXT;
-    if (!obj("Shorten")) item.X2=item.X1+lablen(item)-1;
+    if(!obj("Shorten"))
+		item.X2=item.X1+lablen(item)-1;
     else item.X2=item.X1-1;
   }
   void BeforeAdd(FarDialogItem& item, FarDlgObject& obj)
   {
-    if (obj("Shorten"))
-      FormatWidth(item.Data, __min(item.X2-item.X1+1, 500))
-      .ToAnsi(item.Data, sizeof(item.Data));
+//     if (obj("Shorten"))
+//       FormatWidth(item.PtrData, __min(item.X2-item.X1+1, 500))
+//       .ToAnsi(item.PtrData, sizeof(item.PtrData));
   }
 };
 
@@ -127,7 +128,7 @@ class FarDlgCheckboxClass : public FarDlgObjectClass
     item.X2=item.X1+lablen(item)+4-1;
     item.Selected=obj("Selected");
   }
-  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj)
+  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
   {
     obj("Selected")=items[obj.DialogItem].Selected;
   }
@@ -165,11 +166,7 @@ class FarDlgEditClass : public FarDlgObjectClass
     AddProperty("Width", 10);
   }
   void InitItem(FarDialogItem& item, FarDlgObject& obj);
-  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj)
-  {
-    _toansi(items[obj.DialogItem].Data);
-    obj("Text")=items[obj.DialogItem].Data;
-  }
+  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg);
   void LoadState(PropertyList &state, FarDlgObject& obj)
   {
     obj("Text")=state[obj.Name()];
@@ -195,10 +192,10 @@ class FarDlgComboboxClass : public FarDlgObjectClass
     AddProperty("Items", "");
   }
   void InitItem(FarDialogItem& item, FarDlgObject& obj);
-  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj)
+  void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
   {
-    _toansi(items[obj.DialogItem].Data);
-    obj("Text")=items[obj.DialogItem].Data;
+//    _toansi(items[obj.DialogItem].PtrData);
+    obj("Text")=items[obj.DialogItem].PtrData;
   }
   void LoadState(PropertyList &state, FarDlgObject& obj)
   {

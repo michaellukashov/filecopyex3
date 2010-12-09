@@ -2,16 +2,16 @@
 #include "lowlevelstr.h"
 #include "common.h"
 #include "fileutils.h"
-#include "api.h"
+#include "fwcommon.h"
 
 
 // axxie: special HDD ID inmplementation for NT4
 #define HARDDISK_CONST_PART         _T("\\Device\\Harddisk")
-#define HARDDISK_CONST_PART_LEN     (sizeof(HARDDISK_CONST_PART)/sizeof(TCHAR)-1)
+#define HARDDISK_CONST_PART_LEN     (sizeof(HARDDISK_CONST_PART)/sizeof(wchar_t)-1)
 
 int GetDriveId(const String& path, String& res)
 {
-  TCHAR buf[MAX_FILENAME];
+  wchar_t buf[MAX_FILENAME];
   if (WinNT4)
   {
      // axxie: special HDD ID inmplementation for NT4
@@ -49,8 +49,8 @@ int GetPhysDrive(const String& _path, int& res)
   {
     if (path.left(11)!="\\\\?\\Volume{")
     {
-      TCHAR buf[MAX_FILENAME];
-      if (!pGetVolumeNameForVolumeMountPoint(path.ptr(), buf, MAX_FILENAME)) 
+      wchar_t buf[MAX_FILENAME];
+      if (!GetVolumeNameForVolumeMountPoint(path.ptr(), buf, MAX_FILENAME)) 
         return FALSE;
       path=buf;
     }
@@ -93,7 +93,7 @@ int VolFlags(const String& _path)
 
   int res=0;
   DWORD clen, flg;
-  TCHAR sysname[32];
+  wchar_t sysname[32];
   if (GetVolumeInformation(root.ptr(), NULL, 0, NULL, &clen, &flg, sysname, 32))
   {
     if (flg & FILE_FILE_COMPRESSION) res|=VF_COMPRESSION;
@@ -191,10 +191,10 @@ int RmDir(const String& fn)
 
 String MyEmulatedGetLongPathName(const String& path)
 {
-  TCHAR buf[MAX_FILENAME];
+  wchar_t buf[MAX_FILENAME];
   if (GetFullPathName(path.ptr(), MAX_FILENAME, buf, NULL)==0) 
     return "";
-  TCHAR *p=buf, *op=buf;
+  wchar_t *p=buf, *op=buf;
   String res;
   if (buf[0]=='\\' && buf[1]=='\\' 
     || buf[0]=='/' && buf[1]=='/')
@@ -206,7 +206,7 @@ String MyEmulatedGetLongPathName(const String& path)
   {
     if (!*p || *p=='\\' || *p=='/') 
     {
-      TCHAR t=*p;
+      wchar_t t=*p;
       *p=0;
       WIN32_FIND_DATA fd;
       if (res!="") res+="\\";
@@ -233,8 +233,8 @@ String MyGetLongPathName(const String& path)
 {
   if (Win98 || Win2K)
   {
-    TCHAR res[MAX_FILENAME];
-    if (!pGetLongPathName(path.ptr(), res, MAX_FILENAME))
+    wchar_t res[MAX_FILENAME];
+    if (!GetLongPathName(path.ptr(), res, MAX_FILENAME))
     {
       return MyEmulatedGetLongPathName(path);
     }
@@ -248,10 +248,10 @@ String MyGetLongPathName(const String& path)
 
 String MyGetShortPathName(const String& path)
 {
-  TCHAR buf[MAX_FILENAME];
+  wchar_t buf[MAX_FILENAME];
   if (GetFullPathName(path.ptr(), MAX_FILENAME, buf, NULL)==0) 
     return "";
-  TCHAR *p=buf, *op=buf;
+  wchar_t *p=buf, *op=buf;
   String res;
   if (buf[0]=='\\' && buf[1]=='\\' 
     || buf[0]=='/' && buf[1]=='/')
@@ -263,7 +263,7 @@ String MyGetShortPathName(const String& path)
   {
     if (!*p || *p=='\\' || *p=='/') 
     {
-      TCHAR t=*p;
+      wchar_t t=*p;
       *p=0;
       WIN32_FIND_DATA fd;
       if (res!="") res+="\\";
@@ -273,9 +273,8 @@ String MyGetShortPathName(const String& path)
         if (hf!=INVALID_HANDLE_VALUE) 
         {
           FindClose(hf);
-
-          char abuf[MAX_FILENAME];
-          _ttoacs(abuf, fd.cFileName, MAX_FILENAME);
+//           wchar_t abuf[MAX_FILENAME];
+//           _ttoacs(abuf, fd.cFileName, MAX_FILENAME);
           if (FileHasUnicodeName(buf)) 
             res+=fd.cAlternateFileName;
           else 
@@ -327,12 +326,12 @@ int FileHasUnicodeName(const String& fn)
 #endif
 }
 
-void DebugLog(const TCHAR *DebugMsg, ...)
+void DebugLog(const wchar_t *DebugMsg, ...)
 {
-  TCHAR MsgBuf[0x400];
+  wchar_t MsgBuf[0x400];
   va_list ArgPtr;
   va_start(ArgPtr, DebugMsg);
-  _vsntprintf(MsgBuf, sizeof(MsgBuf), DebugMsg, ArgPtr);
+  _vsntprintf_s(MsgBuf, 0x400, sizeof(MsgBuf), DebugMsg, ArgPtr);
   va_end(ArgPtr);
   OutputDebugString(MsgBuf);
 }

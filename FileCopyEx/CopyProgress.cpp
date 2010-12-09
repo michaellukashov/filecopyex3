@@ -1,4 +1,4 @@
-#include <stdhdr.h>
+﻿#include <stdhdr.h>
 #include "common.h"
 #include "copyprogress.h"
 #include "strutils.h"
@@ -27,8 +27,8 @@ void CopyProgress::Start(int move)
 {
   hScreen=Info.SaveScreen(0, 0, -1, -1);
   DrawWindow(X1, Y1, X2, Y2, move? LOC("Engine.Moving"):LOC("Engine.Copying"));
-  char buf[512], *p=buf;
-  for (int i=0; i<W-MG*2+2; i++) *p++=(char)0xC4;
+  wchar_t buf[512], *p=buf;
+  for (int i=0; i<W-MG*2+2; i++) *p++=0x2500;//'─'
   *p=0;
   Info.Text(X1+MG-1, Y1+5, clrFrame, buf);
   Info.Text(X1+MG-1, Y1+9, clrFrame, buf);
@@ -131,7 +131,7 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
   l += buf.len();
 
   String buf1;
-  buf = "        "+LOC("Engine.Remaining");
+  buf = String("        ")+LOC("Engine.Remaining");
   buf1 = Format(" %2.2d:%2.2d", (int)RemainingTime/60, (int)RemainingTime%60);
   DrawText(X2-MG-buf1.len()-buf.len()+1, Y1+10, clrLabel, buf);
   DrawText(X2-MG-buf1.len()+1, Y1+10, clrText, buf1);

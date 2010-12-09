@@ -21,9 +21,9 @@ void FarDlgObject::InitItem(FarDialogItem& item)
   Class()->InitItem(item, *this); 
 }
 
-void FarDlgObject::RetrieveProperties(Array<FarDialogItem>& items)
+void FarDlgObject::RetrieveProperties(Array<FarDialogItem>& items, HANDLE dlg)
 { 
-  Class()->RetrieveProperties(items, *this); 
+  Class()->RetrieveProperties(items, *this, dlg); 
 }
 
 void FarDlgObject::BeforeAdd(FarDialogItem& item)
@@ -68,14 +68,23 @@ void FarDlgObject::AddToItems(Array<FarDialogItem>& Items,
   }
 }
 
+void SetItemText(FarDialogItem* item, const String& text)
+{
+	size_t len = text.len() + 1;
+	wchar_t* t = (wchar_t*)malloc(sizeof(wchar_t) * len);
+	text.ToUnicode(t, len);
+	item->PtrData = t;
+	item->MaxLen = 0;
+}
+
 void FarDlgObject::PreInitItem(FarDialogItem& item)
 {
-  Name().ToAnsi(item.Data, sizeof(item.Data));
+//	SetItemText(&item, Name());
 
   String p=Property("Text");
   if (p=="") 
     p=LOC(Dialog->Name()+"."+Name());
-  p.ToOem(item.Data, sizeof(item.Data));
+  SetItemText(&item, p);
 
   for (int i=0; i<sizeof(Attrib)/sizeof(Attrib[0]); i++)
     if (Property(Attrib[i].Name))
@@ -197,11 +206,11 @@ void FarDlgContainer::SaveState(PropertyList& state)
       Child(i).SaveState(state);
 }
 
-void FarDlgContainer::RetrieveProperties(Array<FarDialogItem>& items)
+void FarDlgContainer::RetrieveProperties(Array<FarDialogItem>& items, HANDLE dlg)
 {
   for (int i=0; i<Children.Count(); i++)
     if (Child(i).DialogItem!=-1 || Child(i).IsContainer())
-      Child(i).RetrieveProperties(items);
+      Child(i).RetrieveProperties(items, dlg);
 }
 
 void FarDlgContainer::ClearDialogItem()

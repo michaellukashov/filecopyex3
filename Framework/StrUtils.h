@@ -4,26 +4,24 @@
 class FmtArg
 {
 public:
-  Handle string;
+  String string;
   int size;
   union
   {
     int i;
     __int64 i64;
     double d;
-    TCHAR c;
+    wchar_t c;
     void* p;
   } u;
 
-  FmtArg(int v) { size=sizeof(int); u.i=v; string=InvHandle; }
-  FmtArg(__int64 v) { size=sizeof(__int64); u.i64=v; string=InvHandle; }
-  FmtArg(double v) { size=sizeof(double); u.d=v; string=InvHandle; }
-  FmtArg(TCHAR v) { size=sizeof(TCHAR); u.c=v; string=InvHandle; }
-  FmtArg(const String& v) { size=sizeof(void*); u.p=v.Lock(); string=v.handle();}
-  FmtArg(const TCHAR* v) { size=sizeof(void*); u.p=(void*)v; string=InvHandle; }
-  FmtArg(const void* v) { size=sizeof(void*); u.p=(void*)v; string=InvHandle; }
-
-  ~FmtArg() { if (string!=InvHandle) heap->Unlock(string); }
+  FmtArg(int v) { size=sizeof(int); u.i=v; }
+  FmtArg(__int64 v) { size=sizeof(__int64); u.i64=v; }
+  FmtArg(double v) { size=sizeof(double); u.d=v; }
+  FmtArg(wchar_t v) { size=sizeof(wchar_t); u.c=v; }
+  FmtArg(const String& v) { size=sizeof(void*); u.p=v.Lock(); string=v;}
+  FmtArg(const wchar_t* v) { size=sizeof(void*); u.p=(void*)v; }
+  FmtArg(const void* v) { size=sizeof(void*); u.p=(void*)v;}
 };
 
 String Format(const String& fmt,  

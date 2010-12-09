@@ -67,4 +67,4 @@ void beep();
 void beep2();
 void beep3();
 
-void DebugLog(const TCHAR *DebugMsg, ...);
+void DebugLog(const wchar_t *DebugMsg, ...);

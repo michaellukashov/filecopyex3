@@ -2,6 +2,7 @@
 #include "far/interface/plugin.hpp"
 #include "far/fardlgobject.h"
 #include "far/fardlgclass.h"
+#include "farplugin.h"
 
 void FarDlgObjectClass::DefineProperties()
 {
@@ -28,11 +29,18 @@ void FarDlgEditClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
     if (p!="") 
     {
       FarDlgEdit &e=static_cast<FarDlgEdit&>(obj);
-      (String("FarFramework\\")+e.GetDialog()->Name()+"\\"+e.Name()).ToAnsi(
-        e.HistoryId, sizeof(e.HistoryId));
+      (String("FarFramework\\")+e.GetDialog()->Name()+"\\"+e.Name()).ToUnicode(e.HistoryId, sizeof(e.HistoryId)/sizeof(wchar_t));
       item.History=e.HistoryId;
     }
   }
+}
+void FarDlgEditClass::RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
+{
+	size_t len = Info.SendDlgMessage(dlg, DM_GETTEXTPTR, obj.DialogItem, NULL);
+	wchar_t* buf = (wchar_t*)_malloca((len + 1)*sizeof(wchar_t));
+	Info.SendDlgMessage(dlg, DM_GETTEXTPTR, obj.DialogItem, (LONG_PTR)buf);
+//	_toansi(items[obj.DialogItem].PtrData);
+	obj("Text")=buf;
 }
 
 void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
@@ -59,7 +67,7 @@ void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
     memset(e.list.Items, 0, sz);
     for (int i=0; i<items.Count(); i++)
     {
-      strncpy(e.list.Items[i].Text, items[i].optr(), sizeof(e.list.Items[i].Text));
+//      strncpy_s(e.list.Items[i].Text, 128, items[i].optr(), sizeof(e.list.Items[i].Text));
       if (obj("Text")==items[i])
         e.list.Items[i].Flags|=LIF_SELECTED;
     }
@@ -69,11 +77,11 @@ void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
 int lablen(FarDialogItem& item)
 {
   if (item.Flags & DIF_SHOWAMPERSAND)
-    return (int)strlen(item.Data);
+    return (int)wcslen(item.PtrData);
   else
   {
     int res=0;
-    for (char *p=item.Data; *p; p++)
+    for (const wchar_t *p=item.PtrData; *p; p++)
       if (*p!='&') res++;
     return res;
   }

@@ -9,6 +9,18 @@ FarMenu::FarMenu(void)
 
 FarMenu::~FarMenu(void)
 {
+	for(int i = 0; i < items.Count(); ++i)
+	{
+		free((void*)items[i].Text);
+	}
+}
+
+void FarMenu::SetItemText(FarMenuItem* item, const String& text)
+{
+	size_t len = text.len() + 1;
+	wchar_t* t = (wchar_t*)malloc(sizeof(wchar_t) * len);
+	text.ToUnicode(t, len);
+	item->Text = t;
 }
 
 void FarMenu::AddLine(const String& line)
@@ -17,7 +29,7 @@ void FarMenu::AddLine(const String& line)
   item.Checked=0;
   item.Selected=Selection==items.Count();
   item.Separator=0;
-  line.ToOem(item.Text, sizeof(item.Text));
+  SetItemText(&item, line);
   items.Add(item);
 }
 
@@ -27,7 +39,7 @@ void FarMenu::AddLineCheck(const String& line, int check)
   item.Checked=check;
   item.Selected=Selection==items.Count();
   item.Separator=0;
-  line.ToOem(item.Text, sizeof(item.Text));
+  SetItemText(&item, line);
   items.Add(item);
 }
 
@@ -37,14 +49,14 @@ void FarMenu::AddSep()
   item.Checked=0;
   item.Separator=1;
   item.Selected=0;
-  item.Text[0]=0;
+  SetItemText(&item, String());
   items.Add(item);
 }
 
 int FarMenu::Execute()
 {
   return Info.Menu(Info.ModuleNumber, -1, -1, 0, Flags,
-    Title.optr(), Bottom.optr(), HelpTopic.aptr(), NULL, NULL, items.Storage(),
+    Title.ptr(), Bottom.ptr(), HelpTopic.ptr(), NULL, NULL, items.Storage(),
     items.Count());
 }
 
@@ -83,8 +95,8 @@ int ShowMessageHelp(const String& title, const String& msg, int Flags, const Str
   String msgbuf=title+"\n"+msg+"\n\x01";
   int res=Info.Message(Info.ModuleNumber, 
                         Flags | FMSG_ALLINONE, 
-                        help.aptr(), 
-                        (const char**)(const char*)msgbuf.optr(), 0, 0);
+                        help.ptr(), 
+                        (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, 0);
   return res;
 }
 
@@ -98,12 +110,12 @@ int ShowMessageExHelp(const String& title, const String& msg,
                   const String& buttons, int flags, const String& help)
 {
   int nb=0;
-  for (TCHAR *p=buttons.Lock(); *p; p++)
+  for (wchar_t *p=buttons.Lock(); *p; p++)
     if (*p=='\n') nb++;
   buttons.Unlock();
   String msgbuf=title+"\n"+msg+"\n\x01\n"+buttons;
   int res=Info.Message(Info.ModuleNumber, flags | FMSG_ALLINONE, 
-    help.aptr(), (const char**)(const char*)msgbuf.optr(), 0, nb+1);
+    help.ptr(), (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, nb+1);
   return res;
 }
 
@@ -142,7 +154,7 @@ int Error2RS(const String& s, const String& fn, int code)
 
 String GetErrText(int code)
 {
-  TCHAR buf[1024];
+  wchar_t buf[1024];
   FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, code, 0, buf, 1024, NULL);
   return buf;
 }
@@ -151,7 +163,7 @@ String FormatWidth(const String& s, int len)
 {
   int dif = s.len()-len;
   if (dif>0) 
-    return "..."+s.right(len-3);
+    return String("...")+s.right(len-3);
   else
     return s+String(' ', -dif);
 }
@@ -160,14 +172,14 @@ String FormatWidthNoExt(const String& s, int len)
 {
   int dif = s.len()-len;
   if (dif>0) 
-    return "..."+s.right(len-3);
+    return String("...")+s.right(len-3);
   else
     return s;
 }
 
-static void stripnl(TCHAR *msg)
+static void stripnl(wchar_t *msg)
 {
-  TCHAR *pa=msg, *pm=msg;
+  wchar_t *pa=msg, *pm=msg;
   while (*pa)
   {
     if (*pa!='\n' && *pa!='\r') *pm++=*pa;
@@ -178,17 +190,17 @@ static void stripnl(TCHAR *msg)
 
 String SplitWidth(const String& s, int w)
 {
-  TCHAR msg[1024], res[1024];
+  wchar_t msg[1024], res[1024];
   s.CopyTo(msg, 1024);
   stripnl(msg);
-  TCHAR *p=(TCHAR*)msg, *op=p;
+  wchar_t *p=(wchar_t*)msg, *op=p;
   res[0]=0;
   do
   {
     while (*p && *p!=' ') p++;
     if (p-op>w)
     {
-      TCHAR t=*p;
+      wchar_t t=*p;
       *p=0;
       _tcat(res, op, 1024);
       _tcat(res, _T("\n"), 1024);
@@ -198,7 +210,7 @@ String SplitWidth(const String& s, int w)
   }
   while (*p++);
   if (*op) _tcat(res, op, 1024);
-  p=(TCHAR*)_tcsend(res)-1;
+  p=(wchar_t*)_tcsend(res)-1;
   while (p>=res && *p=='.') *p--=0;
   return res;
 }

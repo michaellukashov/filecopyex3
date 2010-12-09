@@ -30,8 +30,8 @@ String FarRegistry::GetString(const String& key, const String& value, const Stri
     if (RegQueryValueEx(hKey, value.ptr(), 0, &Type, NULL, &Size)==0
       && (Type==REG_SZ || Type==REG_EXPAND_SZ))
     {
-      String res(' ', Size/sizeof(TCHAR));
-      if (RegQueryValueEx(hKey, value.ptr(), 0, &Type, (LPBYTE)(TCHAR*)res.ptr(), 
+      String res(' ', Size/sizeof(wchar_t));
+      if (RegQueryValueEx(hKey, value.ptr(), 0, &Type, (LPBYTE)(wchar_t*)res.ptr(), 
         &Size)==0)
       {
         RegCloseKey(hKey);
@@ -48,8 +48,8 @@ void FarRegistry::SetString(const String& key, const String& value, const String
   HKEY hKey=CreateKey(key);
   if (hKey)
   {
-    RegSetValueEx(hKey, value.ptr(), 0, REG_SZ, (LPBYTE)(TCHAR*)buf.ptr(), 
-      sizeof(TCHAR)*(buf.len()+1));
+    RegSetValueEx(hKey, value.ptr(), 0, REG_SZ, (LPBYTE)(wchar_t*)buf.ptr(), 
+      sizeof(wchar_t)*(buf.len()+1));
     RegCloseKey(hKey);
   }
 }
@@ -85,7 +85,7 @@ void FarRegistry::ReadList(const String& key, StringList& list)
   if (hKey)
   {
     int c=0;
-    TCHAR Name[512], Data[4096];
+    wchar_t Name[512], Data[4096];
     DWORD NameSize=512, DataSize=sizeof(Data), Type;
     while (RegEnumValue(hKey, c++, Name, &NameSize, NULL, &Type, 
       (LPBYTE)Data, &DataSize)==0)
@@ -105,7 +105,7 @@ void FarRegistry::WriteList(const String& key, StringList& list)
   if (hKey)
   {
     int c=0;
-    TCHAR Name[512];
+    wchar_t Name[512];
     DWORD NameSize=512, Type;
     StringList ValueList;
     while (RegEnumValue(hKey, c++, Name, &NameSize, NULL, &Type, NULL, NULL)==0)
@@ -117,13 +117,13 @@ void FarRegistry::WriteList(const String& key, StringList& list)
     for (int i=0; i<ValueList.Count(); i++)
       RegDeleteValue(hKey, ValueList[i].ptr());
     c=0;
-    for (i=0; i<list.Count(); i++)
+    for (int i=0; i<list.Count(); i++)
     {
       const String& data=list[i];
-      TCHAR Name[16];
-      _itot(c++, Name, 10);
-      RegSetValueEx(hKey, Name, 0, REG_SZ, (LPBYTE)(TCHAR*)data.ptr(), 
-        sizeof(TCHAR)*((int)data.len()+1));
+      wchar_t Name[16];
+      _itot_s(c++, Name, 16, 10);
+      RegSetValueEx(hKey, Name, 0, REG_SZ, (LPBYTE)(wchar_t*)data.ptr(), 
+        sizeof(wchar_t)*((int)data.len()+1));
     }
     RegCloseKey(hKey);
   }
@@ -146,12 +146,12 @@ void FarRegistry::CopyKey(const String& Src, const String& Dst)
   }
   int i=0;
   DWORD dcb, ncb, type;
-  TCHAR name[512];
+  wchar_t name[512];
   BYTE data[4096];
   while (1)
   {
     dcb=sizeof(data);
-    ncb=sizeof(name)/sizeof(TCHAR);
+    ncb=sizeof(name)/sizeof(wchar_t);
     if (RegEnumValue(hSrc, i++, name, &ncb, NULL, &type, data, &dcb)) break;
     RegSetValueEx(hDst, name, NULL, type, data, dcb);
   }

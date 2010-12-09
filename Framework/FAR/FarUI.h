@@ -17,6 +17,7 @@ public:
   void SetSelection(int n);
   int Execute();
 protected:
+	void SetItemText(FarMenuItem* item, const String& text);
   String Title, Bottom, HelpTopic;
   int Flags, Selection;
   Array<FarMenuItem> items;

@@ -1,67 +1,62 @@
 #pragma once
-#include "objstring.h"
+#include <vector>
+#include "LowLevelStr.h"
+#include "ObjString.h"
 
 class Store  
 {
 public:
-  Store();
-  virtual ~Store();
+	Store();
+	virtual ~Store();
 
-  int Add(int size);
-  void* operator[](int n) { return Pool+Index[n].Ref; }
-  int Size(int n) { return Index[n].Size; }
-  int Count() { return IndexCount; }
-
-  struct IndexItem 
-  {
-    int Ref, Size;
-  };
+	int Add(int size);
+	void* operator[](int n) { return items[n].ptr; }
+	int Size(int n) { return (int)items[n].size; }
+	int Count() { return (int)items.size(); }
 
 protected:
-  unsigned char *Pool;
-  IndexItem *Index;
-  int IndexCount, IndexLimit, PoolSize, PoolLimit,
-    IndexAlloc, IndexAllocBlock, PoolAlloc, PoolAllocBlock, PageSize;
-
-  int ReallocIndex(int size);
-  int ReallocPool(int size);
-  int InternalReallocIndex(int size);
-  int InternalReallocPool(int size);
+	struct Item
+	{
+		void* ptr;
+		size_t size;
+	};
+	std::vector<Item> items;
 };
 
 class StringStore : protected Store
 {
 public:
-  StringStore() { ; }
-  ~StringStore() { ; }
+	StringStore() { ; }
+	~StringStore() { ; }
 
-  int Add(const TCHAR* ptr)
-  {
-    int res=Store::Add((int)(_tcslen(ptr)+1)*sizeof(TCHAR));
-    _tcscpy(operator[](res), ptr);
-    return res;
-  }
-  int Add(const String& ptr) { return Add(ptr.ptr()); }
-  TCHAR* operator[](int n) { return (TCHAR*)Store::operator[](n); }
-  int Len(int n) { return Index[n].Size/sizeof(TCHAR)-1; }
-  int Count() { return IndexCount; }
+	int Add(const wchar_t* ptr)
+	{
+		size_t l = _tcslen(ptr)+1;
+		int res=Store::Add((int)l*sizeof(wchar_t));
+		_tcscpy_s(operator[](res), l, ptr);
+		return res;
+	}
+	int Add(const String& ptr) { return Add(ptr.ptr()); }
+	wchar_t* operator[](int n) { return (wchar_t*)Store::operator[](n); }
+	int Len(int n) { return Size(n)/sizeof(wchar_t)-1; }
+	int Count() { return Store::Count(); }
 };
 
 template <class ItemType>
 class ArrayStore : protected Store
 {
 public:
-  ArrayStore() { ; }
-  ~ArrayStore() { ; }
+	ArrayStore() { ; }
+	~ArrayStore() { ; }
 
-  int Add(const ItemType& ptr)
-  { 
-    int res=Store::Add(sizeof(ItemType)); 
-    operator[](res)=ptr;
-    return res;
-  }
-  ItemType& operator[](int n) 
-    { return *(ItemType*)Store::operator[](n); }
-  int Count() 
-    { return IndexCount; }
+	int Add(const ItemType& ptr)
+	{ 
+		int res=Store::Add(sizeof(ItemType)); 
+		operator[](res)=ptr;
+		return res;
+	}
+	ItemType& operator[](int n) 
+	{ return *(ItemType*)Store::operator[](n); }
+	int Count() 
+	{ return Store::Count(); }
 };
