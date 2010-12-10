@@ -22,8 +22,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__DIALOG_H__
+#define	__DIALOG_H__
+
 #pragma once
 
-#include "fardlgobject.h"
-#include "fardlgclass.h"
+#include "dlgobject.h"
+#include "dlgclass.h"
 
+#endif//__DIALOG_H__

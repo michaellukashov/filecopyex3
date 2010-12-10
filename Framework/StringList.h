@@ -22,6 +22,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__STRINGLIST_H__
+#define	__STRINGLIST_H__
+
 #pragma once
 
 #include "array.h"
@@ -37,8 +40,6 @@ class StringList
 public:
 	StringList(void);
 	virtual ~StringList(void);
-//	void SetBlock(int);
-//	void SetOptions(int);
 
 	int Count();
 	const String operator[](int);
@@ -55,8 +56,6 @@ public:
 	void Clear();
 
 	int Find(const String&, int=0);
-// 	int PFind(const String&, int=0);
-// 	int GFind(const String&, int=0);
 
 	int LoadFrom(FILE*);
 	int SaveTo(FILE*, TextFormat=tfANSI);
@@ -80,3 +79,5 @@ public:
 private:
 	Array<ListItem> items;
 };
+
+#endif//__STRINGLIST_H__

@@ -22,9 +22,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__PROGRESS_H__
+#define	__PROGRESS_H__
+
 #pragma once
 
-#include "farplugin.h"
+#include "plugin.h"
 
 #define WIN_NONE          0
 #define WIN_MESSAGE       1
@@ -34,27 +37,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class FarProgress
 {
 public:
-  FarProgress(void);
-  virtual ~FarProgress(void);
-  void ShowMessage(const String&);
-  void ShowProgress(const String&);
-  void ShowScanProgress(const String& msg);
-  void SetScanProgressInfo(__int64 NumberOfFiles, __int64 TotalSize);
-  void Hide();
-  void SetPercent(float);
-  int InverseBars;
+	FarProgress(void);
+	virtual ~FarProgress(void);
+	void ShowMessage(const String&);
+	void ShowProgress(const String&);
+	void ShowScanProgress(const String& msg);
+	void SetScanProgressInfo(__int64 NumberOfFiles, __int64 TotalSize);
+	void Hide();
+	void SetPercent(float);
+	int InverseBars;
 protected:
-  int clrFrame, clrTitle, clrBar, clrText, clrLabel;
-  int ProgX1, ProgX2, ProgY, WinType;
-  HANDLE hScreen;
-  void DrawWindow(int, int, int, int, const String&);
-  void GetConSize(int&, int&);
-  void DrawProgress(int, int, int, float);
-  void DrawText(int, int, int, const String&);
-  void SetTitle(const String&);
-  void SetTitle2(const String&);
-  String GetTitle();
-  String TitleBuf, ProgTitle;
-  void DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles, __int64 TotalSize);
-  __int64 LastUpdate;
+	int clrFrame, clrTitle, clrBar, clrText, clrLabel;
+	int ProgX1, ProgX2, ProgY, WinType;
+	HANDLE hScreen;
+	void DrawWindow(int, int, int, int, const String&);
+	void GetConSize(int&, int&);
+	void DrawProgress(int, int, int, float);
+	void DrawText(int, int, int, const String&);
+	void SetTitle(const String&);
+	void SetTitle2(const String&);
+	String GetTitle();
+	String TitleBuf, ProgTitle;
+	void DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles, __int64 TotalSize);
+	__int64 LastUpdate;
 };
+
+#endif//__PROGRESS_H__

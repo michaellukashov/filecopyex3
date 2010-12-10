@@ -22,6 +22,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__COMMON_H__
+#define	__COMMON_H__
+
 #pragma once
 
 #include "../framework/objstring.h"
@@ -93,3 +96,5 @@ void beep2();
 void beep3();
 
 void DebugLog(const wchar_t *DebugMsg, ...);
+
+#endif//__COMMON_H__

@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../../src/common.h"
 #include "../lowlevelstr.h"
 #include "../strutils.h"
-#include "farprogress.h"
+#include "progress.h"
 
 FarProgress::FarProgress(void)
 {

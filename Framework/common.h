@@ -22,6 +22,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__FWCOMMON_H__
+#define	__FWCOMMON_H__
+
 #pragma once
 
 #include <tchar.h>
@@ -40,3 +43,5 @@ extern int WinNT, Win2K, WinXP, Win98, WinNT4;
 extern HANDLE hInstance;
 
 BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID);
+
+#endif//__FWCOMMON_H__

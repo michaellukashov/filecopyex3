@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../stdhdr.h"
 #include "../lowlevelstr.h"
-#include "farplugin.h"
+#include "plugin.h"
 
 FarMenu::FarMenu(void)
 {

@@ -22,6 +22,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__STORE_H__
+#define	__STORE_H__
+
 #pragma once
 
 #include <vector>
@@ -76,12 +79,12 @@ public:
 
 	int Add(const ItemType& ptr)
 	{ 
-		int res=Store::Add(sizeof(ItemType)); 
-		operator[](res)=ptr;
+		int res = Store::Add(sizeof(ItemType)); 
+		operator[](res) = ptr;
 		return res;
 	}
-	ItemType& operator[](int n) 
-	{ return *(ItemType*)Store::operator[](n); }
-	int Count() 
-	{ return Store::Count(); }
+	ItemType& operator[](int n) { return *(ItemType*)Store::operator[](n); }
+	int Count() { return Store::Count(); }
 };
+
+#endif//__STORE_H__

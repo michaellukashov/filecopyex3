@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "stdhdr.h"
 #include "object.h"
-#include "fwcommon.h"
+#include "common.h"
 #include "lowlevelstr.h"
 #include "strutils.h"
 

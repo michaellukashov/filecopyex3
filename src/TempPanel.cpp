@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../framework/strutils.h"
 #include "filecopyex.h"
 #include "common.h"
-#include "../framework/FwCommon.h"
+#include "../framework/common.h"
 
 StringList TempFiles;
 

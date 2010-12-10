@@ -22,29 +22,33 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__UI_H__
+#define	__UI_H__
+
 #pragma once
+
 #include "../array.h"
 #include "interface/plugin.hpp"
 
 class FarMenu
 {
 public:
-  FarMenu(void);
-  virtual ~FarMenu(void);
-  void SetTitle(const String&);
-  void SetBottom(const String&);
-  void SetHelpTopic(const String&);
-  void SetFlags(int f);
-  void AddLine(const String&);
-  void AddLineCheck(const String&, int check);
-  void AddSep();
-  void SetSelection(int n);
-  int Execute();
+	FarMenu(void);
+	virtual ~FarMenu(void);
+	void SetTitle(const String&);
+	void SetBottom(const String&);
+	void SetHelpTopic(const String&);
+	void SetFlags(int f);
+	void AddLine(const String&);
+	void AddLineCheck(const String&, int check);
+	void AddSep();
+	void SetSelection(int n);
+	int Execute();
 protected:
 	void SetItemText(FarMenuItem* item, const String& text);
-  String Title, Bottom, HelpTopic;
-  int Flags, Selection;
-  Array<FarMenuItem> items;
+	String Title, Bottom, HelpTopic;
+	int Flags, Selection;
+	Array<FarMenuItem> items;
 };
 
 int ShowMessage(const String&, const String&, int);
@@ -67,15 +71,16 @@ String SplitWidth(const String&, int);
 
 inline __int64 GetTime()
 {
-  LARGE_INTEGER res;
-  QueryPerformanceCounter(&res);
-  return res.QuadPart;
+	LARGE_INTEGER res;
+	QueryPerformanceCounter(&res);
+	return res.QuadPart;
 }
 
 inline __int64 TicksPerSec()
 {
-  LARGE_INTEGER res;
-  QueryPerformanceFrequency(&res);
-  return res.QuadPart;
+	LARGE_INTEGER res;
+	QueryPerformanceFrequency(&res);
+	return res.QuadPart;
 }
 
+#endif//__UI_H__

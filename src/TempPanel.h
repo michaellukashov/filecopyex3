@@ -22,22 +22,27 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__TEMPPANEL_H__
+#define	__TEMPPANEL_H__
+
 #pragma once
 
-#include "../framework/far/farplugin.h"
+#include "../framework/far/plugin.h"
 
 class TempPanel : public FarPanel
 {
 public:
-  TempPanel();
-  ~TempPanel();
+	TempPanel();
+	~TempPanel();
 
-  int ReadFileList(int silent);
-  int ChangeDir(String& dir, int silent, const String& suggest);
-  int DelFiles(PluginPanelItem* files, int count, int silent);
-  int PutFiles(PluginPanelItem* files, int count, int move, int silent);
-  int GetFiles(PluginPanelItem* files, int count, int move, 
-    const String& dest, int silent);
-  int MkDir(String& name, int silent);
+	int ReadFileList(int silent);
+	int ChangeDir(String& dir, int silent, const String& suggest);
+	int DelFiles(PluginPanelItem* files, int count, int silent);
+	int PutFiles(PluginPanelItem* files, int count, int move, int silent);
+	int GetFiles(PluginPanelItem* files, int count, int move, 
+		const String& dest, int silent);
+	int MkDir(String& name, int silent);
 
 };
+
+#endif//__TEMPPANEL_H__

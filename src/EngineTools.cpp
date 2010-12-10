@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "FileCopyEx.h"
 #include "engine.h"
 #include "EngineTools.h"
-#include "../framework/FwCommon.h"
+#include "../framework/common.h"
 
 void* Alloc(int size)
 {

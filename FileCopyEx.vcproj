@@ -482,11 +482,11 @@
 					>
 				</File>
 				<File
-					RelativePath=".\Framework\fwcommon.cpp"
+					RelativePath=".\Framework\common.cpp"
 					>
 				</File>
 				<File
-					RelativePath=".\Framework\fwcommon.h"
+					RelativePath=".\Framework\common.h"
 					>
 				</File>
 				<File
@@ -582,34 +582,38 @@
 				Name="far"
 				>
 				<File
-					RelativePath=".\Framework\FAR\farpanel.cpp"
+					RelativePath=".\Framework\FAR\panel.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Framework\FAR\panel.h"
 					>
 				</File>
 				<Filter
 					Name="dialogs"
 					>
 					<File
-						RelativePath=".\Framework\FAR\fardialog.cpp"
+						RelativePath=".\Framework\FAR\dialog.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\fardialog.h"
+						RelativePath=".\Framework\FAR\dialog.h"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\fardlgclass.cpp"
+						RelativePath=".\Framework\FAR\dlgclass.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\fardlgclass.h"
+						RelativePath=".\Framework\FAR\dlgclass.h"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\fardlgobject.cpp"
+						RelativePath=".\Framework\FAR\dlgobject.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\fardlgobject.h"
+						RelativePath=".\Framework\FAR\dlgobject.h"
 						>
 					</File>
 				</Filter>
@@ -617,35 +621,35 @@
 					Name="common"
 					>
 					<File
-						RelativePath=".\Framework\FAR\farplugin.cpp"
+						RelativePath=".\Framework\FAR\plugin.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\farplugin.h"
+						RelativePath=".\Framework\FAR\plugin.h"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\farprogress.cpp"
+						RelativePath=".\Framework\FAR\progress.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\farprogress.h"
+						RelativePath=".\Framework\FAR\progress.h"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\farregistry.cpp"
+						RelativePath=".\Framework\FAR\registry.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\farregistry.h"
+						RelativePath=".\Framework\FAR\registry.h"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\farui.cpp"
+						RelativePath=".\Framework\FAR\ui.cpp"
 						>
 					</File>
 					<File
-						RelativePath=".\Framework\FAR\farui.h"
+						RelativePath=".\Framework\FAR\ui.h"
 						>
 					</File>
 				</Filter>

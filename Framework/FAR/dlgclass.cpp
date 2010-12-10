@@ -24,9 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../stdhdr.h"
 #include "interface/plugin.hpp"
-#include "fardlgobject.h"
-#include "fardlgclass.h"
-#include "farplugin.h"
+#include "dlgobject.h"
+#include "dlgclass.h"
+#include "plugin.h"
 
 void FarDlgObjectClass::DefineProperties()
 {

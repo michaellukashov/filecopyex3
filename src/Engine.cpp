@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../framework/strutils.h"
 
 #include "enginetools.h"
-#include "../framework/FwCommon.h"
+#include "../framework/common.h"
 
 #define AllocAlign  65536
 

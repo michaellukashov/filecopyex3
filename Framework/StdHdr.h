@@ -22,6 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__STDHDR_H__
+#define	__STDHDR_H__
 
 #pragma once
 
@@ -52,4 +54,4 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <windows.h>
 #include <winioctl.h>
 
-//#pragma hdrstop
+#endif//__STDHDR_H__

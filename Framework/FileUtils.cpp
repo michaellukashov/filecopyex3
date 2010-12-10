@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stdhdr.h"
 #include "fileutils.h"
 #include "strutils.h"
-#include "fwcommon.h"
+#include "common.h"
 
 #include "..\src\Common.h"
 #include "..\src\FileCopyEx.h"

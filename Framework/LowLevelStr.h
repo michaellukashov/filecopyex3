@@ -22,6 +22,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__LOWLEVELSTR_H__
+#define	__LOWLEVELSTR_H__
+
 #pragma once
 
 #include <stdarg.h>
@@ -45,16 +48,16 @@ int _truestr(const wchar_t *s);
 
 inline const wchar_t* _tcsend(const wchar_t* s) 
 {
-  wchar_t* res=(wchar_t*)s;
-  while (*res) res++;
-  return res;
+	wchar_t* res=(wchar_t*)s;
+	while (*res) res++;
+	return res;
 }
 
 inline const char* strend(const char* s)
 {
-  char* res=(char*)s;
-  while (*res) res++;
-  return res;
+	char* res=(char*)s;
+	while (*res) res++;
+	return res;
 }
 
 wchar_t* _tcsrstr(const wchar_t* wcs1, const wchar_t* wcs2);
@@ -63,25 +66,26 @@ wchar_t* _tcsrspnp(const wchar_t* string, const wchar_t* control);
 
 inline void _wcopy(wchar_t *d, const wchar_t *s, size_t size)
 {
-  wcsncpy_s(d, size, s, size);
-  d[size-1]=0;
+	wcsncpy_s(d, size, s, size);
+	d[size-1]=0;
 }
 
 inline void _acopy(char *d, const char *s, size_t size)
 {
-  strncpy_s(d, size, s, size);
-  d[size-1]=0;
+	strncpy_s(d, size, s, size);
+	d[size-1]=0;
 }
 
 inline void _tcopy(wchar_t *d, const wchar_t *s, size_t size)
 {
-  _tcsncpy_s(d, size, s, size);
-  d[size-1]=0;
+	_tcsncpy_s(d, size, s, size);
+	d[size-1]=0;
 }
 
 inline void _tcat(wchar_t *d, const wchar_t *s, size_t size)
 {
-  _tcsncat_s(d, size, s, size-_tcslen(d));
-  d[size-1]=0;
+	_tcsncat_s(d, size, s, size-_tcslen(d));
+	d[size-1]=0;
 }
 
+#endif//__LOWLEVELSTR_H__

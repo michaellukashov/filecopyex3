@@ -23,8 +23,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "../stdhdr.h"
-#include "farplugin.h"
-#include "farpanel.h"
+#include "plugin.h"
+#include "panel.h"
 
 FarPanel::FarPanel()
 {

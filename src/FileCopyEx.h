@@ -22,10 +22,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__FILECOPYEX_H__
+#define	__FILECOPYEX_H__
+
 #pragma once
 
 #include "../framework/properties.h"
-#include "../framework/far/farplugin.h"
+#include "../framework/far/plugin.h"
 
 #define MRES_NONE         0
 #define MRES_STDCOPY      1
@@ -35,21 +38,23 @@ extern int Win2K, WinNT;
 extern StringList DescFiles;
 
 class FileCopyExPlugin :
-  public FarPlugin
+	public FarPlugin
 {
 public:
-  FileCopyExPlugin(void);
-  virtual ~FileCopyExPlugin(void);
-  int Configure(int);
-  FarPanel* OpenPlugin(int, int);
-  void InitOptions(PropertyList&);
-  void Config();
+	FileCopyExPlugin(void);
+	virtual ~FileCopyExPlugin(void);
+	int Configure(int);
+	FarPanel* OpenPlugin(int, int);
+	void InitOptions(PropertyList&);
+	void Config();
 
 private:
-  void About();
-  void KeyConfig();
-  void MiscInit();
+	void About();
+	void KeyConfig();
+	void MiscInit();
 };
 
 void SaveTemp();
 extern StringList TempFiles;
+
+#endif//__FILECOPYEX_H__

@@ -24,10 +24,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../stdhdr.h"
 #include "../lowlevelstr.h"
-#include "../fwcommon.h"
+#include "../common.h"
 #include "../valuelist.h"
 #include "../properties.h"
-#include "farplugin.h"
+#include "plugin.h"
 
 PluginStartupInfo Info;
 String PluginRootKey;

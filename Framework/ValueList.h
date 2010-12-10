@@ -22,6 +22,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#ifndef	__VALUELIST_H__
+#define	__VALUELIST_H__
+
 #pragma once
 
 #include "stringlist.h"
@@ -60,3 +63,5 @@ class LocaleList : public ValueList
 public:
 	void Load(const String& fn);
 };
+
+#endif//__VALUELIST_H__

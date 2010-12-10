@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stdhdr.h"
 #include <stdarg.h>
 //#include "../FileCopyEx/Common.h"
-#include "FAR/FarPlugin.h"
+#include "far/plugin.h"
 #include "strutils.h"
 
 

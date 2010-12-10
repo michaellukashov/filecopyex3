@@ -24,8 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "../stdhdr.h"
 #include "../valuelist.h"
-#include "fardlgobject.h"
-#include "fardlgclass.h"
+#include "dlgobject.h"
+#include "dlgclass.h"
 
 extern LocaleList *Locale;
 #define LOC(s) ((*Locale)[s])

@@ -26,12 +26,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../framework/lowlevelstr.h"
 #include "common.h"
 #include "engine.h"
-#include "../framework/far/farplugin.h"
+#include "../framework/far/plugin.h"
 #include "filecopyex.h"
 #include "../framework/strutils.h"
 #include "../framework/fileutils.h"
 #include "EngineTools.h"
-#include "../framework/fwcommon.h"
+#include "../framework/common.h"
 
 #define EXCEPTION_ABORT_BY_ESC  0x0F
 
