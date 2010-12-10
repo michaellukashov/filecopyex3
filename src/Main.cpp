@@ -334,8 +334,8 @@ int Engine::Main(int move, int curonly)
     String fmt;
     if (!move) fmt=LOC("CopyDialog.CopyTo");
     else 
-    fmt=LOC("CopyDialog.MoveTo");
-    prompt = Format(fmt, fn);
+	    fmt=LOC("CopyDialog.MoveTo");
+    prompt = Format(fmt.ptr(), fn.ptr());
     if (curonly || dstpath=="") dstpath=fn;
     /*else if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
       && dstpath!="queue:" && dstpath!="plugin:")
@@ -1154,15 +1154,15 @@ int Engine::CheckOverwrite(int fnum, const String& Src, const String& Dst, Strin
   FindClose(FindFirstFile(Dst.ptr(), &fd));
   dsz=FormatNum(MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh));
   dtime=FormatTime(fd.ftLastWriteTime);
-  dlg["Label4"]("Text")=Format("%14s %s  %s", dsz, LOC("OverwriteDialog.Bytes"), dtime);
+  dlg["Label4"]("Text")=Format(L"%14s %s  %s", dsz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), dtime.ptr());
 
   FindClose(FindFirstFile(Src.ptr(), &fs));
   ssz=FormatNum(MAKEINT64(fs.nFileSizeLow, fs.nFileSizeHigh));
   stime=FormatTime(fs.ftLastWriteTime);
-  dlg["Label3"]("Text")=Format("%14s %s  %s", ssz, LOC("OverwriteDialog.Bytes"), stime);
+  dlg["Label3"]("Text")=Format(L"%14s %s  %s", ssz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), stime.ptr());
 
-  dlg["Source"]("Text")       = Format("%-16s", LOC("OverwriteDialog.Source"));
-  dlg["Destination"]("Text")  = Format("%-16s", LOC("OverwriteDialog.Destination"));
+  dlg["Source"]("Text")       = Format(L"%-16s", LOC("OverwriteDialog.Source").ptr());
+  dlg["Destination"]("Text")  = Format(L"%-16s", LOC("OverwriteDialog.Destination").ptr());
 
   dlg["AcceptForAll"]("Selected")=0;
   dlg["SkipIfNewer"]("Selected")=SkipNewer;
@@ -1287,10 +1287,10 @@ BOOL Engine::CheckFreeDiskSpace(const __int64 TotalBytesToProcess, const int Mov
       if (disk_str.len() >= 2)
         if (disk_str[1] == ':') disk_str = disk_str.left(2);
       dlg["Label1"]("Text") = LOC("FreeSpaceErrorDialog.NotEnoughSpace") + " " + disk_str;
-      dlg["Label2"]("Text") = Format("%-20s%12s", LOC("FreeSpaceErrorDialog.AvailableSpace"), 
-                                      FormatValue(FreeBytesAvailable.QuadPart));
-      dlg["Label3"]("Text") = Format("%-20s%12s", LOC("FreeSpaceErrorDialog.RequiredSpace"), 
-                                      FormatValue(TotalBytesToProcess));
+      dlg["Label2"]("Text") = Format(L"%-20s%12s", LOC("FreeSpaceErrorDialog.AvailableSpace").ptr(), 
+                                      FormatValue(FreeBytesAvailable.QuadPart).ptr());
+      dlg["Label3"]("Text") = Format(L"%-20s%12s", LOC("FreeSpaceErrorDialog.RequiredSpace").ptr(), 
+                                      FormatValue(TotalBytesToProcess).ptr());
       dlg["Label4"]("Text") = LOC("FreeSpaceErrorDialog.AbortPrompt");
 
       int dlgres = dlg.Execute();

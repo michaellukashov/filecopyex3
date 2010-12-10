@@ -32,18 +32,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class ValueList
 {
 public:
-	ValueList();
-	virtual ~ValueList();
-
-	const String Name(int);
-	const String Value(int);
+	const String& Name(int);
+	const String& Value(int);
 	int Count();
 	void Clear();
 
 	void Set(const String&, const String&);
 	void Set(const String&);
 
-	const String operator[](const String&); 
+	const String& operator[](const String&);
 
 	void LoadFromList(StringList&);
 	void SaveToList(StringList&);
@@ -56,6 +53,7 @@ public:
 private:
 	int Find(const String& k);
 	Array<ListItem> items;
+	String empty;
 };
 
 class LocaleList : public ValueList

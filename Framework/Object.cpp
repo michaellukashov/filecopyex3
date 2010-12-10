@@ -105,7 +105,7 @@ int Object::LoadFromList(StringList &list, int start)
         if (obj)
           i=obj->LoadFromList(list, i+1);
         else
-          FWError(Format("Object type %s is undefined", ptype));
+          FWError(Format(L"Object type %s is undefined", ptype.ptr()));
       }
     }
     else 
@@ -198,7 +198,7 @@ Object& ObjectList::operator[] (const String& n)
 {
   int i=StringList::Find(n);
   if (i!=-1) return operator[](i);
-  FWError(Format("Request to undefined object %s", n));
+  FWError(Format(L"Request to undefined object %s", n.ptr()));
   return *((Object*)NULL);
 }
 

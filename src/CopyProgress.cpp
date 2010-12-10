@@ -143,20 +143,20 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
   buf = LOC("Engine.Total");
   DrawText(l, Y1+10, clrLabel, buf);
   l += buf.len();
-  buf = Format(" %2.2d:%2.2d  ", (int)TotalTime/60, (int)TotalTime%60);
+  buf = Format(L" %2.2d:%2.2d  ", (int)TotalTime/60, (int)TotalTime%60);
   DrawText(l, Y1+10, clrText, buf);
   l += buf.len();
 
   buf = LOC("Engine.Elapsed");
   DrawText(l, Y1+10, clrLabel, buf);
   l += buf.len();
-  buf = Format(" %2.2d:%2.2d  ", (int)ElapsedTime/60, (int)ElapsedTime%60);
+  buf = Format(L" %2.2d:%2.2d  ", (int)ElapsedTime/60, (int)ElapsedTime%60);
   DrawText(l, Y1+10, clrText, buf);
   l += buf.len();
 
   String buf1;
   buf = String("        ")+LOC("Engine.Remaining");
-  buf1 = Format(" %2.2d:%2.2d", (int)RemainingTime/60, (int)RemainingTime%60);
+  buf1 = Format(L" %2.2d:%2.2d", (int)RemainingTime/60, (int)RemainingTime%60);
   DrawText(X2-MG-buf1.len()-buf.len()+1, Y1+10, clrLabel, buf);
   DrawText(X2-MG-buf1.len()+1, Y1+10, clrText, buf1);
 
@@ -166,7 +166,7 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
     int pc=TotalBytes?(int)((float)(ReadBytes+WriteBytes)/(TotalBytes*2)*100):0;
     if (pc<0) pc=0;
     if (pc>100) pc=100;
-    buf = Format("{%d%% %2.2d:%2.2d} %s - FAR", pc, (int)RemainingTime/60, (int)RemainingTime%60, 
+    buf = Format(L"{%d%% %2.2d:%2.2d} %s - FAR", pc, (int)RemainingTime/60, (int)RemainingTime%60, 
                 Move? LOC("Engine.Moving"):LOC("Engine.Copying"));
     SetConsoleTitle(buf.ptr());
   }

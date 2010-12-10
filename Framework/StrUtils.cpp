@@ -29,27 +29,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "strutils.h"
 
 
-String Format(const String& fmt, 
-              const FmtArg& a1, const FmtArg& a2, const FmtArg& a3, const FmtArg& a4, 
-              const FmtArg& a5, const FmtArg& a6, const FmtArg& a7, const FmtArg& a8, 
-              const FmtArg& a9, const FmtArg& a10, const FmtArg& a11, const FmtArg& a12, 
-              const FmtArg& a13, const FmtArg& a14, const FmtArg& a15, const FmtArg& a16)
+String Format(const wchar_t* fmt, ...)
 {
-  wchar_t buf[8192], *p=fmt.Lock();
-#define SZ (__max(__max(sizeof(int), sizeof(double)), sizeof(void*)))
-  char *arglist=(char*)_alloca(SZ*16), *argptr=arglist;
-#define ROUND(n) ((n+SZ-1)&~(SZ-1))
-#define ADD(a) { \
-    memcpy(argptr, &a.u, a.size); \
-    argptr+=ROUND(a.size); }
-  ADD(a1); ADD(a2); ADD(a3); ADD(a4); ADD(a5); ADD(a6); ADD(a7); ADD(a8);
-  ADD(a9); ADD(a10); ADD(a11); ADD(a12); ADD(a13); ADD(a14); ADD(a15); ADD(a16);
-#undef ADD
-#undef ROUND
-#undef SZ
-  _vsntprintf_s(buf, 8192, p, (va_list)arglist);
-  fmt.Unlock();
-  return buf;
+	wchar_t buf[8192];
+	va_list args;
+	va_start(args, fmt);
+	_vsntprintf_s(buf, 8192, fmt, args);
+	va_end(args);
+	return buf;
 }
 
 String FormatNum(__int64 n)
@@ -77,7 +64,7 @@ String FormatTime(const FILETIME& ft)
   SYSTEMTIME st;
   FileTimeToLocalFileTime(&ft, &ft1);
   FileTimeToSystemTime(&ft1, &st);
-  return Format("%02d.%02d.%04d %02d:%02d:%02d",
+  return Format(L"%02d.%02d.%04d %02d:%02d:%02d",
                 (int)st.wDay, (int)st.wMonth, (int)st.wYear, 
                 (int)st.wHour, (int)st.wMinute, (int)st.wSecond);
 }
@@ -112,8 +99,8 @@ String FormatProgress(__int64 cb, __int64 total)
     case 4: un=LOC("Engine.Tb"); break;
     case 5: un=LOC("Engine.Pb"); break;
   }
-  return Format("%s %s %s %s [%d%%]", FormatNum(cb/div), LOC("Engine.Of"), 
-                FormatNum(total/div), un, (int)(total?(float)cb/total*100:0));
+  return Format(L"%s %s %s %s [%d%%]", FormatNum(cb/div).ptr(), LOC("Engine.Of").ptr(), 
+                FormatNum(total/div).ptr(), un.ptr(), (int)(total?(float)cb/total*100:0));
 }
 
 
@@ -134,7 +121,7 @@ String FormatSpeed(__int64 cb)
     case 5: un=LOC("Engine.Pb"); break;
   }
 
-  return Format("%s %s/%s", FormatNum(cb/div), un, LOC("Engine.Sec"));
+  return Format(L"%s %s/%s", FormatNum(cb/div).ptr(), un.ptr(), LOC("Engine.Sec").ptr());
 }
 
 
@@ -153,6 +140,6 @@ String FormatValue(__int64 Value)
     case 4: UnitStr = LOC("Engine.Tb"); break;
     case 5: UnitStr = LOC("Engine.Pb"); break;
   }
-  return Format("%s %s", FormatNum(Value), UnitStr);
+  return Format(L"%s %s", FormatNum(Value).ptr(), UnitStr.ptr());
 }
 

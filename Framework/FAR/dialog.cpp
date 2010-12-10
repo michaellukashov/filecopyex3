@@ -96,7 +96,7 @@ FarDlgObject& FarDialog::operator[](const String& n)
 {
   FarDlgObject *obj=FindChild(n);
   if (!obj)
-    FWError(Format("Request to undefined object %s", n));
+    FWError(Format(L"Request to undefined object %s", n.ptr()));
   return *obj;
 }
 

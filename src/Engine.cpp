@@ -398,7 +398,7 @@ open_retry:
         case OM_RESUME:
           bi->OutFile = Open(DstName, OPEN_WRITE | oflg);
           if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN)==-1)
-            FWError(Format("FSeek to %d failed, code %d", info.ResumePos, 
+            FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos, 
               (int)GetLastError()));
           break;
         case OM_SKIP:
@@ -506,7 +506,7 @@ reopen_retry:
                 }
               }
               if (FSeek(bi->OutFile, Pos, FILE_BEGIN)==-1)
-                FWError(Format("FSeek to %d failed, code %d", Pos, 
+                FWError(Format(L"FSeek to %d failed, code %d", Pos, 
                   (int)GetLastError()));
             }
             goto retry;
@@ -697,7 +697,7 @@ open_retry:
     if (OverwriteMode == OM_RESUME)
     {
       if (FSeek(InputFile, info.ResumePos, FILE_BEGIN)==-1)
-        FWError(Format("FSeek to %d failed, code %d", info.ResumePos, 
+        FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos, 
           (int)GetLastError()));
     }
 
@@ -749,7 +749,7 @@ reopen_retry:
                 }
               }
               if (FSeek(InputFile, Pos, FILE_BEGIN)==-1)
-                FWError(Format("FSeek to %d failed, code %d", Pos, 
+                FWError(Format(L"FSeek to %d failed, code %d", Pos, 
                   (int)GetLastError()));
             }
             goto retry;

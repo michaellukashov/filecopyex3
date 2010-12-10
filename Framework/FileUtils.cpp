@@ -401,8 +401,7 @@ __int64 FileSize(const String& fn)
 inline String TempName()
 {
   srand((unsigned)time(NULL));
-  return Format("%8.8x", rand()*rand()*rand())+
-    "."+Format("%3.3x", rand());
+  return Format(L"%8.8x", rand()*rand()*rand())+"."+Format(L"%3.3x", rand());
 }
 
 String TempPath()
