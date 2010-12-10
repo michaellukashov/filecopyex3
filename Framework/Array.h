@@ -47,7 +47,7 @@ public:
 		arr[j] = item;
 	}
 
-	const ItemType* Storage() { return &arr.front(); }
+	const ItemType* Storage() { return arr.empty() ? NULL : &arr.front(); }
 
 private:
 	std::vector<ItemType> arr;
