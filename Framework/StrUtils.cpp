@@ -36,10 +36,9 @@ String Format(const String& fmt,
               const FmtArg& a13, const FmtArg& a14, const FmtArg& a15, const FmtArg& a16)
 {
   wchar_t buf[8192], *p=fmt.Lock();
-  char *arglist=(char*)_alloca(__max(__max(sizeof(int), 
-    sizeof(double)), sizeof(void*))*16),
-    *argptr=arglist;
-#define ROUND(n) ((n+sizeof(int)-1)&~(sizeof(int)-1))
+#define SZ (__max(__max(sizeof(int), sizeof(double)), sizeof(void*)))
+  char *arglist=(char*)_alloca(SZ*16), *argptr=arglist;
+#define ROUND(n) ((n+SZ-1)&~(SZ-1))
 #define ADD(a) { \
     memcpy(argptr, &a.u, a.size); \
     argptr+=ROUND(a.size); }
@@ -47,6 +46,7 @@ String Format(const String& fmt,
   ADD(a9); ADD(a10); ADD(a11); ADD(a12); ADD(a13); ADD(a14); ADD(a15); ADD(a16);
 #undef ADD
 #undef ROUND
+#undef SZ
   _vsntprintf_s(buf, 8192, p, (va_list)arglist);
   fmt.Unlock();
   return buf;
