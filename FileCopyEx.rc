@@ -45,11 +45,11 @@ BEGIN
         BEGIN
             VALUE "Comments", "Small bugfixes by slst, CDK, Ivanych, Nsky, Alter and axxie. Far2 + x64 version by djdron"
             VALUE "CompanyName", "Max Antipin and Serge Cheperis aka craZZy"
-            VALUE "FileDescription", "Extended file copy plugin for Far2 manager"
+            VALUE "FileDescription", "Extended File Copy plugin for Far 2 file manager"
             VALUE "FileVersion", "2.0.0.0"
             VALUE "InternalName", "FileCopyEx"
-            VALUE "LegalCopyright", "Copyright (c) 2006-2010"
-            VALUE "ProductName", "Extended file copy plugin for Far2 manager main executable"
+            VALUE "LegalCopyright", "Copyright (c) 2004-2010"
+            VALUE "ProductName", "Extended File Copy plugin for Far 2 file manager main executable"
             VALUE "ProductVersion", "2.0.0.0"
         END
     END
