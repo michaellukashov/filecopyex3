@@ -134,9 +134,8 @@ int ShowMessageExHelp(const String& title, const String& msg,
                   const String& buttons, int flags, const String& help)
 {
   int nb=0;
-  for (wchar_t *p=buttons.Lock(); *p; p++)
+  for (const wchar_t *p=buttons.ptr(); *p; p++)
     if (*p=='\n') nb++;
-  buttons.Unlock();
   String msgbuf=title+"\n"+msg+"\n\x01\n"+buttons;
   int res=Info.Message(Info.ModuleNumber, flags | FMSG_ALLINONE, 
     help.ptr(), (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, nb+1);

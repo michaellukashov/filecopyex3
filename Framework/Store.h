@@ -38,9 +38,9 @@ public:
 	virtual ~Store();
 
 	int Add(int size);
-	void* operator[](int n) { return items[n].ptr; }
-	int Size(int n) { return (int)items[n].size; }
-	int Count() { return (int)items.size(); }
+	void* operator[](int n) const { return items[n].ptr; }
+	int Size(int n) const { return (int)items[n].size; }
+	int Count() const { return (int)items.size(); }
 
 protected:
 	struct Item
@@ -60,14 +60,14 @@ public:
 	int Add(const wchar_t* ptr)
 	{
 		size_t l = _tcslen(ptr)+1;
-		int res=Store::Add((int)l*sizeof(wchar_t));
-		_tcscpy_s(operator[](res), l, ptr);
+		int res = Store::Add((int)l*sizeof(wchar_t));
+		_tcscpy_s((wchar_t*)operator[](res), l, ptr);
 		return res;
 	}
 	int Add(const String& ptr) { return Add(ptr.ptr()); }
-	wchar_t* operator[](int n) { return (wchar_t*)Store::operator[](n); }
-	int Len(int n) { return Size(n)/sizeof(wchar_t)-1; }
-	int Count() { return Store::Count(); }
+	const wchar_t* operator[](int n) const { return (const wchar_t*)Store::operator[](n); }
+	int Len(int n) const { return Size(n)/sizeof(wchar_t)-1; }
+	int Count() const { return Store::Count(); }
 };
 
 template <class ItemType>

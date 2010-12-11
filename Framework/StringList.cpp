@@ -264,7 +264,7 @@ int StringList::SaveTo(FILE *f, TextFormat tf)
   }
   for (int i=0; i<Count(); i++)
   {
-    const wchar_t* s=(*this)[i].Lock();
+    const wchar_t* s=(*this)[i].ptr();
     const int ssize=4096;
     if (tf!=tfANSI)
     {
@@ -288,7 +288,6 @@ int StringList::SaveTo(FILE *f, TextFormat tf)
       strcpy_s(buf, ssize, "\r\n");
       fwrite(buf, sizeof(char), 2, f);
     }
-    (*this)[i].Unlock();
   }
   return 1;
 }

@@ -30,8 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lowlevelstr.h"
 #include <string>
 
-class String;
-
 class String
 {
 public:
@@ -39,7 +37,7 @@ public:
 	String(const char* v)
 	{
 		str.resize(strlen(v), '\0');
-		_atotcs(ptr(), v, str.length()+1);
+		_atotcs((wchar_t*)ptr(), v, str.length()+1);
 	}
 	String(wchar_t ch, int len)
 	{
@@ -63,6 +61,7 @@ public:
 	const String operator+(const String& v) const { return str + v.str; }
 
 	inline int len() const { return (int)str.length(); }
+	inline bool empty() const { return str.empty(); }
 
 	inline wchar_t operator[] (int i) const
 	{
@@ -124,57 +123,53 @@ public:
 
 	int find(const String& v, int start=0) const
 	{
-		wchar_t* p=ptr(), *rp=_tcsstr(p+start, v.ptr());
+		const wchar_t* p=ptr(), *rp=_tcsstr(p+start, v.ptr());
 		if (!rp) return -1; 
 		else return (int)(rp-p);
 	}
 	int rfind(const String& v) const
 	{
-		wchar_t* p=ptr(), *rp=_tcsrstr(p, v.ptr());
+		const wchar_t* p=ptr(), *rp=_tcsrstr(p, v.ptr());
 		if (!rp) return -1; 
 		else return (int)(rp-p);
 	}
 	int cfind(wchar_t v, int start=0) const
 	{
-		wchar_t* p=ptr(), *rp=_tcschr(p+start, v);
+		const wchar_t* p=ptr(), *rp=_tcschr(p+start, v);
 		if (!rp) return -1; 
 		else return (int)(rp-p);
 	}
 	int crfind(wchar_t v) const
 	{
-		wchar_t* p=ptr(), *rp=_tcsrchr(p, v);
+		const wchar_t* p=ptr(), *rp=_tcsrchr(p, v);
 		if (!rp) return -1; 
 		else return (int)(rp-p);
 	}
 	int cfind(const String& v, int start=0) const
 	{
-		wchar_t* p=ptr(), *rp=_tcspbrk(p+start, v.ptr());
+		const wchar_t* p=ptr(), *rp=_tcspbrk(p+start, v.ptr());
 		if (!rp) return -1; 
 		else return (int)(rp-p);
 	}
 	int cnfind(const String& v, int start=0) const
 	{
-		wchar_t* p=ptr(), *rp=_tcsspnp(p+start, v.ptr());
-		if (!rp) return -1; 
+		const wchar_t* p=ptr(), *rp=_tcsspnp(p+start, v.ptr());
+		if (!rp) return -1;
 		else return (int)(rp-p);
 	}
 	int crfind(const String& v) const 
 	{ 
-		wchar_t* p=ptr(), *rp=_tcsrpbrk(p, v.ptr());
+		const wchar_t* p=ptr(), *rp=_tcsrpbrk(p, v.ptr());
 		if (!rp) return -1; 
 		else return (int)(rp-p);
 	}
 	int cnrfind(const String& v) const 
 	{ 
-		wchar_t* p=ptr(), *rp=_tcsrspnp(p, v.ptr());
+		const wchar_t* p=ptr(), *rp=_tcsrspnp(p, v.ptr());
 		if (!rp) return -1; 
 		else return (int)(rp-p);
 	}
-
-	wchar_t* ptr() const { return Lock(); }
-	wchar_t* Lock() const { return (wchar_t*)str.c_str(); }
-	void Unlock() const {}
-
+	const wchar_t* ptr() const { return str.c_str(); }
 private:
 	std::wstring str;
 };

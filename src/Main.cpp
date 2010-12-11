@@ -114,17 +114,11 @@ void AddToQueue(int curonly)
 
 		String file;
 		if(pit->FindData.lpwszFileName[0])
-		{
 			file = pit->FindData.lpwszFileName;
-			if(file.cfind('\\')==-1)
-				file=AddEndSlash(srcpath)+file;
-		}
-		if(file=="" || !FileHasUnicodeName(file))
-		{
-			file = pit->FindData.lpwszFileName;
-			if(file.cfind('\\')==-1)
-				file=AddEndSlash(srcpath)+file;
-		}
+		if(file.empty())
+			file = pit->FindData.lpwszAlternateFileName;
+		if(file.cfind('\\')==-1)
+			file=AddEndSlash(srcpath)+file;
 
 		if(TempFiles.Find(file)==-1)
 			TempFiles.Add(file);
@@ -601,17 +595,9 @@ rep:
     {
       int i=SortIndex[ii];
 	  TPanelItem pit(i);
-      if(!wcscmp(pit->FindData.lpwszFileName, L"..")) 
+      String file=pit->FindData.lpwszFileName;
+      if(file == L"..")
         continue;
-
-      wchar_t nbuf[MAX_FILENAME];
-      if(pit->FindData.lpwszAlternateFileName[0]
-      && !wcschr(pit->FindData.lpwszAlternateFileName, '\\'))
-        wcsncpy_s(nbuf, MAX_FILENAME, pit->FindData.lpwszAlternateFileName, MAX_FILENAME);
-      else
-        wcsncpy_s(nbuf, MAX_FILENAME, pit->FindData.lpwszFileName, MAX_FILENAME);
-//      _toansi(nbuf);
-      String file=nbuf;
 
       String filepath=ExtractFilePath(file);
       if(!havecurpath || filepath.icmp(curpath))
@@ -624,7 +610,6 @@ rep:
       }
 
       if(file.cfind('\\')==-1) file=AddEndSlash(srcpath)+file;
-      file=MyGetLongPathName(file);
 
       if(_CopyDescs && !ExtractFileName(file).icmp(CurPathDesc))
       {

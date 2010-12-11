@@ -85,10 +85,6 @@ int Delete(const String& fn);
 int VolFlags(const String& path);
 int CheckParallel(const String& srcpath, const String& dstpath);
 
-String MyGetLongPathName(const String& path);
-String MyGetShortPathName(const String& path);
-int FileHasUnicodeName(const String& fn);
-
 String GetSymLink(const String &dir);
 
 void beep();

@@ -323,12 +323,10 @@ String ExpandEnv(const String& v)
 
 String ApplyFileMask(const String& _name, const String& _mask)
 {
-  wchar_t *name=_name.Lock(), 
-        *mask=_mask.Lock(),
-        res[MAX_FILENAME]=_T("");
+  wchar_t *name = (wchar_t*)_name.ptr(), *mask = (wchar_t*)_mask.ptr(),
+	  res[MAX_FILENAME]=_T("");
   int sz=MAX_FILENAME;
-  wchar_t *next = (wchar_t*)_tcsend(name)-1,
-        *mext = (wchar_t*)_tcsend(mask)-1; 
+  wchar_t *next = (wchar_t*)_tcsend(name)-1, *mext = (wchar_t*)_tcsend(mask)-1;
   while (next >= name && *next != '.') next--;
   if (next < name) next = name+_tcslen(name);
   else *next++ = 0;
@@ -354,8 +352,6 @@ String ApplyFileMask(const String& _name, const String& _mask)
       else _tcat(res, (*sym=*m, sym), sz);
     }
   }
-  _name.Unlock();
-  _mask.Unlock();
   return res;
 }
 
@@ -416,7 +412,7 @@ String TempPathName()
   return TempPath()+"\\"+TempName();
 }
 
-static int __MoveFile(wchar_t* src, wchar_t *dst)
+static int __MoveFile(const wchar_t* src, const wchar_t *dst)
 {
   int attr=GetFileAttributes(dst);
   SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
@@ -430,7 +426,7 @@ static int __MoveFile(wchar_t* src, wchar_t *dst)
   }
 }
 
-static int __MoveFileEx(wchar_t* src, wchar_t *dst, int flg)
+static int __MoveFileEx(const wchar_t* src, const wchar_t *dst, int flg)
 {
   int attr=GetFileAttributes(dst);
   // bug #41 fixed by axxie
@@ -533,7 +529,7 @@ int MoveFile(const String& _src, const String& _dst, int replace)
 
 void ForceDirectories(const String& s)
 {
-  wchar_t *ptr = s.Lock(), *sptr=ptr;
+  wchar_t *ptr = (wchar_t*)s.ptr(), *sptr = ptr;
   while (*ptr)
   {
     if (*ptr == '\\' || *ptr == '/')
@@ -545,7 +541,6 @@ void ForceDirectories(const String& s)
     }
     ptr++;
   }
-  s.Unlock();
 }
 
 void Out(const String &s)

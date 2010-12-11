@@ -39,10 +39,10 @@ public:
 	FileNameStore() { ; }
 	~FileNameStore() { ; }
 
-	int Add(wchar_t* ptr) { return StringStore::Add(ptr); }
-	int AddRel(wchar_t pc, wchar_t* ptr);
-	int Count() { return StringStore::Count(); }
-	wchar_t* GetNameByNum(int num);
+	int Add(const wchar_t* ptr) { return StringStore::Add(ptr); }
+	int AddRel(wchar_t pc, const wchar_t* ptr);
+	int Count() const { return StringStore::Count(); }
+	const wchar_t* GetNameByNum(int n) const { return (*this)[n]+1; }
 
 	friend class FileNameStoreEnum;
 };
@@ -62,11 +62,11 @@ public:
 	}
 	~FileNameStoreEnum() { ; }
 
-	int Count() { return Store->Count(); }
+	int Count() const { return Store->Count(); }
 	void ToFirst();
 	void Skip();
-	wchar_t* GetNext();
-	wchar_t* GetByNum(int num);
+	const wchar_t* GetNext();
+	const wchar_t* GetByNum(int num);
 
 };
 

@@ -22,10 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.h"
 #include "../framework/common.h"
 
-wchar_t* FileNameStoreEnum::GetNext()
+const wchar_t* FileNameStoreEnum::GetNext()
 {
   if (Cur>=Store->Count()) return NULL;
-  wchar_t *ptr=(*Store)[Cur++];
+  const wchar_t *ptr=(*Store)[Cur++];
   if (*ptr=='+') 
   {
     wchar_t *p=CurPath;
@@ -61,7 +61,7 @@ wchar_t* FileNameStoreEnum::GetNext()
 void FileNameStoreEnum::Skip()
 {
   if (Cur>=Store->Count()) return;
-  wchar_t *ptr=(*Store)[Cur++];
+  const wchar_t *ptr=(*Store)[Cur++];
   if (*ptr=='+') 
   {
     wchar_t *p=CurPath;
@@ -89,7 +89,7 @@ void FileNameStoreEnum::ToFirst()
   Buffer[0]=CurPath[0]=0;
 }
 
-wchar_t* FileNameStoreEnum::GetByNum(int n)
+const wchar_t* FileNameStoreEnum::GetByNum(int n)
 {
   if (n<Cur-1) 
   {
@@ -105,12 +105,7 @@ wchar_t* FileNameStoreEnum::GetByNum(int n)
   }
 }
 
-wchar_t* FileNameStore::GetNameByNum(int n)
-{
-  return (*this)[n]+1;
-}
-
-int FileNameStore::AddRel(wchar_t pc, wchar_t* s)
+int FileNameStore::AddRel(wchar_t pc, const wchar_t* s)
 {
   wchar_t buf[MAX_FILENAME+1];
   buf[0]=pc;

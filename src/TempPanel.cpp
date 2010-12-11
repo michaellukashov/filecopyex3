@@ -48,10 +48,10 @@ void CopyFindData(const String& _fn, WIN32_FIND_DATA fd, PluginPanelItem& item,
 {
   String fn=_fn;
   memset(&item, 0, sizeof(item));
-  if (!toplevel)
+  if(!toplevel)
   {
-    String name=FileHasUnicodeName(fn)? fd.cAlternateFileName: fd.cFileName;
-    fn=ExtractFilePath(fn)+"\\"+name;
+    String name = fd.cFileName;
+    fn = ExtractFilePath(fn)+ "\\" + name;
   }
   size_t len = (fn.len() + 1)*sizeof(wchar_t);
   wchar_t* name = (wchar_t*)malloc(len);
@@ -165,17 +165,11 @@ int TempPanel::PutFiles(PluginPanelItem* files, int count, int move, int silent)
   {
     wchar_t buf[MAX_FILENAME];
     GetCurrentDirectory(MAX_FILENAME, buf);
-    String cd=AddEndSlash(MyGetShortPathName(buf));
+    String cd=AddEndSlash(buf);
     for (int i=0; i<count; i++)
     {
-      wchar_t nbuf[MAX_FILENAME];
-      if (FileHasUnicodeName(files[i].FindData.lpwszFileName))
-        wcsncpy_s(nbuf, MAX_FILENAME, files[i].FindData.lpwszAlternateFileName, MAX_FILENAME);
-      else
-        wcsncpy_s(nbuf, MAX_FILENAME, files[i].FindData.lpwszFileName, MAX_FILENAME);
-      String file=nbuf;
+      String file=files[i].FindData.lpwszFileName;
       if (file.cfind('\\')==-1) file=cd+file;
-
       if (TempFiles.Find(file)==-1) TempFiles.Add(file);
     }
     SaveTemp();

@@ -212,109 +212,6 @@ int RmDir(const String& fn)
   return TRUE;
 }
 
-
-String MyEmulatedGetLongPathName(const String& path)
-{
-  wchar_t buf[MAX_FILENAME];
-  if (GetFullPathName(path.ptr(), MAX_FILENAME, buf, NULL)==0) 
-    return "";
-  wchar_t *p=buf, *op=buf;
-  String res;
-  if (buf[0]=='\\' && buf[1]=='\\' 
-    || buf[0]=='/' && buf[1]=='/')
-  {
-    p+=2; op+=2;
-    res+="\\";
-  }
-  do
-  {
-    if (!*p || *p=='\\' || *p=='/') 
-    {
-      wchar_t t=*p;
-      *p=0;
-      WIN32_FIND_DATA fd;
-      if (res!="") res+="\\";
-      if (!_tcschr(op, ':'))
-      {
-        HANDLE hf=FindFirstFile(buf, &fd);
-        if (hf!=INVALID_HANDLE_VALUE) 
-        {
-          FindClose(hf);
-          res+=fd.cFileName;
-        }
-        else res+=op;
-      }
-      else res+=op;
-      *p=t;
-      op=p+1;
-    }
-  }
-  while (*p++);
-  return res;
-}
-
-String MyGetLongPathName(const String& path)
-{
-  if (Win98 || Win2K)
-  {
-    wchar_t res[MAX_FILENAME];
-    if (!GetLongPathName(path.ptr(), res, MAX_FILENAME))
-    {
-      return MyEmulatedGetLongPathName(path);
-    }
-    return res;
-  }
-  else
-  {
-    return MyEmulatedGetLongPathName(path);
-  }
-}
-
-String MyGetShortPathName(const String& path)
-{
-  wchar_t buf[MAX_FILENAME];
-  if (GetFullPathName(path.ptr(), MAX_FILENAME, buf, NULL)==0) 
-    return "";
-  wchar_t *p=buf, *op=buf;
-  String res;
-  if (buf[0]=='\\' && buf[1]=='\\' 
-    || buf[0]=='/' && buf[1]=='/')
-  {
-    p+=2; op+=2;
-    res+="\\";
-  }
-  do
-  {
-    if (!*p || *p=='\\' || *p=='/') 
-    {
-      wchar_t t=*p;
-      *p=0;
-      WIN32_FIND_DATA fd;
-      if (res!="") res+="\\";
-      if (!_tcschr(op, ':'))
-      {
-        HANDLE hf=FindFirstFile(buf, &fd);
-        if (hf!=INVALID_HANDLE_VALUE) 
-        {
-          FindClose(hf);
-//           wchar_t abuf[MAX_FILENAME];
-//           _ttoacs(abuf, fd.cFileName, MAX_FILENAME);
-          if (FileHasUnicodeName(buf)) 
-            res+=fd.cAlternateFileName;
-          else 
-            res+=fd.cFileName;
-        }
-        else res+=op;
-      }
-      else res+=op;
-      *p=t;
-      op=p+1;
-    }
-  }
-  while (*p++);
-  return res;
-}
-
 int Delete(const String& fn)
 {
   int attr=GetFileAttributes(fn.ptr());
@@ -325,29 +222,6 @@ int Delete(const String& fn)
       return FALSE;
   }
   return TRUE;
-}
-
-int FileHasUnicodeName(const String& fn)
-{
-#ifndef UNICODE
-  return FALSE;
-#else
-  WIN32_FIND_DATA fd;
-  HANDLE hf=FindFirstFile(fn.ptr(), &fd);
-  if (hf==INVALID_HANDLE_VALUE) return FALSE;
-  else
-  {
-    char buf[MAX_FILENAME]; 
-    wchar_t wbuf[MAX_FILENAME];
-    _wtoacs(buf, fd.cFileName, MAX_FILENAME);
-    _tooem(buf);
-    _toansi(buf);
-    _atowcs(wbuf, buf, MAX_FILENAME);
-    int res=_tcsicmp(fd.cFileName, wbuf);
-    FindClose(hf);
-    return res;
-  }
-#endif
 }
 
 void DebugLog(const wchar_t *DebugMsg, ...)
