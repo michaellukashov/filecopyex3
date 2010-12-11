@@ -733,6 +733,7 @@ fin:
   if (!Move)
   {
     int i=0;
+	Info.Control(PANEL_ACTIVE,FCTL_BEGINSELECTION,0,NULL);
     while (i<Files.Count())
     {
       if (Files[i].PanelIndex!=-1)
@@ -748,21 +749,21 @@ fin:
             }
             j++;
           }
-          if (ok)
+          if(ok)
 		  {
-//            data[Files[i].PanelIndex].Flags &= ~PPIF_SELECTED;
+			Info.Control(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
 		  }
           i=j-1;
         }
         else if (!(Files[i].Flags & FLG_DIR_POST) &&
           Files[i].Flags & FLG_COPIED)
 		{
-//            data[Files[i].PanelIndex].Flags &= ~PPIF_SELECTED;
+			Info.Control(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
 		}
       }
       i++;
     }
-    Info.Control(PANEL_ACTIVE, FCTL_SETSELECTION, 0, (LONG_PTR)&pi);
+	Info.Control(PANEL_ACTIVE,FCTL_ENDSELECTION,0,NULL);
     // fixed by Nsky: bug #40
 //    SetFileApisToANSI();
   }
