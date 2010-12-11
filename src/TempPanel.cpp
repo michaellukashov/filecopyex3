@@ -55,7 +55,7 @@ void CopyFindData(const String& _fn, WIN32_FIND_DATA fd, PluginPanelItem& item,
   }
   size_t len = (fn.len() + 1)*sizeof(wchar_t);
   wchar_t* name = (wchar_t*)malloc(len);
-  fn.ToUnicode(name, fn.len());
+  fn.ToUnicode(name, fn.len() + 1);
   item.FindData.lpwszFileName = name;
   item.FindData.lpwszAlternateFileName = NULL;
   item.FindData.dwFileAttributes=fd.dwFileAttributes;
