@@ -80,78 +80,6 @@ protected:
 	PluginPanelItem* ppi;
 };
 
-void AddToQueue(int curonly)
-{
-	//  SetFileApisToOEM();
-	PanelInfo pi;
-	Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
-	// fixed by Nsky: bug #40
-	//  SetFileApisToANSI();
-	if(pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType== PTYPE_INFOPANEL ||
-		!pi.ItemsNumber) return;
-
-	Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
-	wchar_t cur_dir[MAX_FILENAME];
-	Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELDIR, MAX_FILENAME, (LONG_PTR)cur_dir);
-	if(pi.Plugin && wcsncmp(cur_dir, L"queue:", 6)) 
-	{
-		ShowMessage(LOC("PluginName"), LOC("CopyDialog.CantAddToQueue"), FMSG_MB_OK);
-		return;
-	}
-
-	String srcpath=CutEndSlash(cur_dir);
-	if(srcpath.left(7)=="queue:\\") srcpath=srcpath.substr(7);
-	else if(srcpath=="queue:") srcpath="";
-
-	int s = curonly?pi.CurrentItem:0,
-		e = curonly?pi.CurrentItem:pi.SelectedItemsNumber-1;
-//	PluginPanelItem* data = curonly?pi.PanelItems:pi.SelectedItems;
-	for (int i = s; i <= e ; i++)
-	{
-		TPanelItem pit(i, pi.Focus == TRUE, !curonly);
-		if(!wcscmp(pit->FindData.lpwszFileName, L"..")) 
-			continue;
-
-		String file;
-		if(pit->FindData.lpwszFileName[0])
-			file = pit->FindData.lpwszFileName;
-		if(file.empty())
-			file = pit->FindData.lpwszAlternateFileName;
-		if(file.cfind('\\')==-1)
-			file=AddEndSlash(srcpath)+file;
-
-		if(TempFiles.Find(file)==-1)
-			TempFiles.Add(file);
-	}
-
-	SaveTemp();
-	SetFileApisToOEM();
-	Info.Control(PANEL_PASSIVE, FCTL_UPDATEPANEL, 1, NULL);
-	Info.Control(PANEL_PASSIVE, FCTL_REDRAWPANEL, 0, NULL);
-//	fixed by Nsky: bug #40
-//	SetFileApisToANSI();
-}
-/*
-static PluginPanelItem* SortData;
-
-int MyCompare(const int &i, const int &j, const void*)
-{
-  char *p1=strrchr(SortData[i].FindData.cFileName, '\\'),
-       *p2=strrchr(SortData[j].FindData.cFileName, '\\');
-  if(!p1 && !p2) return 0;
-  else if(!p1) return -1;
-  else if(!p2) return 1;
-  else
-  {
-    char t1=*p1, t2=*p2;
-    *p1=*p2=0;
-    int res=_stricmp(SortData[i].FindData.cFileName,
-      SortData[j].FindData.cFileName);
-    *p1=t1; *p2=t2;
-    return res;
-  }
-}
-*/
 String Engine::FindDescFile(const String& dir, int *idx)
 {
   for (int i=0; i<DescFiles.Count(); i++)
@@ -283,12 +211,7 @@ int Engine::Main(int move, int curonly)
 
   if(pi.Plugin)
   {
-    if(!wcsncmp(cur_dir, L"queue:\\", 7)) 
-    {
-      if(!wcscmp(cur_dir, L"queue:\\")) dstpath="queue:"; 
-      else dstpath=Replace(String(cur_dir).substr(7), "/", "\\")+"\\";
-    }
-    else dstpath="plugin:";
+    dstpath="plugin:";
     allowPlug=1;
   }
   else 
@@ -334,8 +257,6 @@ int Engine::Main(int move, int curonly)
         dstpath=AddEndSlash(dstpath)+fn;*/
   } 
   srcpath=CutEndSlash(cur_dir);
-  if(srcpath.left(7)=="queue:\\") srcpath=srcpath.substr(7);
-  else if(srcpath=="queue:") srcpath="";
 
   _InverseBars=(bool)Options["ConnectLikeBars"] && pi.PanelRect.left>0;
   
@@ -421,11 +342,6 @@ rep:
       ShowMessage(dlg("Text"), LOC("CopyDialog.InvalidPath"), FMSG_MB_OK);
       goto rep;
     }
-  }
-  else if(dsttext=="queue:")
-  {
-    AddToQueue(curonly);
-    return MRES_NONE;
   }
 
   String RelDstPath = ExpandEnv(Replace(dsttext, "/", "\\"));

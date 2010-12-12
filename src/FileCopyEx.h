@@ -54,7 +54,4 @@ private:
 	void MiscInit();
 };
 
-void SaveTemp();
-extern StringList TempFiles;
-
 #endif//__FILECOPYEX_H__

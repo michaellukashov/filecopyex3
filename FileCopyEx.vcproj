@@ -459,14 +459,6 @@
 				>
 			</File>
 			<File
-				RelativePath=".\src\temppanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath=".\src\temppanel.h"
-				>
-			</File>
-			<File
 				RelativePath=".\src\utils.cpp"
 				>
 			</File>

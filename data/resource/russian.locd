@@ -17,7 +17,6 @@ CopyDialog.StreamsWarn=Потоки не поддерживаются на диске назначения
 CopyDialog.RightsWarn=Права доступа не поддерживаются на диске назначения
 CopyDialog.InvalidPathWarn=Путь назначения неверен
 CopyDialog.ReadOnlyWarn=Диск назначения доступен только для чтения
-CopyDialog.CantAddToQueue=Файлы с панелей плагинов нельзя добавить в очередь
 CopyDialog.DescSelectedWarn=Вы выбрали файл описаний для операции копирования/перемещения.
 CopyDialog.DescSelectedWarn1=Хотите скопировать/переместить его как обычный файл?
 CopyDialog.OntoItselfError=Нельзя копировать файл в самого себя
@@ -89,8 +88,6 @@ SetupDialog.CheckFreeDiskSpace=Проверять свободное место на диске
 
 KeysDialog=Клавиши
 KeysDialog.BindToF5=Вызов плагина по &F5/F6
-KeysDialog.BindAddToQueue=&Добавить в очередь по Ctrl-Shift-Q
-KeysDialog.BindShowQueue=&Показать очередь по Alt-Shift-Q
 KeysDialog.Label1=Вызов стандартного копирования:
 KeysDialog.AltShiftF5=&Alt-Shift-F5/F6
 KeysDialog.CtrlShiftF5=Ctrl-&Shift-F5/F6
@@ -137,9 +134,7 @@ Menu.Item1=&1. Скопировать файлы...
 Menu.Item2=&2. Переместить файлы...
 Menu.Item3=&3. Скопировать файл под курсором...
 Menu.Item4=&4. Переместить файл под курсором...
-Menu.AddToQueue=&5. Добавить в очередь
-Menu.ShowQueue=&6. Показать очередь
-Menu.Config=&7. Настройка...
+Menu.Config=&5. Настройка...
 
 Error.MemAlloc=Ошибка при выделении памяти
 Error.OutputFileCreate=Ошибка при создании выходного файла

@@ -44,7 +44,7 @@ int isour(const String &key)
 {
   String src=regkey+"\\"+key;
   String buf=Registry.GetString(src, "Sequence", "");
-  return (!buf.nicmp("F11 >", 5) || !buf.icmp("F5") || !buf.icmp("F6"));
+  return (!buf.nicmp("F11 x", 5) || !buf.icmp("F5") || !buf.icmp("F6"));
 }
 
 void restore(const String &key)
@@ -63,7 +63,7 @@ void dobind(const String& key, const String& seq)
 {
   String src=regkey+"\\"+key;
   String dst=regkey+".backup\\"+key;
-  if (!isour(key))
+  if(!isour(key))
   {
     Registry.DeleteKey(dst);
     Registry.CopyKey(src, dst);
@@ -102,24 +102,18 @@ void FileCopyExPlugin::KeyConfig()
   altShift = isour("AltShiftF5") && isour("AltShiftF6");
   ctrlShift = isour("CtrlShiftF5") && isour("CtrlShiftF6");
   ctrlAlt = isour("CtrlAltF5") && isour("CtrlAltF6");
-  int bindAddToQueue = isour("CtrlShiftQ");
-  int bindShowQueue = isour("AltShiftQ");
 
   dlg["BindToF5"]("Selected")=bind;
   dlg["AltShiftF5"]("Selected")=!bind || altShift;
   dlg["CtrlShiftF5"]("Selected")=bind && ctrlShift;
   dlg["CtrlAltF5"]("Selected")=bind && ctrlAlt;
-  dlg["BindAddToQueue"]("Selected")=bindAddToQueue;
-  dlg["BindShowQueue"]("Selected")=bindShowQueue;
 
   if (dlg.Execute()==-1) return;
 
   if (dlg["BindToF5"]("Selected") != bind
     || dlg["AltShiftF5"]("Selected") != altShift
     || dlg["CtrlShiftF5"]("Selected") != ctrlShift
-    || dlg["CtrlAltF5"]("Selected") != ctrlAlt
-    || dlg["BindAddToQueue"]("Selected") != bindAddToQueue
-    || dlg["BindShowQueue"]("Selected") != bindShowQueue)
+    || dlg["CtrlAltF5"]("Selected") != ctrlAlt)
   {
     ActlKeyMacro prm;
     memset(&prm, 0, sizeof(prm));
@@ -135,10 +129,10 @@ void FileCopyExPlugin::KeyConfig()
 
     if (dlg["BindToF5"]("Selected"))
     {
-      dobind("F5", "F11 > 1"); 
-      dobind("F6", "F11 > 2");
-      dobind("ShiftF5", "F11 > 3"); 
-      dobind("ShiftF6", "F11 > 4");
+      dobind("F5", "F11 x 1"); 
+      dobind("F6", "F11 x 2");
+      dobind("ShiftF5", "F11 x 3"); 
+      dobind("ShiftF6", "F11 x 4");
       String key;
       if (dlg["AltShiftF5"]("Selected")) key="AltShift";
       else if (dlg["CtrlShiftF5"]("Selected")) key="CtrlShift";
@@ -146,10 +140,6 @@ void FileCopyExPlugin::KeyConfig()
       dobind(key+"F5", "F5");
       dobind(key+"F6", "F6");
     }
-
-    if (dlg["BindAddToQueue"]("Selected")) dobind("CtrlShiftQ", "F11 > 5");
-    if (dlg["BindShowQueue"]("Selected")) dobind("AltShiftQ", "F11 > 6");
-
     reloadmacro();
   }
 }

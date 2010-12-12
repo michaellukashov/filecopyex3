@@ -270,12 +270,6 @@ object KeysDialog: FarDialog
   end
   object CtrlAltF5: FarDlgRadioButton
   end
-  object Sep2: FarDlgLine
-  end
-  object BindAddToQueue: FarDlgCheckbox
-  end
-  object BindShowQueue: FarDlgCheckbox
-  end
   object Sep3: FarDlgLine
   end
   object OK: FarDlgButton

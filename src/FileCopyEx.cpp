@@ -26,7 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.h"
 #include "engine.h"
 #include "filecopyex.h"
-#include "temppanel.h"
 #include "../framework/far/interface/farkeys.hpp"
 
 StringList DescFiles;
@@ -34,15 +33,9 @@ StringList DescFiles;
 FileCopyExPlugin::FileCopyExPlugin(void)
 {
   RootKey="FileCopyEx";
-  MenuItems.Add("[&>] Extended copy");
+  MenuItems.Add("E&xtended copy");
   ConfigItems.Add("Extended copy");
   MiscInit();
-  Registry.ReadList(String("\\")+Info.RootKey+"\\FileCopyEx\\Queue", TempFiles);
-}
-
-void SaveTemp()
-{
-  Registry.WriteList("Queue", TempFiles);
 }
 
 FileCopyExPlugin::~FileCopyExPlugin(void)
@@ -78,8 +71,6 @@ void CallCopy(int move, int curonly)
   }
 }
 
-void AddToQueue(int curonly);
-
 FarPanel* FileCopyExPlugin::OpenPlugin(int from, int item)
 {
   int move, curonly;
@@ -94,9 +85,6 @@ FarPanel* FileCopyExPlugin::OpenPlugin(int from, int item)
   menu.AddLine(LOC("Menu.Item3"));
   menu.AddLine(LOC("Menu.Item4"));
   menu.AddSep();
-  menu.AddLine(LOC("Menu.AddToQueue"));
-  menu.AddLine(LOC("Menu.ShowQueue"));
-  menu.AddSep();
   menu.AddLine(LOC("Menu.Config"));
   
   switch (menu.Execute())
@@ -105,9 +93,7 @@ FarPanel* FileCopyExPlugin::OpenPlugin(int from, int item)
     case 1: move = 1; curonly = 0; break;
     case 2: move = 0; curonly = 1; break;
     case 3: move = 1; curonly = 1; break;
-    case 5: AddToQueue(0); return NULL;
-    case 6: return new TempPanel();
-    case 8: Config(); return NULL; 
+    case 5: Config(); return NULL; 
     default: return NULL;
   }
 

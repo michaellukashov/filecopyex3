@@ -17,7 +17,6 @@ CopyDialog.StreamsWarn=Streams are not supported on destination volume
 CopyDialog.RightsWarn=Access rights are not supported on destination volume
 CopyDialog.InvalidPathWarn=Destination path is incorrect
 CopyDialog.ReadOnlyWarn=Destination volume is read-only
-CopyDialog.CantAddToQueue=Files from plugin panels can't be added to queue
 CopyDialog.DescSelectedWarn=You have selected a description file for copy/move operation.
 CopyDialog.DescSelectedWarn1=Do you want to copy/move it as ordinary file?
 CopyDialog.OntoItselfError=Cannot copy the file onto itself
@@ -88,8 +87,6 @@ SetupDialog.Label7=Kb
 
 KeysDialog=Hotkeys
 KeysDialog.BindToF5=Bind Extended copy to &F5/F6
-KeysDialog.BindAddToQueue=A&dd to queue by Ctrl-Shift-Q
-KeysDialog.BindShowQueue=S&how queue by Alt-Shift-Q
 KeysDialog.Label1=Bind standard copy to:
 KeysDialog.AltShiftF5=&Alt-Shift-F5/F6
 KeysDialog.CtrlShiftF5=Ctrl-&Shift-F5/F6
@@ -136,9 +133,7 @@ Menu.Item1=&1. Copy files...
 Menu.Item2=&2. Move files...
 Menu.Item3=&3. Copy file under cursor...
 Menu.Item4=&4. Move file under cursor...
-Menu.AddToQueue=&5. Add to queue
-Menu.ShowQueue=&6. Show queue
-Menu.Config=&7. Settings...
+Menu.Config=&5. Settings...
 
 Error.MemAlloc=Memory allocation error
 Error.OutputFileCreate=Error creating output file
