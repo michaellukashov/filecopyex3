@@ -31,15 +31,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void _atowcs(wchar_t *d, size_t size, const char *s);
 
-wchar_t *_trim(wchar_t *s);
-wchar_t *_trimquotes(wchar_t *s);
-
-int _truestr(const wchar_t *s);
-
 inline const wchar_t* _tcsend(const wchar_t* s) { return s + wcslen(s); }
 
-wchar_t* _tcsrstr(const wchar_t* wcs1, const wchar_t* wcs2);
-wchar_t* _tcsrpbrk(const wchar_t* string, const wchar_t* control);
-wchar_t* _tcsrspnp(const wchar_t* string, const wchar_t* control);
+const wchar_t* _tcsrpbrk(const wchar_t* string, const wchar_t* control);
 
 #endif//__LOWLEVELSTR_H__

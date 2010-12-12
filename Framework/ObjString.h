@@ -127,12 +127,6 @@ public:
 		if (!rp) return -1; 
 		else return (int)(rp-p);
 	}
-	int rfind(const String& v) const
-	{
-		const wchar_t* p=ptr(), *rp=_tcsrstr(p, v.ptr());
-		if (!rp) return -1; 
-		else return (int)(rp-p);
-	}
 	int cfind(wchar_t v, int start=0) const
 	{
 		const wchar_t* p=ptr(), *rp=wcschr(p+start, v);
