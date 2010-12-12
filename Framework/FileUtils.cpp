@@ -158,7 +158,7 @@ BOOL GetPrimaryVolumeMountPoint(const String& VolumeMountPointForPath,
                                         VolumeNameForPath,
                                         sizeof(VolumeNameForPath)/sizeof(wchar_t)))
   {
-    wchar_t VolumeMountPoint[] = _T("?:\\");
+    wchar_t VolumeMountPoint[] = L"?:\\";
     wchar_t VolumeName[MAX_FILENAME];
 
     for (char drive = 'A'; drive < 'Z'; drive++)
@@ -168,7 +168,7 @@ BOOL GetPrimaryVolumeMountPoint(const String& VolumeMountPointForPath,
                                             VolumeName,
                                             sizeof(VolumeName)/sizeof(wchar_t)))
       {
-        if (_tcscmp(VolumeNameForPath, VolumeName) == 0)
+        if (wcscmp(VolumeNameForPath, VolumeName) == 0)
         {
           String tmp = CutEndSlash(VolumeMountPoint);
           if (tmp != CutEndSlash(VolumeMountPointForPath))
@@ -239,10 +239,7 @@ int GetSymLink(const String &_dir, String &res, int flg)
                (rd->ReparseTag==IO_REPARSE_TAG_MOUNT_POINT) && 
                (!memcmp(rd->ReparseGuid.Data4, L"\\??\\", 8)))
           {
-            wchar_t buf[MAX_FILENAME];
-            memset(buf, 0, sizeof(buf));
-            _wtotcs(buf, (wchar_t*)&rd->GenericReparseBuffer, MAX_FILENAME);
-            String r=buf;
+            String r=(wchar_t*)&rd->GenericReparseBuffer;
             if (r.left(7)!="Volume{") 
             {
               CloseHandle(hf);
@@ -324,32 +321,30 @@ String ExpandEnv(const String& v)
 String ApplyFileMask(const String& _name, const String& _mask)
 {
   wchar_t *name = (wchar_t*)_name.ptr(), *mask = (wchar_t*)_mask.ptr(),
-	  res[MAX_FILENAME]=_T("");
+	  res[MAX_FILENAME]=L"";
   int sz=MAX_FILENAME;
   wchar_t *next = (wchar_t*)_tcsend(name)-1, *mext = (wchar_t*)_tcsend(mask)-1;
   while (next >= name && *next != '.') next--;
-  if (next < name) next = name+_tcslen(name);
+  if (next < name) next = name+wcslen(name);
   else *next++ = 0;
   while (mext >= mask && *mext != '.') mext--;
-  if (mext < mask) mext = mask+_tcslen(mask);
+  if (mext < mask) mext = mask+wcslen(mask);
   else *mext++ = 0;
   wchar_t sym[2] = { 0, 0 };
   for (wchar_t *m = mask; *m; m++)
   {
-    if (*m == '*') _tcat(res, name, sz);
-    else if (*m == '?') _tcat(res, 
-      (*sym = m-mask < (int)_tcslen(name) ? name[m-mask] : 0, sym), sz);
-    else _tcat(res, (*sym=*m, sym), sz);
+    if (*m == '*') wcscat_s(res, sz, name);
+    else if (*m == '?') wcscat_s(res, sz, (*sym = m-mask < (int)wcslen(name) ? name[m-mask] : 0, sym));
+    else wcscat_s(res, sz, (*sym=*m, sym));
   }
   if (mext[0])
   {
-    _tcat(res, _T("."), sz);
+    wcscat_s(res, sz, L".");
     for (wchar_t *m = mext; *m; m++)
     {
-      if (*m == '*') _tcat(res, next, sz);
-      else if (*m == '?') _tcat(res, 
-        (*sym = m-mext < (int)_tcslen(next) ? next[m-mext] : 0, sym), sz);
-      else _tcat(res, (*sym=*m, sym), sz);
+      if (*m == '*') wcscat_s(res, sz, next);
+      else if (*m == '?') wcscat_s(res, sz, (*sym = m-mext < (int)wcslen(next) ? next[m-mext] : 0, sym));
+      else wcscat_s(res, sz, (*sym=*m, sym));
     }
   }
   return res;
@@ -430,7 +425,7 @@ static int __MoveFileEx(const wchar_t* src, const wchar_t *dst, int flg)
 {
   int attr=GetFileAttributes(dst);
   // bug #41 fixed by axxie
-  if (_tcsicmp(src, dst)) SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
+  if (_wcsicmp(src, dst)) SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFileEx(src, dst, flg)) return TRUE;
   else
   {

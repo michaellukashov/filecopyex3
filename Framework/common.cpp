@@ -32,7 +32,7 @@ void FWError(const wchar_t *s)
     errorHandler(s);
   else
   {
-    MessageBox(0, s, _T("FileCopyEx plugin error"), MB_OK | MB_ICONSTOP | MB_SETFOREGROUND);
+    MessageBox(0, s, L"FileCopyEx plugin error", MB_OK | MB_ICONSTOP | MB_SETFOREGROUND);
     DebugBreak();
   }
 }
@@ -48,10 +48,10 @@ extern void InitObjMgr();
 int WinNT, Win2K, WinXP, Win98, WinNT4;
 HANDLE hInstance;
 
-wchar_t* AWErrMsgWinNT = _T("Remove FileCopyExA.dll file from plugins folder!\n\
-it's intended to use on Win9x based operating systems.");
-wchar_t* AWErrMsgWin98 = _T("Remove FileCopyExW.dll file from plugins folder!\n\
-it's intended to use on WinNT based operating systems.");
+wchar_t* AWErrMsgWinNT = L"Remove FileCopyExA.dll file from plugins folder!\n\
+it's intended to use on Win9x based operating systems.";
+wchar_t* AWErrMsgWin98 = L"Remove FileCopyExW.dll file from plugins folder!\n\
+it's intended to use on WinNT based operating systems.";
 
 BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID)
 {

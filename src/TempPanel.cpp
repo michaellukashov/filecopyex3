@@ -102,7 +102,7 @@ int TempPanel::ReadFileList(int silent)
     if (hf==INVALID_HANDLE_VALUE) return FALSE;
     do
     {
-      if (_tcscmp(fd.cFileName, _T(".")) && _tcscmp(fd.cFileName, _T("..")))
+      if (wcscmp(fd.cFileName, L".") && wcscmp(fd.cFileName, L".."))
       {
         PluginPanelItem item;
         CopyFindData(path+fd.cFileName, fd, item, 0);
@@ -143,11 +143,9 @@ int TempPanel::DelFiles(PluginPanelItem* files, int count, int silent)
 {
   if (CurDir=="")
   {
-    wchar_t buf[MAX_FILENAME];
     for (int i=0; i<count; i++)
     {
-      wcscpy_s(buf, MAX_FILENAME, files[i].FindData.lpwszFileName);
-      int j=TempFiles.Find(buf);
+      int j=TempFiles.Find(files[i].FindData.lpwszFileName);
       if (j!=-1) TempFiles.Delete(j);
     }
     SaveTemp();

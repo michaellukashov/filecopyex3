@@ -46,7 +46,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <malloc.h>
 #include <string.h>
-#include <tchar.h>
 #include <stdio.h>
 #include <conio.h>
 #include <time.h>

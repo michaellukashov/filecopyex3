@@ -225,14 +225,14 @@ String SplitWidth(const String& s, int w)
     {
       wchar_t t=*p;
       *p=0;
-      _tcat(res, op, 1024);
-      _tcat(res, _T("\n"), 1024);
+      wcscat_s(res, 1024, op);
+      wcscat_s(res, 1024, L"\n");
       op=p+1;
       *p=t;
     }
   }
   while (*p++);
-  if (*op) _tcat(res, op, 1024);
+  if (*op) wcscat_s(res, 1024, op);
   p=(wchar_t*)_tcsend(res)-1;
   while (p>=res && *p=='.') *p--=0;
   return res;

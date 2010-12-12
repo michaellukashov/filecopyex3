@@ -29,14 +29,16 @@ const wchar_t* FileNameStoreEnum::GetNext()
   if (*ptr=='+') 
   {
     wchar_t *p=CurPath;
-    while (*p) p++;
-    if (p>CurPath) *p++='\\';
-    _tcopy(p, ptr+1, MAX_FILENAME-(p-CurPath));
-    _tcscpy_s(Buffer, MAX_FILENAME, CurPath);
+    while(*p)
+		p++;
+    if(p>CurPath)
+		*p++='\\';
+    wcscpy_s(p, MAX_FILENAME - (p - CurPath), ptr+1);
+    wcscpy_s(Buffer, MAX_FILENAME, CurPath);
   }
   else if (*ptr=='-')
   {
-    _tcscpy_s(Buffer, MAX_FILENAME, CurPath);
+    wcscpy_s(Buffer, MAX_FILENAME, CurPath);
     wchar_t *p=CurPath;
     while (*p) p++;
     p--;
@@ -45,7 +47,7 @@ const wchar_t* FileNameStoreEnum::GetNext()
   }
   else if (*ptr=='*')
   {
-    _tcscpy_s(Buffer, MAX_FILENAME, CurPath);
+    wcscpy_s(Buffer, MAX_FILENAME, CurPath);
     CurPath[0]=0;
   }
   else
@@ -53,7 +55,7 @@ const wchar_t* FileNameStoreEnum::GetNext()
     wchar_t *p=CurPath, *b=Buffer;
     while (*p) *b++=*p++;
     if (b>Buffer) *b++='\\';
-    _tcopy(b, ptr+1, MAX_FILENAME-(b-Buffer));
+    wcscpy_s(b, MAX_FILENAME-(b-Buffer), ptr+1);
   }
   return Buffer;
 }
@@ -67,7 +69,7 @@ void FileNameStoreEnum::Skip()
     wchar_t *p=CurPath;
     while (*p) p++;
     if (p>CurPath) *p++='\\';
-    _tcopy(p, ptr+1, MAX_FILENAME-(p-CurPath));
+    wcscpy_s(p, MAX_FILENAME-(p-CurPath), ptr+1);
   }
   else if (*ptr=='-')
   {
@@ -93,7 +95,7 @@ const wchar_t* FileNameStoreEnum::GetByNum(int n)
 {
   if (n<Cur-1) 
   {
-    FWError(_T("FileNameStoreEnum::GetByNum - assertion failure :))"));
+    FWError(L"FileNameStoreEnum::GetByNum - assertion failure :))");
     return NULL;
   }
   else if (n==Cur-1)
@@ -109,7 +111,7 @@ int FileNameStore::AddRel(wchar_t pc, const wchar_t* s)
 {
   wchar_t buf[MAX_FILENAME+1];
   buf[0]=pc;
-  _tcopy(buf+1, s, MAX_FILENAME);
+  wcscpy_s(buf+1, MAX_FILENAME, s);
   return Add(buf);
 }
 

@@ -38,7 +38,7 @@ const String String::trim() const
 {
 	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
 	const wchar_t *p = ptr();
-	_tcscpy_s(sp, len() + 1, p);
+	wcscpy_s(sp, len() + 1, p);
 	wchar_t *ep=sp+len()-1;
 	// bug #46 fixed by axxie
 	while (*sp && isbadchar(*sp)) sp++;
@@ -51,7 +51,7 @@ const String String::ltrim() const
 {
 	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
 	const wchar_t *p=ptr();
-	_tcscpy_s(sp, len() + 1, p);
+	wcscpy_s(sp, len() + 1, p);
 	// bug #46 fixed by axxie
 	while (*sp && isbadchar(*sp)) sp++;
 	return sp;
@@ -61,7 +61,7 @@ const String String::rtrim() const
 {
 	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
 	const wchar_t *p=ptr();
-	_tcscpy_s(sp, len() + 1, p);
+	wcscpy_s(sp, len() + 1, p);
 	wchar_t *ep=sp+len()-1;
 	// bug #46 fixed by axxie
 	while (ep>=sp && isbadchar(*ep)) ep--;
@@ -73,7 +73,7 @@ const String String::trimquotes() const
 {
 	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
 	const wchar_t *p=ptr();
-	_tcscpy_s(sp, len() + 1, p);
+	wcscpy_s(sp, len() + 1, p);
 	wchar_t *ep=sp+len()-1;
 	if (*sp && *sp=='"') sp++;
 	if (ep>=sp && *ep=='"') *ep=0;
@@ -123,7 +123,7 @@ const String String::toUpper() const
 {
 	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
 	const wchar_t *p=ptr();
-	_tcscpy_s(sp, len()+1, p);
+	wcscpy_s(sp, len()+1, p);
 	CharUpperBuff(sp, len());
 	return sp;
 }
@@ -132,7 +132,7 @@ const String String::toLower() const
 {
 	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
 	const wchar_t *p=ptr();
-	_tcscpy_s(sp, len() + 1, p);
+	wcscpy_s(sp, len() + 1, p);
 	CharLowerBuff(sp, len());
 	return sp;
 }

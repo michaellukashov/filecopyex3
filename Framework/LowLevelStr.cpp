@@ -25,13 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stdhdr.h"
 #include "lowlevelstr.h"
 
-void _wtoacs(char *d, const wchar_t *s, size_t size)
-{
-  WideCharToMultiByte(CP_ACP, 0, s, -1, d, (int)size, NULL, NULL);
-  d[size-1]=0;
-}
-
-void _atowcs(wchar_t *d, const char *s, size_t size)
+void _atowcs(wchar_t *d, size_t size, const char *s)
 {
   MultiByteToWideChar(CP_ACP, 0, s, -1, d, (int)size);
   d[size-1]=0;
@@ -40,7 +34,7 @@ void _atowcs(wchar_t *d, const char *s, size_t size)
 wchar_t *_trim(wchar_t *arg)
 {
   while (*arg && (*arg==' '||*arg=='\t'||*arg=='\n'||*arg=='\r')) arg++;
-  wchar_t *p=arg+_tcslen(arg)-1;
+  wchar_t *p=arg+wcslen(arg)-1;
   while (p>=arg && (*p==' '||*p=='\t'||*p=='\n'||*p=='\r')) *p--=0;
   return arg;
 }
@@ -48,25 +42,14 @@ wchar_t *_trim(wchar_t *arg)
 wchar_t *_trimquotes(wchar_t *arg)
 {
   if (*arg && (*arg=='"')) arg++;
-  wchar_t *p=arg+_tcslen(arg)-1;
+  wchar_t *p=arg+wcslen(arg)-1;
   if (p>=arg && (*p=='"')) *p--=0;
   return arg;
 }
 
 int _truestr(const wchar_t *s)
 {
-  return s && (!_tcscmp(s, _T("1")) || !_tcsicmp(s, _T("yes")) 
-    || !_tcsicmp(s, _T("true")));
-}
-
-void _tooem(char *s)
-{
-  CharToOemBuffA(s, s, (int)strlen(s));
-}
-
-void _toansi(char *s)
-{
-  OemToCharBuffA(s, s, (int)strlen(s));
+  return s && (!wcscmp(s, L"1") || !_wcsicmp(s, L"yes") || !_wcsicmp(s, L"true"));
 }
 
 wchar_t* _tcsrstr(const wchar_t* wcs1, const wchar_t* wcs2)

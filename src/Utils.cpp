@@ -126,7 +126,7 @@ int VolFlags(const String& _path)
     if (flg & FILE_NAMED_STREAMS) res|=VF_STREAMS;
     // NT4 supports streams, but has no special flag for this fact
     // bug #13 fixed by Alter
-    if (!_tcsicmp(sysname, TEXT("NTFS"))) res|=VF_STREAMS;
+    if (!_wcsicmp(sysname, TEXT("NTFS"))) res|=VF_STREAMS;
     if (flg & FILE_READ_ONLY_VOLUME) res|=VF_READONLY;
     if (flg & FILE_UNICODE_ON_DISK) res|=VF_UNICODE;
     if (GetDriveType(root.ptr())==DRIVE_CDROM) res|=VF_CDROM;
@@ -229,7 +229,7 @@ void DebugLog(const wchar_t *DebugMsg, ...)
   wchar_t MsgBuf[0x400];
   va_list ArgPtr;
   va_start(ArgPtr, DebugMsg);
-  _vsntprintf_s(MsgBuf, 0x400, sizeof(MsgBuf), DebugMsg, ArgPtr);
+  _vsnwprintf_s(MsgBuf, 0x400, sizeof(MsgBuf), DebugMsg, ArgPtr);
   va_end(ArgPtr);
   OutputDebugString(MsgBuf);
 }

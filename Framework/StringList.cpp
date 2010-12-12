@@ -177,7 +177,6 @@ int StringList::LoadFrom(FILE* f)
   int unicode=(read==2) && (sign.uc==0xFEFF || sign.uc==0xFFFE);
   int inv=(unicode) && (sign.uc==0xFFFE);
   const int bsize=4096, ssize=4096;
-  wchar_t buf[ssize];
   if (unicode)
   {
     const wchar_t CR='\r', LF='\n';
@@ -195,8 +194,7 @@ int StringList::LoadFrom(FILE* f)
         if (buffer[i]==CR || buffer[i]==LF && oldc!=CR) 
         {
           string[spos]=0;
-          _wtotcs(buf, string, sizeof(buf)/sizeof(wchar_t));
-          Add(buf);
+          Add(string);
           spos=0;
         }
         else if (buffer[i]!=CR && buffer[i]!=LF && spos<ssize)
@@ -208,8 +206,7 @@ int StringList::LoadFrom(FILE* f)
     if (spos) 
     {
       string[spos]=0;
-      _wtotcs(buf, string, sizeof(buf)/sizeof(wchar_t));
-      Add(buf);
+      Add(string);
     }
   }
   else
@@ -230,8 +227,7 @@ int StringList::LoadFrom(FILE* f)
         if (buffer[i]==CR || buffer[i]==LF && oldc!=CR) 
         {
           string[spos]=0;
-          _atotcs(buf, string, ssize);
-          Add(buf);
+          Add(string);
           spos=0;
         }
         else if (buffer[i]!=CR && buffer[i]!=LF && spos<ssize)
@@ -243,8 +239,7 @@ int StringList::LoadFrom(FILE* f)
     if (spos) 
     {
       string[spos]=0;
-      _atotcs(buf, string, ssize);
-      Add(buf);
+      Add(string);
     }
   }
   return 1;
@@ -269,7 +264,7 @@ int StringList::SaveTo(FILE *f, TextFormat tf)
     if (tf!=tfANSI)
     {
       wchar_t buf[ssize];
-      _ttowcs(buf, s, ssize);
+      wcscpy_s(buf, ssize, s);
       if (tf==tfUnicodeBE)
         for (int j=0; j<(int)wcslen(buf); j++)
           buf[j]=((buf[j]&0x00FF)<<8) | ((buf[j]&0xFF00) >> 8);
@@ -282,11 +277,8 @@ int StringList::SaveTo(FILE *f, TextFormat tf)
     }
     else
     {
-      char buf[ssize];
-      _ttoacs(buf, s, ssize);
-      fwrite(buf, sizeof(char), strlen(buf), f);
-      strcpy_s(buf, ssize, "\r\n");
-      fwrite(buf, sizeof(char), 2, f);
+      fwrite(s, sizeof(char), wcslen(s), f);
+      fwrite("\r\n", sizeof(char), 2, f);
     }
   }
   return 1;
@@ -295,7 +287,7 @@ int StringList::SaveTo(FILE *f, TextFormat tf)
 int StringList::Load(const String& fn)
 {
   FILE *f = NULL;
-  _tfopen_s(&f, fn.ptr(), _T("rb"));
+  _wfopen_s(&f, fn.ptr(), L"rb");
   if (!f) return 0;
   int res=LoadFrom(f);
   fclose(f);
@@ -307,7 +299,7 @@ int StringList::Save(const String& fn, TextFormat tf)
   int attr=GetFileAttributes(fn.ptr());
   SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
   FILE *f=NULL;
-  _tfopen_s(&f, fn.ptr(), _T("wb"));
+  _wfopen_s(&f, fn.ptr(), L"wb");
   int res;
   if (!f) res=0;
   else
@@ -334,7 +326,7 @@ void StringList::LoadFromString(const wchar_t* s, wchar_t delim)
     if (!*p || *p==delim)
     {
       int len=__min((int)(p-pp), 4095);
-      _tcsncpy_s(buf, 4096, pp, len);
+      wcsncpy_s(buf, 4096, pp, len);
       buf[len]=0;
       pp=p+1;
       Add(buf);

@@ -59,9 +59,9 @@ public:
 
 	int Add(const wchar_t* ptr)
 	{
-		size_t l = _tcslen(ptr)+1;
+		size_t l = wcslen(ptr)+1;
 		int res = Store::Add((int)l*sizeof(wchar_t));
-		_tcscpy_s((wchar_t*)operator[](res), l, ptr);
+		wcscpy_s((wchar_t*)operator[](res), l, ptr);
 		return res;
 	}
 	int Add(const String& ptr) { return Add(ptr.ptr()); }

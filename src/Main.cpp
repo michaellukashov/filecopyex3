@@ -408,7 +408,7 @@ rep:
 
   // fixed by Nsky: bug #28
   if(!dsttext.left(4).icmp("nul\\"))
-    dsttext = _T("nul");
+    dsttext = L"nul";
 
   // bugfixed by slst: bug #7     
   dsttext = Replace(dsttext, "\"", "");
@@ -969,7 +969,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
         RememberStruct Remember;
         while (1)
         {
-          if(_tcscmp(fd.cFileName, _T("..")) && _tcscmp(fd.cFileName, _T(".")))
+          if(wcscmp(fd.cFileName, L"..") && wcscmp(fd.cFileName, L"."))
           {
             int idx;
             if(_CopyDescs && _DescsInDirs 
@@ -1046,9 +1046,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
             && sid.dwStreamNameSize)
           {
             strn[sid.dwStreamNameSize/2]=0;
-            wchar_t strnb[MAX_FILENAME];
-            _wtotcs(strnb, strn, MAX_FILENAME);
-            if(!AddFile(src+strnb, dst+strnb, attr, 
+            if(!AddFile(src+strn, dst+strn, attr, 
               sid.Size.QuadPart, Modify, flags | AF_STREAM, Level+1))
             {
               BackupRead(NULL, NULL, 0, NULL, TRUE, FALSE, &ctx);

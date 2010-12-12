@@ -184,7 +184,7 @@ HANDLE Open(const String& fn, int mode, int attr)
 
   HANDLE res = CreateFile(
     // fixed by Nsky: bug #28
-    (!fn.left(4).icmp("nul\\")) ? _T("nul") : fn.ptr(),
+    (!fn.left(4).icmp("nul\\")) ? L"nul" : fn.ptr(),
     // fixed by slst: bug #17
     // mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
     // fixed by slst: bug #48

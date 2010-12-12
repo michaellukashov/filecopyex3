@@ -34,7 +34,7 @@ String Format(const wchar_t* fmt, ...)
 	wchar_t buf[8192];
 	va_list args;
 	va_start(args, fmt);
-	_vsntprintf_s(buf, 8192, fmt, args);
+	_vsnwprintf_s(buf, 8192, fmt, args);
 	va_end(args);
 	return buf;
 }
@@ -42,8 +42,8 @@ String Format(const wchar_t* fmt, ...)
 String FormatNum(__int64 n)
 {
   wchar_t num[64], buf[64];
-  _stprintf_s(num, 64, _T("%I64d"), n);
-  wchar_t *s=_tcsrev(num), *d=buf;
+  swprintf_s(num, 64, L"%I64d", n);
+  wchar_t *s=_wcsrev(num), *d=buf;
   int q=0;
   while (*s) 
   {
@@ -54,7 +54,7 @@ String FormatNum(__int64 n)
   // Bug #9 fixed by axxie
   if (*(d-1)==' ') d--;
   *d = 0;
-  _tcsrev(buf);
+  _wcsrev(buf);
   return buf;
 }
 

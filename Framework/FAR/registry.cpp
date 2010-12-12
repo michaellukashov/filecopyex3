@@ -145,7 +145,7 @@ void FarRegistry::WriteList(const String& key, StringList& list)
     {
       const String& data=list[i];
       wchar_t Name[16];
-      _itot_s(c++, Name, 16, 10);
+      _itow_s(c++, Name, 16, 10);
       RegSetValueEx(hKey, Name, 0, REG_SZ, (LPBYTE)(wchar_t*)data.ptr(), 
         sizeof(wchar_t)*((int)data.len()+1));
     }
