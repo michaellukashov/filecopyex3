@@ -44,7 +44,7 @@ public:
 	FileCopyExPlugin(void);
 	virtual ~FileCopyExPlugin(void);
 	int Configure(int);
-	FarPanel* OpenPlugin(int, int);
+	void OpenPlugin(int, int);
 	void InitOptions(PropertyList&);
 	void Config();
 

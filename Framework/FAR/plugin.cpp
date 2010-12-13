@@ -109,11 +109,12 @@ HANDLE _export WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 {
 //  SetFileApisToANSI();
   Instance->InitLang();
-  FarPanel* p=Instance->OpenPlugin(OpenFrom, (int)Item);
-  if (!p) Instance->SaveOptions();
+  Instance->OpenPlugin(OpenFrom, (int)Item);
+  Instance->SaveOptions();
 //  SetFileApisToOEM();
-  if (p) return (HANDLE)p;
-  else return INVALID_HANDLE_VALUE;
+//  if (p) return (HANDLE)p;
+//  else
+	  return INVALID_HANDLE_VALUE;
 }
 
 int _export WINAPI ConfigureW(int ItemNumber)
@@ -162,7 +163,7 @@ void _export WINAPI ClosePluginW(HANDLE hPlugin)
 {
 //  SetFileApisToANSI();
   Instance->SaveOptions();
-  delete (FarPanel*)hPlugin;
+//  delete (FarPanel*)hPlugin;
 //  SetFileApisToOEM();
 }
 
@@ -176,9 +177,8 @@ int FarPlugin::Configure(int)
   return FALSE;
 }
 
-FarPanel* FarPlugin::OpenPlugin(int, int)
+void FarPlugin::OpenPlugin(int, int)
 {
-  return NULL;
 }
 
 

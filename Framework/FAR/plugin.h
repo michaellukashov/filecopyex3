@@ -43,7 +43,7 @@ public:
 	FarPlugin(void);
 	virtual ~FarPlugin(void);
 	virtual int Configure(int);
-	virtual FarPanel* OpenPlugin(int, int);
+	virtual void OpenPlugin(int, int);
 	StringList MenuItems, ConfigItems;
 	String Prefix, RootKey;
 	int Flags;

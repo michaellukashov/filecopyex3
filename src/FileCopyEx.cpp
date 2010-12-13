@@ -71,10 +71,8 @@ void CallCopy(int move, int curonly)
   }
 }
 
-FarPanel* FileCopyExPlugin::OpenPlugin(int from, int item)
+void FileCopyExPlugin::OpenPlugin(int from, int item)
 {
-  int move, curonly;
-
   FarMenu menu;
   menu.SetFlags(FMENU_WRAPMODE);
   menu.SetTitle(LOC("PluginName"));
@@ -87,19 +85,17 @@ FarPanel* FileCopyExPlugin::OpenPlugin(int from, int item)
   menu.AddSep();
   menu.AddLine(LOC("Menu.Config"));
   
+  int move, curonly;
   switch (menu.Execute())
   {
     case 0: move = 0; curonly = 0; break;
     case 1: move = 1; curonly = 0; break;
     case 2: move = 0; curonly = 1; break;
     case 3: move = 1; curonly = 1; break;
-    case 5: Config(); return NULL; 
-    default: return NULL;
+    case 5: Config(); return; 
+    default: return;
   }
-
   CallCopy(move, curonly);
-
-  return NULL;
 }
 
 void FileCopyExPlugin::InitOptions(PropertyList& options)

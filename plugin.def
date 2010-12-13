@@ -6,12 +6,3 @@ EXPORTS
   OpenPluginW
   ClosePluginW
   ConfigureW
-
-  GetOpenPluginInfoW
-  SetDirectoryW
-  GetFindDataW
-  FreeFindDataW
-  DeleteFilesW
-  PutFilesW
-  GetFilesW
-  MakeDirectoryW

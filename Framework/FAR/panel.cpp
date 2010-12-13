@@ -161,6 +161,8 @@ int FarPanel::MkDir(String &name, int silent)
   return FALSE;
 }
 
+/*
+
 void _export WINAPI GetOpenPluginInfoW(HANDLE hPlugin, struct OpenPluginInfo *Info)
 {
 //  SetFileApisToANSI();
@@ -241,3 +243,5 @@ int _export WINAPI MakeDirectoryW(HANDLE hPlugin,const wchar_t **Name,int OpMode
   return res;
 
 }
+
+*/
