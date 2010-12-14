@@ -56,10 +56,8 @@ FarProgress::~FarProgress(void)
 void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String& caption)
 {
 	int W = X2-X1+1, H = Y2-Y1+1;
-	String tpl;
-	if(!caption.empty())
-		tpl = String(" ") + caption+ " ";
-	tpl = "\n";
+	String tpl = caption;
+	tpl += "\n";
 	String bkg = String(' ', W - 10);
 	bkg += "\n";
 	for(int i = 0; i < H - 4; ++i)
