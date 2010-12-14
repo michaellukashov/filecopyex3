@@ -59,6 +59,7 @@ void CopyProgress::Start(int move)
   Move=move;
   Info.Text(0, 0, 0, NULL);
   Info.RestoreScreen(NULL);
+  TitleBuf=GetTitle();
 }
 
 void CopyProgress::Stop()
@@ -166,9 +167,9 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
     int pc=TotalBytes?(int)((float)(ReadBytes+WriteBytes)/(TotalBytes*2)*100):0;
     if (pc<0) pc=0;
     if (pc>100) pc=100;
-    buf = Format(L"{%d%% %2.2d:%2.2d} %s - FAR", pc, (int)RemainingTime/60, (int)RemainingTime%60, 
-                Move? LOC("Engine.Moving"):LOC("Engine.Copying"));
-    SetConsoleTitle(buf.ptr());
+    buf = Format(L"{%d%% %2.2d:%2.2d} %s", pc, (int)RemainingTime/60, (int)RemainingTime%60, 
+                Move? LOC("Engine.Moving").ptr():LOC("Engine.Copying").ptr());
+	SetTitle2(buf);
   }
 }
 
