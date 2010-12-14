@@ -55,45 +55,18 @@ FarProgress::~FarProgress(void)
 
 void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String& caption)
 {
-  int W = X2-X1+1, H = Y2-Y1+1;
-  wchar_t buf[512];
-  int attr=clrFrame;
-  buf[W]=0;
-  for (int i=0; i<W; i++) buf[i]=' ';
-  Info.Text(X1, Y1, attr, buf);
-  Info.Text(X1, Y2, attr, buf);
-  buf[3]=0x2554;//'╔'
-  buf[W-4]=0x2557;//'╗'
-  for (int i=4; i<W-4; i++) buf[i]=0x2550;//'═'
-  Info.Text(X1, Y1+1, attr, buf);
-  buf[3]=0x255a;//'╚'
-  buf[W-4]=0x255d;//'╝'
-  Info.Text(X1, Y2-1, attr, buf);
-  buf[3]=0x2551;//'║'
-  buf[W-4]=0x2551;//'║'
-  for (int i=4; i<W-4; i++) buf[i]=' ';
-  for (int i=Y1+2; i<Y2-1; i++)
-    Info.Text(X1, i, attr, buf);
-  if (caption!="")
-  {
-    Info.Text(X1+(X2-X1-caption.len())/2, Y1+1, clrTitle, (String(" ")+caption+" ").ptr());
-  }
-  Info.Text(0, 0, 0, NULL);
-
-  HANDLE h = GetStdHandle(STD_OUTPUT_HANDLE);
-  WORD a[512];
-  ULONG cb;
-  COORD cd = { X1+2, Y2+1 };
-  ReadConsoleOutputAttribute(h, a, W, cd, &cb);
-  for (int i=0; i<(int)cb; i++) a[i] = a[i] & 0x7;
-  WriteConsoleOutputAttribute(h, a, cb, cd, &cb);
-  for (int j=Y1+1; j<=Y2+1; j++)
-  {
-    COORD cd = { X2+1, j };
-    ReadConsoleOutputAttribute(h, a, 2, cd, &cb);
-    for (int i=0; i<(int)cb; i++) a[i] = a[i] & 0x7;
-    WriteConsoleOutputAttribute(h, a, cb, cd, &cb);
-  }
+	int W = X2-X1+1, H = Y2-Y1+1;
+	String tpl;
+	if(!caption.empty())
+		tpl = String(" ") + caption+ " ";
+	tpl = "\n";
+	String bkg = String(' ', W - 10);
+	bkg += "\n";
+	for(int i = 0; i < H - 4; ++i)
+	{
+		tpl += bkg;
+	}
+	Info.Message(Info.ModuleNumber, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t**)tpl.ptr(), 0, 0);
 }
 
 void FarProgress::GetConSize(int& w, int &h)
@@ -112,7 +85,7 @@ void FarProgress::ShowMessage(const String& msg)
   GetConSize(sw, sh);
   int W=msg.len()+12, H=5;
   int X1=(sw-W)/2; 
-  int Y1=(sh-H)/2-2;
+  int Y1=(sh-H)/2;
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
   DrawWindow(X1, Y1, X2, Y2, "");
@@ -131,7 +104,7 @@ void FarProgress::ShowProgress(const String& msg)
   GetConSize(sw, sh);
   int W=sw/2, H=6;
   int X1=(sw-W)/2; 
-  int Y1=(sh-H)/2-2;
+  int Y1=(sh-H)/2;
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
   DrawWindow(X1, Y1, X2, Y2, "");
@@ -229,7 +202,7 @@ void FarProgress::ShowScanProgress(const String& msg)
   if (WindowWidth < 40) WindowWidth = 40;
   int WindowHeight = 7;
   int WindowCoordX1 = (ConsoleWidth  - WindowWidth)/2;
-  int WindowCoordY1 = (ConsoleHeight - WindowHeight)/2-2;
+  int WindowCoordY1 = (ConsoleHeight - WindowHeight)/2;
   int WindowCoordX2 = WindowCoordX1 + WindowWidth - 1;
   int WindowCoordY2 = WindowCoordY1 + WindowHeight - 1;
   hScreen = Info.SaveScreen(WindowCoordX1, WindowCoordY1, 

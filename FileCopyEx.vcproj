@@ -577,14 +577,6 @@
 			<Filter
 				Name="far"
 				>
-				<File
-					RelativePath=".\Framework\FAR\panel.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Framework\FAR\panel.h"
-					>
-				</File>
 				<Filter
 					Name="dialogs"
 					>
@@ -616,6 +608,14 @@
 				<Filter
 					Name="common"
 					>
+					<File
+						RelativePath=".\Framework\FAR\panel.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Framework\FAR\panel.h"
+						>
+					</File>
 					<File
 						RelativePath=".\Framework\FAR\plugin.cpp"
 						>
