@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string.h>
 
 void _atowcs(wchar_t *d, size_t size, const char *s);
+void _wtoacs(char *d, size_t size, const wchar_t *s);
 
 inline const wchar_t* _tcsend(const wchar_t* s) { return s + wcslen(s); }
 

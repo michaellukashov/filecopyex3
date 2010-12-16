@@ -36,6 +36,7 @@ public:
 	void Resize(int n) { 	arr.resize(n); }
 	int Count() { return (int)arr.size(); }
 	ItemType& operator[](int n) { return arr[n]; }
+	const ItemType& operator[](int n) const { return arr[n]; }
 
 	int Add(const ItemType& v) { arr.push_back(v); return (int)arr.size() - 1; }
 	void Delete(int n, int c = 1) { arr.erase(arr.begin() + n, arr.begin() + n + c); }

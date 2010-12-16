@@ -38,11 +38,8 @@ enum TextFormat { tfANSI, tfUnicode, tfUnicodeBE };
 class StringList
 {
 public:
-	StringList(void);
-	virtual ~StringList(void);
-
 	int Count();
-	const String operator[](int);
+	const String& operator[](int) const;
 	int& Values(int);
 	void*& PtrValues(int);
 	void Set(int, const String&);

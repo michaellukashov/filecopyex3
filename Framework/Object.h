@@ -89,8 +89,8 @@ public:
 
 	ObjectClass* Class() { return _class; }
 	Object* Parent() { return _parent; }
-	const String Name() { return _name; }
-	const String Type() { return _type; }
+	const String& Name() const { return _name; }
+	const String& Type() const { return _type; }
 
 	int LoadFrom(FILE*);
 	int SaveTo(FILE*);

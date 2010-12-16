@@ -30,6 +30,11 @@ void _atowcs(wchar_t *d, size_t size, const char *s)
 	MultiByteToWideChar(CP_ACP, 0, s, -1, d, (int)size);
 	d[size-1]=0;
 }
+void _wtoacs(char *d, size_t size, const wchar_t *s)
+{
+	WideCharToMultiByte(CP_ACP, 0, s, -1, d, (int)size, NULL, NULL);
+	d[size-1]=0;
+}
 
 const wchar_t* _tcsrpbrk(const wchar_t* string, const wchar_t* control)
 {
