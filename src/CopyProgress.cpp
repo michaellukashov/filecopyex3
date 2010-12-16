@@ -38,8 +38,8 @@ CopyProgress::CopyProgress(void)
   cinterval=TicksPerSec();
   int w, h;
   GetConSize(w, h);
-  X1=(w-W)/2;
-  Y1=(h-H)/2;
+  X1=(w-W + 1)/2;
+  Y1=(h-H - 1)/2;
   X2=X1+W-1, Y2=Y1+H-1;
 }
 

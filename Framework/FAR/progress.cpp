@@ -82,8 +82,8 @@ void FarProgress::ShowMessage(const String& msg)
   int sw, sh;
   GetConSize(sw, sh);
   int W=msg.len()+12, H=5;
-  int X1=(sw-W)/2; 
-  int Y1=(sh-H)/2;
+  int X1=(sw-W + 1)/2; 
+  int Y1=(sh-H - 1)/2;
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
   DrawWindow(X1, Y1, X2, Y2, "");
@@ -101,8 +101,8 @@ void FarProgress::ShowProgress(const String& msg)
   int sw, sh;
   GetConSize(sw, sh);
   int W=sw/2, H=6;
-  int X1=(sw-W)/2; 
-  int Y1=(sh-H)/2;
+  int X1=(sw-W + 1)/2; 
+  int Y1=(sh-H - 1)/2;
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
   DrawWindow(X1, Y1, X2, Y2, "");
@@ -205,8 +205,8 @@ void FarProgress::ShowScanProgress(const String& msg)
   if (WindowWidth > 46) WindowWidth = 46;
   if (WindowWidth < 40) WindowWidth = 40;
   int WindowHeight = 7;
-  int WindowCoordX1 = (ConsoleWidth  - WindowWidth)/2;
-  int WindowCoordY1 = (ConsoleHeight - WindowHeight)/2;
+  int WindowCoordX1 = (ConsoleWidth  - WindowWidth + 1)/2;
+  int WindowCoordY1 = (ConsoleHeight - WindowHeight - 1)/2;
   int WindowCoordX2 = WindowCoordX1 + WindowWidth - 1;
   int WindowCoordY2 = WindowCoordY1 + WindowHeight - 1;
   hScreen = Info.SaveScreen(WindowCoordX1, WindowCoordY1, 
