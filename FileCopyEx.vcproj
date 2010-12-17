@@ -53,8 +53,6 @@
 				RuntimeLibrary="1"
 				BufferSecurityCheck="true"
 				DefaultCharIsUnsigned="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="stdhdr.h"
 				PrecompiledHeaderFile="$(IntDir)/vc70.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)\"
@@ -150,8 +148,6 @@
 				RuntimeLibrary="1"
 				BufferSecurityCheck="true"
 				DefaultCharIsUnsigned="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="stdhdr.h"
 				PrecompiledHeaderFile="$(IntDir)/vc70.pch"
 				AssemblerListingLocation="$(IntDir)/"
 				ObjectFile="$(IntDir)\"
@@ -249,8 +245,6 @@
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="true"
 				DefaultCharIsUnsigned="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="stdhdr.h"
 				AssemblerListingLocation="$(IntDir)/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -346,8 +340,6 @@
 				BufferSecurityCheck="false"
 				EnableFunctionLevelLinking="true"
 				DefaultCharIsUnsigned="true"
-				UsePrecompiledHeader="0"
-				PrecompiledHeaderThrough="stdhdr.h"
 				AssemblerListingLocation="$(IntDir)/"
 				WarningLevel="3"
 				SuppressStartupBanner="true"
@@ -515,6 +507,14 @@
 				</File>
 				<File
 					RelativePath=".\Framework\store.h"
+					>
+				</File>
+				<File
+					RelativePath=".\Framework\taskbar_icon.cpp"
+					>
+				</File>
+				<File
+					RelativePath=".\Framework\taskbar_icon.h"
 					>
 				</File>
 			</Filter>

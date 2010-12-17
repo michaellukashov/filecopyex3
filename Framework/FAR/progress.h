@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "plugin.h"
+#include "../taskbar_icon.h"
 
 #define WIN_NONE          0
 #define WIN_MESSAGE       1
@@ -60,6 +61,8 @@ protected:
 	String TitleBuf, ProgTitle;
 	void DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles, __int64 TotalSize);
 	__int64 LastUpdate;
+
+	TaskBarIcon taskbar_icon;
 };
 
 #endif//__PROGRESS_H__

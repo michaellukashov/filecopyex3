@@ -136,6 +136,7 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
   }
   *bp=0;
   Info.Text(x1, y, clrText, buf);
+  taskbar_icon.SetState(taskbar_icon.S_PROGRESS, pc);
 }
 
 void FarProgress::SetPercent(float pc)
@@ -162,6 +163,7 @@ void FarProgress::Hide()
     hScreen=0;
   }
   WinType=WIN_NONE;
+  taskbar_icon.SetState(taskbar_icon.S_NO_PROGRESS);
 }
 
 void FarProgress::DrawText(int x, int y, int c, const String& msg)
@@ -254,15 +256,15 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles,
   wchar_t SizeStr[256];
   _snwprintf_s(SizeStr, 256, sizeof(SizeStr)/sizeof(wchar_t), (const wchar_t*)SizeFmtStr.ptr(), (const wchar_t*)FormatValue(TotalSize).ptr());
 
-  size_t SizeStrOffset = x2 - x1 - wcslen(SizeStr) - wcslen(FilesStr);
-  wchar_t Spacer[256];
-  if (SizeStrOffset+1 >= sizeof(Spacer)) SizeStrOffset = 2;
-  for(int i = 0; i < 256; ++i)
-	  Spacer[i] = 0x20;
-  Spacer[SizeStrOffset] = 0x00;
+
+  int s = x2 - x1 - (int)wcslen(SizeStr) - (int)wcslen(FilesStr);
+  String spacer;
+  if(s > 0)
+	  spacer = String(' ', s);
 
   wchar_t buf[256];
-  _snwprintf_s(buf, 256, sizeof(buf)/sizeof(wchar_t), L"%s %s%s", FilesStr, Spacer, SizeStr);
+  _snwprintf_s(buf, 256, sizeof(buf)/sizeof(wchar_t), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
 
   Info.Text(x1, y + 1, clrText, buf);
+  taskbar_icon.SetState(taskbar_icon.S_WORKING);
 }
