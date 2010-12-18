@@ -39,8 +39,6 @@ FarDialog::~FarDialog(void)
 {
 }
 
-void SetItemText(FarDialogItem* item, const String& text);
-
 int FarDialog::Execute()
 {
   Array<FarDialogItem> Items;
@@ -50,7 +48,7 @@ int FarDialog::Execute()
   frame.Type=DI_DOUBLEBOX;
   String p=Property("Title");
   if (p=="") p=LOC(Name());
-  SetItemText(&frame, p);
+  SetItemText(frame, p);
   Items.Add(frame);
 
   int w, h, f;
@@ -73,12 +71,12 @@ int FarDialog::Execute()
       if (RetCodes[i].itemNo==res)
       {
         if (RetCodes[i].retCode!=-1)
-          RetrieveProperties(Items, hnd);
+          RetrieveProperties(hnd);
         ret=RetCodes[i].retCode;
         break;
       }
   }
-  ClearDialogItem();
+  ClearDialogItems(Items);
   return ret;
 }
 

@@ -49,7 +49,7 @@ public:
 	virtual ~FarDlgObject(void);
 
 	virtual void InitItem(FarDialogItem& item);
-	virtual void RetrieveProperties(Array<FarDialogItem>& items, HANDLE dlg);
+	virtual void RetrieveProperties(HANDLE dlg);
 	virtual void BeforeAdd(FarDialogItem& item);
 	virtual void LoadState(PropertyList &state);
 	virtual void SaveState(PropertyList &state);
@@ -60,6 +60,8 @@ public:
 protected:
 	virtual void AddToItems(Array<FarDialogItem>&, Array<RetCode>&, int, int, int);
 	void PreInitItem(FarDialogItem& item);
+	void SetItemText(FarDialogItem& item, const String& text);
+	void DestroyItemText(FarDialogItem& item);
 
 	FarDialog *Dialog;
 	virtual void BeforeLoad();
@@ -92,11 +94,11 @@ protected:
 	void AddToItems(Array<FarDialogItem>&, Array<RetCode>&, int, int, int);
 
 	void DefSize(int&, int&, int&);
-	void ClearDialogItem();
+	void ClearDialogItems(Array<FarDialogItem>&);
 	FarDlgObject* FindChild(const String&);
 	void LoadState(PropertyList &state);
 	void SaveState(PropertyList &state);
-	void RetrieveProperties(Array<FarDialogItem>& items, HANDLE dlg);
+	void RetrieveProperties(HANDLE dlg);
 
 	int IsContainer() { return 1; }
 };

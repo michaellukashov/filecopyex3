@@ -41,7 +41,7 @@ protected:
 
 public:
 	virtual void InitItem(FarDialogItem&, FarDlgObject&) { ; }
-	virtual void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject&, HANDLE) { ; }
+	virtual void RetrieveProperties(FarDlgObject&, HANDLE) { ; }
 	virtual void BeforeAdd(FarDialogItem&, FarDlgObject&) { ; }
 	virtual void LoadState(PropertyList &state, FarDlgObject&) { ; }
 	virtual void SaveState(PropertyList &state, FarDlgObject&) { ; }
@@ -86,7 +86,6 @@ class FarDlgLineClass : public FarDlgObjectClass
 	{
 		item.Type=DI_TEXT;
 		item.Flags|=DIF_SEPARATOR | DIF_BOXCOLOR;
-		item.PtrData=L"";
 	}
 };
 
@@ -156,7 +155,7 @@ class FarDlgCheckboxClass : public FarDlgObjectClass
 		item.X2=item.X1+lablen(item)+4-1;
 		item.Selected=obj("Selected");
 	}
-	void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg);
+	void RetrieveProperties(FarDlgObject& obj, HANDLE dlg);
 	void LoadState(PropertyList &state, FarDlgObject& obj)
 	{
 		obj("Selected")=state[obj.Name()];
@@ -191,7 +190,7 @@ class FarDlgEditClass : public FarDlgObjectClass
 		AddProperty("Width", 10);
 	}
 	void InitItem(FarDialogItem& item, FarDlgObject& obj);
-	void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg);
+	void RetrieveProperties(FarDlgObject& obj, HANDLE dlg);
 	void LoadState(PropertyList &state, FarDlgObject& obj)
 	{
 		obj("Text")=state[obj.Name()];
@@ -217,7 +216,7 @@ class FarDlgComboboxClass : public FarDlgObjectClass
 		AddProperty("Items", "");
 	}
 	void InitItem(FarDialogItem& item, FarDlgObject& obj);
-	void RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg);
+	void RetrieveProperties(FarDlgObject& obj, HANDLE dlg);
 	void LoadState(PropertyList &state, FarDlgObject& obj)
 	{
 		obj("Text")=state[obj.Name()];

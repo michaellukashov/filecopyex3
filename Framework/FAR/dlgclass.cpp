@@ -42,7 +42,7 @@ void FarDlgObjectClass::DefineProperties()
 
 FarDlgObjectReg *__FarDlgObjectReg;
 
-void FarDlgCheckboxClass::RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
+void FarDlgCheckboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 {
 	obj("Selected")=(int)Info.SendDlgMessage(dlg, DM_GETCHECK, obj.DialogItem, 0);
 }
@@ -72,7 +72,7 @@ static String GetDlgText(HANDLE dlg, int id)
 	return buf;
 }
 
-void FarDlgEditClass::RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
+void FarDlgEditClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 {
 	obj("Text")=GetDlgText(dlg, obj.DialogItem);
 }
@@ -107,7 +107,7 @@ void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
     }
   }
 }
-void FarDlgComboboxClass::RetrieveProperties(Array<FarDialogItem>& items, FarDlgObject& obj, HANDLE dlg)
+void FarDlgComboboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 {
 	obj("Text")=GetDlgText(dlg, obj.DialogItem);
 }
