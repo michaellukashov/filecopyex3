@@ -100,6 +100,15 @@ void FarPlugin::SaveOptions()
 	registry.WriteList("Options", temp);
 }
 
+static void FarErrorHandler(const wchar_t* s)
+{
+	/*if (ShowMessageEx("Error", s, "OK\nDebug", 0)==1)
+	DebugBreak();*/
+	const wchar_t* items[]={ L"Framework Error", s, L"OK", L"Debug" };
+	if (Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, items, 4, 2)==1)
+		DebugBreak();
+}
+
 void _export WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info)
 {
 	::Info = *Info;
@@ -167,27 +176,10 @@ void FarPlugin::OpenPlugin(int, int)
 {
 }
 
-
-extern HANDLE hInstance;
-
-String GetDLLName()
+String FarPlugin::GetDLLPath()
 {
-	wchar_t buf[1024];
-	GetModuleFileName((HMODULE)hInstance, buf, 1024);
-	return buf;
-}
-
-String GetDLLPath()
-{
-	String dlln=GetDLLName();
+	wchar_t buf[MAX_FILENAME];
+	GetModuleFileName((HMODULE)hInstance, buf, MAX_FILENAME);
+	String dlln = buf;
 	return dlln.substr(0, dlln.crfind('\\'));
-}
-
-void FarErrorHandler(const wchar_t* s)
-{
-	/*if (ShowMessageEx("Error", s, "OK\nDebug", 0)==1)
-	DebugBreak();*/
-	const wchar_t* items[]={ L"Framework Error", s, L"OK", L"Debug" };
-	if (Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, items, 4, 2)==1)
-		DebugBreak();
 }

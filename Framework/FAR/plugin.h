@@ -59,6 +59,8 @@ public:
 	FarDialogList& Dialogs() { return dialogs; }
 
 protected:
+	String GetDLLPath();
+
 	FarDialogList dialogs;
 	PropertyList options;
 	StringList MenuItems;
@@ -78,11 +80,6 @@ extern PluginStartupInfo Info;
 extern FarPlugin* plugin;
 extern HANDLE hInstance;
 
-String GetDLLName();
-String GetDLLPath();
-
 FarPlugin* CreatePlugin();
-
-void FarErrorHandler(const wchar_t*);
 
 #endif//__PLUGIN_H__
