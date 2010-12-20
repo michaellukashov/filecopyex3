@@ -30,151 +30,137 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "plugin.h"
 
 PluginStartupInfo Info;
-String PluginRootKey;
-FarPlugin *Instance=NULL;
+FarPlugin* plugin = NULL;
 
-String CurLocaleFile;
-LocaleList *Locale;
+FarPlugin::~FarPlugin()
+{
+	free(menu);
+	free(config);
+}
 
 void FarPlugin::InitLang()
 {
-  String fn=Info.GetMsg(Info.ModuleNumber, 0);
-  if (fn!=CurLocaleFile)
-  {
-    Locale->Load(GetDLLPath()+"\\resource\\"+fn);
-    CurLocaleFile=fn;
-  }
+	String fn = Info.GetMsg(Info.ModuleNumber, 0);
+	if (fn != CurLocaleFile)
+	{
+		CurLocaleFile = fn;
+		locale.Load(GetDLLPath() + "\\resource\\" + fn);
+	}
 }
 
-FarPlugin::FarPlugin(void)
+void FarPlugin::Create()
 {
-  // bug #15 fixed by Ivanych
-//  SetFileApisToOEM();
-  Prefix="";
-  RootKey="UnknownPlugin";
-  Flags=0;
+	// bug #15 fixed by Ivanych
+	registry.root_key = String(Info.RootKey) + "\\" + RegRootKey();
+	InitLang();
 
-  InitLang();
-
-  if (!Dialogs.Load(GetDLLPath()+"\\resource\\dialogs.objd"))
-  {
-    FWError("Could not load DIALOGS.OBJD");
-    exit(0);
-  }
+	if(!dialogs.Load(GetDLLPath() + "\\resource\\dialogs.objd"))
+	{
+		FWError("Could not load dialogs.objd");
+		exit(0);
+	}
+	InitOptions();
+	LoadOptions();
 }
-
-FarPlugin::~FarPlugin(void)
+void FarPlugin::FillInfo(PluginInfo* info) const
 {
+	info->Flags = flags;
+	info->CommandPrefix = NULL;
+	info->DiskMenuStringsNumber = 0;
+	info->DiskMenuNumbers = NULL;
+	if(!menu)
+	{
+		menu = (const wchar_t**)malloc(sizeof(const wchar_t*)*MenuItems.Count());
+		for(int i = 0; i < MenuItems.Count(); ++i)
+			menu[i] = MenuItems[i].ptr();
+	}
+	if(!config)
+	{
+		config = (const wchar_t**)malloc(sizeof(const wchar_t*)*ConfigItems.Count());
+		for(int i = 0; i < ConfigItems.Count(); ++i)
+			config[i] = ConfigItems[i].ptr();
+	}
+	info->PluginMenuStringsNumber=plugin->MenuItems.Count();
+	info->PluginMenuStrings=menu;
+	info->PluginConfigStringsNumber=plugin->ConfigItems.Count();
+	info->PluginConfigStrings=config;
 }
 
 void FarPlugin::LoadOptions()
 {
-  StringList temp;
-  Registry.ReadList("Options", temp);
-  Options.LoadFromList(temp);
+	StringList temp;
+	registry.ReadList("Options", temp);
+	options.LoadFromList(temp);
 }
 
 void FarPlugin::SaveOptions()
 {
-  StringList temp;
-  Options.SaveToList(temp);
-  Registry.WriteList("Options", temp);
-}
-
-void FarPlugin::InitOptions(PropertyList&)
-{
-}
-
-void Init()
-{
-  Locale=new LocaleList();
-  errorHandler=FarErrorHandler;
-  __FarDlgObjectReg=new FarDlgObjectReg;
-  Instance=InitInstance();
-  PluginRootKey=String(::Info.RootKey)+"\\"+Instance->RootKey;
-  Instance->InitOptions(Instance->Options);
-  Instance->LoadOptions();
+	StringList temp;
+	options.SaveToList(temp);
+	registry.WriteList("Options", temp);
 }
 
 void _export WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info)
 {
-//  SetFileApisToANSI();
-  ::Info=*Info;
-  if(!Instance)
-	  Init();
-//  SetFileApisToOEM();
+	::Info = *Info;
+	if(!plugin)
+	{
+		errorHandler = FarErrorHandler;
+		InitObjMgr();
+		plugin = CreatePlugin();
+	}
 }
 
 HANDLE _export WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 {
-//  SetFileApisToANSI();
-  Instance->InitLang();
-  Instance->OpenPlugin(OpenFrom, (int)Item);
-  Instance->SaveOptions();
-//  SetFileApisToOEM();
-//  if (p) return (HANDLE)p;
-//  else
-	  return INVALID_HANDLE_VALUE;
+	plugin->InitLang();
+	plugin->OpenPlugin(OpenFrom, (int)Item);
+	plugin->SaveOptions();
+	//  if (p) return (HANDLE)p;
+	//  else
+	return INVALID_HANDLE_VALUE;
 }
 
 int _export WINAPI ConfigureW(int ItemNumber)
 {
-//  SetFileApisToANSI();
-  Instance->InitLang();
-  int res=Instance->Configure(ItemNumber);
-  Instance->SaveOptions();
-//  SetFileApisToOEM();
-  return res;
+	plugin->InitLang();
+	int res=plugin->Configure(ItemNumber);
+	plugin->SaveOptions();
+	return res;
 }
-
-wchar_t **menu=NULL, **config=NULL, *prefix=NULL;
 
 void _export WINAPI GetPluginInfoW(struct PluginInfo *Info)
 {
-//  SetFileApisToANSI();
-  Instance->InitLang();
-  memset(Info, 0, sizeof(struct PluginInfo));
-  Info->StructSize=sizeof(struct PluginInfo);
-  Info->Flags=Instance->Flags;
-  if (!prefix && Instance->Prefix!="") prefix=_wcsdup(Instance->Prefix.ptr());
-  Info->CommandPrefix=prefix;
-  Info->DiskMenuStringsNumber=0;
-  Info->DiskMenuNumbers=NULL;
-  if (!menu)
-  {
-    menu=(wchar_t**)malloc(sizeof(wchar_t*)*Instance->MenuItems.Count());
-    for (int i=0; i<Instance->MenuItems.Count(); i++)
-      menu[i]=_wcsdup(Instance->MenuItems[i].ptr());
-  }
-  if (!config)
-  {
-    config=(wchar_t**)malloc(sizeof(wchar_t*)*Instance->ConfigItems.Count());
-    for (int i=0; i<Instance->ConfigItems.Count(); i++)
-      config[i]=_wcsdup(Instance->ConfigItems[i].ptr());
-  }
-  Info->PluginMenuStringsNumber=Instance->MenuItems.Count();
-  Info->PluginMenuStrings=menu;
-  Info->PluginConfigStringsNumber=Instance->ConfigItems.Count();
-  Info->PluginConfigStrings=config;
-//  SetFileApisToOEM();
+	Info->StructSize=sizeof(struct PluginInfo);
+	plugin->InitLang();
+	plugin->FillInfo(Info);
 }
 
 void _export WINAPI ClosePluginW(HANDLE hPlugin)
 {
-//  SetFileApisToANSI();
-  Instance->SaveOptions();
-//  delete (FarPanel*)hPlugin;
-//  SetFileApisToOEM();
+	plugin->SaveOptions();
+	//  delete (FarPanel*)hPlugin;
+}
+
+void _export WINAPI ExitFARW()
+{
+	delete plugin;
+	DoneObjMgr();
+};
+
+const String& LOC(const String& l)
+{
+	return plugin->Locale()[l];
 }
 
 int _export WINAPI GetMinFarVersionW(void)
 {
-  return FARMANAGERVERSION;
+	return FARMANAGERVERSION;
 }
 
 int FarPlugin::Configure(int)
 {
-  return FALSE;
+	return FALSE;
 }
 
 void FarPlugin::OpenPlugin(int, int)
@@ -186,22 +172,22 @@ extern HANDLE hInstance;
 
 String GetDLLName()
 {
-  wchar_t buf[1024];
-  GetModuleFileName((HMODULE)hInstance, buf, 1024);
-  return buf;
+	wchar_t buf[1024];
+	GetModuleFileName((HMODULE)hInstance, buf, 1024);
+	return buf;
 }
 
 String GetDLLPath()
 {
-  String dlln=GetDLLName();
-  return dlln.substr(0, dlln.crfind('\\'));
+	String dlln=GetDLLName();
+	return dlln.substr(0, dlln.crfind('\\'));
 }
 
 void FarErrorHandler(const wchar_t* s)
 {
-  /*if (ShowMessageEx("Error", s, "OK\nDebug", 0)==1)
-    DebugBreak();*/
-  const wchar_t* items[]={ L"Framework Error", s, L"OK", L"Debug" };
-  if (Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, items, 4, 2)==1)
-    DebugBreak();
+	/*if (ShowMessageEx("Error", s, "OK\nDebug", 0)==1)
+	DebugBreak();*/
+	const wchar_t* items[]={ L"Framework Error", s, L"OK", L"Debug" };
+	if (Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, items, 4, 2)==1)
+		DebugBreak();
 }

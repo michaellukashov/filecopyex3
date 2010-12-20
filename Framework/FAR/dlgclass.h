@@ -243,24 +243,7 @@ class FarDialogClass : public FarDlgObjectClass
 	}
 };
 
-
-class FarDlgObjectReg
-{
-public:
-	FarDlgObjectReg()
-	{
-		objectManager->RegisterClass(new FarDlgLineClass);
-		objectManager->RegisterClass(new FarDlgLabelClass);
-		objectManager->RegisterClass(new FarDlgPanelClass);
-		objectManager->RegisterClass(new FarDlgButtonClass);
-		objectManager->RegisterClass(new FarDlgCheckboxClass);
-		objectManager->RegisterClass(new FarDlgRadioButtonClass);
-		objectManager->RegisterClass(new FarDlgEditClass);
-		objectManager->RegisterClass(new FarDlgComboboxClass);
-		objectManager->RegisterClass(new FarDialogClass);
-	}
-};
-
-extern FarDlgObjectReg* __FarDlgObjectReg;
+void InitObjMgr();
+void DoneObjMgr();
 
 #endif//__DLGCLASS_H__

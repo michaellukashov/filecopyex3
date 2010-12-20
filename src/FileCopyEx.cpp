@@ -28,99 +28,102 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "filecopyex.h"
 #include "../framework/far/interface/farkeys.hpp"
 
-StringList DescFiles;
-
-FileCopyExPlugin::FileCopyExPlugin(void)
+void FileCopyExPlugin::Create()
 {
-  RootKey="FileCopyEx";
-  MenuItems.Add("E&xtended copy");
-  ConfigItems.Add("Extended copy");
-  MiscInit();
+	MenuItems.Add("E&xtended copy");
+	ConfigItems.Add("Extended copy");
+	FarPlugin::Create();
+	descs.LoadFromString(registry.GetString("\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');
 }
 
 FileCopyExPlugin::~FileCopyExPlugin(void)
 {
 }
 
-int getmod();
-
 int FileCopyExPlugin::Configure(int)
 {
-  Config();
-  return TRUE;
+	Config();
+	return TRUE;
 }
 
 void CallCopy(int move, int curonly)
 {
-  Engine engine;
-  int res=engine.Main(move, curonly);
-  if (res==MRES_STDCOPY || res==MRES_STDCOPY_RET)
-  {
-    KeySequence seq;
-    DWORD keys[8];
-    seq.Flags=KSFLAGS_DISABLEOUTPUT;
-    seq.Sequence=keys;
-    seq.Count=1;
-    keys[0]=move ? KEY_F6 : KEY_F5;
-    if (res==MRES_STDCOPY_RET)
-    {
-      seq.Count=2;
-      keys[1]=KEY_ENTER;
-    }
-    Info.AdvControl(Info.ModuleNumber, ACTL_POSTKEYSEQUENCE, (void*)&seq);
-  }
+	Engine engine;
+	int res=engine.Main(move, curonly);
+	if (res==MRES_STDCOPY || res==MRES_STDCOPY_RET)
+	{
+		KeySequence seq;
+		DWORD keys[8];
+		seq.Flags=KSFLAGS_DISABLEOUTPUT;
+		seq.Sequence=keys;
+		seq.Count=1;
+		keys[0]=move ? KEY_F6 : KEY_F5;
+		if (res==MRES_STDCOPY_RET)
+		{
+			seq.Count=2;
+			keys[1]=KEY_ENTER;
+		}
+		Info.AdvControl(Info.ModuleNumber, ACTL_POSTKEYSEQUENCE, (void*)&seq);
+	}
 }
 
 void FileCopyExPlugin::OpenPlugin(int from, int item)
 {
-  FarMenu menu;
-  menu.SetFlags(FMENU_WRAPMODE);
-  menu.SetTitle(LOC("PluginName"));
-  menu.SetBottom(LOC("PluginCopyright"));
-  menu.SetHelpTopic("Menu");
-  menu.AddLine(LOC("Menu.Item1"));
-  menu.AddLine(LOC("Menu.Item2"));
-  menu.AddLine(LOC("Menu.Item3"));
-  menu.AddLine(LOC("Menu.Item4"));
-  menu.AddSep();
-  menu.AddLine(LOC("Menu.Config"));
-  
-  int move, curonly;
-  switch (menu.Execute())
-  {
-    case 0: move = 0; curonly = 0; break;
-    case 1: move = 1; curonly = 0; break;
-    case 2: move = 0; curonly = 1; break;
-    case 3: move = 1; curonly = 1; break;
-    case 5: Config(); return; 
-    default: return;
-  }
-  CallCopy(move, curonly);
+	FarMenu menu;
+	menu.SetFlags(FMENU_WRAPMODE);
+	menu.SetTitle(LOC("PluginName"));
+	menu.SetBottom(LOC("PluginCopyright"));
+	menu.SetHelpTopic("Menu");
+	menu.AddLine(LOC("Menu.Item1"));
+	menu.AddLine(LOC("Menu.Item2"));
+	menu.AddLine(LOC("Menu.Item3"));
+	menu.AddLine(LOC("Menu.Item4"));
+	menu.AddSep();
+	menu.AddLine(LOC("Menu.Config"));
+
+	int move, curonly;
+	switch (menu.Execute())
+	{
+	case 0: move = 0; curonly = 0; break;
+	case 1: move = 1; curonly = 0; break;
+	case 2: move = 0; curonly = 1; break;
+	case 3: move = 1; curonly = 1; break;
+	case 5: Config(); return; 
+	default: return;
+	}
+	CallCopy(move, curonly);
 }
 
-void FileCopyExPlugin::InitOptions(PropertyList& options)
+void FileCopyExPlugin::InitOptions()
 {
-  options.Add("BufPercent", 1);
-  options.Add("BufSize", 0);
-  options.Add("BufPercentVal", 15);
-  options.Add("BufSizeVal", 4096);
-  options.Add("OverwriteDef", 0);
-  options.Add("CopyStreamsDef", 0);
-  options.Add("CopyRightsDef", 0);
-  options.Add("AllowParallel", 1);
-  options.Add("DefParallel", 0);
-  options.Add("CopyDescs", 1);
-  options.Add("DescsInSubdirs", 0);
-  options.Add("ConnectLikeBars", 0);
-  options.Add("ConfirmBreak", 1);
-  options.Add("Sound", 0);
-  options.Add("PreallocMin", 4096);
-  options.Add("UnbuffMin", 64);
-  options.Add("ReadFilesOpenedForWriting", 0);
-  options.Add("CheckFreeDiskSpace", 1);
+	options.Add("BufPercent", 1);
+	options.Add("BufSize", 0);
+	options.Add("BufPercentVal", 15);
+	options.Add("BufSizeVal", 4096);
+	options.Add("OverwriteDef", 0);
+	options.Add("CopyStreamsDef", 0);
+	options.Add("CopyRightsDef", 0);
+	options.Add("AllowParallel", 1);
+	options.Add("DefParallel", 0);
+	options.Add("CopyDescs", 1);
+	options.Add("DescsInSubdirs", 0);
+	options.Add("ConnectLikeBars", 0);
+	options.Add("ConfirmBreak", 1);
+	options.Add("Sound", 0);
+	options.Add("PreallocMin", 4096);
+	options.Add("UnbuffMin", 64);
+	options.Add("ReadFilesOpenedForWriting", 0);
+	options.Add("CheckFreeDiskSpace", 1);
 }
 
-FarPlugin* InitInstance()
+FarPlugin* CreatePlugin()
 {
-  return new FileCopyExPlugin;
+	FarPlugin* p = new FileCopyExPlugin;
+	p->Create();
+	return p;
+}
+
+FileCopyExPlugin* Plugin()
+{
+	return (FileCopyExPlugin*)plugin;
 }

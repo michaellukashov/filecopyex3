@@ -40,33 +40,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class FarPlugin
 {
 public:
-	FarPlugin(void);
-	virtual ~FarPlugin(void);
+	FarPlugin() : flags(0), menu(NULL), config(NULL) {}
+	virtual ~FarPlugin();
+	virtual void Create();
 	virtual int Configure(int);
 	virtual void OpenPlugin(int, int);
-	StringList MenuItems, ConfigItems;
-	String Prefix, RootKey;
-	int Flags;
-	FarDialogList Dialogs;
 	void InitLang();
-	PropertyList Options;
 	virtual void LoadOptions();
 	virtual void SaveOptions();
-	virtual void InitOptions(PropertyList&);
+	virtual void InitOptions() {}
+
+	virtual void FillInfo(PluginInfo* info) const;
+
+	const char* RegRootKey() const { return "UnknownPlugin"; }
+
+	const LocaleList& Locale() const { return locale; }
+	PropertyList& Options() { return options; }
+	FarDialogList& Dialogs() { return dialogs; }
+
+protected:
+	FarDialogList dialogs;
+	PropertyList options;
+	StringList MenuItems;
+	StringList ConfigItems;
+	FarRegistry registry;
+	String CurLocaleFile;
+	LocaleList locale;
+
+	int flags;
+	mutable const wchar_t** menu;
+	mutable const wchar_t** config;
 };
 
-extern LocaleList* Locale;
-#define LOC(s) ((*Locale)[s])
+const String& LOC(const String& l);
 
 extern PluginStartupInfo Info;
-extern String PluginRootKey;
-extern FarPlugin *Instance;
+extern FarPlugin* plugin;
 extern HANDLE hInstance;
 
 String GetDLLName();
 String GetDLLPath();
 
-FarPlugin* InitInstance();
+FarPlugin* CreatePlugin();
 
 void FarErrorHandler(const wchar_t*);
 

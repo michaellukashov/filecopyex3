@@ -26,17 +26,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lowlevelstr.h"
 #include "valuelist.h"
 
-const String& ValueList::Name(int n)
+const String& ValueList::Name(int n) const
 {
 	return items[n].name;
 }
 
-const String& ValueList::Value(int n)
+const String& ValueList::Value(int n) const
 {
 	return items[n].value;
 }
 
-int ValueList::Count()
+int ValueList::Count() const
 {
 	return items.Count();
 }
@@ -68,7 +68,7 @@ void ValueList::Set(const String& s)
 //=============================================================================
 //	ValueList::Find
 //-----------------------------------------------------------------------------
-int ValueList::Find(const String& k)
+int ValueList::Find(const String& k) const
 {
 	for(int i = 0; i < items.Count(); ++i)
 	{
@@ -78,7 +78,7 @@ int ValueList::Find(const String& k)
 	return -1;
 }
 
-const String& ValueList::operator[](const String& n)
+const String& ValueList::operator[](const String& n) const
 {
 	int i = Find(n);
 	if (i != -1)

@@ -38,21 +38,16 @@ enum TextFormat { tfANSI, tfUnicode, tfUnicodeBE };
 class StringList
 {
 public:
-	int Count();
+	int Count() const;
 	const String& operator[](int) const;
 	int& Values(int);
-	void*& PtrValues(int);
 	void Set(int, const String&);
-
 	int Add(const String&, int=0);
-	void Insert(int, const String&, int=0);
-	int Add(const String&, void*);
-	void Insert(int, const String&, void*);
 	void Delete(int);
 	void Exchange(int, int);
 	void Clear();
 
-	int Find(const String&, int=0);
+	int Find(const String&, int=0) const;
 
 	int LoadFrom(FILE*);
 	int SaveTo(FILE*, TextFormat=tfANSI);
@@ -66,11 +61,7 @@ public:
 	struct ListItem
 	{
 		String str;
-		union
-		{
-			int Data;
-			void* PtrData;
-		};
+		int Data;
 	};
 
 private:

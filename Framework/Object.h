@@ -32,17 +32,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "properties.h"
 
 class Object;
-class ObjectManager;
 
 class ObjectClass
 {
 protected:
 	virtual Object* Create() { return NULL; }
-	virtual const String TypeName() { return L""; }
-	virtual void DefineProperties() { ; }
+	virtual const String TypeName() { return String(); }
+	virtual void DefineProperties() {}
 
 	void AddProperty(const String& name, int def);
-	void AddProperty(const String& name, double def);
+	void AddProperty(const String& name, float def);
 	void AddProperty(const String& name, const String& def);
 
 private:
@@ -55,34 +54,17 @@ private:
 
 #define DEFINE_CLASS(name, type) \
 protected: \
-Object* Create() { return (Object*)(new type()); } \
-const String TypeName() { return name; }
+	Object* Create() { return (Object*)new type; } \
+	virtual const String TypeName() { return name; }
 
-class ObjectList : private StringList
-{
-public:
-	ObjectList();
-	virtual ~ObjectList();
-
-	void Add(Object&);
-	void Delete(int);
-	void Clear();
-	int Count();
-
-	Object& operator[] (int);
-	Object& operator[] (const String&);
-
-private:
-	Object* Parent;
-	friend class Object;
-};
+typedef Array<Object*> Objects;
+typedef Array<ObjectClass*> ObjectClasses;
 
 class Object
 {
 public:
-	virtual ~Object(void) { ; }
+	virtual ~Object() { ClearChilds(); }
 
-	ObjectList Children;
 	Object& operator[](int i) { return Child(i); }
 	Object& operator[](const String& v) { return Child(v); }
 	Property& operator()(const String& v) { return Property(v); }
@@ -100,19 +82,20 @@ public:
 	void ReloadPropertiesRecursive();
 
 protected:
-	PropertyStore Properties, 
-		LoadedProperties;
-
-	Object& Child(int i) { return Children[i]; }
-	Object& Child(const String& v) { return Children[v]; }
+	void ClearChilds();
+	Object& Child(int i) { return *childs[i]; }
+	Object& Child(const String& v);
 	Property& Property(const String& v);
 
-	Object() { ; }
-	virtual void AfterLoad() { ; }
-	virtual void BeforeLoad() { ; }
+	Object() {}
+	virtual void AfterLoad() {}
+	virtual void BeforeLoad() {}
+
+	PropertyStore properties;
+	PropertyStore loaded_properties;
+	Objects childs;
 
 private:
-
 	int LoadFromList(StringList&, int start=0);
 	void SaveToList(StringList&, int clear=1, int level=0);
 
@@ -122,9 +105,10 @@ protected:
 	String _name;
 	String _type;
 
+	::Property undef_property;
+
 	friend class ObjectManager;
 	friend class ObjectClass;
-	friend class ObjectList;
 };
 
 template <class ChildType, class ParentType, class ClassType>
@@ -137,46 +121,19 @@ public:
 	ChildType& operator[](const String& v) { return Child(v); }
 
 protected:
-	ChildType& Child(int i) { return static_cast<ChildType&>(Children[i]); }
-	ChildType& Child(const String& v) { return static_cast<ChildType&>(Children[v]); }
+	ChildType& Child(int i) { return static_cast<ChildType&>(Object::Child(i)); }
+	ChildType& Child(const String& v) { return static_cast<ChildType&>(Object::Child(v)); }
 };
 
 class ObjectManager
 {
 public:
-	ObjectManager()
-	{
-//		NameList.SetOptions(slSorted | slIgnoreCase);
-	}
-	void RegisterClass(ObjectClass* cl) 
-	{
-		cl->DefineProperties();
-		NameList.Add(cl->TypeName(), cl);
-	}
-	Object* Create(const String& type, const String& name, Object* parent)
-	{
-		int j=NameList.Find(type);
-		if (j==-1) return NULL;
-		ObjectClass* cl=(ObjectClass*)NameList.PtrValues(j);
-		if(cl)
-		{
-			Object* obj=cl->Create();
-			obj->_class=cl;
-			obj->_type=type;
-			obj->_name=name;
-			obj->_parent=parent;
-			obj->Properties.CopyFrom(cl->Properties);
-			if(parent)
-				parent->Children.Add(*obj);
-			return obj;
-		}
-		return NULL;
-	}
-	String Name(int i) { return NameList[i]; }
-	int Count() { return NameList.Count(); }
-
+	~ObjectManager();
+	void RegisterClass(ObjectClass* cl);
+	Object* Create(const String& type, const String& name, Object* parent);
 private:
-	StringList NameList;
+	ObjectClass* FindClass(const String& type);
+	ObjectClasses reg_classes;
 };
 
 extern ObjectManager* objectManager;

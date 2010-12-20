@@ -165,72 +165,57 @@ int FarPanel::MkDir(String &name, int silent)
 
 void _export WINAPI GetOpenPluginInfoW(HANDLE hPlugin, struct OpenPluginInfo *Info)
 {
-//  SetFileApisToANSI();
   ((FarPanel*)hPlugin)->CallGetOpenPluginInfo(Info);
-//  SetFileApisToOEM();
 }
 
 int _export WINAPI SetDirectoryW(HANDLE hPlugin,const wchar_t *Dir,int OpMode)
 {
-//  SetFileApisToANSI();
 //   size_t l = wcslen(Dir)+1;
 //   char *dir=(char*)_alloca(l);
 //   strcpy_s(dir, l, Dir);
 //   _toansi(dir);
   int res=((FarPanel*)hPlugin)->CallSetDirectory(Dir, OpMode);
-//  SetFileApisToOEM();
   return res;
 }
 
 int _export WINAPI GetFindDataW(HANDLE hPlugin,  struct PluginPanelItem **pPanelItem,
                                int *pItemsNumber, int OpMode)
 {
-//  SetFileApisToANSI();
   int res=((FarPanel*)hPlugin)->CallGetFindData(*pPanelItem, *pItemsNumber, OpMode);
-//  SetFileApisToOEM();
   return res;
 }
 
 void _export WINAPI FreeFindDataW(HANDLE hPlugin, struct PluginPanelItem *PanelItem,
                                  int ItemsNumber)
 {
-//  SetFileApisToANSI();
   ((FarPanel*)hPlugin)->CallFreeFindData(PanelItem, ItemsNumber);
-//  SetFileApisToOEM();
 }
 
 int _export WINAPI DeleteFilesW(HANDLE hPlugin, struct PluginPanelItem *PanelItem,
                                int ItemsNumber, int OpMode)
 {
-//  SetFileApisToANSI();
   int res=((FarPanel*)hPlugin)->CallDeleteFiles(PanelItem, ItemsNumber, OpMode);
-//  SetFileApisToOEM();
   return res;
 }
 
 int _export WINAPI PutFilesW(HANDLE hPlugin,struct PluginPanelItem *PanelItem,int ItemsNumber,int Move,const wchar_t *SrcPath,int OpMode)
 {
-//  SetFileApisToANSI();
   int res=((FarPanel*)hPlugin)->CallPutFiles(PanelItem, ItemsNumber, Move, OpMode);
-//  SetFileApisToOEM();
   return res;
 }
 
 int _export WINAPI GetFilesW(HANDLE hPlugin,struct PluginPanelItem *PanelItem,int ItemsNumber,int Move,const wchar_t **DestPath,int OpMode)
 {
-//  SetFileApisToANSI();
 //   size_t l = strlen(DestPath)+1;
 //   char *dp=(char*)_alloca(l);
 //   strcpy_s(dp, l, DestPath);
 //   _toansi(dp);
   int res=((FarPanel*)hPlugin)->CallGetFiles(PanelItem, ItemsNumber, Move, *DestPath, OpMode);
-//  SetFileApisToOEM();
   return res;
 }
 
 int _export WINAPI MakeDirectoryW(HANDLE hPlugin,const wchar_t **Name,int OpMode)
 {
-//  SetFileApisToANSI();
 //   size_t l = strlen(Name)+1;
 //   char *dp=(char*)_alloca(l);
 //   strcpy_s(dp, l, Name);
@@ -239,7 +224,6 @@ int _export WINAPI MakeDirectoryW(HANDLE hPlugin,const wchar_t **Name,int OpMode
   int res=((FarPanel*)hPlugin)->CallMakeDirectory(name, OpMode);
 //   if (res==TRUE && name!=Name)
 // 	  name.ToOem(Name, MAX_PATH);
-//  SetFileApisToOEM();
   return res;
 
 }

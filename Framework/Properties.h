@@ -30,100 +30,77 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stringlist.h"
 #include "array.h"
 
-enum ValType { vtInt, vtFloat, vtString };
-
-class PropVal
+class Property
 {
+	enum Type { vtInt, vtFloat, vtString, vtUnknown };
 public:
-	ValType Type;
-	int Int;
-	double Float;
-	String Str;
-};
+	Property() : Type(vtUnknown) {}
+	Property(int);
+	Property(float);
+	Property(const String&);
 
-class Property : private PropVal
-{
-public:
-	void operator= (int);
-	void operator= (double);
-	void operator= (const String&);
-	void operator= (const Property&);
+	void operator=(const Property& p);
+
 	operator int() const;
 	operator bool() const;
-	operator double() const;
+	operator float() const;
 	operator const String() const;
 	bool operator== (const String&) const;
 	bool operator== (int) const;
-	bool operator== (double) const;
+	bool operator== (float) const;
 	bool operator== (const Property&) const;
 	bool operator!= (const String&) const;
 	bool operator!= (int) const;
-	bool operator!= (double) const;
+	bool operator!= (float) const;
 	bool operator!= (const Property&) const;
 	bool operator!() const;
 
-	friend class PropertyStore;
+protected:
+	Type Type;
+	int Int;
+	float Float;
+	String Str;
 };
-
-extern Property UndefProperty;
 
 class PropertyStore
 {
 public:
-	PropertyStore(void);
-	virtual ~PropertyStore(void);
+	Property& operator[](int i) { return Values[i]; }
 
-	Property& operator[](int);
-
-	int Add(int);
-	int Add(double);
-	int Add(const String&);
-
-	int Count();
-	void CopyFrom(PropertyStore&);
+	int Add(const Property& p) { return Values.Add(p); }
+	int Count() const { return Values.Count(); }
 
 	void SaveToList(StringList&, StringList&);
 	void LoadFromList(StringList&, StringList&);
 
 private:
-	Array<PropVal> Values;
-	void Clear();
-
-	friend class Property;
+	Array<Property> Values;
 };
 
-class PropertyList : protected PropertyStore
+class PropertyList
 {
 public:
-	PropertyList(void) { ; }
-	virtual ~PropertyList(void) { ; }
-
 	Property& operator[](int i) { return store[i]; }
-	Property& operator[](const String& n)
-	{
-		int i=names.Find(n);
-		if (i!=-1) return store[i];
-		else return UndefProperty;
-	}
+	Property& operator[](const String& n) { return GetValueByName(n); }
 
 	void GetNameAndValue(int i, String& name, String& value)
 	{
-		name  = (String) names[i];
-		value = (String) store[i];
+		name  = (String)names[i];
+		value = (String)store[i];
 	}
 
 	Property& GetValueByName(const String& n)
 	{
 		int i=names.Find(n);
 		if (i!=-1) return store[i];
-		else return UndefProperty;
+		else return undef_property;
 	}
 
 	int Add(const String& n, int v) { return names.Add(n, store.Add(v)); }
-	int Add(const String& n, double v) { return names.Add(n, store.Add(v)); }
+	int Add(const String& n, float v) { return names.Add(n, store.Add(v)); }
 	int Add(const String& n, const String& v) { return names.Add(n, store.Add(v)); }
 
-	int Count() { return names.Count(); }
+	int Count() const { return names.Count(); }
 
 	void SaveToList(StringList& l) { store.SaveToList(l, names); }
 	void LoadFromList(StringList& l) { store.LoadFromList(l, names); }
@@ -131,6 +108,7 @@ public:
 private:
 	PropertyStore store;
 	StringList names;
+	Property undef_property;
 };
 
 #endif//__PROPERTIES_H__

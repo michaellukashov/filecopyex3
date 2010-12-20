@@ -48,7 +48,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
+				PreprocessorDefinitions="_WINXP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="true"
@@ -143,7 +143,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
+				PreprocessorDefinitions="_WINXP"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="1"
 				BufferSecurityCheck="true"
@@ -239,7 +239,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
+				PreprocessorDefinitions="_WINXP"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
@@ -334,7 +334,7 @@
 				EnableIntrinsicFunctions="true"
 				FavorSizeOrSpeed="1"
 				AdditionalIncludeDirectories=""
-				PreprocessorDefinitions="_WINXP;SEPARATE_UNICODE"
+				PreprocessorDefinitions="_WINXP"
 				StringPooling="true"
 				RuntimeLibrary="0"
 				BufferSecurityCheck="false"
@@ -670,30 +670,6 @@
 		<Filter
 			Name="docs"
 			>
-			<Filter
-				Name="english"
-				>
-				<File
-					RelativePath=".\data\doc\history.eng.html"
-					>
-				</File>
-				<File
-					RelativePath=".\data\doc\readme.eng.html"
-					>
-				</File>
-			</Filter>
-			<Filter
-				Name="russian"
-				>
-				<File
-					RelativePath=".\data\doc\history.rus.html"
-					>
-				</File>
-				<File
-					RelativePath=".\data\doc\readme.rus.html"
-					>
-				</File>
-			</Filter>
 			<Filter
 				Name="resources"
 				>

@@ -40,8 +40,6 @@ void FarDlgObjectClass::DefineProperties()
   AddProperty("Text", "");
 }
 
-FarDlgObjectReg *__FarDlgObjectReg;
-
 void FarDlgCheckboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 {
 	obj("Selected")=(int)Info.SendDlgMessage(dlg, DM_GETCHECK, obj.DialogItem, 0);
@@ -125,3 +123,20 @@ int lablen(FarDialogItem& item)
   }
 }
 
+void InitObjMgr()
+{
+	objectManager = new ObjectManager;
+	objectManager->RegisterClass(new FarDlgLineClass);
+	objectManager->RegisterClass(new FarDlgLabelClass);
+	objectManager->RegisterClass(new FarDlgPanelClass);
+	objectManager->RegisterClass(new FarDlgButtonClass);
+	objectManager->RegisterClass(new FarDlgCheckboxClass);
+	objectManager->RegisterClass(new FarDlgRadioButtonClass);
+	objectManager->RegisterClass(new FarDlgEditClass);
+	objectManager->RegisterClass(new FarDlgComboboxClass);
+	objectManager->RegisterClass(new FarDialogClass);
+}
+void DoneObjMgr()
+{
+	delete objectManager;
+}

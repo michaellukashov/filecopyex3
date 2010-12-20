@@ -37,7 +37,7 @@ extern ErrorHandler errorHandler;
 
 #define MAKEINT64(low, high) ((((__int64)(high))<<32)|((__int64)low))
 
-extern int WinNT, Win2K, WinXP, Win98, WinNT4;
+extern int WinNT, WinNT4, Win2K, WinXP;
 extern HANDLE hInstance;
 
 BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID);

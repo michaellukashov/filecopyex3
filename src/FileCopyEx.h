@@ -34,24 +34,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define MRES_STDCOPY      1
 #define MRES_STDCOPY_RET  2
 
-extern int Win2K, WinNT;
-extern StringList DescFiles;
-
-class FileCopyExPlugin :
-	public FarPlugin
+class FileCopyExPlugin : public FarPlugin
 {
 public:
-	FileCopyExPlugin(void);
 	virtual ~FileCopyExPlugin(void);
-	int Configure(int);
-	void OpenPlugin(int, int);
-	void InitOptions(PropertyList&);
+	virtual void Create();
+	virtual int Configure(int);
+	virtual void OpenPlugin(int, int);
+	virtual void InitOptions();
 	void Config();
+	const char* RegRootKey() const { return "FileCopyEx"; }
+
+	const StringList& Descs() const { return descs; }
 
 private:
 	void About();
 	void KeyConfig();
-	void MiscInit();
+
+	void reloadmacro();
+	int isour(const String &key);
+	void restore(const String &key);
+	void dobind(const String& key, const String& seq);
+
+private:
+	StringList descs;
 };
+
+FileCopyExPlugin* Plugin();
 
 #endif//__FILECOPYEX_H__

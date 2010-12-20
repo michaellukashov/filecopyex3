@@ -32,26 +32,27 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class ValueList
 {
 public:
-	const String& Name(int);
-	const String& Value(int);
-	int Count();
+	const String& Name(int) const;
+	const String& Value(int) const;
+	int Count() const;
 	void Clear();
 
 	void Set(const String&, const String&);
 	void Set(const String&);
 
-	const String& operator[](const String&);
+	const String& operator[](const String&) const;
 
 	void LoadFromList(StringList&);
 	void SaveToList(StringList&);
 
 	struct ListItem
 	{
-		String name, value;
+		String name;
+		String value;
 	};
 
 private:
-	int Find(const String& k);
+	int Find(const String& k) const;
 	Array<ListItem> items;
 	String empty;
 };

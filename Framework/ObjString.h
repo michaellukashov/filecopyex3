@@ -70,7 +70,7 @@ public:
 	}
 
 	int AsInt() const { return _wtoi(ptr()); }
-	double AsFloat() const { return _wtof(ptr()); }
+	float AsFloat() const { return (float)_wtof(ptr()); }
 	bool AsBool() const { return (*this) == L"1"; } 
 	void ToUnicode(wchar_t* buf, size_t sz) const { CopyTo(buf, sz); }
 	void CopyTo(wchar_t* buf, size_t sz) const { wcscpy_s(buf, sz, ptr()); }
@@ -87,7 +87,7 @@ public:
 		_i64tow_s(v, buf, 64, 10);
 		str = buf;
 	}
-	explicit String(double v)
+	explicit String(float v)
 	{
 		wchar_t buf[64];
 		swprintf_s(buf, 64, L"%g", v);

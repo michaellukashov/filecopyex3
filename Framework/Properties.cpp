@@ -28,225 +28,146 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "valuelist.h"
 #include "common.h"
 
-PropertyStore::PropertyStore(void)
+Property::Property(int v)
 {
+	Type = vtInt;
+	Int=v;
 }
 
-PropertyStore::~PropertyStore(void)
+Property::Property(float v)
 {
-  Clear();
+	Type = vtFloat;
+	Float=v;
 }
 
-Property& PropertyStore::operator [](int n)
+Property::Property(const String& v)
 {
-  return static_cast<Property&>(Values[n]);
+	Type = vtString;
+	Str = v;
 }
 
-Property UndefProperty;
+void Property::operator=(const Property& p)
+{
+	switch(Type)
+	{
+	case vtInt:		Int = (int)p;
+	case vtFloat:	Float = (float)p;
+	case vtString:	Str = (const String)p;
+	}
+}
+
 
 Property::operator int() const
 {
-  switch (Type)
-  {
-    case vtInt: return Int;
-    case vtFloat: return (int)Float;
-    case vtString: return String(Str).AsInt();
-  }
-  return 0;
+	switch (Type)
+	{
+	case vtInt: return Int;
+	case vtFloat: return (int)Float;
+	case vtString: return Str.AsInt();
+	}
+	return 0;
 }
 
 Property::operator bool() const
 {
-  switch (Type)
-  {
-    case vtInt: return Int!=0;
-    case vtFloat: return Float!=0;
-    case vtString: return Str!=L"";
-  }
-  return 0;
+	switch (Type)
+	{
+	case vtInt: return Int!=0;
+	case vtFloat: return Float!=0;
+	case vtString: return Str!=L"";
+	}
+	return 0;
 }
 
 bool Property::operator!() const
 {
-  return !operator bool();
+	return !operator bool();
 }
 
-Property::operator double() const
+Property::operator float() const
 {
-  switch (Type)
-  {
-    case vtInt: return (double)Int;
-    case vtFloat: return Float;
-    case vtString: return String(Str).AsFloat();
-  }
-  return 0;
+	switch (Type)
+	{
+	case vtInt: return (float)Int;
+	case vtFloat: return Float;
+	case vtString: return Str.AsFloat();
+	}
+	return 0;
 }
 
 Property::operator const String() const
 {
-  switch (Type)
-  {
-    case vtInt: return String(Int);
-    case vtFloat: return String(Float);
-    case vtString: return String(Str);
-  }
-  return L"";
-}
-
-void Property::operator=(int v)
-{
-  switch (Type)
-  {
-    case vtInt: Int=v; break;
-    case vtFloat: Float=(double)v; break;
-    case vtString: Str = String(v); 
-  }
-}
-
-void Property::operator=(double v)
-{
-  switch (Type)
-  {
-    case vtInt: Int=(int)v; break;
-    case vtFloat: Float=v; break;
-    case vtString: Str = String(v); 
-  }
-}
-
-void Property::operator=(const String& v)
-{
-  switch (Type)
-  {
-    case vtInt: Int=v.AsInt(); break;
-    case vtFloat: Float=v.AsFloat(); break;
-    case vtString: Str = v;
-  }
-}
-
-void Property::operator=(const Property& v)
-{
-  switch (Type)
-  {
-    case vtInt: Int=(int)v; break;
-    case vtFloat: Float=(double)v; break;
-    case vtString: Str = String(v);
-  }
+	switch (Type)
+	{
+	case vtInt: return String(Int);
+	case vtFloat: return String(Float);
+	case vtString: return Str;
+	}
+	return L"";
 }
 
 bool Property::operator== (const String& v) const
 {
-  return v==operator const String();
+	return v==operator const String();
 }
 
 bool Property::operator== (int v) const
 {
-  return v==operator int();
+	return v==operator int();
 }
 
-bool Property::operator== (double v) const
+bool Property::operator== (float v) const
 {
-  return v==operator double();
+	return v==operator float();
 }
 
 bool Property::operator== (const Property& v) const
 {
-  switch (Type)
-  {
-    case vtInt: return operator==((int)v);
-    case vtFloat: return operator==((double)v);
-    case vtString: return operator==((const String)v);
-  }
-  return false;
+	switch (Type)
+	{
+	case vtInt: return operator==((int)v);
+	case vtFloat: return operator==((float)v);
+	case vtString: return operator==((const String)v);
+	}
+	return false;
 }
 
 bool Property::operator!= (const String& v) const
 {
-  return v!=operator const String();
+	return v!=operator const String();
 }
 
 bool Property::operator!= (int v) const
 {
-  return v!=operator int();
+	return v!=operator int();
 }
 
-bool Property::operator!= (double v) const
+bool Property::operator!= (float v) const
 {
-  return v!=operator double();
+	return v!=operator float();
 }
 
 bool Property::operator!= (const Property& v) const
 {
-  return !operator==(v);
-}
-
-int PropertyStore::Add(int v)
-{
-  PropVal val;
-  val.Type=vtInt;
-  val.Int=v;
-  return Values.Add(val);
-}
-
-int PropertyStore::Add(double v)
-{
-  PropVal val;
-  val.Type=vtFloat;
-  val.Float=v;
-  return Values.Add(val);
-}
-
-int PropertyStore::Add(const String& v)
-{
-  PropVal val;
-  val.Type=vtString;
-  val.Str=v;
-  return Values.Add(val);
-}
-
-int PropertyStore::Count()
-{
-  return Values.Count();
-}
-
-void PropertyStore::Clear()
-{
-//   for (int i=0; i<Count(); i++)
-//   {
-//     if (Values[i].Type==vtString)
-//       heap->Free(Values[i].Str);
-//   }
-  Values.Clear();
+	return !operator==(v);
 }
 
 void PropertyStore::SaveToList(StringList& list, StringList& names)
 {
-  ValueList temp;
-  for (int i=0; i<Count(); i++)
-    temp.Set(names[i], (*this)[names.Values(i)]);
-  temp.SaveToList(list);
+	ValueList temp;
+	for (int i=0; i<Count(); i++)
+		temp.Set(names[i], (*this)[names.Values(i)]);
+	temp.SaveToList(list);
 }
 
 void PropertyStore::LoadFromList(StringList& list, StringList& names)
 {
-  ValueList temp;
-  temp.LoadFromList(list);
-  for (int i=0; i<temp.Count(); i++)
-  {
-    int j=names.Find(temp.Name(i));
-    if (j!=-1)
-      (*this)[names.Values(j)]=temp.Value(i);
-  }
-}
-
-void PropertyStore::CopyFrom(PropertyStore& src)
-{
-  Clear();
-  Values.Resize(src.Count());
-  for (int i=0; i<src.Count(); i++)
-  {
-    PropVal val=src.Values[i];
-//     if (val.Type==vtString)
-//       val.Str=heap->AllocString(String(val.Str));
-    Values[i]=val;
-  }
+	ValueList temp;
+	temp.LoadFromList(list);
+	for (int i=0; i<temp.Count(); i++)
+	{
+		int j=names.Find(temp.Name(i));
+		if (j!=-1)
+			(*this)[names.Values(j)]=temp.Value(i);
+	}
 }

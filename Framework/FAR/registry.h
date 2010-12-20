@@ -32,8 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class FarRegistry
 {
 public:
-	FarRegistry(void);
-	virtual ~FarRegistry(void);
 	int GetInt(const String&, const String&, int);
 	void SetInt(const String&, const String&, int);
 	String GetString(const String&, const String&, const String&);
@@ -42,12 +40,13 @@ public:
 	void WriteList(const String&, StringList&);
 	void DeleteKey(const String&);
 	void CopyKey(const String&, const String&);
+
+	String root_key;
+
 protected:
 	String ResolveKey(const String&);
 	HKEY OpenKey(const String&);
 	HKEY CreateKey(const String&);
 };
-
-extern FarRegistry Registry;
 
 #endif//__REGISTRY_H__

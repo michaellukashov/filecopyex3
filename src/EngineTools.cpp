@@ -170,7 +170,7 @@ HANDLE Open(const String& fn, int mode, int attr)
   // new feature by slst: ReadFilesOpenedForWriting checking (bug #17)
   DWORD dwShareMode = FILE_SHARE_READ;
 
-  if ((mode & OPEN_READ) && (BOOL)(Instance->Options["ReadFilesOpenedForWriting"]))
+  if ((mode & OPEN_READ) && (BOOL)(plugin->Options()["ReadFilesOpenedForWriting"]))
     dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
   
   int f;
@@ -308,7 +308,7 @@ int Engine::EngineError(const String& s, const String& fn, int code, int& flg,
     }
   }
 
-  FarDialog &dlg=Instance->Dialogs["CopyError"];
+  FarDialog& dlg = plugin->Dialogs()["CopyError"];
   dlg.ResetControls();
   if (title!="") dlg("Title")=title;
   

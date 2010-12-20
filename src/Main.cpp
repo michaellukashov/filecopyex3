@@ -82,11 +82,11 @@ protected:
 
 String Engine::FindDescFile(const String& dir, int *idx)
 {
-  for (int i=0; i<DescFiles.Count(); i++)
-    if(FileExists(AddEndSlash(dir)+DescFiles[i]))
+  for (int i=0; i<Plugin()->Descs().Count(); i++)
+    if(FileExists(AddEndSlash(dir)+Plugin()->Descs()[i]))
     {
       if(idx) *idx=i;
-      return DescFiles[i];
+      return Plugin()->Descs()[i];
     }
   if(idx) *idx=-1;
   return "";
@@ -95,13 +95,13 @@ String Engine::FindDescFile(const String& dir, int *idx)
 String Engine::FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx)
 {
   HANDLE hf;
-  for (int i=0; i<DescFiles.Count(); i++)
-    if((hf=FindFirstFile((AddEndSlash(dir)+DescFiles[i]).ptr(), &fd)) 
+  for (int i=0; i<Plugin()->Descs().Count(); i++)
+    if((hf=FindFirstFile((AddEndSlash(dir)+Plugin()->Descs()[i]).ptr(), &fd)) 
       != INVALID_HANDLE_VALUE)
     {
       FindClose(hf);
       if(idx) *idx=i;
-      return DescFiles[i];
+      return Plugin()->Descs()[i];
     }
   if(idx) *idx=-1;
   return "";
@@ -179,7 +179,7 @@ void Engine::FarToWin32FindData(const FAR_FIND_DATA &fd, WIN32_FIND_DATA &wfd)
 
 int Engine::Main(int move, int curonly)
 {
-  PropertyList& Options = Instance->Options;
+  PropertyList& Options = plugin->Options();
 
   _CopyDescs    = Options["CopyDescs"];
   _DescsInDirs  = Options["DescsInSubdirs"];
@@ -191,9 +191,9 @@ int Engine::Main(int move, int curonly)
   _HideDescs      = Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_SETHIDDEN;
   _UpdateRODescs  = Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_UPDATEREADONLY;
 
-  FarDialog& dlg = Instance->Dialogs["CopyDialog"];
+  FarDialog& dlg = plugin->Dialogs()["CopyDialog"];
   dlg.ResetControls();
-  FarDialog& advdlg = Instance->Dialogs["AdvCopyDialog"];
+  FarDialog& advdlg = plugin->Dialogs()["AdvCopyDialog"];
   advdlg.ResetControls();
 
   PanelInfo pi;
@@ -203,10 +203,8 @@ int Engine::Main(int move, int curonly)
 
   wchar_t cur_dir[MAX_FILENAME];
   Info.Control(PANEL_PASSIVE, FCTL_GETPANELDIR, MAX_FILENAME, (LONG_PTR)cur_dir);
-//  SetFileApisToOEM();
   Info.Control(PANEL_PASSIVE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
   // fixed by Nsky: bug #40
-//  SetFileApisToANSI();
 //  _toansi(pi.CurDir);
 
   if(pi.Plugin)
@@ -221,10 +219,8 @@ int Engine::Main(int move, int curonly)
       dstpath=AddEndSlash(cur_dir);
 
   Info.Control(PANEL_ACTIVE, FCTL_GETPANELDIR, MAX_FILENAME, (LONG_PTR)cur_dir);
-//  SetFileApisToOEM();
   Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
   // fixed by Nsky: bug #40
-//  SetFileApisToANSI();
 //  _toansi(pi.CurDir);
   if(pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType== PTYPE_INFOPANEL ||
      !pi.ItemsNumber) return MRES_NONE;
@@ -299,7 +295,7 @@ rep:
   int dres=dlg.Execute();
   if(dres==2) 
   {
-    ((FileCopyExPlugin*)Instance)->Config();
+    ((FileCopyExPlugin*)plugin)->Config();
     goto rep;
   }
   else if(dres==1)
@@ -552,13 +548,11 @@ rep:
     if(e == EXCEPTION_ABORT_BY_ESC)
     {
       ScanFoldersProgressBox.Hide();
-//      SetFileApisToOEM();
       Info.Control(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
       Info.Control(PANEL_PASSIVE, FCTL_UPDATEPANEL, 1, NULL);
       Info.Control(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, NULL);
       Info.Control(PANEL_PASSIVE, FCTL_REDRAWPANEL, 0, NULL);
       // fixed by Nsky: bug #40
-//      SetFileApisToANSI();
       return MRES_NONE;
     }
   }
@@ -609,7 +603,7 @@ rep:
 
   // bugfixed by slst: bug #32
   // CheckFreeDiskSpace feature added
-  if(Instance->Options["CheckFreeDiskSpace"])
+  if(Options["CheckFreeDiskSpace"])
   {
     if(!CheckFreeDiskSpace(TotalBytes, Move, srcpath, dstpath))
       return MRES_NONE; // not enough space
@@ -626,8 +620,6 @@ rep:
 
 fin:
   ScanFoldersProgressBox.Hide();
-
-//  SetFileApisToOEM();
 
   if(!Move)
   {
@@ -664,7 +656,6 @@ fin:
     }
 	Info.Control(PANEL_ACTIVE,FCTL_ENDSELECTION,0,NULL);
     // fixed by Nsky: bug #40
-//    SetFileApisToANSI();
   }
   else
   {
@@ -672,7 +663,6 @@ fin:
     Info.Control(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
     Info.Control(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
     // fixed by Nsky: bug #40
-//    SetFileApisToANSI();
     PanelRedrawInfo rpi;
     rpi.TopPanelItem = pi.TopPanelItem;
 
@@ -695,22 +685,18 @@ fin:
 	  if(NewFileName == NewPanelFilename)
 	  {
 		rpi.CurrentItem = i;
-//        SetFileApisToOEM();
 		Info.Control(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, (LONG_PTR)&rpi);
 		// fixed by Nsky: bug #40
-//        SetFileApisToANSI();
 		break;
 	  }
     }
   }
 
-//  SetFileApisToOEM();
   Info.Control(PANEL_ACTIVE,	FCTL_UPDATEPANEL, 1, NULL);
   Info.Control(PANEL_PASSIVE,	FCTL_UPDATEPANEL, 1, NULL);
   Info.Control(PANEL_ACTIVE,	FCTL_REDRAWPANEL, 0, NULL);
   Info.Control(PANEL_PASSIVE,	FCTL_REDRAWPANEL, 0, NULL);
   // fixed by Nsky: bug #40
-//  SetFileApisToANSI();
 
   return MRES_NONE;
 }
@@ -890,7 +876,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
             int idx;
             if(_CopyDescs && _DescsInDirs 
               && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-              && (idx=DescFiles.Find(fd.cFileName))!=-1)
+              && (idx=Plugin()->Descs().Find(fd.cFileName))!=-1)
             {
               if(descidx=-1 || idx<descidx)
               {
@@ -1042,7 +1028,7 @@ void Engine::SetOverwriteMode(int Start)
 
 int Engine::CheckOverwrite(int fnum, const String& Src, const String& Dst, String& ren)
 {
-  FarDialog &dlg=Instance->Dialogs["OverwriteDialog"];
+  FarDialog& dlg = plugin->Dialogs()["OverwriteDialog"];
   dlg.ResetControls();
 
   dlg["Label2"]("Text")=Dst;
@@ -1095,7 +1081,7 @@ rep:
 
   if(res == OM_RENAME && !AcceptForAll)
   {
-    FarDialog &dlg=Instance->Dialogs["RenameDialog"];
+    FarDialog& dlg = plugin->Dialogs()["RenameDialog"];
     dlg.ResetControls();
 
     dlg["Edit"]("Text")=ExtractFileName(Dst);
@@ -1177,7 +1163,7 @@ BOOL Engine::CheckFreeDiskSpace(const __int64 TotalBytesToProcess, const int Mov
     {
       WaitForSingleObject(UiFree, INFINITE);
   
-      FarDialog &dlg=Instance->Dialogs["FreeSpaceErrorDialog"];
+      FarDialog& dlg = plugin->Dialogs()["FreeSpaceErrorDialog"];
       dlg.ResetControls();
       
       dlg("Title") = LOC("FreeSpaceErrorDialog.Title");

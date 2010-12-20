@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lowlevelstr.h"
 #include "stringlist.h"
 
-int StringList::Count()
+int StringList::Count() const
 {
 	return items.Count();
 }
@@ -49,41 +49,12 @@ int& StringList::Values(int n)
 	return items[n].Data;
 }
 
-void*& StringList::PtrValues(int n)
-{
-	return items[n].PtrData;
-}
-
 int StringList::Add(const String& v, int data)
 {
 	ListItem itm;
 	itm.Data=data;
 	itm.str=v;
 	return items.Add(itm);
-}
-
-void StringList::Insert(int n, const String& v, int data)
-{
-	ListItem itm;
-	itm.Data=data;
-	itm.str=v;
-	items.Insert(n, itm);
-}
-
-int StringList::Add(const String& v, void* data)
-{
-	ListItem itm;
-	itm.PtrData=data;
-	itm.str=v;
-	return items.Add(itm);
-}
-
-void StringList::Insert(int n, const String& v, void* data)
-{
-	ListItem itm;
-	itm.PtrData=data;
-	itm.str=v;
-	items.Insert(n, itm);
 }
 
 void StringList::Delete(int n)
@@ -278,7 +249,7 @@ void StringList::LoadFromString(const wchar_t* s, wchar_t delim)
 	} while (*p++);
 }
 
-int StringList::Find(const String& v, int start)
+int StringList::Find(const String& v, int start) const
 {
 	for(int i = start; i < Count(); ++i)
 	{

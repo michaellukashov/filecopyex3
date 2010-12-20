@@ -6,3 +6,4 @@ EXPORTS
   OpenPluginW
   ClosePluginW
   ConfigureW
+  ExitFARW

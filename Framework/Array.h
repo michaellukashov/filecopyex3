@@ -34,7 +34,7 @@ template <class ItemType> class Array
 public:
 	void Clear() { arr.clear(); }
 	void Resize(int n) { 	arr.resize(n); }
-	int Count() { return (int)arr.size(); }
+	int Count() const { return (int)arr.size(); }
 	ItemType& operator[](int n) { return arr[n]; }
 	const ItemType& operator[](int n) const { return arr[n]; }
 
@@ -48,7 +48,7 @@ public:
 		arr[j] = item;
 	}
 
-	const ItemType* Storage() { return arr.empty() ? NULL : &arr.front(); }
+	const ItemType* Storage() const { return arr.empty() ? NULL : &arr.front(); }
 
 private:
 	std::vector<ItemType> arr;

@@ -26,9 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../valuelist.h"
 #include "dlgobject.h"
 #include "dlgclass.h"
-
-extern LocaleList *Locale;
-#define LOC(s) ((*Locale)[s])
+#include "plugin.h"
 
 FarDlgObject::FarDlgObject(void)
 {
@@ -147,7 +145,7 @@ void FarDlgContainer::DefSize(int& sumw, int& sumh, int& fit)
 	sumw=sumh=0;
 	int groupw=0, grouph=0;
 	fit=Property("FitWidth");
-	for (int i=0; i<Children.Count(); i++)
+	for (int i=0; i<childs.Count(); i++)
 	{
 		FarDlgObject &obj=Child(i);
 		if (obj.Property("Visible"))
@@ -174,7 +172,7 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items,
 	Array<_group> Groups;
 	_group group;
 	group.start=group.w=group.h=group.nfit=0;
-	for (int i=0; i<Children.Count(); i++)
+	for (int i=0; i<childs.Count(); i++)
 	{
 		FarDlgObject &obj=Child(i);
 		if (obj.Property("Visible"))
@@ -223,21 +221,21 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items,
 
 void FarDlgContainer::LoadState(PropertyList& state)
 {
-	for (int i=0; i<Children.Count(); i++)
+	for (int i=0; i<childs.Count(); i++)
 		if (Child(i).IsContainer() || (bool)Child(i)("Persistent"))
 			Child(i).LoadState(state);
 }
 
 void FarDlgContainer::SaveState(PropertyList& state)
 {
-	for (int i=0; i<Children.Count(); i++)
+	for (int i=0; i<childs.Count(); i++)
 		if (Child(i).IsContainer() || (bool)Child(i)("Persistent"))
 			Child(i).SaveState(state);
 }
 
 void FarDlgContainer::RetrieveProperties(HANDLE dlg)
 {
-	for (int i=0; i<Children.Count(); i++)
+	for (int i=0; i<childs.Count(); i++)
 		if (Child(i).DialogItem!=-1 || Child(i).IsContainer())
 			Child(i).RetrieveProperties(dlg);
 }
@@ -248,14 +246,14 @@ void FarDlgContainer::ClearDialogItems(Array<FarDialogItem>& Items)
 	{
 		DestroyItemText(Items[i]);
 	}
-	for (int i=0; i<Children.Count(); i++)
+	for (int i=0; i<childs.Count(); i++)
 		Child(i).ClearDialogItem();
 }
 
 FarDlgObject* FarDlgContainer::FindChild(const String& name)
 {
 	if (Name()==name) return this;
-	for (int i=0; i<Children.Count(); i++)
+	for (int i=0; i<childs.Count(); i++)
 	{
 		FarDlgObject* obj=Child(i).FindChild(name);
 		if (obj) return obj;
