@@ -65,9 +65,11 @@ void FarDlgEditClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
 static String GetDlgText(HANDLE dlg, int id)
 {
 	size_t len = Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, NULL);
-	wchar_t* buf = (wchar_t*)_malloca((len + 1)*sizeof(wchar_t));
+	wchar_t* buf = (wchar_t*)malloc((len + 1)*sizeof(wchar_t));
 	Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, (LONG_PTR)buf);
-	return buf;
+	String t(buf);
+	free(buf);
+	return t;
 }
 
 void FarDlgEditClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)

@@ -102,6 +102,7 @@ void FarDlgObject::SetItemText(FarDialogItem& item, const String& text)
 void FarDlgObject::DestroyItemText(FarDialogItem& item)
 {
 	free((wchar_t*)item.PtrData);
+	item.PtrData = NULL;
 }
 
 void FarDlgObject::PreInitItem(FarDialogItem& item)
@@ -127,6 +128,7 @@ void FarDlgObject::DefSize(int& w, int& h, int& fit)
 	fit=Property("FitWidth");
 	w=item.X2-item.X1+1;
 	h=item.Y2-item.Y1+1;
+	DestroyItemText(item);
 }
 
 FarDlgObject* FarDlgObject::FindChild(const String& name)

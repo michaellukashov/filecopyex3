@@ -52,6 +52,7 @@ BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID)
 	hInstance = hInst;
 	if(reason == DLL_PROCESS_ATTACH)
 	{
+		_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG)|_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
 		OSVERSIONINFO osv;
 		osv.dwOSVersionInfoSize=sizeof(osv);
 		GetVersionEx(&osv);
