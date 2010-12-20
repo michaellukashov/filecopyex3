@@ -44,8 +44,6 @@ void FWError(const String &s)
 
 ErrorHandler errorHandler=NULL;
 
-extern void InitObjMgr();
-extern void DeleteObjMgr();
 int WinNT, WinNT4, Win2K, WinXP;
 HANDLE hInstance;
 
