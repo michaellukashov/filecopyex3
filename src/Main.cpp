@@ -33,9 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "EngineTools.h"
 #include "../framework/common.h"
 
-#define EXCEPTION_ABORT_BY_ESC  0x0F
-
-
 int warn(const String& s)
 {
   return ShowMessage(LOC("CopyDialog.Warning"), s+"\n"+LOC("CopyDialog.WarnPrompt"), FMSG_MB_YESNO) == 0;
@@ -500,63 +497,45 @@ rep:
   int havecurpath=0;
 
   // bugfixed by slst: bug #23
-  // Engine::Addfile throws exception with EXCEPTION_ABORT_BY_ESC parameter
-  try
-  {
-    for (int ii=0; ii<c; ii++)
-    {
-      int i=SortIndex[ii];
+	for (int ii=0; ii<c; ii++)
+	{
+	  int i=SortIndex[ii];
 	  TPanelItem pit(i);
-      String file=pit->FindData.lpwszFileName;
-      if(file == L"..")
-        continue;
+	  String file=pit->FindData.lpwszFileName;
+	  if(file == L"..")
+		continue;
 
-      String filepath=ExtractFilePath(file);
-      if(!havecurpath || filepath.icmp(curpath))
-      {
-        if(havecurpath && 
-          !DirEnd(curpath!=""?curpath:srcpath, dstpath)) goto fin;
-        curpath=filepath;
-        havecurpath=1;
-        if(!DirStart(curpath!=""?curpath:srcpath, dstpath)) goto fin;
-      }
+	  String filepath=ExtractFilePath(file);
+	  if(!havecurpath || filepath.icmp(curpath))
+	  {
+		if(havecurpath && 
+		  !DirEnd(curpath!=""?curpath:srcpath, dstpath)) goto fin;
+		curpath=filepath;
+		havecurpath=1;
+		if(!DirStart(curpath!=""?curpath:srcpath, dstpath)) goto fin;
+	  }
 
-      if(file.cfind('\\')==-1) file=AddEndSlash(srcpath)+file;
+	  if(file.cfind('\\')==-1) file=AddEndSlash(srcpath)+file;
 
-      if(_CopyDescs && !ExtractFileName(file).icmp(CurPathDesc))
-      {
-        if(ShowMessageEx(LOC("CopyDialog.Warning"), 
-          FormatWidthNoExt(file, 50)+"\n"+
-          LOC("CopyDialog.DescSelectedWarn")+"\n"+
-          LOC("CopyDialog.DescSelectedWarn1"), 
-          LOC("Framework.No")+"\n"+LOC("Framework.Yes"), 0)!=1)
-            continue;
-        else
-          CurPathDesc="";
-      }
+	  if(_CopyDescs && !ExtractFileName(file).icmp(CurPathDesc))
+	  {
+		if(ShowMessageEx(LOC("CopyDialog.Warning"), 
+		  FormatWidthNoExt(file, 50)+"\n"+
+		  LOC("CopyDialog.DescSelectedWarn")+"\n"+
+		  LOC("CopyDialog.DescSelectedWarn1"), 
+		  LOC("Framework.No")+"\n"+LOC("Framework.Yes"), 0)!=1)
+			continue;
+		else
+		  CurPathDesc="";
+	  }
 
-      String dst=ApplyFileMaskPath(file, dstpath);
-      FAR_FIND_DATA *fd = &pit->FindData;
-      WIN32_FIND_DATA wfd;
-      FarToWin32FindData(*fd, wfd);
-      if(!AddFile(file, dst, wfd, CurPathAddFlags, 1, i)) 
-        goto fin;
-    } // for (int ii=0; ii<c; ii++)
-  }
-  catch (int e) // bugfixed by slst: bug #23
-  {
-    if(e == EXCEPTION_ABORT_BY_ESC)
-    {
-      ScanFoldersProgressBox.Hide();
-      Info.Control(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
-      Info.Control(PANEL_PASSIVE, FCTL_UPDATEPANEL, 1, NULL);
-      Info.Control(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, NULL);
-      Info.Control(PANEL_PASSIVE, FCTL_REDRAWPANEL, 0, NULL);
-      // fixed by Nsky: bug #40
-      return MRES_NONE;
-    }
-  }
-  // bugfixed by slst: bug #23 - end of fix
+	  String dst=ApplyFileMaskPath(file, dstpath);
+	  FAR_FIND_DATA *fd = &pit->FindData;
+	  WIN32_FIND_DATA wfd;
+	  FarToWin32FindData(*fd, wfd);
+	  if(!AddFile(file, dst, wfd, CurPathAddFlags, 1, i)) 
+		goto fin;
+	} // for (int ii=0; ii<c; ii++)
 
   if(havecurpath && !DirEnd(curpath!=""?curpath:srcpath, dstpath)) goto fin;
 
@@ -707,7 +686,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
                     int PanelIndex)
 {
   // bugfixed by slst: bug #23
-  if(CheckEscape(FALSE)) throw EXCEPTION_ABORT_BY_ESC;
+  if(CheckEscape(FALSE)) return FALSE;
 
   if(attr==0xFFFFFFFF) return TRUE;
 
