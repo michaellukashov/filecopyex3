@@ -47,33 +47,13 @@ public:
 	virtual void SaveState(PropertyList &state, FarDlgObject&) { ; }
 };
 
-static struct { char* Name; int Flag; } Attrib[] = {
-//	{ "SetColor", DIF_SETCOLOR },
-	{ "BoxColor", DIF_BOXCOLOR }, 
-	{ "Group", DIF_GROUP }, 
-	{ "LeftText", DIF_LEFTTEXT }, 
-	{ "MoveSelect", DIF_MOVESELECT }, 
-	{ "ShowAmpersand", DIF_SHOWAMPERSAND }, 
-	{ "CenterGroup", DIF_CENTERGROUP }, 
-	{ "NoBrackets", DIF_NOBRACKETS }, 
-	{ "Separator", DIF_SEPARATOR }, 
-	{ "Editor", DIF_EDITOR }, 
-	{ "History", DIF_HISTORY }, 
-	{ "EditExpand", DIF_EDITEXPAND }, 
-	{ "DropdownList", DIF_DROPDOWNLIST }, 
-	{ "UseLastHistory", DIF_USELASTHISTORY }, 
-	{ "BtnNoClose", DIF_BTNNOCLOSE }, 
-	{ "SelectOnEntry", DIF_SELECTONENTRY }, 
-	{ "NoFocus", DIF_NOFOCUS }, 
-	{ "MaskEdit", DIF_MASKEDIT }, 
-	{ "Disable", DIF_DISABLE }, 
-	{ "ListNoAmpersand", DIF_LISTNOAMPERSAND }, 
-	{ "ReadOnly", DIF_READONLY }, 
-	{ "3State", DIF_3STATE }, 
-//	{ "VarEdit", DIF_VAREDIT }, 
-	{ "Hidden", DIF_HIDDEN }, 
-	{ "ManualAddHistory", DIF_MANUALADDHISTORY }, 
+struct Attribute
+{
+	const char* Name;
+	int Flag;
 };
+const Attribute& Attrib(int i);
+int AttribCount();
 
 class FarDlgLineClass : public FarDlgObjectClass
 {

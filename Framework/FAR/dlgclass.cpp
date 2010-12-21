@@ -28,10 +28,41 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dlgclass.h"
 #include "plugin.h"
 
+static const Attribute _Attrib[] =
+{
+//	{ "SetColor", DIF_SETCOLOR },
+	{ "BoxColor", DIF_BOXCOLOR }, 
+	{ "Group", DIF_GROUP }, 
+	{ "LeftText", DIF_LEFTTEXT }, 
+	{ "MoveSelect", DIF_MOVESELECT }, 
+	{ "ShowAmpersand", DIF_SHOWAMPERSAND }, 
+	{ "CenterGroup", DIF_CENTERGROUP }, 
+	{ "NoBrackets", DIF_NOBRACKETS }, 
+	{ "Separator", DIF_SEPARATOR }, 
+	{ "Editor", DIF_EDITOR }, 
+	{ "History", DIF_HISTORY }, 
+	{ "EditExpand", DIF_EDITEXPAND }, 
+	{ "DropdownList", DIF_DROPDOWNLIST }, 
+	{ "UseLastHistory", DIF_USELASTHISTORY }, 
+	{ "BtnNoClose", DIF_BTNNOCLOSE }, 
+	{ "SelectOnEntry", DIF_SELECTONENTRY }, 
+	{ "NoFocus", DIF_NOFOCUS }, 
+	{ "MaskEdit", DIF_MASKEDIT }, 
+	{ "Disable", DIF_DISABLE }, 
+	{ "ListNoAmpersand", DIF_LISTNOAMPERSAND }, 
+	{ "ReadOnly", DIF_READONLY }, 
+	{ "3State", DIF_3STATE }, 
+//	{ "VarEdit", DIF_VAREDIT }, 
+	{ "Hidden", DIF_HIDDEN }, 
+	{ "ManualAddHistory", DIF_MANUALADDHISTORY }, 
+};
+const Attribute& Attrib(int i) { return _Attrib[i]; }
+int AttribCount() { return sizeof(_Attrib)/sizeof(Attribute); }
+
 void FarDlgObjectClass::DefineProperties()
 {
-  for (int i=0; i<sizeof(Attrib)/sizeof(Attrib[0]); i++)
-    AddProperty(Attrib[i].Name, 0);
+  for (int i=0; i<AttribCount(); i++)
+    AddProperty(Attrib(i).Name, 0);
   AddProperty("FitWidth", 0);
   AddProperty("Focus", 0);
   AddProperty("NoBreak", 0);

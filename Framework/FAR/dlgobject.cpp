@@ -114,9 +114,9 @@ void FarDlgObject::PreInitItem(FarDialogItem& item)
 		p=LOC(Dialog->Name()+"."+Name());
 	SetItemText(item, p);
 
-	for (int i=0; i<sizeof(Attrib)/sizeof(Attrib[0]); i++)
-		if (Property(Attrib[i].Name))
-			item.Flags |= Attrib[i].Flag;
+	for (int i=0; i<AttribCount(); i++)
+		if (Property(Attrib(i).Name))
+			item.Flags |= Attrib(i).Flag;
 	if (Property("Focus")) item.Focus=1;
 }
 
