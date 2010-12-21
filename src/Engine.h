@@ -94,7 +94,7 @@ private:
 	int FlushBuff(BuffInfo *bi);
 	void BGFlush();
 	int WaitForFlushEnd();
-	friend void __stdcall FlushThread(Engine* eng);
+	friend unsigned int __stdcall FlushThread(void* p);
 	void FinalizeBuf(BuffInfo *bi);
 	void ProcessDesc(int fnum);
 	void ShowReadName(const String&);

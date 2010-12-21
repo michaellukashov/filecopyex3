@@ -22,6 +22,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <process.h>
 #include "../framework/stdhdr.h"
 #include "../framework/lowlevelstr.h"
 #include "filecopyex.h"
@@ -557,23 +558,26 @@ skip: ;
   return !Aborted;
 }
 
-void __stdcall FlushThread(Engine* eng)
+unsigned int __stdcall FlushThread(void* p)
 {
-  eng->FlushBuff(eng->wbi);
+	Engine* eng = (Engine*)p;
+	return eng->FlushBuff(eng->wbi);
 }
 
 void Engine::BGFlush()
 {
-  DWORD id;
-  BGThread = CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)FlushThread, this, 0, &id);
+	BGThread = (HANDLE)_beginthreadex(NULL, 0, FlushThread, this, 0, NULL);
 }
 
 int Engine::WaitForFlushEnd()
 {
-  while (WaitForSingleObject(FlushEnd, 500) == WAIT_TIMEOUT)
+  while (WaitForSingleObject(FlushEnd, 200) == WAIT_TIMEOUT)
   {
     if (CheckEscape()) return FALSE;
   }
+  WaitForSingleObject(BGThread, INFINITE);
+  CloseHandle(BGThread);
+  BGThread = NULL;
   return TRUE;
 }
 
