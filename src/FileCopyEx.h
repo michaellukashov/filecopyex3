@@ -43,7 +43,7 @@ public:
 	virtual void OpenPlugin(int, int);
 	virtual void InitOptions();
 	void Config();
-	const char* RegRootKey() const { return "FileCopyEx"; }
+	virtual const char* RegRootKey() const { return "FileCopyEx"; }
 
 	const StringList& Descs() const { return descs; }
 

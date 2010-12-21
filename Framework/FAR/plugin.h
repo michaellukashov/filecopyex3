@@ -52,7 +52,7 @@ public:
 
 	virtual void FillInfo(PluginInfo* info) const;
 
-	const char* RegRootKey() const { return "UnknownPlugin"; }
+	virtual const char* RegRootKey() const { return "UnknownPlugin"; }
 
 	const LocaleList& Locale() const { return locale; }
 	PropertyList& Options() { return options; }
