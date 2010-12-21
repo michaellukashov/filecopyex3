@@ -43,7 +43,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ReadBlock   0x20000     // 128 KB
 #define WriteBlock  0x20000     // 128 KB
 
-Engine::Engine(): FlushSrc(SrcNames), FlushDst(DstNames)
+Engine::Engine(): FlushSrc(SrcNames), FlushDst(DstNames), BGThread(NULL), FlushEnd(NULL), UiFree(NULL)
 {
   Parallel=Streams=Rights=Move=SkipNewer=SkippedToTemp=0;
   CompressMode=EncryptMode=ATTR_INHERIT;
