@@ -72,8 +72,8 @@ void FarProgress::GetConSize(int& w, int &h)
   HANDLE hc = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_SCREEN_BUFFER_INFO bi;
   GetConsoleScreenBufferInfo(hc, &bi);
-  w=bi.dwSize.X;
-  h=bi.dwSize.Y;
+  w=bi.srWindow.Right - bi.srWindow.Left + 1;
+  h=bi.srWindow.Bottom - bi.srWindow.Top + 1;
 }
 
 void FarProgress::ShowMessage(const String& msg)
