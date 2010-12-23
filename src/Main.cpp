@@ -174,7 +174,7 @@ void Engine::FarToWin32FindData(const FAR_FIND_DATA &fd, WIN32_FIND_DATA &wfd)
   wfd.nFileSizeLow=x.LowPart;
 }
 
-int Engine::Main(int move, int curonly)
+Engine::MResult Engine::Main(int move, int curonly)
 {
   PropertyList& Options = plugin->Options();
 

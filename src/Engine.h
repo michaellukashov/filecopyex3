@@ -67,7 +67,9 @@ class Engine
 {
 public:
 	Engine();
-	int Main(int move, int curonly);
+
+	enum MResult{ MRES_NONE, MRES_STDCOPY, MRES_STDCOPY_RET };
+	MResult Main(int move, int curonly);
 
 private:
 	FileNameStore SrcNames, DstNames;

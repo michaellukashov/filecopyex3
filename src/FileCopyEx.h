@@ -30,10 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../framework/properties.h"
 #include "../framework/far/plugin.h"
 
-#define MRES_NONE         0
-#define MRES_STDCOPY      1
-#define MRES_STDCOPY_RET  2
-
 class FileCopyExPlugin : public FarPlugin
 {
 public:

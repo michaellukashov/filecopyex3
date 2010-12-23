@@ -49,8 +49,8 @@ int FileCopyExPlugin::Configure(int)
 void CallCopy(int move, int curonly)
 {
 	Engine engine;
-	int res=engine.Main(move, curonly);
-	if (res==MRES_STDCOPY || res==MRES_STDCOPY_RET)
+	Engine::MResult res=engine.Main(move, curonly);
+	if(res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
 	{
 		KeySequence seq;
 		DWORD keys[8];
@@ -58,7 +58,7 @@ void CallCopy(int move, int curonly)
 		seq.Sequence=keys;
 		seq.Count=1;
 		keys[0]=move ? KEY_F6 : KEY_F5;
-		if (res==MRES_STDCOPY_RET)
+		if(res == Engine::MRES_STDCOPY_RET)
 		{
 			seq.Count=2;
 			keys[1]=KEY_ENTER;
