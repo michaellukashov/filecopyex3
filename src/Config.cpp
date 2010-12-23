@@ -140,10 +140,15 @@ void FileCopyExPlugin::About()
 	dlg.Execute();
 }
 
-int bn;
-void beep();
-void beep2();
-void beep3();
+void beep(int b)
+{
+	switch(b)
+	{
+	case 0:		MessageBeep(MB_ICONWARNING);	break;
+	case 1:		MessageBeep(MB_ICONASTERISK);	break;
+	case 2:		MessageBeep(MB_OK);				break;
+	}
+}
 
 void FileCopyExPlugin::Config()
 {
@@ -152,87 +157,23 @@ void FileCopyExPlugin::Config()
 	dlg.LoadState(options);
 
 rep:
-	int res=dlg.Execute();
-	if (res==1) 
+	int res = dlg.Execute();
+	switch(res)
 	{
+	case 0:
+		dlg.SaveState(options);
+		break;
+	case 1:
 		KeyConfig();
 		goto rep;
-	}
-	else if (res==2)
-	{
+	case 2:
 		About();
 		goto rep;
-	}
-	else if (res==3)
-	{
-		if (bn==0) beep();
-		else if (bn==1) beep2();
-		else if (bn==2) beep3();
-		bn++;
-		if (bn>2) bn=0;
+	case 3:
+		static int bn = 0;
+		beep(bn);
+		if(++bn > 2)
+			bn = 0;
 		goto rep;
 	}
-	else if (res==0)
-	{
-		dlg.SaveState(options);
-	}
-}
-
-int clrFrame=0x7F, clrTitle=0x70, clrBar=0x70, 
-clrText=0x70, clrLabel=0x71;
-
-extern int WinNT;
-
-void dobeep(int hz, int delay)
-{
-	if(WinNT)
-		Beep(hz, delay);
-}
-
-#pragma warning(disable:4244)
-
-float tone = 1.1224f, htone = 1.0594f;
-float A=440, H=A*tone, C=H*htone, D=C*tone, E=D*tone,
-F=E*htone, G=F*tone;
-float A1=A*2, H1=H*2, C1=C*2, D1=D*2, E1=E*2, F1=F*2, G1=G*2;
-float A2=A*4, H2=H*4, C2=C*4, D2=D*4, E2=E*4, F2=F*4, G2=G*4;
-int dur=75;
-
-void playAm()
-{
-	dobeep(A, dur); dobeep(A1, dur); dobeep(C1, dur);
-	dobeep(E1, dur); dobeep(C1, dur); dobeep(A1, dur);
-}
-
-void playDm()
-{
-	dobeep(D, dur); dobeep(D1, dur); dobeep(F1, dur);
-	dobeep(A1, dur); dobeep(F1, dur); dobeep(D1, dur);
-}
-
-void playC()
-{
-	dobeep(C, dur); dobeep(C1, dur); dobeep(E1, dur);
-	dobeep(G1, dur); dobeep(E1, dur); dobeep(C1, dur);
-}
-
-void playG()
-{
-	dobeep(G, dur); dobeep(G1, dur); dobeep(H1, dur);
-	dobeep(D1, dur); dobeep(H1, dur); dobeep(G1, dur);
-}
-
-void beep()
-{
-	playAm(); 
-}
-
-void beep2()
-{
-	playC(); playG();
-}
-
-void beep3()
-{
-	playDm(); playC(); playG();
 }

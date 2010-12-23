@@ -73,8 +73,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VF_UNICODE 32
 #define VF_CDROM 64
 
-extern LocaleList* Locale;
-
 int ExistsN(const String& fn, int n);
 String DupName(const String& src, int n);
 int RmDir(const String& fn);
@@ -87,9 +85,7 @@ int CheckParallel(const String& srcpath, const String& dstpath);
 
 String GetSymLink(const String &dir);
 
-void beep();
-void beep2();
-void beep3();
+void beep(int);
 
 void DebugLog(const wchar_t *DebugMsg, ...);
 

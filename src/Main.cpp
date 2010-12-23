@@ -592,9 +592,9 @@ rep:
   
   if((bool)Options["Sound"] && !Aborted)
   {
-    if(GetTime()-Start > 30*60*TicksPerSec()) beep3();
-    else if(GetTime()-Start > 10*60*TicksPerSec()) beep2();
-    else if(GetTime()-Start > 30*TicksPerSec()) beep();
+    if(GetTime()-Start > 30*60*TicksPerSec()) beep(2);
+    else if(GetTime()-Start > 10*60*TicksPerSec()) beep(1);
+    else if(GetTime()-Start > 30*TicksPerSec()) beep(0);
   }
 
 fin:
