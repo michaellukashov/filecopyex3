@@ -34,7 +34,7 @@ public:
 	~TaskBarIcon();
 
 	enum State { S_PROGRESS, S_NO_PROGRESS, S_WORKING, S_ERROR, S_PAUSED };
-	void SetState(State state, float param = 1.0f);
+	void SetState(State state, float param = 0.0f);
 
 protected:
 	State last_state;
