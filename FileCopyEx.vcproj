@@ -509,14 +509,6 @@
 					RelativePath=".\Framework\store.h"
 					>
 				</File>
-				<File
-					RelativePath=".\Framework\taskbar_icon.cpp"
-					>
-				</File>
-				<File
-					RelativePath=".\Framework\taskbar_icon.h"
-					>
-				</File>
 			</Filter>
 			<Filter
 				Name="strings"
@@ -638,6 +630,14 @@
 					</File>
 					<File
 						RelativePath=".\Framework\FAR\registry.h"
+						>
+					</File>
+					<File
+						RelativePath=".\Framework\FAR\taskbar_icon.cpp"
+						>
+					</File>
+					<File
+						RelativePath=".\Framework\FAR\taskbar_icon.h"
 						>
 					</File>
 					<File

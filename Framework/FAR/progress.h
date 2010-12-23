@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "plugin.h"
-#include "../taskbar_icon.h"
+#include "taskbar_icon.h"
 
 #define WIN_NONE          0
 #define WIN_MESSAGE       1
