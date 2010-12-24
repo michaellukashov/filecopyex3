@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void FileCopyExPlugin::Create()
 {
-	MenuItems.Add("E&xtended copy");
+	MenuItems.Add("Extended copy");
 	ConfigItems.Add("Extended copy");
 	FarPlugin::Create();
 	descs.LoadFromString(registry.GetString("\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');

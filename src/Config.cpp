@@ -28,17 +28,18 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../framework/far/interface/farkeys.hpp"
 
 const String regkey = "\\Software\\Far2\\KeyMacros\\Shell";
+const String menu_plug = "F11 $if(menu.Select(\"Extended copy\",2)<=0) MsgBox(\"Extended copy\",\"Plugin was not found in list!\",1) $Exit $end Enter ";
 
 int FileCopyExPlugin::isour(const String &key)
 {
 	String src = regkey + "\\" + key;
 	String buf = registry.GetString(src, "Sequence", "");
-	return (!buf.nicmp("F11 x", 5) || !buf.icmp("F5") || !buf.icmp("F6"));
+	return (!buf.nicmp(menu_plug, menu_plug.len()) || !buf.icmp("F5") || !buf.icmp("F6"));
 }
 
 void FileCopyExPlugin::restore(const String &key)
 {
-	if (isour(key))
+	if(isour(key))
 	{
 		String src = regkey + ".backup\\" + key;
 		String dst = regkey + "\\" + key;
@@ -89,9 +90,9 @@ void FileCopyExPlugin::KeyConfig()
 	dlg["CtrlShiftF5"]("Selected")=bind && ctrlShift;
 	dlg["CtrlAltF5"]("Selected")=bind && ctrlAlt;
 
-	if (dlg.Execute()==-1) return;
+	if(dlg.Execute()==-1) return;
 
-	if (dlg["BindToF5"]("Selected") != bind
+	if(dlg["BindToF5"]("Selected") != bind
 		|| dlg["AltShiftF5"]("Selected") != altShift
 		|| dlg["CtrlShiftF5"]("Selected") != ctrlShift
 		|| dlg["CtrlAltF5"]("Selected") != ctrlAlt)
@@ -108,16 +109,16 @@ void FileCopyExPlugin::KeyConfig()
 		restore("CtrlAltF5"); restore("CtrlAltF6");
 		restore("CtrlShiftQ"); restore("AltShiftQ"); 
 
-		if (dlg["BindToF5"]("Selected"))
+		if(dlg["BindToF5"]("Selected"))
 		{
-			dobind("F5", "F11 x 1"); 
-			dobind("F6", "F11 x 2");
-			dobind("ShiftF5", "F11 x 3"); 
-			dobind("ShiftF6", "F11 x 4");
+			dobind("F5", menu_plug + "1");
+			dobind("F6", menu_plug + "2");
+			dobind("ShiftF5", menu_plug + "3"); 
+			dobind("ShiftF6", menu_plug + "4");
 			String key;
-			if (dlg["AltShiftF5"]("Selected")) key="AltShift";
-			else if (dlg["CtrlShiftF5"]("Selected")) key="CtrlShift";
-			else if (dlg["CtrlAltF5"]("Selected")) key="CtrlAlt";
+			if(dlg["AltShiftF5"]("Selected")) key="AltShift";
+			else if(dlg["CtrlShiftF5"]("Selected")) key="CtrlShift";
+			else if(dlg["CtrlAltF5"]("Selected")) key="CtrlAlt";
 			dobind(key+"F5", "F5");
 			dobind(key+"F6", "F6");
 		}
