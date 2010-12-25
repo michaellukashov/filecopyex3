@@ -30,46 +30,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 const String regkey = "\\Software\\Far2\\KeyMacros\\Shell";
 const String menu_plug = "F11 $if(menu.Select(\"Extended copy\",2)<=0) MsgBox(\"Extended copy\",\"Plugin was not found in list!\",1) $Exit $end Enter ";
 
-int FileCopyExPlugin::isour(const String &key)
+int FileCopyExPlugin::Binded(const String& key)
+{
+	String seq = registry.GetString(regkey + "\\" + key, "Sequence", "");
+	return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp("F5") || !seq.icmp("F6"));
+}
+
+void FileCopyExPlugin::Bind(const String& key, const String& seq)
 {
 	String src = regkey + "\\" + key;
-	String buf = registry.GetString(src, "Sequence", "");
-	return (!buf.nicmp(menu_plug, menu_plug.len()) || !buf.icmp("F5") || !buf.icmp("F6"));
+	registry.SetString(src, "Sequence", seq);
+	registry.SetInt(src, "DisableOutput", 1);
+	registry.SetInt(src, "NoPluginPanels", 0);
+	registry.SetInt(src, "PluginPanels", 1); 
 }
 
-void FileCopyExPlugin::restore(const String &key)
+void FileCopyExPlugin::Unbind(const String& key)
 {
-	if(isour(key))
-	{
-		String src = regkey + ".backup\\" + key;
-		String dst = regkey + "\\" + key;
-		registry.DeleteKey(dst);
-		registry.CopyKey(src, dst);
-		registry.DeleteKey(src);
-	}
+	registry.DeleteKey(regkey + "\\" + key);
 }
 
-void FileCopyExPlugin::dobind(const String& key, const String& seq)
-{
-	String src = regkey + "\\" + key;
-	String dst = regkey + ".backup\\" + key;
-	if(!isour(key))
-	{
-		registry.DeleteKey(dst);
-		registry.CopyKey(src, dst);
-		registry.DeleteKey(src);
-	}
-	registry.SetString(src, "Sequence", seq);  
-	registry.SetInt(src, "DisableOutput", 1);  
-	registry.SetInt(src, "NoPluginPanels", 0);  
-	registry.SetInt(src, "PluginPanels", 1);  
-}
-
-void FileCopyExPlugin::reloadmacro()
+void FileCopyExPlugin::MacroCommand(const FARMACROCOMMAND& cmd)
 {
 	ActlKeyMacro prm;
 	memset(&prm, 0, sizeof(prm));
-	prm.Command=MCMD_LOADALL;
+	prm.Command = cmd;
 	Info.AdvControl(Info.ModuleNumber, ACTL_KEYMACRO, &prm);
 }
 
@@ -78,54 +63,50 @@ void FileCopyExPlugin::KeyConfig()
 	FarDialog& dlg = Dialogs()["KeysDialog"];
 	dlg.ResetControls();
 
-	int altShift, ctrlShift, ctrlAlt, bind;
-	bind = isour("F5") && isour("F6") 
-		&& isour("ShiftF5") && isour("ShiftF6");
-	altShift = isour("AltShiftF5") && isour("AltShiftF6");
-	ctrlShift = isour("CtrlShiftF5") && isour("CtrlShiftF6");
-	ctrlAlt = isour("CtrlAltF5") && isour("CtrlAltF6");
+	bool bind = Binded("F5") && Binded("F6") && Binded("ShiftF5") && Binded("ShiftF6");
+	bool altShift = bind && Binded("AltShiftF5") && Binded("AltShiftF6");
+	bool ctrlShift = bind && Binded("CtrlShiftF5") && Binded("CtrlShiftF6");
+	bool ctrlAlt = bind && Binded("CtrlAltF5") && Binded("CtrlAltF6");
+	if(!altShift && !ctrlShift && !ctrlAlt)
+		altShift = true;
 
-	dlg["BindToF5"]("Selected")=bind;
-	dlg["AltShiftF5"]("Selected")=!bind || altShift;
-	dlg["CtrlShiftF5"]("Selected")=bind && ctrlShift;
-	dlg["CtrlAltF5"]("Selected")=bind && ctrlAlt;
+	dlg["BindToF5"]("Selected") = bind;
+	dlg["AltShiftF5"]("Selected") = altShift;
+	dlg["CtrlShiftF5"]("Selected") = ctrlShift;
+	dlg["CtrlAltF5"]("Selected") = ctrlAlt;
 
-	if(dlg.Execute()==-1) return;
+	if(dlg.Execute() == -1)
+		return;
 
-	if(dlg["BindToF5"]("Selected") != bind
-		|| dlg["AltShiftF5"]("Selected") != altShift
-		|| dlg["CtrlShiftF5"]("Selected") != ctrlShift
-		|| dlg["CtrlAltF5"]("Selected") != ctrlAlt)
+	if(dlg["BindToF5"]("Selected") == bind
+		&& dlg["AltShiftF5"]("Selected") == altShift
+		&& dlg["CtrlShiftF5"]("Selected") == ctrlShift
+		&& dlg["CtrlAltF5"]("Selected") == ctrlAlt)
+		return;
+
+	MacroCommand(MCMD_SAVEALL);
+
+	Unbind("F5");			Unbind("ShiftF5");
+	Unbind("F6");			Unbind("ShiftF6");
+	Unbind("AltShiftF5");	Unbind("AltShiftF6");
+	Unbind("CtrlShiftF5");	Unbind("CtrlShiftF6");
+	Unbind("CtrlAltF5");	Unbind("CtrlAltF6");
+
+	if(dlg["BindToF5"]("Selected"))
 	{
-		ActlKeyMacro prm;
-		memset(&prm, 0, sizeof(prm));
-		prm.Command=MCMD_SAVEALL;
-		Info.AdvControl(Info.ModuleNumber, ACTL_KEYMACRO, &prm);
-
-		restore("F5"); restore("F6");
-		restore("ShiftF5"); restore("ShiftF6");
-		restore("AltShiftF5"); restore("AltShiftF6");
-		restore("CtrlShiftF5"); restore("CtrlShiftF6");
-		restore("CtrlAltF5"); restore("CtrlAltF6");
-		restore("CtrlShiftQ"); restore("AltShiftQ"); 
-
-		if(dlg["BindToF5"]("Selected"))
-		{
-			dobind("F5", menu_plug + "1");
-			dobind("F6", menu_plug + "2");
-			dobind("ShiftF5", menu_plug + "3"); 
-			dobind("ShiftF6", menu_plug + "4");
-			String key;
-			if(dlg["AltShiftF5"]("Selected")) key="AltShift";
-			else if(dlg["CtrlShiftF5"]("Selected")) key="CtrlShift";
-			else if(dlg["CtrlAltF5"]("Selected")) key="CtrlAlt";
-			dobind(key+"F5", "F5");
-			dobind(key+"F6", "F6");
-		}
-		reloadmacro();
+		Bind("F5", menu_plug + "1");
+		Bind("F6", menu_plug + "2");
+		Bind("ShiftF5", menu_plug + "3"); 
+		Bind("ShiftF6", menu_plug + "4");
+		String key;
+		if(dlg["AltShiftF5"]("Selected")) key = "AltShift";
+		else if(dlg["CtrlShiftF5"]("Selected")) key = "CtrlShift";
+		else if(dlg["CtrlAltF5"]("Selected")) key = "CtrlAlt";
+		Bind(key + "F5", "F5");
+		Bind(key + "F6", "F6");
 	}
+	MacroCommand(MCMD_LOADALL);
 }
-
 
 #ifdef _WIN64
 #define VersionStr "version 2.0.0 beta (x64 Unicode), " __DATE__

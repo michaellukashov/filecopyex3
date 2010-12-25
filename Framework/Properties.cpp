@@ -31,13 +31,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 Property::Property(int v)
 {
 	Type = vtInt;
-	Int=v;
+	Int = v;
 }
 
 Property::Property(float v)
 {
 	Type = vtFloat;
-	Float=v;
+	Float = v;
 }
 
 Property::Property(const String& v)
@@ -56,10 +56,9 @@ void Property::operator=(const Property& p)
 	}
 }
 
-
 Property::operator int() const
 {
-	switch (Type)
+	switch(Type)
 	{
 	case vtInt: return Int;
 	case vtFloat: return (int)Float;
@@ -70,23 +69,18 @@ Property::operator int() const
 
 Property::operator bool() const
 {
-	switch (Type)
+	switch(Type)
 	{
-	case vtInt: return Int!=0;
-	case vtFloat: return Float!=0;
-	case vtString: return Str!=L"";
+	case vtInt: return Int != 0;
+	case vtFloat: return Float != 0;
+	case vtString: return Str == L"1";
 	}
-	return 0;
-}
-
-bool Property::operator!() const
-{
-	return !operator bool();
+	return false;
 }
 
 Property::operator float() const
 {
-	switch (Type)
+	switch(Type)
 	{
 	case vtInt: return (float)Int;
 	case vtFloat: return Float;
@@ -97,7 +91,7 @@ Property::operator float() const
 
 Property::operator const String() const
 {
-	switch (Type)
+	switch(Type)
 	{
 	case vtInt: return String(Int);
 	case vtFloat: return String(Float);
@@ -106,50 +100,15 @@ Property::operator const String() const
 	return L"";
 }
 
-bool Property::operator== (const String& v) const
+bool Property::operator==(const Property& v) const
 {
-	return v==operator const String();
-}
-
-bool Property::operator== (int v) const
-{
-	return v==operator int();
-}
-
-bool Property::operator== (float v) const
-{
-	return v==operator float();
-}
-
-bool Property::operator== (const Property& v) const
-{
-	switch (Type)
+	switch(Type)
 	{
 	case vtInt: return operator==((int)v);
 	case vtFloat: return operator==((float)v);
 	case vtString: return operator==((const String)v);
 	}
 	return false;
-}
-
-bool Property::operator!= (const String& v) const
-{
-	return v!=operator const String();
-}
-
-bool Property::operator!= (int v) const
-{
-	return v!=operator int();
-}
-
-bool Property::operator!= (float v) const
-{
-	return v!=operator float();
-}
-
-bool Property::operator!= (const Property& v) const
-{
-	return !operator==(v);
 }
 
 void PropertyStore::SaveToList(StringList& list, StringList& names)

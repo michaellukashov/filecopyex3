@@ -45,15 +45,20 @@ public:
 	operator bool() const;
 	operator float() const;
 	operator const String() const;
-	bool operator== (const String&) const;
-	bool operator== (int) const;
-	bool operator== (float) const;
-	bool operator== (const Property&) const;
-	bool operator!= (const String&) const;
-	bool operator!= (int) const;
-	bool operator!= (float) const;
-	bool operator!= (const Property&) const;
-	bool operator!() const;
+
+	bool operator==(int v) const { return v == (int)*this; }
+	bool operator==(bool v) const { return v == (bool)*this; }
+	bool operator==(float v) const { return v == (float)*this; }
+	bool operator==(const String& v) const { return v == (const String)*this; }
+	bool operator==(const Property& v) const;
+
+	bool operator!=(int v) const { return !operator==(v); }
+	bool operator!=(bool v) const { return !operator==(v); }
+	bool operator!=(float v) const { return !operator==(v); }
+	bool operator!=(const String& v) const { return !operator==(v); }
+	bool operator!=(const Property& v) const { return !operator==(v); }
+
+	bool operator!() const { return !(bool)*this; }
 
 protected:
 	Type Type;

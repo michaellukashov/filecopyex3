@@ -44,13 +44,13 @@ public:
 	const StringList& Descs() const { return descs; }
 
 private:
-	void About();
-	void KeyConfig();
+	void	About();
+	void	KeyConfig();
 
-	void reloadmacro();
-	int isour(const String &key);
-	void restore(const String &key);
-	void dobind(const String& key, const String& seq);
+	void	Bind(const String& key, const String& seq);
+	void	Unbind(const String& key);
+	int		Binded(const String &key);
+	void	MacroCommand(const FARMACROCOMMAND& cmd);
 
 private:
 	StringList descs;
