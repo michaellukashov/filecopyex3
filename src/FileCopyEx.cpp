@@ -59,10 +59,10 @@ int FileCopyExPlugin::Configure(int)
 	return TRUE;
 }
 
-void CallCopy(int move, int curonly)
+void CallCopy(int move, int curOnly)
 {
 	Engine engine;
-	Engine::MResult res=engine.Main(move, curonly);
+	Engine::MResult res=engine.Main(move, curOnly);
 	if(res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
 	{
 		/* svs 09.02.2011 18:51:58 +0300 - build 1844                                                                                                                                                     ░
@@ -101,17 +101,17 @@ void FileCopyExPlugin::OpenPlugin(const struct OpenInfo *OInfo)
 	menu.AddSep();
 	menu.AddLine(LOC("Menu.Config"));
 
-	int move, curonly;
+	int move=0, curOnly=0;
 	switch (menu.Execute())
 	{
-		case 0: move = 0; curonly = 0; break;
-		case 1: move = 1; curonly = 0; break;
-		case 2: move = 0; curonly = 1; break;
-		case 3: move = 1; curonly = 1; break;
+		case 0: move = 0; curOnly = 0; break;
+		case 1: move = 1; curOnly = 0; break;
+		case 2: move = 0; curOnly = 1; break;
+		case 3: move = 1; curOnly = 1; break;
 		case 5: Config(); return; 
 		default: return;
 	}
-	CallCopy(move, curonly);
+	CallCopy(move, curOnly);
 }
 
 void FileCopyExPlugin::InitOptions()

@@ -63,16 +63,18 @@ struct RememberStruct
 	int Attr, Flags, Level;
 };
 
+PluginPanelItem* GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1);
+
 struct TPanelItem
 {
 public:
 	TPanelItem(int idx, bool active = true, bool selected = false)
 	{
-		/* XXX ppi = (PluginPanelItem*)malloc(Info.Control(active ? PANEL_ACTIVE : PANEL_PASSIVE, selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM, idx, NULL));
-		if(ppi)
-			Info.Control(active ? PANEL_ACTIVE : PANEL_PASSIVE, selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM, idx, (LONG_PTR)ppi);
-			*/
-		ppi = 0; // XXX
+		ppi = GetPanelItem(
+			active ? PANEL_ACTIVE : PANEL_PASSIVE, 
+			selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM, 
+			idx
+		);
 	}
 	~TPanelItem()
 	{
