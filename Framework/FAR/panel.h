@@ -33,7 +33,7 @@ public:
   FarPanel();
   virtual ~FarPanel();
 
-  void CallGetOpenPluginInfo(OpenPluginInfo *info);
+  void CallGetOpenPluginInfo(OpenInfo *info);
   int CallSetDirectory(const String& dir, int opmode);
   int CallGetFindData(PluginPanelItem* &items, int &nitems, int opmode);
   void CallFreeFindData(PluginPanelItem *items, int nitems);

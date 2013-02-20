@@ -50,38 +50,41 @@ void FarMenu::SetItemText(FarMenuItem* item, const String& text)
 void FarMenu::AddLine(const String& line)
 {
   FarMenuItem item;
-  item.Checked=0;
-  item.Selected=Selection==items.Count();
-  item.Separator=0;
+  item.Flags = 0;
+  if (Selection == items.Count()) {
+	item.Flags = MIF_SELECTED;
+  };
   SetItemText(&item, line);
   items.Add(item);
 }
 
 void FarMenu::AddLineCheck(const String& line, int check)
 {
-  FarMenuItem item;
-  item.Checked=check;
-  item.Selected=Selection==items.Count();
-  item.Separator=0;
-  SetItemText(&item, line);
-  items.Add(item);
+	FarMenuItem item;
+	item.Flags = 0;
+	if (check) {
+		item.Flags |= MIF_CHECKED;
+	}
+	if (Selection == items.Count()) {
+		item.Flags = MIF_SELECTED;
+	};
+	SetItemText(&item, line);
+	items.Add(item);
 }
 
 void FarMenu::AddSep()
 {
   FarMenuItem item;
-  item.Checked=0;
-  item.Separator=1;
-  item.Selected=0;
+  item.Flags = MIF_SEPARATOR;
   SetItemText(&item, String());
   items.Add(item);
 }
 
 int FarMenu::Execute()
 {
-  return Info.Menu(Info.ModuleNumber, -1, -1, 0, Flags,
+  return 0; /* XXX Info.Menu(Info.ModuleNumber, -1, -1, 0, Flags,
     Title.ptr(), Bottom.ptr(), HelpTopic.ptr(), NULL, NULL, items.Storage(),
-    items.Count());
+    items.Count()); */
 }
 
 void FarMenu::SetBottom(const String& v)
@@ -117,10 +120,10 @@ int ShowMessage(const String& title, const String& msg, int Flags)
 int ShowMessageHelp(const String& title, const String& msg, int Flags, const String& help)
 {
   String msgbuf=title+"\n"+msg+"\n\x01";
-  int res=Info.Message(Info.ModuleNumber, 
+  int res=0; /* XXX Info.Message(Info.ModuleNumber, 
                         Flags | FMSG_ALLINONE, 
                         help.ptr(), 
-                        (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, 0);
+                        (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, 0); */
   return res;
 }
 
@@ -137,8 +140,8 @@ int ShowMessageExHelp(const String& title, const String& msg,
   for (const wchar_t *p=buttons.ptr(); *p; p++)
     if (*p=='\n') nb++;
   String msgbuf=title+"\n"+msg+"\n\x01\n"+buttons;
-  int res=Info.Message(Info.ModuleNumber, flags | FMSG_ALLINONE, 
-    help.ptr(), (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, nb+1);
+  int res=0; /* XXX Info.Message(Info.ModuleNumber, flags | FMSG_ALLINONE, 
+    help.ptr(), (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, nb+1); */
   return res;
 }
 

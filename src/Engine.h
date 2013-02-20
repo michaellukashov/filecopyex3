@@ -1,4 +1,4 @@
-/*
+﻿/*
 FileCopyEx - Extended File Copy plugin for Far 2 file manager
 
 Copyright (C) 2004 - 2010
@@ -61,6 +61,26 @@ struct RememberStruct
 	__int64 Size;
 	FILETIME Modify;
 	int Attr, Flags, Level;
+};
+
+struct TPanelItem
+{
+public:
+	TPanelItem(int idx, bool active = true, bool selected = false)
+	{
+		/* XXX ppi = (PluginPanelItem*)malloc(Info.Control(active ? PANEL_ACTIVE : PANEL_PASSIVE, selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM, idx, NULL));
+		if(ppi)
+			Info.Control(active ? PANEL_ACTIVE : PANEL_PASSIVE, selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM, idx, (LONG_PTR)ppi);
+			*/
+		ppi = 0; // XXX
+	}
+	~TPanelItem()
+	{
+		free(ppi);
+	}
+	PluginPanelItem* operator->() const { return ppi; }
+protected:
+	PluginPanelItem* ppi;
 };
 
 class Engine
@@ -130,7 +150,11 @@ private:
 	int DirEnd(const String& dir, const String& dst);
 	String FindDescFile(const String& dir, int *idx=NULL);
 	String FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx=NULL);
-	void FarToWin32FindData(const FAR_FIND_DATA &fd, WIN32_FIND_DATA &wfd);
+	
+	void FarToWin32FindData(
+		const TPanelItem &tpi, 
+		WIN32_FIND_DATA &wfd
+	); 
 	String CurPathDesc;
 	int CurPathFlags, CurPathAddFlags;
 	WIN32_FIND_DATA DescFindData;

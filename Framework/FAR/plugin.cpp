@@ -40,7 +40,7 @@ FarPlugin::~FarPlugin()
 
 void FarPlugin::InitLang()
 {
-	String fn = Info.GetMsg(Info.ModuleNumber, 0);
+	String fn = ""; //XXX Info.GetMsg(Info.ModuleNumber, 0);
 	if (fn != CurLocaleFile)
 	{
 		CurLocaleFile = fn;
@@ -51,7 +51,7 @@ void FarPlugin::InitLang()
 void FarPlugin::Create()
 {
 	// bug #15 fixed by Ivanych
-	registry.root_key = String(Info.RootKey) + "\\" + RegRootKey();
+	registry.root_key = ""; //XXX String(Info.RootKey) + "\\" + RegRootKey();
 	InitLang();
 
 	if(!dialogs.Load(GetDLLPath() + "\\resource\\dialogs.objd"))
@@ -62,12 +62,13 @@ void FarPlugin::Create()
 	InitOptions();
 	LoadOptions();
 }
+
 void FarPlugin::FillInfo(PluginInfo* info) const
 {
 	info->Flags = flags;
 	info->CommandPrefix = NULL;
-	info->DiskMenuStringsNumber = 0;
-	info->DiskMenuNumbers = NULL;
+	//XXX info->DiskMenuStringsNumber = 0;
+	//XXX info->DiskMenuNumbers = NULL;
 	if(!menu)
 	{
 		menu = (const wchar_t**)malloc(sizeof(const wchar_t*)*MenuItems.Count());
@@ -80,10 +81,10 @@ void FarPlugin::FillInfo(PluginInfo* info) const
 		for(int i = 0; i < ConfigItems.Count(); ++i)
 			config[i] = ConfigItems[i].ptr();
 	}
-	info->PluginMenuStringsNumber=plugin->MenuItems.Count();
-	info->PluginMenuStrings=menu;
-	info->PluginConfigStringsNumber=plugin->ConfigItems.Count();
-	info->PluginConfigStrings=config;
+	//XXX info->PluginMenuStringsNumber=plugin->MenuItems.Count();
+	//XXX info->PluginMenuStrings=menu;
+	//XXX info->PluginConfigStringsNumber=plugin->ConfigItems.Count();
+	//XXX info->PluginConfigStrings=config;
 }
 
 void FarPlugin::LoadOptions()
@@ -105,11 +106,11 @@ static void FarErrorHandler(const wchar_t* s)
 	/*if (ShowMessageEx("Error", s, "OK\nDebug", 0)==1)
 	DebugBreak();*/
 	const wchar_t* items[]={ L"Framework Error", s, L"OK", L"Debug" };
-	if (Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, items, 4, 2)==1)
-		DebugBreak();
+	//XXX if (Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, items, 4, 2)==1)
+    //XXX 		DebugBreak();
 }
 
-void _export WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info)
+void WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info)
 {
 	::Info = *Info;
 	if(!plugin)
@@ -120,7 +121,7 @@ void _export WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info)
 	}
 }
 
-HANDLE _export WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
+HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 {
 	plugin->InitLang();
 	plugin->OpenPlugin(OpenFrom, (int)Item);
@@ -130,7 +131,7 @@ HANDLE _export WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
 	return INVALID_HANDLE_VALUE;
 }
 
-int _export WINAPI ConfigureW(int ItemNumber)
+int WINAPI ConfigureW(int ItemNumber)
 {
 	plugin->InitLang();
 	int res=plugin->Configure(ItemNumber);
@@ -138,20 +139,20 @@ int _export WINAPI ConfigureW(int ItemNumber)
 	return res;
 }
 
-void _export WINAPI GetPluginInfoW(struct PluginInfo *Info)
+void WINAPI GetPluginInfoW(struct PluginInfo *Info)
 {
 	Info->StructSize=sizeof(struct PluginInfo);
 	plugin->InitLang();
 	plugin->FillInfo(Info);
 }
 
-void _export WINAPI ClosePluginW(HANDLE hPlugin)
+void WINAPI ClosePluginW(HANDLE hPlugin)
 {
 	plugin->SaveOptions();
 	//  delete (FarPanel*)hPlugin;
 }
 
-void _export WINAPI ExitFARW()
+void WINAPI ExitFARW()
 {
 	delete plugin;
 	DoneObjMgr();
@@ -162,9 +163,9 @@ const String& LOC(const String& l)
 	return plugin->Locale()[l];
 }
 
-int _export WINAPI GetMinFarVersionW(void)
+int WINAPI GetMinFarVersionW(void)
 {
-	return FARMANAGERVERSION;
+	return 0; //XXX FARMANAGERVERSION;
 }
 
 int FarPlugin::Configure(int)

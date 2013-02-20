@@ -54,8 +54,8 @@ void CopyProgress::Start(int move)
   wchar_t buf[512], *p=buf;
   for (int i=0; i<W-MG*2+2; i++) *p++=0x2500;//'─'
   *p=0;
-  Info.Text(X1+MG-1, Y1+5, clrFrame, buf);
-  Info.Text(X1+MG-1, Y1+9, clrFrame, buf);
+  Info.Text(X1+MG-1, Y1+5, &clrFrame, buf);
+  Info.Text(X1+MG-1, Y1+9, &clrFrame, buf);
   Move=move;
   Info.Text(0, 0, 0, NULL);
   Info.RestoreScreen(NULL);
@@ -142,24 +142,24 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
 
   String buf;
   buf = LOC("Engine.Total");
-  DrawText(l, Y1+10, clrLabel, buf);
+  DrawText(l, Y1+10, &clrLabel, buf);
   l += buf.len();
   buf = Format(L" %2.2d:%2.2d  ", (int)TotalTime/60, (int)TotalTime%60);
-  DrawText(l, Y1+10, clrText, buf);
+  DrawText(l, Y1+10, &clrText, buf);
   l += buf.len();
 
   buf = LOC("Engine.Elapsed");
-  DrawText(l, Y1+10, clrLabel, buf);
+  DrawText(l, Y1+10, &clrLabel, buf);
   l += buf.len();
   buf = Format(L" %2.2d:%2.2d  ", (int)ElapsedTime/60, (int)ElapsedTime%60);
-  DrawText(l, Y1+10, clrText, buf);
+  DrawText(l, Y1+10, &clrText, buf);
   l += buf.len();
 
   String buf1;
   buf = String("        ")+LOC("Engine.Remaining");
   buf1 = Format(L" %2.2d:%2.2d", (int)RemainingTime/60, (int)RemainingTime%60);
-  DrawText(X2-MG-buf1.len()-buf.len()+1, Y1+10, clrLabel, buf);
-  DrawText(X2-MG-buf1.len()+1, Y1+10, clrText, buf1);
+  DrawText(X2-MG-buf1.len()-buf.len()+1, Y1+10, &clrLabel, buf);
+  DrawText(X2-MG-buf1.len()+1, Y1+10, &clrText, buf1);
 
   if (GetTime()-clastupdate > cinterval)
   {
@@ -178,21 +178,21 @@ void CopyProgress::DrawProgress(const String& pfx, int y, __int64 cb, __int64 to
                                 __int64 time, __int64 n, __int64 totaln)
 {
   if (cb>total) cb=total;
-  DrawText(X1+MG, Y1+y, clrLabel, pfx);
+  DrawText(X1+MG, Y1+y, &clrLabel, pfx);
   String buf;
   buf= FormatWidth(FormatProgress(cb, total), W-MG*2-pfx.len());
-  DrawText(X1+MG+pfx.len()+1, Y1+y, clrText, buf);
+  DrawText(X1+MG+pfx.len()+1, Y1+y, &clrText, buf);
 
   FarProgress::DrawProgress(X1+MG, X2-MG, Y1+y+1, total?((float)cb/total):0);
 
   __int64 rate = (__int64) (time ? (float)cb / time * TicksPerSec() : 0);
   buf= FormatSpeed(rate);
-  DrawText(X2-MG-buf.len()+1, Y1+y, clrText, buf);
+  DrawText(X2-MG-buf.len()+1, Y1+y, &clrText, buf);
 }
 
 void CopyProgress::DrawName(const String& fn, int y)
 {
-  DrawText(X1+MG, Y1+y, clrText, FormatWidth(fn, W-MG*2));
+  DrawText(X1+MG, Y1+y, &clrText, FormatWidth(fn, W-MG*2));
 }
 
 void CopyProgress::ShowReadName(const String& fn)

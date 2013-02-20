@@ -48,13 +48,13 @@ public:
 	void SetPercent(float);
 	int InverseBars;
 protected:
-	int clrFrame, clrTitle, clrBar, clrText, clrLabel;
+	FarColor clrFrame, clrTitle, clrBar, clrText, clrLabel;
 	int ProgX1, ProgX2, ProgY, WinType;
 	HANDLE hScreen;
 	void DrawWindow(int, int, int, int, const String&);
 	void GetConSize(int&, int&);
 	void DrawProgress(int, int, int, float);
-	void DrawText(int, int, int, const String&);
+	void DrawText(int, int, FarColor*, const String&);
 	void SetTitle(const String&);
 	void SetTitle2(const String&);
 	String GetTitle();

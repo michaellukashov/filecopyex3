@@ -1,4 +1,4 @@
-/*
+﻿/*
 FileCopyEx - Extended File Copy plugin for Far 2 file manager
 
 Copyright (C) 2004 - 2010
@@ -26,7 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.h"
 #include "engine.h"
 #include "filecopyex.h"
-#include "../framework/far/interface/farkeys.hpp"
 
 void FileCopyExPlugin::Create()
 {
@@ -52,7 +51,13 @@ void CallCopy(int move, int curonly)
 	Engine::MResult res=engine.Main(move, curonly);
 	if(res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
 	{
-		KeySequence seq;
+		/* svs 09.02.2011 18:51:58 +0300 - build 1844                                                                                                                                                     ░
+                                                                                                                                                                                               ░
+2. Удален ACTL_POSTKEYSEQUENCE (есть аналог в лице ACTL_KEYMACRO).                                                                                                                             ░
+   FARKEYSEQUENCEFLAGS переименован в FARKEYMACROFLAGS (и KSFLAGS_* -> KMFLAGS_* ).                                                                                                            ░
+   Удалена структура KeySequence.                                                                                                                                                              ░
+   */
+		/* XXX KeySequence seq;
 		DWORD keys[8];
 		seq.Flags=KSFLAGS_DISABLEOUTPUT;
 		seq.Sequence=keys;
@@ -64,6 +69,7 @@ void CallCopy(int move, int curonly)
 			keys[1]=KEY_ENTER;
 		}
 		Info.AdvControl(Info.ModuleNumber, ACTL_POSTKEYSEQUENCE, (void*)&seq);
+		*/
 	}
 }
 

@@ -28,8 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 FarPanel::FarPanel()
 {
-  Flags=OPIF_USEFILTER | OPIF_USESORTGROUPS | OPIF_USEHIGHLIGHTING |
-    OPIF_REALNAMES | OPIF_SHOWNAMESONLY;
+  Flags= 0; //XXX OPIF_USEFILTER | OPIF_USESORTGROUPS | OPIF_USEHIGHLIGHTING | OPIF_REALNAMES | OPIF_SHOWNAMESONLY;
   CurDir="";
   FormatName="someplug";
   PanelTitle="Some plugin";
@@ -40,17 +39,17 @@ FarPanel::~FarPanel()
 {
 }
 
-void FarPanel::CallGetOpenPluginInfo(OpenPluginInfo *info)
+void FarPanel::CallGetOpenPluginInfo(OpenInfo *info)
 {
   info->StructSize=sizeof(*info);
-  info->Flags=Flags;
-  info->HostFile=NULL;
+  //XXX info->Flags=Flags;
+  //XXX info->HostFile=NULL;
   (FormatName+":\\"+CurDir).ToUnicode(_CurDirBuf, MAX_FILENAME);
-  info->CurDir=_CurDirBuf;
+  //XXX info->CurDir=_CurDirBuf;
   FormatName.ToUnicode(_FormatBuf, sizeof(_FormatBuf)/sizeof(wchar_t));
   PanelTitle.ToUnicode(_TitleBuf, sizeof(_TitleBuf)/sizeof(wchar_t));
-  info->Format=_FormatBuf;
-  info->PanelTitle=_TitleBuf;
+  //XXX info->Format=_FormatBuf;
+  //XXX info->PanelTitle=_TitleBuf;
 }
 
 int FarPanel::CallSetDirectory(const String& _dir, int opmode)
@@ -60,10 +59,12 @@ int FarPanel::CallSetDirectory(const String& _dir, int opmode)
   {
     if (NewDir=="") 
     {
+		/* XXX 
       if (Flags & OPIF_ADDDOTS) 
         Info.Control(this, FCTL_CLOSEPLUGIN, 0, NULL);
-      else 
+      else */
         return FALSE;
+
     }
     int p=NewDir.crfind('\\');
     if (p==-1) NewDir="";

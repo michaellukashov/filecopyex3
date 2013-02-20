@@ -30,11 +30,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 FarProgress::FarProgress(void)
 {
-  clrFrame=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOX);
-  clrTitle=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOXTITLE);
-  clrBar=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,   (void*)COL_DIALOGTEXT);
-  clrText=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,  (void*)COL_DIALOGTEXT);
-  switch (clrFrame >> 4)
+  //XXX clrFrame = (int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOX);
+  //XXX clrTitle = (int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOXTITLE);
+  //XXX clrBar=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,   (void*)COL_DIALOGTEXT);
+  //XXX clrText=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,  (void*)COL_DIALOGTEXT);
+  /* switch (clrFrame >> 4)
   {
     // [exp] color changed by CDK
     case 7: case 15: clrLabel=1; break;
@@ -42,6 +42,7 @@ FarProgress::FarProgress(void)
     default: clrLabel=14; break;
   }
   clrLabel=clrLabel | clrFrame & 0xF0;
+  */
   WinType=WIN_NONE;
   hScreen=0;
   InverseBars=0;
@@ -64,7 +65,7 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String& capti
 	{
 		tpl += bkg;
 	}
-	Info.Message(Info.ModuleNumber, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t**)tpl.ptr(), 0, 0);
+	//XXX Info.Message(Info.ModuleNumber, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t**)tpl.ptr(), 0, 0);
 }
 
 void FarProgress::GetConSize(int& w, int &h)
@@ -87,7 +88,7 @@ void FarProgress::ShowMessage(const String& msg)
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
   DrawWindow(X1, Y1, X2, Y2, "");
-  Info.Text(X1+6, Y1+2, clrText, FormatWidth(msg, X2-X1-11).ptr());
+  Info.Text(X1+6, Y1+2, &clrText, FormatWidth(msg, X2-X1-11).ptr());
   Info.Text(0, 0, 0, NULL);
   WinType=WIN_MESSAGE;
   TitleBuf=GetTitle();
@@ -106,7 +107,7 @@ void FarProgress::ShowProgress(const String& msg)
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
   DrawWindow(X1, Y1, X2, Y2, "");
-  Info.Text(X1+5, Y1+2, clrText, FormatWidth(msg, X2-X1-9).ptr());
+  Info.Text(X1+5, Y1+2, &clrText, FormatWidth(msg, X2-X1-9).ptr());
   ProgX1=X1+5; 
   ProgX2=X2-5;
   ProgY=Y1+3;
@@ -135,7 +136,7 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
     for (int i=0; i<fn; i++) *bp++=0x2588;//'█'
   }
   *bp=0;
-  Info.Text(x1, y, clrText, buf);
+  Info.Text(x1, y, &clrText, buf);
   taskbar_icon.SetState(taskbar_icon.S_PROGRESS, pc);
 }
 
@@ -166,7 +167,7 @@ void FarProgress::Hide()
   taskbar_icon.SetState(taskbar_icon.S_NO_PROGRESS);
 }
 
-void FarProgress::DrawText(int x, int y, int c, const String& msg)
+void FarProgress::DrawText(int x, int y, FarColor *c, const String& msg)
 {
   Info.Text(x, y, c, msg.ptr());
 }
@@ -214,7 +215,7 @@ void FarProgress::ShowScanProgress(const String& msg)
   hScreen = Info.SaveScreen(WindowCoordX1, WindowCoordY1, 
                             WindowCoordX2 + 2, WindowCoordY2 + 2);
   DrawWindow(WindowCoordX1, WindowCoordY1, WindowCoordX2, WindowCoordY2, "");
-  Info.Text(WindowCoordX1 + 5, WindowCoordY1 + 2, clrText, 
+  Info.Text(WindowCoordX1 + 5, WindowCoordY1 + 2, &clrText, 
             FormatWidth(msg, WindowCoordX2 - WindowCoordX1 - 9).ptr());
   ProgX1  = WindowCoordX1 + 5; 
   ProgX2  = WindowCoordX2 - 5;
@@ -265,6 +266,6 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles,
   wchar_t buf[256];
   _snwprintf_s(buf, 256, sizeof(buf)/sizeof(wchar_t), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
 
-  Info.Text(x1, y + 1, clrText, buf);
+  Info.Text(x1, y + 1, &clrText, buf);
   taskbar_icon.SetState(taskbar_icon.S_WORKING);
 }

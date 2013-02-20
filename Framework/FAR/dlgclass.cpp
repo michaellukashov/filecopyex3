@@ -95,9 +95,9 @@ void FarDlgEditClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
 
 static String GetDlgText(HANDLE dlg, int id)
 {
-	size_t len = Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, NULL);
+	size_t len = 0; //XXX Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, NULL);
 	wchar_t* buf = (wchar_t*)malloc((len + 1)*sizeof(wchar_t));
-	Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, (LONG_PTR)buf);
+	//XXX Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, (LONG_PTR)buf);
 	String t(buf);
 	free(buf);
 	return t;
@@ -146,12 +146,12 @@ void FarDlgComboboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 int lablen(FarDialogItem& item)
 {
   if (item.Flags & DIF_SHOWAMPERSAND)
-    return (int)wcslen(item.PtrData);
+    return 0; //XXX (int)wcslen(item.PtrData);
   else
   {
     int res=0;
-    for (const wchar_t *p=item.PtrData; *p; p++)
-      if (*p!='&') res++;
+    /* XXX for (const wchar_t *p=item.PtrData; *p; p++)
+      if (*p!='&') res++; */
     return res;
   }
 }

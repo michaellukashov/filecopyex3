@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="sources">
+      <UniqueIdentifier>{56a6655b-a0c9-4660-b866-c5d2ff27ae5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework">
+      <UniqueIdentifier>{5a5ba756-407c-41ec-89be-64ab93199471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\base">
+      <UniqueIdentifier>{2f8d08bc-dbce-435a-9e42-32abc35c55de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\objects">
+      <UniqueIdentifier>{fee28101-012d-4d92-b983-673620f4ff9b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\strings">
+      <UniqueIdentifier>{d9c2c284-5eaf-453e-a578-be7894c393ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\file_system">
+      <UniqueIdentifier>{669c5d77-aa70-4337-abc6-e4b0c02bac28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\far">
+      <UniqueIdentifier>{a9f95782-6ae1-4574-99e1-41038ed2f0fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\far\dialogs">
+      <UniqueIdentifier>{6771b059-2345-4fe5-8cb6-37fc300d20de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\far\common">
+      <UniqueIdentifier>{50a45e75-dc27-4de0-9cbc-16cf3d79b684}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="framework\far\interface">
+      <UniqueIdentifier>{58fd67f2-c0d6-480d-92c8-10cb62dd385f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="docs">
+      <UniqueIdentifier>{8abf360c-52f9-463d-91ba-18fa8a80045f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="docs\resources">
+      <UniqueIdentifier>{e4694679-51c4-437c-b49a-a50a8fb1e2ca}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\classes.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\config.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\copyprogress.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\engine.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\enginetools.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\filecopyex.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="src\utils.cpp">
+      <Filter>sources</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\common.cpp">
+      <Filter>framework\base</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\object.cpp">
+      <Filter>framework\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\properties.cpp">
+      <Filter>framework\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\store.cpp">
+      <Filter>framework\objects</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\lowlevelstr.cpp">
+      <Filter>framework\strings</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\objstring.cpp">
+      <Filter>framework\strings</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\stringlist.cpp">
+      <Filter>framework\strings</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\strutils.cpp">
+      <Filter>framework\strings</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\valuelist.cpp">
+      <Filter>framework\strings</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\fileutils.cpp">
+      <Filter>framework\file_system</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\FAR\dialog.cpp">
+      <Filter>framework\far\dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\FAR\dlgclass.cpp">
+      <Filter>framework\far\dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\FAR\dlgobject.cpp">
+      <Filter>framework\far\dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\FAR\panel.cpp">
+      <Filter>framework\far\common</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\FAR\plugin.cpp">
+      <Filter>framework\far\common</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\FAR\progress.cpp">
+      <Filter>framework\far\common</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\FAR\registry.cpp">
+      <Filter>framework\far\common</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\FAR\taskbar_icon.cpp">
+      <Filter>framework\far\common</Filter>
+    </ClCompile>
+    <ClCompile Include="Framework\FAR\ui.cpp">
+      <Filter>framework\far\common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\classes.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\common.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\copyprogress.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\engine.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\enginetools.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="src\filecopyex.h">
+      <Filter>sources</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\array.h">
+      <Filter>framework\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\common.h">
+      <Filter>framework\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\stdhdr.h">
+      <Filter>framework\base</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\object.h">
+      <Filter>framework\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\properties.h">
+      <Filter>framework\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\store.h">
+      <Filter>framework\objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\lowlevelstr.h">
+      <Filter>framework\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\objstring.h">
+      <Filter>framework\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\stringlist.h">
+      <Filter>framework\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\strutils.h">
+      <Filter>framework\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\valuelist.h">
+      <Filter>framework\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\fileutils.h">
+      <Filter>framework\file_system</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\FAR\dialog.h">
+      <Filter>framework\far\dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\FAR\dlgclass.h">
+      <Filter>framework\far\dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\FAR\dlgobject.h">
+      <Filter>framework\far\dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\FAR\panel.h">
+      <Filter>framework\far\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\FAR\plugin.h">
+      <Filter>framework\far\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\FAR\progress.h">
+      <Filter>framework\far\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\FAR\registry.h">
+      <Filter>framework\far\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\FAR\taskbar_icon.h">
+      <Filter>framework\far\common</Filter>
+    </ClInclude>
+    <ClInclude Include="Framework\FAR\ui.h">
+      <Filter>framework\far\common</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\FAR\interface\farcolor.hpp">
+      <Filter>framework\far\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\FAR\interface\farkeys.hpp">
+      <Filter>framework\far\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="framework\FAR\interface\plugin.hpp">
+      <Filter>framework\far\interface</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="data\resource\dialogs.objd">
+      <Filter>docs\resources</Filter>
+    </None>
+    <None Include="data\resource\english.locd">
+      <Filter>docs\resources</Filter>
+    </None>
+    <None Include="data\resource\russian.locd">
+      <Filter>docs\resources</Filter>
+    </None>
+    <None Include="LICENSE.txt" />
+    <None Include="plugin.def" />
+    <None Include="todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="filecopyex.rc" />
+  </ItemGroup>
+</Project>

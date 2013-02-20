@@ -50,7 +50,7 @@ private:
 	void	Bind(const String& key, const String& seq);
 	void	Unbind(const String& key);
 	int		Binded(const String &key);
-	void	MacroCommand(const FARMACROCOMMAND& cmd);
+	// void	MacroCommand(const FARMACROCOMMAND& cmd); // XXX???
 
 private:
 	StringList descs;

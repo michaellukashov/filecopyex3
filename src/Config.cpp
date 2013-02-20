@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../framework/stdhdr.h"
 #include "../framework/lowlevelstr.h"
 #include "filecopyex.h"
-#include "../framework/far/interface/farkeys.hpp"
 
 const String regkey = "\\Software\\Far2\\KeyMacros\\Shell";
 const String menu_plug = "F11 $if(menu.Select(\"Extended copy\",2)<=0) MsgBox(\"Extended copy\",\"Plugin was not found in list!\",1) $Exit $end Enter ";
@@ -50,6 +49,8 @@ void FileCopyExPlugin::Unbind(const String& key)
 	registry.DeleteKey(regkey + "\\" + key);
 }
 
+// XXX I don't know how to replace FARMACROCOMMAND
+/*
 void FileCopyExPlugin::MacroCommand(const FARMACROCOMMAND& cmd)
 {
 	ActlKeyMacro prm;
@@ -57,6 +58,7 @@ void FileCopyExPlugin::MacroCommand(const FARMACROCOMMAND& cmd)
 	prm.Command = cmd;
 	Info.AdvControl(Info.ModuleNumber, ACTL_KEYMACRO, &prm);
 }
+*/
 
 void FileCopyExPlugin::KeyConfig()
 {
@@ -84,7 +86,7 @@ void FileCopyExPlugin::KeyConfig()
 		&& dlg["CtrlAltF5"]("Selected") == ctrlAlt)
 		return;
 
-	MacroCommand(MCMD_SAVEALL);
+	// MacroCommand(MCMD_SAVEALL); // XXX
 
 	Unbind("F5");			Unbind("ShiftF5");
 	Unbind("F6");			Unbind("ShiftF6");
@@ -105,7 +107,7 @@ void FileCopyExPlugin::KeyConfig()
 		Bind(key + "F5", "F5");
 		Bind(key + "F6", "F6");
 	}
-	MacroCommand(MCMD_LOADALL);
+	// MacroCommand(MCMD_LOADALL); // XXX
 }
 
 #ifdef _WIN64

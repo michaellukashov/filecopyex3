@@ -58,11 +58,11 @@ int FarDialog::Execute()
   Items[0].X1=3; Items[0].Y1=1; 
   Items[0].X2=w+6; Items[0].Y2=h+2;
 
-  HANDLE hnd=Info.DialogInit(Info.ModuleNumber, -1, -1, w+10, h+4, 
+  HANDLE hnd=0; /* XXX Info.DialogInit(Info.ModuleNumber, -1, -1, w+10, h+4, 
     String(Property("HelpTopic")).ptr(), 
     (FarDialogItem*)Items.Storage(), Items.Count(),
     0, bool(Property("Warning")) ? FDLG_WARNING : 0,
-    Info.DefDlgProc, 0);
+    Info.DefDlgProc, 0); */
   int ret=-1;
   if (hnd!=INVALID_HANDLE_VALUE)
   {

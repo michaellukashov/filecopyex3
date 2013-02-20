@@ -96,13 +96,13 @@ void FarDlgObject::SetItemText(FarDialogItem& item, const String& text)
 	size_t len = text.len() + 1;
 	wchar_t* t = (wchar_t*)malloc(sizeof(wchar_t) * len);
 	text.ToUnicode(t, len);
-	item.PtrData = t;
-	item.MaxLen = 0;
+	//XXX item.PtrData = t;
+	//XXX item.MaxLen = 0;
 }
 void FarDlgObject::DestroyItemText(FarDialogItem& item)
 {
-	free((wchar_t*)item.PtrData);
-	item.PtrData = NULL;
+	//XXX free((wchar_t*)item.PtrData);
+	//XXX item.PtrData = NULL;
 }
 
 void FarDlgObject::PreInitItem(FarDialogItem& item)
@@ -117,7 +117,7 @@ void FarDlgObject::PreInitItem(FarDialogItem& item)
 	for (int i=0; i<AttribCount(); i++)
 		if (Property(Attrib(i).Name))
 			item.Flags |= Attrib(i).Flag;
-	if (Property("Focus")) item.Focus=1;
+	//XXX if (Property("Focus")) item.Focus=1;
 }
 
 void FarDlgObject::DefSize(int& w, int& h, int& fit)
