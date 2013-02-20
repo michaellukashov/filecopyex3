@@ -25,32 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #ifndef	__UI_H__
 #define	__UI_H__
 
-#pragma once
-
-#include "Framework/Array.h"
-#include "SDK/plugin.hpp"
-
-class FarMenu
-{
-public:
-	FarMenu(void);
-	virtual ~FarMenu(void);
-	void SetTitle(const String&);
-	void SetBottom(const String&);
-	void SetHelpTopic(const String&);
-	void SetFlags(int f);
-	void AddLine(const String&);
-	void AddLineCheck(const String&, int check);
-	void AddSep();
-	void SetSelection(int n);
-	int Execute();
-protected:
-	void SetItemText(FarMenuItem* item, const String& text);
-	String Title, Bottom, HelpTopic;
-	int Flags, Selection;
-	Array<FarMenuItem> items;
-};
-
 int ShowMessage(const String&, const String&, int);
 int ShowMessageHelp(const String&, const String&, int, const String&);
 int ShowMessageEx(const String&, const String&, const String&, int);

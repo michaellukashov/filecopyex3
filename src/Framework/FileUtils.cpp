@@ -26,11 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "fileutils.h"
 #include "strutils.h"
 #include "../common.h"
-
-//#include "..\src\Common.h"
-//#include "..\src\FileCopyEx.h"
-//#include "..\src\engine.h"
-#include "..\EngineTools.h"
+#include "../EngineTools.h"
 
 inline String ExtractFileName(const String& v)
 {

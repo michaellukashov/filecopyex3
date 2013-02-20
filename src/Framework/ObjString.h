@@ -152,6 +152,7 @@ public:
 		else return (int)(rp-p);
 	}
 	const wchar_t* ptr() const { return str.c_str(); }
+	const wchar_t* c_str() const { return str.c_str(); }
 private:
 	std::wstring str;
 };

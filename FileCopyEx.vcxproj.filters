@@ -104,6 +104,9 @@
     <ClCompile Include="src\DLLExport.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\FarMenu.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Classes.h">
@@ -200,6 +203,9 @@
       <Filter>Source\SDK</Filter>
     </ClInclude>
     <ClInclude Include="src\tools.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FarMenu.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

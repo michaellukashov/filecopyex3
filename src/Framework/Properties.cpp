@@ -26,7 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "lowlevelstr.h"
 #include "properties.h"
 #include "valuelist.h"
-//#include "common.h"
 
 Property::Property(int v)
 {

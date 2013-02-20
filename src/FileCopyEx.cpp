@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.h"
 #include "engine.h"
 #include "filecopyex.h"
-#include "ui.h"
+#include "FarMenu.h"
 #include "common.h"
 
 FarPlugin* CreatePlugin()

@@ -27,8 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include <string.h>
-
 void _atowcs(wchar_t *d, size_t size, const char *s);
 void _wtoacs(char *d, size_t size, const wchar_t *s);
 
