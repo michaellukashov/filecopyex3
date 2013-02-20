@@ -290,6 +290,7 @@
     <ClCompile Include="Framework\FAR\ui.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Framework\FAR\guid.hpp" />
     <ClInclude Include="src\classes.h" />
     <ClInclude Include="src\common.h" />
     <ClInclude Include="src\copyprogress.h" />

@@ -210,6 +210,9 @@
       <Filter>framework\far\interface</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Framework\FAR\guid.hpp">
+      <Filter>framework\objects</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\resource\dialogs.objd">

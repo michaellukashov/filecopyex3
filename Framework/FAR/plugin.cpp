@@ -28,6 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "../valuelist.h"
 #include "../properties.h"
 #include "plugin.h"
+#include "version.hpp"
+#include <initguid.h>
+#include "guid.hpp"
 
 PluginStartupInfo Info;
 FarPlugin* plugin = NULL;
@@ -110,9 +113,20 @@ static void FarErrorHandler(const wchar_t* s)
     //XXX 		DebugBreak();
 }
 
-void WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info)
+void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
 {
-	::Info = *Info;
+	Info->StructSize=sizeof(GlobalInfo);
+	Info->MinFarVersion=FARMANAGERVERSION;
+	Info->Version=PLUGIN_VERSION;
+	Info->Guid=MainGuid;
+	Info->Title=PLUGIN_NAME;
+	Info->Description=PLUGIN_DESC;
+	Info->Author=PLUGIN_AUTHOR;
+}
+
+void WINAPI SetStartupInfoW(const struct PluginStartupInfo *psi)
+{
+	Info = *psi;
 	if(!plugin)
 	{
 		errorHandler = FarErrorHandler;
@@ -121,7 +135,7 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *Info)
 	}
 }
 
-HANDLE WINAPI OpenPluginW(int OpenFrom, INT_PTR Item)
+HANDLE WINAPI OpenW(int OpenFrom, INT_PTR Item)
 {
 	plugin->InitLang();
 	plugin->OpenPlugin(OpenFrom, (int)Item);
@@ -139,9 +153,28 @@ int WINAPI ConfigureW(int ItemNumber)
 	return res;
 }
 
+/*
+ Функция GetMsg возвращает строку сообщения из языкового файла.
+ А это надстройка над Info.GetMsg для сокращения кода :-)
+*/
+const wchar_t *GetMsg(int MsgId)
+{
+	return Info.GetMsg(&MainGuid,MsgId);
+}
+
+/*
+Функция GetPluginInfoW вызывается для получения информации о плагине
+*/
 void WINAPI GetPluginInfoW(struct PluginInfo *Info)
 {
-	Info->StructSize=sizeof(struct PluginInfo);
+	Info->StructSize = sizeof(*Info);
+	Info->Flags = PF_EDITOR;
+	static const wchar_t *PluginMenuStrings[1];
+	PluginMenuStrings[0] = L"FileCopyEx"; //GetMsg(MTitle);
+	Info->PluginMenu.Guids = &MenuGuid;
+	Info->PluginMenu.Strings = PluginMenuStrings;
+	Info->PluginMenu.Count = ARRAYSIZE(PluginMenuStrings);
+
 	plugin->InitLang();
 	plugin->FillInfo(Info);
 }
