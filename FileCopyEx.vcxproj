@@ -89,6 +89,7 @@
     <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release Unicode|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release Unicode|x64'" />
     <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release Unicode|x64'" />
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug Unicode|x64'">$(ProjectName)64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Unicode|Win32'">
     <Midl>
@@ -262,77 +263,72 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\classes.cpp" />
-    <ClCompile Include="src\config.cpp" />
-    <ClCompile Include="src\copyprogress.cpp" />
-    <ClCompile Include="src\engine.cpp" />
-    <ClCompile Include="src\enginetools.cpp" />
-    <ClCompile Include="src\filecopyex.cpp" />
-    <ClCompile Include="src\utils.cpp" />
-    <ClCompile Include="Framework\common.cpp" />
-    <ClCompile Include="Framework\object.cpp" />
-    <ClCompile Include="Framework\properties.cpp" />
-    <ClCompile Include="Framework\store.cpp" />
-    <ClCompile Include="Framework\lowlevelstr.cpp" />
-    <ClCompile Include="Framework\objstring.cpp" />
-    <ClCompile Include="Framework\stringlist.cpp" />
-    <ClCompile Include="Framework\strutils.cpp" />
-    <ClCompile Include="Framework\valuelist.cpp" />
-    <ClCompile Include="Framework\fileutils.cpp" />
-    <ClCompile Include="Framework\FAR\dialog.cpp" />
-    <ClCompile Include="Framework\FAR\dlgclass.cpp" />
-    <ClCompile Include="Framework\FAR\dlgobject.cpp" />
-    <ClCompile Include="Framework\FAR\panel.cpp" />
-    <ClCompile Include="Framework\FAR\plugin.cpp" />
-    <ClCompile Include="Framework\FAR\progress.cpp" />
-    <ClCompile Include="Framework\FAR\registry.cpp" />
-    <ClCompile Include="Framework\FAR\taskbar_icon.cpp" />
-    <ClCompile Include="Framework\FAR\ui.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Framework\FAR\guid.hpp" />
-    <ClInclude Include="src\classes.h" />
-    <ClInclude Include="src\common.h" />
-    <ClInclude Include="src\copyprogress.h" />
-    <ClInclude Include="src\engine.h" />
-    <ClInclude Include="src\enginetools.h" />
-    <ClInclude Include="src\filecopyex.h" />
-    <ClInclude Include="Framework\array.h" />
-    <ClInclude Include="Framework\common.h" />
-    <ClInclude Include="Framework\stdhdr.h" />
-    <ClInclude Include="Framework\object.h" />
-    <ClInclude Include="Framework\properties.h" />
-    <ClInclude Include="Framework\store.h" />
-    <ClInclude Include="Framework\lowlevelstr.h" />
-    <ClInclude Include="Framework\objstring.h" />
-    <ClInclude Include="Framework\stringlist.h" />
-    <ClInclude Include="Framework\strutils.h" />
-    <ClInclude Include="Framework\valuelist.h" />
-    <ClInclude Include="Framework\fileutils.h" />
-    <ClInclude Include="Framework\FAR\dialog.h" />
-    <ClInclude Include="Framework\FAR\dlgclass.h" />
-    <ClInclude Include="Framework\FAR\dlgobject.h" />
-    <ClInclude Include="Framework\FAR\panel.h" />
-    <ClInclude Include="Framework\FAR\plugin.h" />
-    <ClInclude Include="Framework\FAR\progress.h" />
-    <ClInclude Include="Framework\FAR\registry.h" />
-    <ClInclude Include="Framework\FAR\taskbar_icon.h" />
-    <ClInclude Include="Framework\FAR\ui.h" />
-    <ClInclude Include="framework\FAR\interface\farcolor.hpp" />
-    <ClInclude Include="framework\FAR\interface\farkeys.hpp" />
-    <ClInclude Include="framework\FAR\interface\plugin.hpp" />
-    <ClInclude Include="resource.h" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="data\resource\dialogs.objd" />
     <None Include="data\resource\english.locd" />
     <None Include="data\resource\russian.locd" />
-    <None Include="LICENSE.txt" />
-    <None Include="plugin.def" />
-    <None Include="todo.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="filecopyex.rc" />
+    <ClCompile Include="src\Classes.cpp" />
+    <ClCompile Include="src\common.cpp" />
+    <ClCompile Include="src\CopyProgress.cpp" />
+    <ClCompile Include="src\dialog.cpp" />
+    <ClCompile Include="src\dlgclass.cpp" />
+    <ClCompile Include="src\dlgobject.cpp" />
+    <ClCompile Include="src\Engine.cpp" />
+    <ClCompile Include="src\EngineTools.cpp" />
+    <ClCompile Include="src\FarPlugin.cpp" />
+    <ClCompile Include="src\FileCopyEx.cpp" />
+    <ClCompile Include="src\Framework\FileUtils.cpp" />
+    <ClCompile Include="src\Framework\LowLevelStr.cpp" />
+    <ClCompile Include="src\Framework\Object.cpp" />
+    <ClCompile Include="src\Framework\ObjString.cpp" />
+    <ClCompile Include="src\Framework\Properties.cpp" />
+    <ClCompile Include="src\Framework\Store.cpp" />
+    <ClCompile Include="src\Framework\StringList.cpp" />
+    <ClCompile Include="src\Framework\StrUtils.cpp" />
+    <ClCompile Include="src\Framework\ValueList.cpp" />
+    <ClCompile Include="src\DLLExport.cpp" />
+    <ClCompile Include="src\panel.cpp" />
+    <ClCompile Include="src\progress.cpp" />
+    <ClCompile Include="src\registry.cpp" />
+    <ClCompile Include="src\taskbar_icon.cpp" />
+    <ClCompile Include="src\tools.cpp" />
+    <ClCompile Include="src\ui.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Classes.h" />
+    <ClInclude Include="src\Common.h" />
+    <ClInclude Include="src\CopyProgress.h" />
+    <ClInclude Include="src\dialog.h" />
+    <ClInclude Include="src\dlgclass.h" />
+    <ClInclude Include="src\dlgobject.h" />
+    <ClInclude Include="src\Engine.h" />
+    <ClInclude Include="src\EngineTools.h" />
+    <ClInclude Include="src\FarPlugin.h" />
+    <ClInclude Include="src\FileCopyEx.h" />
+    <ClInclude Include="src\Framework\Array.h" />
+    <ClInclude Include="src\Framework\FileUtils.h" />
+    <ClInclude Include="src\Framework\LowLevelStr.h" />
+    <ClInclude Include="src\Framework\Object.h" />
+    <ClInclude Include="src\Framework\ObjString.h" />
+    <ClInclude Include="src\Framework\Properties.h" />
+    <ClInclude Include="src\Framework\StdHdr.h" />
+    <ClInclude Include="src\Framework\Store.h" />
+    <ClInclude Include="src\Framework\StringList.h" />
+    <ClInclude Include="src\Framework\StrUtils.h" />
+    <ClInclude Include="src\Framework\ValueList.h" />
+    <ClInclude Include="src\guid.hpp" />
+    <ClInclude Include="src\panel.h" />
+    <ClInclude Include="src\progress.h" />
+    <ClInclude Include="src\registry.h" />
+    <ClInclude Include="src\SDK\DlgBuilder.hpp" />
+    <ClInclude Include="src\SDK\farcolor.hpp" />
+    <ClInclude Include="src\SDK\farversion.hpp" />
+    <ClInclude Include="src\SDK\plugin.hpp" />
+    <ClInclude Include="src\taskbar_icon.h" />
+    <ClInclude Include="src\tools.h" />
+    <ClInclude Include="src\ui.h" />
+    <ClInclude Include="src\version.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

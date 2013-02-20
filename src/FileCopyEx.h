@@ -27,8 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "../framework/properties.h"
-#include "../framework/far/plugin.h"
+#include "Framework/Properties.h"
+#include "FarPlugin.h"
 
 class FileCopyExPlugin : public FarPlugin
 {

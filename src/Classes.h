@@ -27,9 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "../framework/store.h"
-#include "../framework/fileutils.h"
-#include "../framework/valuelist.h"
+#include "framework/store.h"
+#include "framework/fileutils.h"
+#include "framework/valuelist.h"
 
 class FileNameStoreEnum;
 
