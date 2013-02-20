@@ -36,7 +36,7 @@ public:
 	virtual ~FileCopyExPlugin(void);
 	virtual void Create();
 	virtual int Configure(int);
-	virtual void OpenPlugin(int, int);
+	virtual void OpenPlugin(const struct OpenInfo *OInfo);
 	virtual void InitOptions();
 	void Config();
 	virtual const char* RegRootKey() const { return "FileCopyEx"; }

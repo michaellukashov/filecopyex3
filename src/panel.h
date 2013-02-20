@@ -22,10 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "interface/plugin.hpp"
-#include "../array.h"
-#include "../objstring.h"
-#include "../fileutils.h"
+#include "sdk/plugin.hpp"
+#include "Framework/array.h"
+#include "Framework/objstring.h"
+#include "Framework/fileutils.h"
 
 class FarPanel
 {

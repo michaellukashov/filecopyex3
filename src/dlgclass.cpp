@@ -22,11 +22,13 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../stdhdr.h"
-#include "interface/plugin.hpp"
+//#include "../stdhdr.h"
+//#include "interface/plugin.hpp"
 #include "dlgobject.h"
 #include "dlgclass.h"
-#include "plugin.h"
+//#include "plugin.h"
+#include "common.h"
+#include "Framework/Object.h"
 
 static const Attribute _Attrib[] =
 {
@@ -159,16 +161,18 @@ int lablen(FarDialogItem& item)
 void InitObjMgr()
 {
 	objectManager = new ObjectManager;
-	objectManager->RegisterClass(new FarDlgLineClass);
-	objectManager->RegisterClass(new FarDlgLabelClass);
-	objectManager->RegisterClass(new FarDlgPanelClass);
-	objectManager->RegisterClass(new FarDlgButtonClass);
-	objectManager->RegisterClass(new FarDlgCheckboxClass);
-	objectManager->RegisterClass(new FarDlgRadioButtonClass);
-	objectManager->RegisterClass(new FarDlgEditClass);
-	objectManager->RegisterClass(new FarDlgComboboxClass);
-	objectManager->RegisterClass(new FarDialogClass);
+	objectManager->RegClass(new FarDlgLineClass);
+	objectManager->RegClass(new FarDlgLineClass);
+	objectManager->RegClass(new FarDlgLabelClass);
+	objectManager->RegClass(new FarDlgPanelClass);
+	objectManager->RegClass(new FarDlgButtonClass);
+	objectManager->RegClass(new FarDlgCheckboxClass);
+	objectManager->RegClass(new FarDlgRadioButtonClass);
+	objectManager->RegClass(new FarDlgEditClass);
+	objectManager->RegClass(new FarDlgComboboxClass);
+	objectManager->RegClass(new FarDialogClass);
 }
+
 void DoneObjMgr()
 {
 	delete objectManager;

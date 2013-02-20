@@ -22,9 +22,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../stdhdr.h"
-#include "../lowlevelstr.h"
-#include "plugin.h"
+#include "Framework/stdhdr.h"
+//#include "../lowlevelstr.h"
+//#include "plugin.h"
+#include "registry.h"
 
 String FarRegistry::ResolveKey(const String& s)
 {

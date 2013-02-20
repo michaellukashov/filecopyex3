@@ -25,8 +25,8 @@ static void FarErrorHandler(const wchar_t* s)
 	/*if (ShowMessageEx("Error", s, "OK\nDebug", 0)==1)
 	DebugBreak();*/
 	const wchar_t* items[]={ L"Framework Error", s, L"OK", L"Debug" };
-	//XXX if (Info.Message(Info.ModuleNumber, FMSG_WARNING, NULL, items, 4, 2)==1)
-    //XXX 		DebugBreak();
+	if (Info.Message(&MainGuid, &MainGuid, FMSG_WARNING, NULL, items, 4, 2)==1)
+		DebugBreak();
 }
 
 void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)

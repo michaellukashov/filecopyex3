@@ -23,8 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "taskbar_icon.h"
-#include "plugin.h"
+#include "Framework/StdHdr.h"
 #include "guid.hpp"
+#include "common.h"
 
 TaskBarIcon::TaskBarIcon() : last_state(S_NO_PROGRESS)
 {

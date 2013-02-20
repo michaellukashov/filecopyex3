@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/Object.h"
 #include "Framework/ValueList.h"
 #include "SDK/plugin.hpp"
+#include "dlgobject.h"
 
 class FarDlgObject;
 class FarDialog;

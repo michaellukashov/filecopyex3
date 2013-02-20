@@ -89,4 +89,18 @@ void beep(int);
 
 void DebugLog(const wchar_t *DebugMsg, ...);
 
+inline __int64 GetTime()
+{
+	LARGE_INTEGER res;
+	QueryPerformanceCounter(&res);
+	return res.QuadPart;
+}
+
+inline __int64 TicksPerSec()
+{
+	LARGE_INTEGER res;
+	QueryPerformanceFrequency(&res);
+	return res.QuadPart;
+}
+
 #endif//__COMMON_H__

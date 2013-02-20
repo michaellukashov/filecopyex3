@@ -22,13 +22,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../framework/stdhdr.h"
+#include "framework/stdhdr.h"
 
 #include "common.h"
 #include "FileCopyEx.h"
 #include "engine.h"
 #include "EngineTools.h"
-#include "../framework/common.h"
+#include "tools.h"
+#include "ui.h"
 
 void* Alloc(int size)
 {

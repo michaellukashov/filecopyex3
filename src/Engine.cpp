@@ -23,16 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <process.h>
-#include "../framework/stdhdr.h"
-#include "../framework/lowlevelstr.h"
-#include "filecopyex.h"
-#include "engine.h"
 #include "common.h"
-#include "../framework/fileutils.h"
-#include "../framework/strutils.h"
-
-#include "enginetools.h"
-#include "../framework/common.h"
+#include "engine.h"
+#include "EngineTools.h"
+#include "tools.h"
+#include "ui.h"
+#include "Framework/ObjString.h"
+#include "Framework/StrUtils.h"
+#include "FileCopyEx.h"
 
 #define AllocAlign  65536
 

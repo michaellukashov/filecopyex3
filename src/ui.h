@@ -69,18 +69,4 @@ String FormatWidth(const String&, int);
 String FormatWidthNoExt(const String&, int);
 String SplitWidth(const String&, int);
 
-inline __int64 GetTime()
-{
-	LARGE_INTEGER res;
-	QueryPerformanceCounter(&res);
-	return res.QuadPart;
-}
-
-inline __int64 TicksPerSec()
-{
-	LARGE_INTEGER res;
-	QueryPerformanceFrequency(&res);
-	return res.QuadPart;
-}
-
 #endif//__UI_H__

@@ -271,7 +271,6 @@
     <ClCompile Include="src\Classes.cpp" />
     <ClCompile Include="src\common.cpp" />
     <ClCompile Include="src\CopyProgress.cpp" />
-    <ClCompile Include="src\dialog.cpp" />
     <ClCompile Include="src\dlgclass.cpp" />
     <ClCompile Include="src\dlgobject.cpp" />
     <ClCompile Include="src\Engine.cpp" />
@@ -299,7 +298,6 @@
     <ClInclude Include="src\Classes.h" />
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\CopyProgress.h" />
-    <ClInclude Include="src\dialog.h" />
     <ClInclude Include="src\dlgclass.h" />
     <ClInclude Include="src\dlgobject.h" />
     <ClInclude Include="src\Engine.h" />

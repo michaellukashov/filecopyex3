@@ -35,9 +35,6 @@
     <ClCompile Include="src\CopyProgress.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\dialog.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\dlgclass.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -116,9 +113,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\CopyProgress.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\dialog.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\dlgclass.h">

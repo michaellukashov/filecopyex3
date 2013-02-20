@@ -184,7 +184,7 @@ ObjectManager::~ObjectManager()
 		delete reg_classes[i];
 	}
 }
-void ObjectManager::RegisterClass(ObjectClass* cl) 
+void ObjectManager::RegClass(ObjectClass* cl) 
 {
 	cl->DefineProperties();
 	reg_classes.Add(cl);

@@ -22,11 +22,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../stdhdr.h"
-#include "../../src/common.h"
-#include "../lowlevelstr.h"
-#include "../strutils.h"
 #include "progress.h"
+
+#include "Framework/StrUtils.h"
+#include "common.h"
+#include "ui.h"
+#include "tools.h"
 
 FarProgress::FarProgress(void)
 {

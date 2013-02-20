@@ -17,10 +17,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "../framework/stdhdr.h"
+//#include "framework/stdhdr.h"
 #include "classes.h"
 #include "common.h"
-#include "../framework/common.h"
+#include "tools.h"
 
 const wchar_t* FileNameStoreEnum::GetNext()
 {

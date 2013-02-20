@@ -27,14 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-//#include "Framework/stringlist.h"
-//#include "sdk/plugin.hpp"
-//#include "sdk/farcolor.hpp"
-//#include "dialog.h"
-//
-//#include "ui.h"
-//#include "progress.h"
-//#include "panel.h"
 #include "Framework/ObjString.h"
 #include "Framework/Properties.h"
 #include "Framework/ValueList.h"

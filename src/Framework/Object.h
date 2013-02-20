@@ -129,8 +129,9 @@ class ObjectManager
 {
 public:
 	~ObjectManager();
-	void RegisterClass(ObjectClass* cl);
+	void RegClass(ObjectClass* cl);
 	Object* Create(const String& type, const String& name, Object* parent);
+
 private:
 	ObjectClass* FindClass(const String& type);
 	ObjectClasses reg_classes;

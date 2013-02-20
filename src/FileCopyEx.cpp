@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 FarPlugin* CreatePlugin()
 {
-	FarPlugin* p = new FileCopyExPlugin;
+	FarPlugin* p = new FileCopyExPlugin();
 	p->Create();
 	return p;
 }
@@ -87,7 +87,7 @@ void CallCopy(int move, int curonly)
 	}
 }
 
-void FileCopyExPlugin::OpenPlugin(int from, int item)
+void FileCopyExPlugin::OpenPlugin(const struct OpenInfo *OInfo)
 {
 	FarMenu menu;
 	menu.SetFlags(FMENU_WRAPMODE);
