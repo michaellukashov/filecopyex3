@@ -53,9 +53,6 @@
     <ClCompile Include="src\FileCopyEx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\panel.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\progress.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -137,9 +134,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\guid.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\panel.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\progress.h">
