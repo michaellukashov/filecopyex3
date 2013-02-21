@@ -32,6 +32,7 @@ along with this program.	If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/ObjString.h"
 #include "Framework/StrUtils.h"
 #include "FileCopyEx.h"
+#include "guid.hpp"
 
 #define AllocAlign	65536
 
@@ -80,11 +81,8 @@ void ShowErrorMessage(const String& s)
 
 	String msgbuf = LOC("CopyDialog.Error") + "\n" + s + "\n";
 
-	/* XXX Info.Message(Info.ModuleNumber, 
-								FMSG_WARNING | FMSG_MB_OK | FMSG_ALLINONE, 
-								NULL, 
-								(const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, 0);
- */
+	Info.Message(&MainGuid, &UnkGuid, FMSG_WARNING | FMSG_MB_OK | FMSG_ALLINONE, NULL, (const wchar_t * const *)msgbuf.ptr(), 0, 0);
+ 
 }
 
 
@@ -315,8 +313,8 @@ del_retry:
 
 void Engine::ProcessDesc(int fnum)
 {
-	String DstName=FlushDst.GetByNum(fnum), 
-				 SrcName=FlushSrc.GetByNum(fnum);
+	String DstName=FlushDst.GetByNum(fnum);
+	String SrcName=FlushSrc.GetByNum(fnum);
 	//TODO: OM_RENAME can change DstName
 	FileStruct &info=Files[fnum];
 
@@ -1087,19 +1085,18 @@ Engine::MResult Engine::Main(int move, int curOnly)
 
 	_CopyDescs		= Options["CopyDescs"];
 	_DescsInDirs	= Options["DescsInSubdirs"];
-	_ConfirmBreak = Options["ConfirmBreak"];
+	_ConfirmBreak	= Options["ConfirmBreak"];
 	_PreallocMin	= Options["PreallocMin"];
 	_UnbuffMin		= Options["UnbuffMin"];
 
-	_ClearROFromCD	= 0; //XXX Info.AdvControl(Info.ModuleNumber, ACTL_GETSYSTEMSETTINGS, NULL) & FSS_CLEARROATTRIBUTE;
-	_HideDescs			= 0; //XXX Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_SETHIDDEN;
+	_ClearROFromCD	= 1; //Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, NULL) & FSS_CLEARROATTRIBUTE;
+	_HideDescs = 0; //XXX Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_SETHIDDEN;
 	_UpdateRODescs	= 0; //XXX Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_UPDATEREADONLY;
 
 	FarDialog& dlg = plugin->Dialogs()["CopyDialog"];
 	dlg.ResetControls();
 	FarDialog& advdlg = plugin->Dialogs()["AdvCopyDialog"];
 	advdlg.ResetControls();
-
 	
 	String prompt, srcPath, dstPath;
 	Move = move;
@@ -1126,12 +1123,13 @@ Engine::MResult Engine::Main(int move, int curOnly)
 	}
 
 	curDir = getPanelDir(PANEL_ACTIVE);
-	//Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELDIRECTORY, MAX_FILENAME, curDir);
-	//XXX Info.Control(INVALID_HANDLE_VALUE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi); // ???
+	Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &pi); // !!! check result!
 
 	// fixed by Nsky: bug #40
 //	_toansi(pi.CurDir);
-	if(pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType== PTYPE_INFOPANEL || !pi.ItemsNumber) return MRES_NONE;
+	if(pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType== PTYPE_INFOPANEL || !pi.ItemsNumber) {
+		return MRES_NONE;
+	}
 	// Bug #5 fixed by CDK
 	if ((pi.Flags & PFLAGS_REALNAMES) == 0) return MRES_STDCOPY;
 	if (pi.SelectedItemsNumber > 1 && !curOnly) {
@@ -1156,7 +1154,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
 			fmt=LOC("CopyDialog.MoveTo");
 		}
 		prompt = Format(fmt.ptr(), fn.ptr());
-		if(curOnly || dstPath == "") dstPath=fn;
+		if (curOnly || dstPath == "") dstPath=fn;
 		/*else if(!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			&& dstpath!="queue:" && dstpath!="plugin:")
 				dstpath=AddEndSlash(dstpath)+fn;*/
@@ -1166,13 +1164,13 @@ Engine::MResult Engine::Main(int move, int curOnly)
 
 	_InverseBars=(bool)Options["ConnectLikeBars"] && pi.PanelRect.left>0;
 	
-	if (!move) {
-		dlg("Title")=LOC("CopyDialog.Copy");
-	} else {
+	if (move) {
 		dlg("Title")=LOC("CopyDialog.Move");
-		dlg["Label1"]("Text") = prompt;
-		dlg["DestPath"]("Text") = dstPath;
+	} else {
+		dlg("Title")=LOC("CopyDialog.Copy");
 	}
+	dlg["Label1"]("Text") = prompt;
+	dlg["DestPath"]("Text") = dstPath;
 
 	// axxie: Reset cp in case when user pressed Shift-F6/Shift-F5
 	int cp = (!curOnly && srcPath!="") ? CheckParallel(srcPath, dstPath) : FALSE;
@@ -1192,70 +1190,72 @@ Engine::MResult Engine::Main(int move, int curOnly)
 	dlg["Ask"]("Selected") = !Options["OverwriteDef"];
 	dlg["Overwrite"]("Selected") = Options["OverwriteDef"];
 	
-	if(WinNT)
-	{
+	if (WinNT) {
 		advdlg["Streams"]("Selected") = Options["CopyStreamsDef"];
 		advdlg["Rights"]("Selected") = Options["CopyRightsDef"];
-	}
-	else
-	{
+	} else {
 		advdlg["Streams"]("Disable") = 1;
 		advdlg["Rights"]("Disable") = 1;
 		advdlg["Compress"]("Disable") = 1;
 	}
-	if(!Win2K) advdlg["Encrypt"]("Disable") = 1;
+	if (!Win2K) {
+		advdlg["Encrypt"]("Disable") = 1;
+	}
 
 rep:
 
-	int dres=dlg.Execute();
-	if(dres==2) 
-	{
-		((FileCopyExPlugin*)plugin)->Config();
-		goto rep;
-	}
-	else if(dres==1)
-	{
-		if(advdlg.Execute()==0)
-		{
-			adv=1;
-			bool resume=advdlg["ResumeFiles"]("Selected");
-			dlg["Label2"]("Disable")=resume;
-			dlg["Ask"]("Disable")=resume;
-			dlg["Skip"]("Disable")=resume;
-			dlg["Overwrite"]("Disable")=resume;
-			dlg["Append"]("Disable")=resume;
-			dlg["Rename"]("Disable")=resume;
-			dlg["SkipIfNewer"]("Disable")=resume;
-			if(resume)
-				dlg["SkipIfNewer"]("Selected")=0;
+	int dres = dlg.Execute();
+	switch (dres) {
+		case 2: {
+			((FileCopyExPlugin*)plugin)->Config();
+			goto rep;
 		}
-		goto rep;
-	}
-	else if(dres==-1) return MRES_NONE;
 
-	String tmpdsttext=dlg["DestPath"]("Text");
+		case 1: {
+			if(advdlg.Execute()==0)	{
+				adv=1;
+				bool resume=advdlg["ResumeFiles"]("Selected");
+				dlg["Label2"]("Disable")=resume;
+				dlg["Ask"]("Disable")=resume;
+				dlg["Skip"]("Disable")=resume;
+				dlg["Overwrite"]("Disable")=resume;
+				dlg["Append"]("Disable")=resume;
+				dlg["Rename"]("Disable")=resume;
+				dlg["SkipIfNewer"]("Disable")=resume;
+				if (resume) {
+					dlg["SkipIfNewer"]("Selected")=0;
+				}
+			}
+			goto rep;
+		}
+		case -1: {
+			return MRES_NONE;
+		}
+	}
+
+	String tmpDstText=dlg["DestPath"]("Text");
 
 	// bugfixed by slst: 
-	String dsttext = tmpdsttext.trim().trimquotes();
+	String dstText = tmpDstText.trim().trimquotes();
 
 	// fixed by Nsky: bug #28
-	if(!dsttext.left(4).icmp("nul\\"))
-		dsttext = L"nul";
+	if(!dstText.left(4).icmp("nul\\"))
+		dstText = L"nul";
 
 	// bugfixed by slst: bug #7		 
-	dsttext = Replace(dsttext, "\"", "");
+	dstText = Replace(dstText, "\"", "");
 
-	if(dsttext=="plugin:") 
+	if(dstText=="plugin:") 
 	{
-		if(allowPlug) return MRES_STDCOPY_RET;
-		else 
-		{
+		if(allowPlug) {
+			return MRES_STDCOPY_RET;
+		} else {
 			ShowMessage(dlg("Text"), LOC("CopyDialog.InvalidPath"), FMSG_MB_OK);
 			goto rep;
 		}
 	}
 
-	String RelDstPath = ExpandEnv(Replace(dsttext, "/", "\\"));
+	String relDstPath = ExpandEnv(Replace(dstText, "/", "\\"));
 	dstPath = "";
 	
 	wchar_t CurrentDir[MAX_FILENAME];
@@ -1268,17 +1268,21 @@ rep:
 	// Current directory is set by Far to file path of selected file
 	BOOL SCDResult = SetCurrentDirectory(srcPath.ptr());
 	// fixed by Nsky: bug #28
-	if(RelDstPath.icmp("nul")) {
-		if(GetFullPathName(RelDstPath.ptr(), MAX_FILENAME, dstbuf, &FNCPtr)) dstPath = dstbuf;
+	if(relDstPath.icmp("nul")) {
+		if(GetFullPathName(relDstPath.ptr(), MAX_FILENAME, dstbuf, &FNCPtr)) {
+			dstPath = dstbuf;
+		}
 	} else {
-		dstPath = RelDstPath;
+		dstPath = relDstPath;
 	}
-	if(SCDResult) SetCurrentDirectory(CurrentDir);
+	if (SCDResult) {
+		SetCurrentDirectory(CurrentDir);
+	}
 	
-	CompressMode=EncryptMode=ATTR_INHERIT;
-	Streams=Rights=FALSE;
+	CompressMode = EncryptMode = ATTR_INHERIT;
+	Streams = Rights = FALSE;
 
-	if(WinNT)
+	if (WinNT)
 	{
 		Rights = advdlg["Rights"]("Selected");
 		Streams = advdlg["Streams"]("Selected");
@@ -1290,31 +1294,36 @@ rep:
 		}
 	}
 
-	Parallel=dlg["ParallelCopy"]("Selected");
-	SkipNewer=dlg["SkipIfNewer"]("Selected");
-	SkippedToTemp=advdlg["SkippedToTemp"]("Selected");
-	ReadSpeedLimit=WriteSpeedLimit=0;
-	if((bool)advdlg["ReadSpeedLimit"]("Selected"))
+	Parallel = dlg["ParallelCopy"]("Selected");
+	SkipNewer = dlg["SkipIfNewer"]("Selected");
+	SkippedToTemp = advdlg["SkippedToTemp"]("Selected");
+	ReadSpeedLimit = WriteSpeedLimit=0;
+	if((bool)advdlg["ReadSpeedLimit"]("Selected")) {
 		ReadSpeedLimit=(int)advdlg["ReadSpeedLimitValue"]("Text")*1024;
-	if((bool)advdlg["WriteSpeedLimit"]("Selected"))
+	}
+	if((bool)advdlg["WriteSpeedLimit"]("Selected")) {
 		WriteSpeedLimit=(int)advdlg["WriteSpeedLimitValue"]("Text")*1024;
+	}
 
-	if(advdlg["ResumeFiles"]("Selected")) OverwriteMode=OM_RESUME;
-	else if(dlg["Overwrite"]("Selected")) OverwriteMode=OM_OVERWRITE;
-	else if(dlg["Skip"]("Selected")) OverwriteMode=OM_SKIP;
-	else if(dlg["Append"]("Selected")) OverwriteMode=OM_APPEND;
-	else if(dlg["Rename"]("Selected")) OverwriteMode=OM_RENAME;
-	else OverwriteMode=OM_PROMPT;
+	OverwriteMode=OM_PROMPT;
+	if (advdlg["ResumeFiles"]("Selected")) {
+		OverwriteMode=OM_RESUME;
+	} else if(dlg["Overwrite"]("Selected")) {
+		OverwriteMode=OM_OVERWRITE;
+	} else if(dlg["Skip"]("Selected")) {
+		OverwriteMode=OM_SKIP;
+	} else if(dlg["Append"]("Selected")) {
+		OverwriteMode=OM_APPEND;
+	} else if(dlg["Rename"]("Selected")) {
+		OverwriteMode=OM_RENAME;
+	};
 
 	// fixed by Nsky: bug #28
-	if(!dstPath.icmp("nul"))
-	{
+	if(!dstPath.icmp("nul")) {
 		OverwriteMode=OM_OVERWRITE;
 		CompressMode=EncryptMode=ATTR_INHERIT;
 		Streams=Rights=0;
-	}
-	else
-	{
+	} else {
 		int vf=VolFlags(dstPath);
 		if(vf!=-1)
 		{
@@ -1520,78 +1529,66 @@ fin:
 	if(!Move)
 	{
 		int i=0;
-	// XXX Info.Control(PANEL_ACTIVE,FCTL_BEGINSELECTION,0,NULL);
-		while (i<Files.Count())
-		{
-			if(Files[i].PanelIndex!=-1)
-			{
-				if(Files[i].Flags & FLG_DIR_PRE)
-				{
+		Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, NULL);
+		while (i<Files.Count())	{
+			if(Files[i].PanelIndex!=-1) {
+				if(Files[i].Flags & FLG_DIR_PRE) {
 					int ok=1, j=i+1;
-					while (Files[j].Level>Files[i].Level)
-					{
-						if(!(Files[j].Flags & (FLG_DIR_PRE | FLG_DIR_POST | FLG_COPIED)))
-						{
-							ok=0; break;
+					while (Files[j].Level>Files[i].Level) {
+						if(!(Files[j].Flags & (FLG_DIR_PRE | FLG_DIR_POST | FLG_COPIED))) {
+							ok=0; 
+							break;
 						}
 						j++;
 					}
-					if(ok)
-			{
-			//XXX Info.Control(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
-			}
+					if (ok) {
+						Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
+					}
 					i=j-1;
+				} else {
+					if(!(Files[i].Flags & FLG_DIR_POST) && Files[i].Flags & FLG_COPIED)	{
+						Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
+					}
 				}
-				else if(!(Files[i].Flags & FLG_DIR_POST) &&
-					Files[i].Flags & FLG_COPIED)
-		{
-			//XXX Info.Control(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
-		}
 			}
 			i++;
 		}
-	//XXX Info.Control(PANEL_ACTIVE,FCTL_ENDSELECTION,0,NULL);
+		Info.PanelControl(PANEL_ACTIVE, FCTL_ENDSELECTION, 0, NULL);
 		// fixed by Nsky: bug #40
-	}
-	else
-	{
+	} else {
 		// Bugfixed by slst: bug #2
-		//XXX Info.Control(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
-		//XXX Info.Control(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, (LONG_PTR)&pi);
+		Info.PanelControl(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
+		Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &pi);
 		// fixed by Nsky: bug #40
 		PanelRedrawInfo rpi;
 		rpi.TopPanelItem = pi.TopPanelItem;
 
 		String NewFileName;
-		for (int idx=0; idx<Files.Count(); idx++)
-		{
-			if(Files[idx].PanelIndex == pi.CurrentItem)
-			{
+		for (int idx=0; idx<Files.Count(); idx++) {
+			if(Files[idx].PanelIndex == pi.CurrentItem)	{
 				NewFileName = DstNames.GetNameByNum(idx);
 				break;
 			}
 		}
 		NewFileName = NewFileName.toLower();
 
-		for (int i=0; i<pi.ItemsNumber; i++)
-		{
-		TPanelItem pit(i);
-		String NewPanelFilename = pit->FileName;
-		NewPanelFilename = NewPanelFilename.toLower();
-		if(NewFileName == NewPanelFilename)
-		{
-		rpi.CurrentItem = i;
-		//XXX Info.Control(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, (LONG_PTR)&rpi);
-		// fixed by Nsky: bug #40
-		break;
-		}
+		for (int i=0; i<pi.ItemsNumber; i++) {
+			TPanelItem pit(i);
+			String NewPanelFilename = pit->FileName;
+			NewPanelFilename = NewPanelFilename.toLower();
+			if(NewFileName == NewPanelFilename)	{
+				rpi.CurrentItem = i;
+				Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, &rpi);
+				// fixed by Nsky: bug #40
+				break;
+			}
 		}
 	}
 
-	//XXX Info.Control(PANEL_ACTIVE,	FCTL_UPDATEPANEL, 1, NULL);
-	//XXX Info.Control(PANEL_PASSIVE,	FCTL_UPDATEPANEL, 1, NULL);
-	//XXX Info.Control(PANEL_ACTIVE,	FCTL_REDRAWPANEL, 0, NULL);
-	//XXX Info.Control(PANEL_PASSIVE,	FCTL_REDRAWPANEL, 0, NULL);
+	Info.PanelControl(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
+	Info.PanelControl(PANEL_PASSIVE, FCTL_UPDATEPANEL, 1, NULL);
+	Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, NULL);
+	Info.PanelControl(PANEL_PASSIVE, FCTL_REDRAWPANEL, 0, NULL);
 	// fixed by Nsky: bug #40
 
 	return MRES_NONE;

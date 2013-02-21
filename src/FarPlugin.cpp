@@ -104,8 +104,6 @@ void FarPlugin::SaveOptions()
 	*/
 }
 
-
-
 int FarPlugin::Configure(int)
 {
 	return FALSE;

@@ -28,13 +28,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.h"
 #include "ui.h"
 #include "tools.h"
+#include "guid.hpp"
+#include "SDK/farcolor.hpp"
 
 FarProgress::FarProgress(void)
 {
-  //XXX clrFrame = (int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOX);
-  //XXX clrTitle = (int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOXTITLE);
-  //XXX clrBar=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,   (void*)COL_DIALOGTEXT);
-  //XXX clrText=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,  (void*)COL_DIALOGTEXT);
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGBOX, &clrFrame);
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGBOXTITLE, &clrTitle );
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrBar);
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrText);
+  // XXX !!!
   /* switch (clrFrame >> 4)
   {
     // [exp] color changed by CDK
@@ -66,7 +69,7 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String& capti
 	{
 		tpl += bkg;
 	}
-	//XXX Info.Message(Info.ModuleNumber, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t**)tpl.ptr(), 0, 0);
+	Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t**)tpl.ptr(), 0, 0);
 }
 
 void FarProgress::GetConSize(int& w, int &h)

@@ -63,14 +63,15 @@ int AttribCount() { return sizeof(_Attrib)/sizeof(Attribute); }
 
 void FarDlgObjectClass::DefineProperties()
 {
-  for (int i=0; i<AttribCount(); i++)
-    AddProperty(Attrib(i).Name, 0);
-  AddProperty("FitWidth", 0);
-  AddProperty("Focus", 0);
-  AddProperty("NoBreak", 0);
-  AddProperty("Visible", 1);
-  AddProperty("Persistent", 0);
-  AddProperty("Text", "");
+	for (int i=0; i<AttribCount(); i++) {
+		AddProperty(Attrib(i).Name, 0);
+	}
+	AddProperty("FitWidth", 0);
+	AddProperty("Focus", 0);
+	AddProperty("NoBreak", 0);
+	AddProperty("Visible", 1);
+	AddProperty("Persistent", 0);
+	AddProperty("Text", "");
 }
 
 void FarDlgCheckboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
@@ -80,34 +81,33 @@ void FarDlgCheckboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 
 void FarDlgEditClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
 {
-  item.Type=DI_EDIT;
-  int w=obj("Width");
-  item.X2=item.X1+w-1;
-  if (item.Flags & DIF_HISTORY)
-  {
-    String p=obj("HistoryId");
-    if (p!="") 
-    {
-      FarDlgEdit &e=static_cast<FarDlgEdit&>(obj);
-      (String("FarFramework\\")+e.GetDialog()->Name()+"\\"+e.Name()).ToUnicode(e.HistoryId, sizeof(e.HistoryId)/sizeof(wchar_t));
-      item.History=e.HistoryId;
-    }
-  }
+	item.Type=DI_EDIT;
+	int w = obj("Width");
+	item.X2 = item.X1 + w - 1;
+	if (item.Flags & DIF_HISTORY) {
+		String p=obj("HistoryId");
+		if (p!="") {
+			FarDlgEdit &e=static_cast<FarDlgEdit&>(obj);
+			(String("FarFramework\\")+e.GetDialog()->Name()+"\\"+e.Name()).ToUnicode(e.HistoryId, sizeof(e.HistoryId)/sizeof(wchar_t));
+			item.History=e.HistoryId;
+		}
+	}
 }
 
 static String GetDlgText(HANDLE dlg, int id)
 {
-	size_t len = 0; //XXX Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, NULL);
-	wchar_t* buf = (wchar_t*)malloc((len + 1)*sizeof(wchar_t));
-	//XXX Info.SendDlgMessage(dlg, DM_GETTEXTPTR, id, (LONG_PTR)buf);
-	String t(buf);
-	free(buf);
+	FarDialogItemData item = { sizeof(FarDialogItemData) };
+	item.PtrLength = Info.SendDlgMessage(dlg, DM_GETTEXT, id, NULL);
+	item.PtrData = new wchar_t[item.PtrLength+1];
+	Info.SendDlgMessage(dlg, DM_GETTEXT, id, &item);
+	String t(item.PtrData);
+	delete(item.PtrData); 
 	return t;
 }
 
 void FarDlgEditClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 {
-	obj("Text")=GetDlgText(dlg, obj.DialogItem);
+	obj("Text") = GetDlgText(dlg, obj.DialogItem);
 }
 
 void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
@@ -147,13 +147,13 @@ void FarDlgComboboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 
 int lablen(FarDialogItem& item)
 {
-  if (item.Flags & DIF_SHOWAMPERSAND)
-    return 0; //XXX (int)wcslen(item.PtrData);
-  else
-  {
+  if (item.Flags & DIF_SHOWAMPERSAND) {
+    return wcslen(item.Data);
+  } else {
     int res=0;
-    /* XXX for (const wchar_t *p=item.PtrData; *p; p++)
-      if (*p!='&') res++; */
+    for (const wchar_t *p=item.Data; *p; p++) {
+      if (*p!='&') res++; 
+	}
     return res;
   }
 }

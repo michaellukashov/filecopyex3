@@ -29,6 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "dlgobject.h"
 #include "common.h"
 #include "Framework/StrUtils.h"
+#include "Framework/ObjString.h"
+#include "guid.hpp"
 
 FarDlgObject::FarDlgObject(void)
 {
@@ -98,13 +100,14 @@ void FarDlgObject::SetItemText(FarDialogItem& item, const String& text)
 	size_t len = text.len() + 1;
 	wchar_t* t = (wchar_t*)malloc(sizeof(wchar_t) * len);
 	text.ToUnicode(t, len);
-	//XXX item.PtrData = t;
-	//XXX item.MaxLen = 0;
+	item.Data = t;
+	item.MaxLength = 0;
 }
+
 void FarDlgObject::DestroyItemText(FarDialogItem& item)
 {
-	//XXX free((wchar_t*)item.PtrData);
-	//XXX item.PtrData = NULL;
+	free((wchar_t*)item.Data);
+	item.Data = NULL;
 }
 
 void FarDlgObject::PreInitItem(FarDialogItem& item)
@@ -112,14 +115,16 @@ void FarDlgObject::PreInitItem(FarDialogItem& item)
 	//	SetItemText(&item, Name());
 
 	String p=Property("Text");
-	if (p=="") 
-		p=LOC(Dialog->Name()+"."+Name());
+	if (p=="") {
+		String t = Dialog->Name()+"."+Name();
+		p=LOC(t);
+	}
 	SetItemText(item, p);
 
 	for (int i=0; i<AttribCount(); i++)
 		if (Property(Attrib(i).Name))
 			item.Flags |= Attrib(i).Flag;
-	//XXX if (Property("Focus")) item.Focus=1;
+	if (Property("Focus")) item.Flags |= DIF_FOCUS;
 }
 
 void FarDlgObject::DefSize(int& w, int& h, int& fit)
@@ -179,7 +184,7 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items,
 	for (int i=0; i<childs.Count(); i++)
 	{
 		FarDlgObject &obj=Child(i);
-		if (obj.Property("Visible"))
+		if (obj.Property("Visible")) 
 		{
 			int w, h, f;
 			obj.DefSize(w, h, f);
@@ -212,8 +217,9 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items,
 			{
 				int w, h, f;
 				obj.DefSize(w, h, f);
-				if (f) 
+				if (f) { 
 					w=(curW-Groups[j].w)/Groups[j].nfit;
+				}
 				obj.AddToItems(Items, RetCodes, x, y, w);
 				x+=w+2;
 			}
@@ -239,9 +245,12 @@ void FarDlgContainer::SaveState(PropertyList& state)
 
 void FarDlgContainer::RetrieveProperties(HANDLE dlg)
 {
-	for (int i=0; i<childs.Count(); i++)
-		if (Child(i).DialogItem!=-1 || Child(i).IsContainer())
-			Child(i).RetrieveProperties(dlg);
+	int cnt = childs.Count();
+	for (int i=0; i<cnt; i++) {
+		FarDlgObject& fdo = Child(i);
+		if (fdo.DialogItem!=-1 || fdo.IsContainer())
+			fdo.RetrieveProperties(dlg);
+	}
 }
 
 void FarDlgContainer::ClearDialogItems(Array<FarDialogItem>& Items)
@@ -298,23 +307,24 @@ int FarDialog::Execute()
   Items[0].X1=3; Items[0].Y1=1; 
   Items[0].X2=w+6; Items[0].Y2=h+2;
 
-  HANDLE hnd=0; /* XXX Info.DialogInit(Info.ModuleNumber, -1, -1, w+10, h+4, 
-    String(Property("HelpTopic")).ptr(), 
-    (FarDialogItem*)Items.Storage(), Items.Count(),
-    0, bool(Property("Warning")) ? FDLG_WARNING : 0,
-    Info.DefDlgProc, 0); */
-  int ret=-1;
-  if (hnd!=INVALID_HANDLE_VALUE)
-  {
-	  int res = Info.DialogRun(hnd);
-    for (int i=0; i<RetCodes.Count(); i++)
-      if (RetCodes[i].itemNo==res)
-      {
-        if (RetCodes[i].retCode!=-1)
-          RetrieveProperties(hnd);
-        ret=RetCodes[i].retCode;
-        break;
-      }
+	HANDLE hnd = Info.DialogInit(&MainGuid, &MainDialog, -1, -1, w+10, h+4, 
+		String(Property("HelpTopic")).c_str(), 
+		(FarDialogItem*)Items.Storage(), Items.Count(),
+		0, bool(Property("Warning")) ? FDLG_WARNING : 0,
+		Info.DefDlgProc, 0
+	);  // !!! Need real Dialog GUID, instead of MainDialog
+	int ret=-1;
+	if (hnd!=INVALID_HANDLE_VALUE) {
+	int res = Info.DialogRun(hnd);
+    for (int i=0; i<RetCodes.Count(); i++) {
+		if (RetCodes[i].itemNo == res) {
+			if (RetCodes[i].retCode!=-1) {
+				RetrieveProperties(hnd);
+			}
+			ret=RetCodes[i].retCode;
+			break;
+		}
+	}
   }
   ClearDialogItems(Items);
   return ret;

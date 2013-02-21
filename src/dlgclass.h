@@ -109,7 +109,7 @@ class FarDlgButtonClass : public FarDlgObjectClass
 	{
 		item.Type=DI_BUTTON;
 		item.X2=item.X1+lablen(item)+4-1;
-		//if (obj("Default")) item.DefaultButton=1; // XXX
+		if (obj("Default")) item.Flags |= DIF_DEFAULTBUTTON;
 	}
 };
 
@@ -134,7 +134,7 @@ class FarDlgCheckboxClass : public FarDlgObjectClass
 	{
 		item.Type=DI_CHECKBOX;
 		item.X2=item.X1+lablen(item)+4-1;
-		// item.Selected=obj("Selected"); // XXX
+		item.Selected=int(obj("Selected"));
 	}
 	void RetrieveProperties(FarDlgObject& obj, HANDLE dlg);
 	void LoadState(PropertyList &state, FarDlgObject& obj)
