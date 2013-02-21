@@ -58,12 +58,10 @@ int ShowMessageExHelp(const String& title, const String& msg,
   return res;
 }
 
-
 int msgw()
 {
   return 50;
 }
-
 
 void Error(const String& s, int code)
 {
@@ -98,22 +96,24 @@ String GetErrText(int code)
   return buf;
 }
 
-String FormatWidth(const String& s, int len)
+String FormatWidth(const String &s, int len)
 {
-  int dif = s.len()-len;
-  if (dif>0) 
-    return String("...")+s.right(len-3);
-  else
-    return s+String(' ', -dif);
+	int dif = s.len()-len;
+	if (dif > 0) {
+		return String("...") + s.right(len-3);
+	} else {
+		return s + String(' ', -dif);
+	}
 }
 
 String FormatWidthNoExt(const String& s, int len)
 {
-  int dif = s.len()-len;
-  if (dif>0) 
-    return String("...")+s.right(len-3);
-  else
-    return s;
+	int dif = s.len()-len;
+	if (dif > 0) {
+		return String("...") + s.right(len-3);
+	} else {
+		return s;
+	}
 }
 
 static void stripnl(wchar_t *msg)
@@ -127,7 +127,7 @@ static void stripnl(wchar_t *msg)
   *pm=0;
 }
 
-String SplitWidth(const String& s, int w)
+String SplitWidth(const String &s, int w)
 {
   wchar_t msg[1024], res[1024];
   s.CopyTo(msg, 1024);
@@ -146,8 +146,7 @@ String SplitWidth(const String& s, int w)
       op=p+1;
       *p=t;
     }
-  }
-  while (*p++);
+  }  while (*p++);
   if (*op) wcscat_s(res, 1024, op);
   p=(wchar_t*)_tcsend(res)-1;
   while (p>=res && *p=='.') *p--=0;
