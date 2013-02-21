@@ -319,7 +319,6 @@
     <ClInclude Include="src\guid.hpp" />
     <ClInclude Include="src\progress.h" />
     <ClInclude Include="src\registry.h" />
-    <ClInclude Include="src\SDK\DlgBuilder.hpp" />
     <ClInclude Include="src\SDK\farcolor.hpp" />
     <ClInclude Include="src\SDK\farversion.hpp" />
     <ClInclude Include="src\SDK\plugin.hpp" />

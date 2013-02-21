@@ -184,9 +184,6 @@
     <ClInclude Include="src\Framework\ValueList.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="src\SDK\DlgBuilder.hpp">
-      <Filter>Source\SDK</Filter>
-    </ClInclude>
     <ClInclude Include="src\SDK\farcolor.hpp">
       <Filter>Source\SDK</Filter>
     </ClInclude>
