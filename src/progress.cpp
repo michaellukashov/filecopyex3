@@ -47,6 +47,8 @@ FarProgress::FarProgress(void)
   }
   clrLabel=clrLabel | clrFrame & 0xF0;
   */
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrLabel); // !!! not sure
+
   WinType=WIN_NONE;
   hScreen=0;
   InverseBars=0;
