@@ -124,15 +124,15 @@ void FileCopyExPlugin::InitOptions()
 	options.Add("CopyStreamsDef", 0);
 	options.Add("CopyRightsDef", 0);
 	options.Add("AllowParallel", 1);
-	options.Add("DefParallel", 0);
+	options.Add("DefParallel", 1);
 	options.Add("CopyDescs", 1);
 	options.Add("DescsInSubdirs", 0);
 	options.Add("ConnectLikeBars", 0);
 	options.Add("ConfirmBreak", 1);
-	options.Add("Sound", 0);
-	options.Add("PreallocMin", 4096);
+	options.Add("Sound", 1);
+	options.Add("PreallocMin", 64);
 	options.Add("UnbuffMin", 64);
-	options.Add("ReadFilesOpenedForWriting", 0);
+	options.Add("ReadFilesOpenedForWriting", 1);
 	options.Add("CheckFreeDiskSpace", 1);
 }
 
