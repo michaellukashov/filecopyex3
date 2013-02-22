@@ -78,7 +78,6 @@ void SetFileTime(const String& fn, FILETIME& time);
 void SetFileTime(HANDLE h, FILETIME& time);
 int Read(HANDLE h, void *buf, int size);
 int Write(HANDLE h, void *buf, int size);
-void ClearInput();
 int GetSectorSize(const String& path);
 
 #endif//__ENGINETOOLS_H__
