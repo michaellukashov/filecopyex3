@@ -1019,19 +1019,19 @@ void Engine::AddTopLevelDir(const String &dir, const String &dstmask,
 	SrcNames.AddRel(pc, dir.ptr());
 	DstNames.AddRel(pc, ExtractFilePath(
 		ApplyFileMaskPath(dir+"\\somefile.txt", dstmask)).ptr());
-	FileStruct _info;
-	memset(&_info, 0, sizeof(_info));
-	FileStruct &info=Files[Files.Add(_info)];
+	FileStruct info;
+	memset(&info, 0, sizeof(info));
+	
 	info.Flags=Flags;
 	info.Level=0;
 	info.PanelIndex=-1;
-	if((hf=FindFirstFile(dir.ptr(), &fd))
-		!=INVALID_HANDLE_VALUE)
+	if ((hf=FindFirstFile(dir.ptr(), &fd)) !=INVALID_HANDLE_VALUE)
 	{
 		FindClose(hf);
 		info.Attr=fd.dwFileAttributes;
 		info.Modify=fd.ftLastWriteTime;
 	}
+	Files.push_back(info);
 }
 
 int Engine::DirStart(const String& dir, const String& dstmask)
@@ -1528,9 +1528,8 @@ fin:
 
 	if(!Move)
 	{
-		int i=0;
 		Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, NULL);
-		while (i<Files.Count())	{
+		for (size_t i = 0; i < Files.size(); i++)	{
 			if(Files[i].PanelIndex!=-1) {
 				if(Files[i].Flags & FLG_DIR_PRE) {
 					int ok=1, j=i+1;
@@ -1551,7 +1550,6 @@ fin:
 					}
 				}
 			}
-			i++;
 		}
 		Info.PanelControl(PANEL_ACTIVE, FCTL_ENDSELECTION, 0, NULL);
 		// fixed by Nsky: bug #40
@@ -1564,7 +1562,7 @@ fin:
 		rpi.TopPanelItem = pi.TopPanelItem;
 
 		String NewFileName;
-		for (int idx=0; idx<Files.Count(); idx++) {
+		for (size_t idx=0; idx<Files.size(); idx++) {
 			if(Files[idx].PanelIndex == pi.CurrentItem)	{
 				NewFileName = DstNames.GetNameByNum(idx);
 				break;
@@ -1572,7 +1570,7 @@ fin:
 		}
 		NewFileName = NewFileName.toLower();
 
-		for (int i=0; i<pi.ItemsNumber; i++) {
+		for (size_t i=0; i<pi.ItemsNumber; i++) {
 			TPanelItem pit(i);
 			String NewPanelFilename = pit->FileName;
 			NewPanelFilename = NewPanelFilename.toLower();
@@ -1638,14 +1636,15 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 	if(attr & FILE_ATTRIBUTE_DIRECTORY) sz1 = 0;
 	else sz1 = size;
 
-	FileStruct _info;
-	memset(&_info, 0, sizeof(_info));
-	FileStruct &info=Files[Files.Add(_info)];
+	FileStruct info;
+	memset(&info, 0, sizeof(info));
 	info.Size=sz1;
 	info.Attr=attr;
 	info.Modify=Modify;
 	info.Level=Level;
 	info.PanelIndex=PanelIndex;
+	Files.push_back(info);
+
 	wchar_t pc;
 	if(attr & FILE_ATTRIBUTE_DIRECTORY) 
 	{
@@ -1861,12 +1860,13 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 fin:
 	if(attr & FILE_ATTRIBUTE_DIRECTORY) 
 	{
-		FileStruct _info1;
-		memset(&_info1, 0, sizeof(_info1));
-		FileStruct &info1=Files[Files.Add(_info1)];
-		info1.Flags|=FLG_DIR_POST | info.Flags & (FLG_COPIED | FLG_DELETED);
-		info1.Level=Level;
-		info1.PanelIndex=-1;
+		FileStruct info;
+		memset(&info, 0, sizeof(info));
+		info.Flags|=FLG_DIR_POST | info.Flags & (FLG_COPIED | FLG_DELETED);
+		info.Level=Level;
+		info.PanelIndex=-1;
+		Files.push_back(info);
+
 		SrcNames.AddRel('-', ExtractFileName(src).ptr());
 		DstNames.AddRel('-', ExtractFileName(dst).ptr());
 	}

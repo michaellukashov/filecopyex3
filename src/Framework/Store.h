@@ -69,21 +69,4 @@ public:
 	int Count() const { return Store::Count(); }
 };
 
-template <class ItemType>
-class ArrayStore : protected Store
-{
-public:
-	ArrayStore() { ; }
-	~ArrayStore() { ; }
-
-	int Add(const ItemType& ptr)
-	{ 
-		int res = Store::Add(sizeof(ItemType)); 
-		operator[](res) = ptr;
-		return res;
-	}
-	ItemType& operator[](int n) { return *(ItemType*)Store::operator[](n); }
-	int Count() { return Store::Count(); }
-};
-
 #endif//__STORE_H__

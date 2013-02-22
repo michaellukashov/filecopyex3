@@ -27,6 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include <vector>
+
 #include "copyprogress.h"
 #include "classes.h"
 
@@ -95,7 +97,7 @@ public:
 
 private:
 	FileNameStore SrcNames, DstNames;
-	ArrayStore<FileStruct> Files;
+	std::vector<FileStruct> Files;
 	FileNameStoreEnum FlushSrc, FlushDst;
 
 	int Parallel, BufSize, Streams, Rights, Move,
