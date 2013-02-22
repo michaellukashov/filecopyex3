@@ -53,13 +53,7 @@
     <ClCompile Include="src\FileCopyEx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\progress.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\registry.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\taskbar_icon.cpp">
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\ui.cpp">
@@ -78,9 +72,6 @@
       <Filter>Source\Framework</Filter>
     </ClCompile>
     <ClCompile Include="src\Framework\Properties.cpp">
-      <Filter>Source\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Framework\Store.cpp">
       <Filter>Source\Framework</Filter>
     </ClCompile>
     <ClCompile Include="src\Framework\StringList.cpp">
@@ -102,6 +93,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\FarMenu.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FarProgress.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\taskbarIcon.cpp">
       <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
@@ -136,13 +133,7 @@
     <ClInclude Include="src\guid.hpp">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="src\progress.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="src\registry.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\taskbar_icon.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\ui.h">
@@ -172,9 +163,6 @@
     <ClInclude Include="src\Framework\StdHdr.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="src\Framework\Store.h">
-      <Filter>Source\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="src\Framework\StringList.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
@@ -197,6 +185,12 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\FarMenu.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FarProgress.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\taskbarIcon.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

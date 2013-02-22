@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "framework/store.h"
 #include "framework/fileutils.h"
 #include "framework/valuelist.h"
 
@@ -38,7 +37,7 @@ public:
 		levelPlus, 
 		levelMinus, 
 		levelSame,
-		levelStar, // ???
+		levelStar, 
 	};
 
 	FileName(const Direction _d, const String& _name): d(_d), Name(_name) {};
@@ -55,10 +54,9 @@ private:
 class FileNameStore
 {
 public:
-	FileNameStore() { ; }
-	~FileNameStore() { ; }
+	FileNameStore() { }
+	~FileNameStore() { }
 
-	//size_t Add(String &name) { return StringStore::Add(ptr); }
 	size_t AddRel(FileName::Direction _d, const String& _name) { items.push_back(FileName(_d, _name)); return items.size()-1; };
 	size_t Count() const { return items.size(); };
 	const String GetNameByNum(size_t n) const { return items[n].getName(); };
