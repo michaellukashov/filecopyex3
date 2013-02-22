@@ -107,7 +107,7 @@ const wchar_t* FileNameStoreEnum::GetByNum(int n)
   }
 }
 
-int FileNameStore::AddRel(wchar_t pc, const wchar_t* s)
+size_t FileNameStore::AddRel(wchar_t pc, const wchar_t* s)
 {
   wchar_t buf[MAX_FILENAME+1];
   buf[0]=pc;
@@ -115,6 +115,7 @@ int FileNameStore::AddRel(wchar_t pc, const wchar_t* s)
   return Add(buf);
 }
 
+// ===== DescList =====
 DescList::DescList()
 {
 //  Names.SetOptions(slSorted | slIgnoreCase);

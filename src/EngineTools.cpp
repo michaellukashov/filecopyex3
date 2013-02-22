@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tools.h"
 #include "ui.h"
 
-void* Alloc(int size)
+void* Alloc(size_t size)
 {
   size = (size/4096+1)*4096;
   return VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE);

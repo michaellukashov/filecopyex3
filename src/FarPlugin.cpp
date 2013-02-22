@@ -88,7 +88,7 @@ void FarPlugin::FillInfo(PluginInfo* info) const
 
 void FarPlugin::LoadOptions()
 {
-	/* 	XXX Replace registry 
+	/* YYY Replace registry 
 	StringList temp;
 	registry.ReadList("Options", temp);
 	options.LoadFromList(temp);
@@ -97,7 +97,7 @@ void FarPlugin::LoadOptions()
 
 void FarPlugin::SaveOptions()
 {
-	/* 	XXX Replace registry 
+	/* YYY Replace registry 
 	StringList temp;
 	options.SaveToList(temp);
 	registry.WriteList("Options", temp);

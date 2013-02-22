@@ -24,11 +24,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "store.h"
 
-Store::Store()
+StringStore::StringStore()
 {
 }
 
-Store::~Store()
+StringStore::~StringStore()
 {
 	for(int i = 0; i < Count(); ++i)
 	{
@@ -36,11 +36,14 @@ Store::~Store()
 	}
 }
 
-int Store::Add(int size)
+size_t StringStore::Add(const wchar_t* ptr) 
 {
+	size_t l = wcslen(ptr)+1;
+
 	Item item;
-	item.ptr = malloc(size);
-	item.size = size;
+	item.size = l*sizeof(wchar_t);
+	item.ptr = (wchar_t*)malloc(item.size);
+	wcscpy_s(item.ptr, l, ptr);
 	items.push_back(item);
-	return (int)items.size() - 1;
+	return items.size() - 1;
 }

@@ -30,43 +30,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 #include "ObjString.h"
 
-class Store  
+class StringStore 
 {
 public:
-	Store();
-	virtual ~Store();
+	StringStore();
+	~StringStore();
 
-	int Add(int size);
-	void* operator[](int n) const { return items[n].ptr; }
-	int Size(int n) const { return (int)items[n].size; }
-	int Count() const { return (int)items.size(); }
+	size_t Add(const wchar_t* ptr);
+	size_t Add(const String& ptr) { return Add(ptr.ptr()); }
+	const wchar_t* operator[](size_t n) const { return items[n].ptr; }
+	size_t Len(size_t n) const { return items[n].size/sizeof(wchar_t)-1; }
+	size_t Count() const { return items.size(); }
 
 protected:
 	struct Item
 	{
-		void* ptr;
+		wchar_t *ptr;
 		size_t size;
 	};
 	std::vector<Item> items;
-};
-
-class StringStore : protected Store
-{
-public:
-	StringStore() { ; }
-	~StringStore() { ; }
-
-	int Add(const wchar_t* ptr)
-	{
-		size_t l = wcslen(ptr)+1;
-		int res = Store::Add((int)l*sizeof(wchar_t));
-		wcscpy_s((wchar_t*)operator[](res), l, ptr);
-		return res;
-	}
-	int Add(const String& ptr) { return Add(ptr.ptr()); }
-	const wchar_t* operator[](int n) const { return (const wchar_t*)Store::operator[](n); }
-	int Len(int n) const { return Size(n)/sizeof(wchar_t)-1; }
-	int Count() const { return Store::Count(); }
 };
 
 #endif//__STORE_H__
