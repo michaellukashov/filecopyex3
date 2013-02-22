@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "FarPlugin.h"
-#include "taskbar_icon.h"
+#include "taskbarIcon.h"
 
 #define WIN_NONE          0
 #define WIN_MESSAGE       1
@@ -62,7 +62,7 @@ protected:
 	void DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles, __int64 TotalSize);
 	__int64 LastUpdate;
 
-	TaskBarIcon taskbar_icon;
+	TaskBarIcon taskbarIcon;
 };
 
 #endif//__PROGRESS_H__

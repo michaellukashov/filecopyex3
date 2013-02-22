@@ -22,7 +22,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "progress.h"
+#include "FarProgress.h"
 
 #include "Framework/StrUtils.h"
 #include "common.h"
@@ -143,7 +143,7 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
   }
   *bp=0;
   Info.Text(x1, y, &clrText, buf);
-  taskbar_icon.SetState(taskbar_icon.S_PROGRESS, pc);
+  taskbarIcon.SetState(taskbarIcon.S_PROGRESS, pc);
 }
 
 void FarProgress::SetPercent(float pc)
@@ -170,7 +170,7 @@ void FarProgress::Hide()
     hScreen=0;
   }
   WinType=WIN_NONE;
-  taskbar_icon.SetState(taskbar_icon.S_NO_PROGRESS);
+  taskbarIcon.SetState(taskbarIcon.S_NO_PROGRESS);
 }
 
 void FarProgress::DrawText(int x, int y, FarColor *c, const String& msg)
@@ -273,5 +273,5 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles,
   _snwprintf_s(buf, 256, sizeof(buf)/sizeof(wchar_t), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
 
   Info.Text(x1, y + 1, &clrText, buf);
-  taskbar_icon.SetState(taskbar_icon.S_WORKING);
+  taskbarIcon.SetState(taskbarIcon.S_WORKING);
 }

@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "progress.h"
+#include "FarProgress.h"
 
 __int64 GetTime();
 
