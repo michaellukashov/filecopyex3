@@ -47,9 +47,6 @@
     <ClCompile Include="src\FarPlugin.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileCopyEx.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\registry.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -86,9 +83,6 @@
     <ClCompile Include="src\tools.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\DLLExport.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\FarMenu.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -103,6 +97,12 @@
     </ClCompile>
     <ClCompile Include="src\Framework\DescList.cpp">
       <Filter>Source\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileCopyExPlugin.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FileCopyEx.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,9 +125,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\FarPlugin.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FileCopyEx.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\guid.hpp">
@@ -201,6 +198,9 @@
     </ClInclude>
     <ClInclude Include="src\Framework\DescList.h">
       <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FileCopyExPlugin.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
