@@ -31,45 +31,69 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "framework/fileutils.h"
 #include "framework/valuelist.h"
 
-class FileNameStoreEnum;
+class FileName 
+{
+public:
+	enum Direction {
+		levelPlus, 
+		levelMinus, 
+		levelSame,
+		levelStar, // ???
+	};
 
-class FileNameStore : protected StringStore
+	FileName(const Direction _d, const String& _name): d(_d), Name(_name) {};
+	~FileName() {};
+
+	Direction getDirection() const {return d;};
+	String getName() const {return Name;};
+
+private:
+	Direction d;
+	String Name;
+};
+
+class FileNameStore
 {
 public:
 	FileNameStore() { ; }
 	~FileNameStore() { ; }
 
-	size_t Add(const wchar_t* ptr) { return StringStore::Add(ptr); }
-	size_t AddRel(wchar_t pc, const wchar_t* ptr);
-	size_t Count() const { return StringStore::Count(); }
-	const wchar_t* GetNameByNum(size_t n) const { return (*this)[n]+1; } // !!!
+	//size_t Add(String &name) { return StringStore::Add(ptr); }
+	size_t AddRel(FileName::Direction _d, const String& _name) { items.push_back(FileName(_d, _name)); return items.size()-1; };
+	size_t Count() const { return items.size(); };
+	const String GetNameByNum(size_t n) const { return items[n].getName(); };
+	const FileName& operator[](size_t n) const { return items[n]; };
+	FileName& operator[](size_t n) { return items[n]; };
 
-	friend class FileNameStoreEnum;
+private:
+		std::vector<FileName> items;
 };
 
+// ===== FileNameStoreEnum =====
 class FileNameStoreEnum
 {
 private:
-	FileNameStore* Store;
-	int Cur;
-	wchar_t Buffer[MAX_FILENAME], CurPath[MAX_FILENAME];
+	FileNameStore* store;
+	size_t cur;
+	String curPath, buffer;
 
 public:
-	FileNameStoreEnum(FileNameStore& store)
+	FileNameStoreEnum(FileNameStore *_store)
 	{
-		Store=&store;
+		store = _store;
 		ToFirst();
 	}
 	~FileNameStoreEnum() { ; }
 
-	size_t Count() const { return Store->Count(); }
+	size_t Count() const { return store->Count(); }
 	void ToFirst();
 	void Skip();
-	const wchar_t* GetNext();
-	const wchar_t* GetByNum(int num);
+	String GetNext();
+	String GetByNum(size_t num);
 
 };
 
+// ===== DescList =====
 class DescList
 {
 public:

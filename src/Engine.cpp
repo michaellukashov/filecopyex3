@@ -93,7 +93,7 @@ __int64 GetPhysMemorySize()
 	return ms.dwTotalPhys;
 }
 
-Engine::Engine(): FlushSrc(SrcNames), FlushDst(DstNames), BGThread(NULL), FlushEnd(NULL), UiFree(NULL)
+Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), FlushEnd(NULL), UiFree(NULL)
 {
 	Parallel=Streams=Rights=Move=SkipNewer=SkippedToTemp=0;
 	CompressMode=EncryptMode=ATTR_INHERIT;
@@ -665,8 +665,8 @@ void Engine::Copy()
 	CopyProgressBox.InverseBars=_InverseBars;
 	if (FileCount) CopyProgressBox.Start(Move);
 
-	FileNameStoreEnum Src(SrcNames);
-	FileNameStoreEnum Dst(DstNames);
+	FileNameStoreEnum Src(&SrcNames);
+	FileNameStoreEnum Dst(&DstNames);
 	Array<CurDirInfo> CurDirStack;
 
 	for (int i=0; i<Src.Count(); i++)
@@ -897,7 +897,7 @@ abort:
 	if (FileCount) CopyProgressBox.Stop();
 	else
 	{
-		FileNameStoreEnum Src(SrcNames);
+		FileNameStoreEnum Src(&SrcNames);
 		for (int i=0; i<Src.Count(); i++)
 		{
 			if (!(Files[i].Flags & FLG_COPIED))
@@ -1001,16 +1001,16 @@ String Engine::FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx)
 	return "";
 }
 
-void Engine::AddTopLevelDir(const String &dir, const String &dstMask, int flags, wchar_t pc)
+void Engine::AddTopLevelDir(const String &dir, const String &dstMask, int flags, FileName::Direction d)
 {
 	HANDLE hf;
 	WIN32_FIND_DATA fd;
 
-	SrcNames.AddRel(pc, dir.ptr());
-	DstNames.AddRel(pc, ExtractFilePath(ApplyFileMaskPath(dir+"\\somefile.txt", dstMask)).ptr());
+	SrcNames.AddRel(d, dir);
+	DstNames.AddRel(d, ExtractFilePath(ApplyFileMaskPath(dir+"\\somefile.txt", dstMask)));
+
 	FileStruct info;
 	memset(&info, 0, sizeof(info));
-	
 	info.Flags = flags;
 	info.Level = 0;
 	info.PanelIndex = -1;
@@ -1032,7 +1032,7 @@ int Engine::DirStart(const String& dir, const String& dstMask)
 	if(_ClearROFromCD && VolFlags(dir) & VF_CDROM) {
 		CurPathAddFlags|=AF_CLEAR_RO;
 	}
-	AddTopLevelDir(dir, dstMask, FLG_DIR_PRE | FLG_DIR_FORCE | FLG_TOP_DIR | CurPathFlags, '+');
+	AddTopLevelDir(dir, dstMask, FLG_DIR_PRE | FLG_DIR_FORCE | FLG_TOP_DIR | CurPathFlags, FileName::levelPlus);
 	return TRUE;
 }
 
@@ -1046,7 +1046,7 @@ int Engine::DirEnd(const String& dir, const String& dstMask)
 			return FALSE;
 		}
 	}
-	AddTopLevelDir(dir, dstMask, FLG_DIR_POST | FLG_DIR_NOREMOVE | CurPathFlags, '*');
+	AddTopLevelDir(dir, dstMask, FLG_DIR_POST | FLG_DIR_NOREMOVE | CurPathFlags, FileName::levelStar);
 	return TRUE;
 }
 
@@ -1456,7 +1456,7 @@ rep:
 
 	if (OverwriteMode == OM_RESUME)
 	{
-		FileNameStoreEnum Enum(DstNames);
+		FileNameStoreEnum Enum(&DstNames);
 		// bugfixed by slst: bug #24
 		//progress.ShowMessage(LOC("Status.ScanningDest"));
 		ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
@@ -1635,16 +1635,16 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 si
 	info->Level = Level;
 	info->PanelIndex = PanelIndex;
 
-	wchar_t pc;
+	FileName::Direction d;
 	if (attr & FILE_ATTRIBUTE_DIRECTORY) {
 		info->Flags |= FLG_DIR_PRE;
-		pc='+';
+		d = FileName::levelPlus;
 	} else {
-		pc=' ';
+		d = FileName::levelSame;
 	}
 
-	SrcNames.AddRel(pc, ExtractFileName(src).ptr());
-	DstNames.AddRel(pc, ExtractFileName(dst).ptr());
+	SrcNames.AddRel(d, ExtractFileName(src));
+	DstNames.AddRel(d, ExtractFileName(dst));
 
 	if (flags & AF_DESCFILE) {
 		info->Flags |= FLG_DESCFILE;
@@ -1851,8 +1851,8 @@ fin:
 		info.PanelIndex = -1;
 		Files.push_back(info);
 
-		SrcNames.AddRel('-', ExtractFileName(src).ptr());
-		DstNames.AddRel('-', ExtractFileName(dst).ptr());
+		SrcNames.AddRel(FileName::levelMinus, ExtractFileName(src));
+		DstNames.AddRel(FileName::levelMinus, ExtractFileName(dst));
 	}
 
 	return TRUE;
@@ -1860,7 +1860,7 @@ fin:
 
 void Engine::SetOverwriteMode(int Start)
 {
-	FileNameStoreEnum Enum(DstNames);
+	FileNameStoreEnum Enum(&DstNames);
 	for (int i=Start; i<Enum.Count(); i++)
 	{
 		String fn=Enum.GetByNum(i);

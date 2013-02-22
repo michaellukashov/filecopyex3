@@ -22,97 +22,95 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "common.h"
 #include "tools.h"
 
-const wchar_t* FileNameStoreEnum::GetNext()
+String FileNameStoreEnum::GetNext()
 {
-  if (Cur>=Store->Count()) return NULL;
-  const wchar_t *ptr=(*Store)[Cur++];
-  if (*ptr=='+') 
-  {
-    wchar_t *p=CurPath;
-    while(*p)
-		p++;
-    if(p>CurPath)
-		*p++='\\';
-    wcscpy_s(p, MAX_FILENAME - (p - CurPath), ptr+1);
-    wcscpy_s(Buffer, MAX_FILENAME, CurPath);
-  }
-  else if (*ptr=='-')
-  {
-    wcscpy_s(Buffer, MAX_FILENAME, CurPath);
-    wchar_t *p=CurPath;
-    while (*p) p++;
-    p--;
-    while (p>CurPath && *p!='\\') p--;
-    *p=0;
-  }
-  else if (*ptr=='*')
-  {
-    wcscpy_s(Buffer, MAX_FILENAME, CurPath);
-    CurPath[0]=0;
-  }
-  else
-  {
-    wchar_t *p=CurPath, *b=Buffer;
-    while (*p) *b++=*p++;
-    if (b>Buffer) *b++='\\';
-    wcscpy_s(b, MAX_FILENAME-(b-Buffer), ptr+1);
-  }
-  return Buffer;
+	if (cur >= store->Count()) return "";
+
+	const FileName &fn = (*store)[cur++];
+
+	switch (fn.getDirection()) {
+		case FileName::levelPlus: {
+			if (!curPath.empty()) {
+				curPath += "\\";
+			};
+			curPath += fn.getName();
+			buffer = curPath;
+			break;
+		}
+
+		case FileName::levelMinus: {
+			buffer = curPath;
+			curPath = curPath.substr(0, curPath.crfind('\\')-1);
+
+			break;
+		}
+
+		case FileName::levelStar: {
+			buffer = curPath;
+			curPath = "";
+			break;
+		}
+
+		default: {
+			buffer = curPath;
+			if (buffer.empty()) {
+				buffer += "\\";
+			}
+			buffer += fn.getName();
+		}
+	}
+
+	return buffer;
 }
 
 void FileNameStoreEnum::Skip()
 {
-  if (Cur>=Store->Count()) return;
-  const wchar_t *ptr=(*Store)[Cur++];
-  if (*ptr=='+') 
-  {
-    wchar_t *p=CurPath;
-    while (*p) p++;
-    if (p>CurPath) *p++='\\';
-    wcscpy_s(p, MAX_FILENAME-(p-CurPath), ptr+1);
-  }
-  else if (*ptr=='-')
-  {
-    wchar_t *p=CurPath;
-    while (*p) p++;
-    p--; 
-    while (p>CurPath && *p!='\\') p--;
-    *p=0;
-  }
-  else if (*ptr=='*')
-  {
-    CurPath[0]=0;
-  }
+	if (cur >= store->Count()) {
+		return;
+	}
+
+	const FileName &fn = (*store)[cur++];
+
+	switch (fn.getDirection()) {
+		case FileName::levelPlus: {
+			if (!curPath.empty()) {
+				curPath += "\\";
+			};
+			curPath += fn.getName();
+			break;
+		}
+
+		case FileName::levelMinus: {
+			curPath = curPath.substr(0, curPath.crfind('\\')-1);
+			break;
+		}
+
+		case FileName::levelStar: {
+			curPath = "";
+			break;
+		}
+	}
 }
 
 void FileNameStoreEnum::ToFirst()
 {
-  Cur=0;
-  Buffer[0]=CurPath[0]=0;
+	cur = 0;
+	curPath = "";
 }
 
-const wchar_t* FileNameStoreEnum::GetByNum(int n)
+String FileNameStoreEnum::GetByNum(size_t n)
 {
-  if (n<Cur-1) 
-  {
-    FWError(L"FileNameStoreEnum::GetByNum - assertion failure :))");
-    return NULL;
-  }
-  else if (n==Cur-1)
-    return Buffer;
-  else
-  {
-    while (Cur<n) Skip();
-    return GetNext();
-  }
-}
-
-size_t FileNameStore::AddRel(wchar_t pc, const wchar_t* s)
-{
-  wchar_t buf[MAX_FILENAME+1];
-  buf[0]=pc;
-  wcscpy_s(buf+1, MAX_FILENAME, s);
-  return Add(buf);
+	if (n < cur-1) {
+		FWError(L"FileNameStoreEnum::GetByNum - assertion failure :))");
+		return "";
+	} 
+  
+	if (n == cur-1) {
+		return buffer;
+	} else {
+		while (cur < n) Skip();
+		return GetNext();
+	}
 }
 
 // ===== DescList =====
