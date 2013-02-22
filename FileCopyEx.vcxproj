@@ -268,7 +268,6 @@
     <None Include="data\resource\russian.locd" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Classes.cpp" />
     <ClCompile Include="src\common.cpp" />
     <ClCompile Include="src\CopyProgress.cpp" />
     <ClCompile Include="src\dlgclass.cpp" />
@@ -279,6 +278,8 @@
     <ClCompile Include="src\FarPlugin.cpp" />
     <ClCompile Include="src\FarProgress.cpp" />
     <ClCompile Include="src\FileCopyEx.cpp" />
+    <ClCompile Include="src\Framework\DescList.cpp" />
+    <ClCompile Include="src\framework\FileNameStoreEnum.cpp" />
     <ClCompile Include="src\Framework\FileUtils.cpp" />
     <ClCompile Include="src\Framework\LowLevelStr.cpp" />
     <ClCompile Include="src\Framework\Object.cpp" />
@@ -294,7 +295,6 @@
     <ClCompile Include="src\ui.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Classes.h" />
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\CopyProgress.h" />
     <ClInclude Include="src\dlgclass.h" />
@@ -306,6 +306,9 @@
     <ClInclude Include="src\FarProgress.h" />
     <ClInclude Include="src\FileCopyEx.h" />
     <ClInclude Include="src\Framework\Array.h" />
+    <ClInclude Include="src\Framework\DescList.h" />
+    <ClInclude Include="src\framework\FileNameStore.h" />
+    <ClInclude Include="src\framework\FileNameStoreEnum.h" />
     <ClInclude Include="src\Framework\FileUtils.h" />
     <ClInclude Include="src\Framework\LowLevelStr.h" />
     <ClInclude Include="src\Framework\Object.h" />

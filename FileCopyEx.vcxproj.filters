@@ -29,9 +29,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Classes.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\CopyProgress.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -101,11 +98,14 @@
     <ClCompile Include="src\taskbarIcon.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\framework\FileNameStoreEnum.cpp">
+      <Filter>Source\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framework\DescList.cpp">
+      <Filter>Source\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\Classes.h">
-      <Filter>Source</Filter>
-    </ClInclude>
     <ClInclude Include="src\Common.h">
       <Filter>Source</Filter>
     </ClInclude>
@@ -192,6 +192,15 @@
     </ClInclude>
     <ClInclude Include="src\taskbarIcon.h">
       <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\FileNameStore.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\FileNameStoreEnum.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framework\DescList.h">
+      <Filter>Source\Framework</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
