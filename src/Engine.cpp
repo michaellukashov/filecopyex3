@@ -24,13 +24,14 @@ along with this program.	If not, see <http://www.gnu.org/licenses/>.
 
 #include <process.h>
 
+#include "Framework/ObjString.h"
+#include "Framework/FileUtils.h"
+#include "Framework/StrUtils.h"
 #include "common.h"
 #include "engine.h"
 #include "EngineTools.h"
 #include "tools.h"
 #include "ui.h"
-#include "Framework/ObjString.h"
-#include "Framework/StrUtils.h"
 #include "FileCopyEx.h"
 #include "guid.hpp"
 

@@ -22,48 +22,51 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__VALUELIST_H__
-#define	__VALUELIST_H__
+#ifndef	__FRAMEWORKSTORE_H__
+#define	__FRAMEWORKSTORE_H__
 
 #pragma once
 
-#include "stringlist.h"
+#include <vector>
 
-class ValueList
+//#include "ValueList.h"
+#include "ObjString.h"
+
+class FileName 
 {
 public:
-	const String& Name(int) const;
-	const String& Value(int) const;
-	int Count() const;
-	void Clear();
-
-	void Set(const String&, const String&);
-	void Set(const String&);
-
-	const String& operator[](const String&) const;
-
-	void LoadFromList(StringList&);
-	void SaveToList(StringList&);
-
-	class ListItem
-	{
-	public:
-		String name;
-		String value;
-
-		ListItem(const String& _name, const String& _value): name(_name), value(_value) {};
+	enum Direction {
+		levelPlus, 
+		levelMinus, 
+		levelSame,
+		levelStar, 
 	};
 
+	FileName(const Direction _d, const String& _name): d(_d), Name(_name) {};
+	~FileName() {};
+
+	Direction getDirection() const {return d;};
+	String getName() const {return Name;};
+
 private:
-	int Find(const String& k) const;
-	Array<ListItem> items;
-	String empty;
+	Direction d;
+	String Name;
 };
 
-class LocaleList : public ValueList
+class FileNameStore
 {
 public:
-	void Load(const String& fn);
+	FileNameStore() { }
+	~FileNameStore() { }
+
+	size_t AddRel(FileName::Direction _d, const String& _name) { items.push_back(FileName(_d, _name)); return items.size()-1; };
+	size_t Count() const { return items.size(); };
+	const String GetNameByNum(size_t n) const { return items[n].getName(); };
+	const FileName& operator[](size_t n) const { return items[n]; };
+	FileName& operator[](size_t n) { return items[n]; };
+
+private:
+		std::vector<FileName> items;
 };
 
-#endif//__VALUELIST_H__
+#endif

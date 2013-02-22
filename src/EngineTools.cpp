@@ -22,7 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "framework/stdhdr.h"
+#include "Framework/stdhdr.h"
+#include "Framework/FileUtils.h"
 
 #include "common.h"
 #include "FileCopyEx.h"
