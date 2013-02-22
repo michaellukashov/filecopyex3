@@ -24,7 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 String FileNameStoreEnum::GetNext()
 {
-	if (cur >= store->Count()) return "";
+	if (cur >= store->Count()) {
+		return "";
+	}
 
 	const FileName &fn = (*store)[cur++];
 
@@ -40,7 +42,7 @@ String FileNameStoreEnum::GetNext()
 
 		case FileName::levelMinus: {
 			buffer = curPath;
-			curPath = curPath.substr(0, curPath.crfind('\\')-1);
+			curPath = curPath.substr(0, curPath.crfind('\\'));
 
 			break;
 		}
@@ -51,9 +53,9 @@ String FileNameStoreEnum::GetNext()
 			break;
 		}
 
-		default: {
+		case FileName::levelSame: {
 			buffer = curPath;
-			if (buffer.empty()) {
+			if (!buffer.empty()) {
 				buffer += "\\";
 			}
 			buffer += fn.getName();
@@ -81,7 +83,7 @@ void FileNameStoreEnum::Skip()
 		}
 
 		case FileName::levelMinus: {
-			curPath = curPath.substr(0, curPath.crfind('\\')-1);
+			curPath = curPath.substr(0, curPath.crfind('\\'));
 			break;
 		}
 
@@ -96,16 +98,17 @@ void FileNameStoreEnum::ToFirst()
 {
 	cur = 0;
 	curPath = "";
+	buffer = "";
 }
 
 String FileNameStoreEnum::GetByNum(size_t n)
 {
-	if (n < cur-1) {
-		FWError(L"FileNameStoreEnum::GetByNum - assertion failure :))");
+	if (cur > n+1) {
+		FWError(L"FileNameStoreEnum::GetByNum - assertion failure");
 		return "";
 	} 
   
-	if (n == cur-1) {
+	if (cur == n+1) {
 		return buffer;
 	} else {
 		while (cur < n) Skip();
