@@ -277,7 +277,6 @@
     <ClCompile Include="src\FarMenu.cpp" />
     <ClCompile Include="src\FarPlugin.cpp" />
     <ClCompile Include="src\FarProgress.cpp" />
-    <ClCompile Include="src\FileCopyExPlugin.cpp" />
     <ClCompile Include="src\Framework\DescList.cpp" />
     <ClCompile Include="src\framework\FileNameStoreEnum.cpp" />
     <ClCompile Include="src\Framework\FileUtils.cpp" />
@@ -304,7 +303,6 @@
     <ClInclude Include="src\FarMenu.h" />
     <ClInclude Include="src\FarPlugin.h" />
     <ClInclude Include="src\FarProgress.h" />
-    <ClInclude Include="src\FileCopyExPlugin.h" />
     <ClInclude Include="src\Framework\Array.h" />
     <ClInclude Include="src\Framework\DescList.h" />
     <ClInclude Include="src\framework\FileNameStore.h" />

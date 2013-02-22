@@ -24,16 +24,18 @@ along with this program.	If not, see <http://www.gnu.org/licenses/>.
 
 #include <process.h>
 
+#include "Framework/DescList.h"
 #include "Framework/ObjString.h"
 #include "Framework/FileUtils.h"
+#include "Framework/StringList.h"
 #include "Framework/StrUtils.h"
-#include "common.h"
-#include "engine.h"
+#include "Common.h"
+#include "Engine.h"
+#include "Guid.hpp"
+#include "FarPlugin.h"
 #include "EngineTools.h"
-#include "tools.h"
-#include "ui.h"
-#include "FileCopyEx.h"
-#include "guid.hpp"
+#include "Tools.h"
+#include "UI.h"
 
 #define AllocAlign	65536
 
@@ -977,28 +979,30 @@ void Engine::FarToWin32FindData(const TPanelItem &tpi, WIN32_FIND_DATA &wfd)
 
 String Engine::FindDescFile(const String& dir, int *idx)
 {
-	for (int i=0; i<Plugin()->Descs().Count(); i++)
-		if(FileExists(AddEndSlash(dir)+Plugin()->Descs()[i]))
+	for (int i=0; i < plugin->Descs().Count(); i++) {
+		if(FileExists(AddEndSlash(dir)+plugin->Descs()[i]))
 		{
-			if(idx) *idx=i;
-			return Plugin()->Descs()[i];
+			if(idx) *idx = i;
+			return plugin->Descs()[i];
 		}
-	if(idx) *idx=-1;
+	}
+	if (idx) {
+		*idx = -1;
+	}
 	return "";
 }
 
 String Engine::FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx)
 {
 	HANDLE hf;
-	for (int i=0; i<Plugin()->Descs().Count(); i++)
-		if((hf=FindFirstFile((AddEndSlash(dir)+Plugin()->Descs()[i]).ptr(), &fd)) 
-			!= INVALID_HANDLE_VALUE)
+	for (int i=0; i < plugin->Descs().Count(); i++)
+		if((hf=FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
 		{
 			FindClose(hf);
-			if(idx) *idx=i;
-			return Plugin()->Descs()[i];
+			if (idx) *idx = i;
+			return plugin->Descs()[i];
 		}
-	if(idx) *idx=-1;
+	if (idx) *idx = -1;
 	return "";
 }
 
@@ -1195,7 +1199,7 @@ rep:
 	int dres = dlg.Execute();
 	switch (dres) {
 		case 2: {
-			((FileCopyExPlugin*)plugin)->Config();
+			plugin->Config();
 			goto rep;
 		}
 
@@ -1754,7 +1758,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 si
 						int idx;
 						if(_CopyDescs && _DescsInDirs 
 							&& !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-							&& (idx=Plugin()->Descs().Find(fd.cFileName))!=-1)
+							&& (idx=plugin->Descs().Find(fd.cFileName))!=-1)
 						{
 							if(descidx=-1 || idx<descidx)
 							{

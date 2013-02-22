@@ -98,9 +98,6 @@
     <ClCompile Include="src\Framework\DescList.cpp">
       <Filter>Source\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileCopyExPlugin.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\FileCopyEx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -198,9 +195,6 @@
     </ClInclude>
     <ClInclude Include="src\Framework\DescList.h">
       <Filter>Source\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="src\FileCopyExPlugin.h">
-      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

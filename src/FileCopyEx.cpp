@@ -47,7 +47,8 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *psi)
 	{
 		errorHandler = FarErrorHandler;
 		InitObjMgr();
-		plugin = CreatePlugin();
+		plugin = new FarPlugin();
+		plugin->Create();
 	}
 }
 

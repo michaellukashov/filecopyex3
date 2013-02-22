@@ -51,6 +51,4 @@ const String& LOC(const String& l);
 extern PluginStartupInfo Info;
 extern FarPlugin* plugin;
 
-FarPlugin* CreatePlugin();
-
 #endif//__FWCOMMON_H__
