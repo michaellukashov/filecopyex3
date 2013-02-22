@@ -1636,19 +1636,21 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 	if(attr & FILE_ATTRIBUTE_DIRECTORY) sz1 = 0;
 	else sz1 = size;
 
-	FileStruct info;
-	memset(&info, 0, sizeof(info));
-	info.Size=sz1;
-	info.Attr=attr;
-	info.Modify=Modify;
-	info.Level=Level;
-	info.PanelIndex=PanelIndex;
-	Files.push_back(info);
+	
+	FileStruct fs;
+	memset(&fs, 0, sizeof(fs));
+	std::vector<FileStruct>::iterator info = Files.insert(Files.end(), fs);
+
+	info->Size=sz1;
+	info->Attr=attr;
+	info->Modify=Modify;
+	info->Level=Level;
+	info->PanelIndex=PanelIndex;
 
 	wchar_t pc;
 	if(attr & FILE_ATTRIBUTE_DIRECTORY) 
 	{
-		info.Flags|=FLG_DIR_PRE;
+		info->Flags|=FLG_DIR_PRE;
 		pc='+';
 	}
 	else pc=' ';
@@ -1658,11 +1660,12 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 
 	if(flags & AF_DESCFILE) 
 	{
-		info.Flags |= FLG_DESCFILE;
-		if(flags & AF_DESC_INVERSE) info.Flags |= FLG_DESC_INVERSE;
+		info->Flags |= FLG_DESCFILE;
+		if(flags & AF_DESC_INVERSE) info->Flags |= FLG_DESC_INVERSE;
 		CopyCount++;
 		return TRUE;
 	}
+	
 
 	int owmode = OM_PROMPT;
 	if(!(flags & AF_STREAM))
@@ -1672,7 +1675,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 			retry:
 			if(MoveFile(src, dst, FALSE)) 
 			{
-				info.Flags |= FLG_COPIED | FLG_DELETED;
+				info->Flags |= FLG_COPIED | FLG_DELETED;
 				goto fin;
 			}
 			int err = GetLastError();
@@ -1680,9 +1683,9 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 			{
 				if(OverwriteMode == OM_RESUME)
 				{
-					if(FileSize(dst)>=info.Size)
+					if(FileSize(dst)>=info->Size)
 					{
-						info.Flags |= FLG_SKIPPED;
+						info->Flags |= FLG_SKIPPED;
 						goto fin;
 					}
 				}
@@ -1699,7 +1702,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 					switch (res)
 					{
 						case OM_SKIP: 
-							info.Flags |= FLG_SKIPPED;
+							info->Flags |= FLG_SKIPPED;
 							goto fin;
 						break;
 
@@ -1707,7 +1710,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 							owmode = OM_OVERWRITE;
 							if(MoveFile(src, dst, TRUE)) 
 							{
-								info.Flags |= FLG_COPIED | FLG_DELETED;
+								info->Flags |= FLG_COPIED | FLG_DELETED;
 								goto fin;
 							}
 						break;
@@ -1740,7 +1743,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 	TotalN++;
 	if(!(attr & FILE_ATTRIBUTE_DIRECTORY)) FileCount++; 
 	TotalBytes += sz1;
-	info.OverMode = owmode;
+	info->OverMode = owmode;
 
 	// bugfixed by slst: bug #24
 	// Updates folder scan progress dialog
