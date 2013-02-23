@@ -51,8 +51,8 @@ public:
 	virtual void InitItem(FarDialogItem& item);
 	virtual void RetrieveProperties(HANDLE dlg);
 	virtual void BeforeAdd(FarDialogItem& item);
-	virtual void LoadState(PropertyList &state);
-	virtual void SaveState(PropertyList &state);
+	virtual void LoadState(PropertyMap &state);
+	virtual void SaveState(PropertyMap &state);
 	int DialogItem;
 
 	FarDialog* GetDialog() { return Dialog; }
@@ -96,8 +96,8 @@ protected:
 	void DefSize(int&, int&, int&);
 	void ClearDialogItems(Array<FarDialogItem>&);
 	FarDlgObject* FindChild(const String&);
-	void LoadState(PropertyList &state);
-	void SaveState(PropertyList &state);
+	void LoadState(PropertyMap &state);
+	void SaveState(PropertyMap &state);
 	void RetrieveProperties(HANDLE dlg);
 
 	int IsContainer() { return 1; }
@@ -113,8 +113,8 @@ public:
 
 	FarDlgObject& operator[](const String&);
 
-	void LoadState(PropertyList &state) { FarDlgContainer::LoadState(state); }
-	void SaveState(PropertyList &state)	{ FarDlgContainer::SaveState(state); }
+	void LoadState(PropertyMap &state) { FarDlgContainer::LoadState(state); }
+	void SaveState(PropertyMap &state)	{ FarDlgContainer::SaveState(state); }
 
 protected:
 	void BeforeLoad();

@@ -27,19 +27,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "stringlist.h"
-#include "array.h"
+#include <map>
+#include <vector>
+
+#include "Array.h"
+#include "ObjString.h"
+#include "StringList.h"
 
 class Property
 {
-	enum Type { vtInt, vtFloat, vtString, vtUnknown };
+	enum Type { vtUnknown, vtInt, vtFloat, vtString };
 public:
-	Property() : Type(vtUnknown) {}
+	Property() : type(vtUnknown) {}
 	Property(int);
 	Property(float);
 	Property(const String&);
 
-	void operator=(const Property& p);
+	void operator = (const Property& p);
 
 	operator int() const;
 	operator bool() const;
@@ -61,10 +65,10 @@ public:
 	bool operator!() const { return !(bool)*this; }
 
 protected:
-	Type Type;
-	int Int;
-	float Float;
-	String Str;
+	Type type;
+	int vInt;
+	float vFloat;
+	String vStr;
 };
 
 class PropertyStore
@@ -82,38 +86,6 @@ private:
 	Array<Property> Values;
 };
 
-class PropertyList
-{
-public:
-	Property& operator[](int i) { return store[i]; }
-	Property& operator[](const String& n) { return GetValueByName(n); }
-
-	void GetNameAndValue(int i, String& name, String& value)
-	{
-		name  = (String)names[i];
-		value = (String)store[i];
-	}
-
-	Property& GetValueByName(const String& n)
-	{
-		int i=names.Find(n);
-		if (i!=-1) return store[i];
-		else return undef_property;
-	}
-
-	int Add(const String& n, int v) { return names.Add(n, store.Add(v)); }
-	int Add(const String& n, float v) { return names.Add(n, store.Add(v)); }
-	int Add(const String& n, const String& v) { return names.Add(n, store.Add(v)); }
-
-	int Count() const { return names.Count(); }
-
-	void SaveToList(StringList& l) { store.SaveToList(l, names); }
-	void LoadFromList(StringList& l) { store.LoadFromList(l, names); }
-
-private:
-	PropertyStore store;
-	StringList names;
-	Property undef_property;
-};
+typedef std::map<String, Property> PropertyMap;
 
 #endif//__PROPERTIES_H__

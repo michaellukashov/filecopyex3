@@ -1073,7 +1073,7 @@ String getPanelDir(HANDLE h_panel) {
 
 Engine::MResult Engine::Main(int move, int curOnly)
 {
-	PropertyList& Options = plugin->Options();
+	PropertyMap& Options = plugin->Options();
 
 	_CopyDescs		= Options["CopyDescs"];
 	_DescsInDirs	= Options["DescsInSubdirs"];

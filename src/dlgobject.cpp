@@ -57,12 +57,12 @@ void FarDlgObject::BeforeAdd(FarDialogItem& item)
 	Class()->BeforeAdd(item, *this); 
 }
 
-void FarDlgObject::LoadState(PropertyList &state)
+void FarDlgObject::LoadState(PropertyMap &state)
 { 
 	Class()->LoadState(state, *this); 
 }
 
-void FarDlgObject::SaveState(PropertyList &state)
+void FarDlgObject::SaveState(PropertyMap &state)
 { 
 	Class()->SaveState(state, *this); 
 }
@@ -229,14 +229,14 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items,
 	}
 }
 
-void FarDlgContainer::LoadState(PropertyList& state)
+void FarDlgContainer::LoadState(PropertyMap& state)
 {
 	for (int i=0; i<childs.Count(); i++)
 		if (Child(i).IsContainer() || (bool)Child(i)("Persistent"))
 			Child(i).LoadState(state);
 }
 
-void FarDlgContainer::SaveState(PropertyList& state)
+void FarDlgContainer::SaveState(PropertyMap& state)
 {
 	for (int i=0; i<childs.Count(); i++)
 		if (Child(i).IsContainer() || (bool)Child(i)("Persistent"))

@@ -44,8 +44,8 @@ public:
 	virtual void InitItem(FarDialogItem&, FarDlgObject&) { ; }
 	virtual void RetrieveProperties(FarDlgObject&, HANDLE) { ; }
 	virtual void BeforeAdd(FarDialogItem&, FarDlgObject&) { ; }
-	virtual void LoadState(PropertyList &state, FarDlgObject&) { ; }
-	virtual void SaveState(PropertyList &state, FarDlgObject&) { ; }
+	virtual void LoadState(PropertyMap &state, FarDlgObject&) { ; }
+	virtual void SaveState(PropertyMap &state, FarDlgObject&) { ; }
 };
 
 struct Attribute
@@ -137,13 +137,13 @@ class FarDlgCheckboxClass : public FarDlgObjectClass
 		item.Selected=int(obj("Selected"));
 	}
 	void RetrieveProperties(FarDlgObject& obj, HANDLE dlg);
-	void LoadState(PropertyList &state, FarDlgObject& obj)
+	void LoadState(PropertyMap &state, FarDlgObject& obj)
 	{
-		obj("Selected")=state[obj.Name()];
+		obj("Selected") = state[obj.Name()];
 	}
-	void SaveState(PropertyList &state, FarDlgObject& obj)
+	void SaveState(PropertyMap &state, FarDlgObject& obj)
 	{
-		state[obj.Name()]=obj("Selected");
+		state[obj.Name()] = obj("Selected");
 	}
 };
 
@@ -172,13 +172,13 @@ class FarDlgEditClass : public FarDlgObjectClass
 	}
 	void InitItem(FarDialogItem& item, FarDlgObject& obj);
 	void RetrieveProperties(FarDlgObject& obj, HANDLE dlg);
-	void LoadState(PropertyList &state, FarDlgObject& obj)
+	void LoadState(PropertyMap &state, FarDlgObject& obj)
 	{
-		obj("Text")=state[obj.Name()];
+		obj("Text") = state[obj.Name()];
 	}
-	void SaveState(PropertyList &state, FarDlgObject& obj)
+	void SaveState(PropertyMap &state, FarDlgObject& obj)
 	{
-		state[obj.Name()]=obj("Text");
+		state[obj.Name()] = obj("Text");
 	}
 	void BeforeAdd(FarDialogItem& item, FarDlgObject& obj)
 	{
@@ -198,13 +198,13 @@ class FarDlgComboboxClass : public FarDlgObjectClass
 	}
 	void InitItem(FarDialogItem& item, FarDlgObject& obj);
 	void RetrieveProperties(FarDlgObject& obj, HANDLE dlg);
-	void LoadState(PropertyList &state, FarDlgObject& obj)
+	void LoadState(PropertyMap &state, FarDlgObject& obj)
 	{
-		obj("Text")=state[obj.Name()];
+		obj("Text") = state[obj.Name()];
 	}
-	void SaveState(PropertyList &state, FarDlgObject& obj)
+	void SaveState(PropertyMap &state, FarDlgObject& obj)
 	{
-		state[obj.Name()]=obj("Text");
+		state[obj.Name()] = obj("Text");
 	}
 	void BeforeAdd(FarDialogItem& item, FarDlgObject& obj)
 	{
