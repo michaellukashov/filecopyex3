@@ -62,27 +62,25 @@ void FarPlugin::Create()
 		exit(0);
 	}
 	InitOptions();
+	settings.create();
 	LoadOptions();
 
-	descs.LoadFromString(registry.GetString("\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');
+	// XXX descs.LoadFromString(registry.GetString("\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');
+	// XXX Workaround
+	descs.Add("Descript.ion");
+	descs.Add("Files.bbs");
+
+	
 }
 
 void FarPlugin::LoadOptions()
 {
-	/* YYY Replace registry 
-	StringList temp;
-	registry.ReadList("Options", temp);
-	options.LoadFromList(temp);
-	*/
+	loadOptions(options, settings);
 }
 
 void FarPlugin::SaveOptions()
 {
-	/* YYY Replace registry 
-	StringList temp;
-	options.SaveToList(temp);
-	registry.WriteList("Options", temp);
-	*/
+	saveOptions(options, settings);
 }
 
 int FarPlugin::Configure(const struct ConfigureInfo *Info)
@@ -157,45 +155,50 @@ String FarPlugin::GetDLLPath()
 
 void FarPlugin::InitOptions()
 {
-	options.Add("BufPercent", 1);
-	options.Add("BufSize", 0);
-	options.Add("BufPercentVal", 15);
-	options.Add("BufSizeVal", 4096);
-	options.Add("OverwriteDef", 0);
-	options.Add("CopyStreamsDef", 0);
-	options.Add("CopyRightsDef", 0);
-	options.Add("AllowParallel", 1);
-	options.Add("DefParallel", 1);
-	options.Add("CopyDescs", 1);
-	options.Add("DescsInSubdirs", 0);
-	options.Add("ConnectLikeBars", 0);
-	options.Add("ConfirmBreak", 1);
-	options.Add("Sound", 1);
-	options.Add("PreallocMin", 64);
-	options.Add("UnbuffMin", 64);
-	options.Add("ReadFilesOpenedForWriting", 1);
-	options.Add("CheckFreeDiskSpace", 1);
+	options["BufPercent"] = 1;
+	options["BufSize"] = 0;
+	options["BufPercentVal"] = 15;
+	options["BufSizeVal"] = 4096;
+	options["OverwriteDef"] = 0;
+	options["CopyStreamsDef"] = 0;
+	options["CopyRightsDef"] = 0;
+	options["AllowParallel"] = 1;
+	options["DefParallel"] = 1;
+	options["CopyDescs"] = 1;
+	options["DescsInSubdirs"] = 0;
+	options["ConnectLikeBars"] = 0;
+	options["ConfirmBreak"] = 1;
+	options["Sound"] = 1;
+	options["PreallocMin"] = 64;
+	options["UnbuffMin"] = 64;
+	options["ReadFilesOpenedForWriting"] = 1;
+	options["CheckFreeDiskSpace"] = 1;
 }
 
 
 int FarPlugin::Binded(const String& key)
 {
-	String seq = registry.GetString(regkey + "\\" + key, "Sequence", "");
-	return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp("F5") || !seq.icmp("F6"));
+	//XXX String seq = registry.GetString(regkey + "\\" + key, "Sequence", "");
+	//XXX return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp("F5") || !seq.icmp("F6"));
+	return true;
 }
 
 void FarPlugin::Bind(const String& key, const String& seq)
 {
+	/* XXX
 	String src = regkey + "\\" + key;
 	registry.SetString(src, "Sequence", seq);
 	registry.SetInt(src, "DisableOutput", 1);
 	registry.SetInt(src, "NoPluginPanels", 0);
 	registry.SetInt(src, "PluginPanels", 1); 
+	*/
 }
 
 void FarPlugin::Unbind(const String& key)
 {
+	/* XXX
 	registry.DeleteKey(regkey + "\\" + key);
+	*/
 }
 
 // XXX I don't know how to replace FARMACROCOMMAND
@@ -304,6 +307,7 @@ rep:
 	{
 		case 0:
 			dlg.SaveState(options);
+			SaveOptions();
 			break;
 		case 1:
 			KeyConfig();
@@ -314,7 +318,7 @@ rep:
 		case 3:
 			static int bn = 0;
 			beep(bn);
-			if(++bn > 2) {
+			if (++bn > 2) {
 				bn = 0;
 			}
 			goto rep;

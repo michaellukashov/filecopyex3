@@ -47,9 +47,6 @@
     <ClCompile Include="src\FarPlugin.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\registry.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\ui.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -66,9 +63,6 @@
       <Filter>Source\Framework</Filter>
     </ClCompile>
     <ClCompile Include="src\Framework\Properties.cpp">
-      <Filter>Source\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Framework\StringList.cpp">
       <Filter>Source\Framework</Filter>
     </ClCompile>
     <ClCompile Include="src\Framework\StrUtils.cpp">
@@ -101,6 +95,12 @@
     <ClCompile Include="src\FileCopyEx.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="src\FarSettings.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framework\StringList.cpp">
+      <Filter>Source\Framework</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h">
@@ -125,9 +125,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\guid.hpp">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\registry.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\ui.h">
@@ -155,9 +152,6 @@
       <Filter>Source\Framework</Filter>
     </ClInclude>
     <ClInclude Include="src\Framework\StdHdr.h">
-      <Filter>Source\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Framework\StringList.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
     <ClInclude Include="src\Framework\StrUtils.h">
@@ -194,6 +188,12 @@
       <Filter>Source\Framework</Filter>
     </ClInclude>
     <ClInclude Include="src\Framework\DescList.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FarSettings.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framework\StringList.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
   </ItemGroup>

@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/Properties.h"
 #include "Framework/ValueList.h"
 #include "dlgobject.h"
-#include "registry.h"
+#include "FarSettings.h"
 
 class FarPlugin
 {
@@ -48,10 +48,8 @@ public:
 	void Config();
 
 	const LocaleList& Locale() const { return locale; }
-	PropertyList& Options() { return options; }
+	PropertyMap& Options() { return options; }
 	FarDialogList& Dialogs() { return dialogs; }
-
-	virtual const char* RegRootKey() const { return "FileCopyEx"; }
 
 	const StringList& Descs() const { return descs; }
 	// void	MacroCommand(const FARMACROCOMMAND& cmd); // XXX???
@@ -60,8 +58,8 @@ private:
 	String GetDLLPath();
 
 	FarDialogList dialogs;
-	PropertyList options;
-	FarRegistry registry;
+	PropertyMap options;
+	FarSettings settings;
 	String CurLocaleFile;
 	LocaleList locale;
 	StringList descs;

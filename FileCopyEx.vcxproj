@@ -288,7 +288,7 @@
     <ClCompile Include="src\Framework\StrUtils.cpp" />
     <ClCompile Include="src\Framework\ValueList.cpp" />
     <ClCompile Include="src\FileCopyEx.cpp" />
-    <ClCompile Include="src\registry.cpp" />
+    <ClCompile Include="src\FarSettings.cpp" />
     <ClCompile Include="src\taskbarIcon.cpp" />
     <ClCompile Include="src\tools.cpp" />
     <ClCompile Include="src\ui.cpp" />
@@ -317,10 +317,10 @@
     <ClInclude Include="src\Framework\StrUtils.h" />
     <ClInclude Include="src\Framework\ValueList.h" />
     <ClInclude Include="src\guid.hpp" />
-    <ClInclude Include="src\registry.h" />
     <ClInclude Include="src\SDK\farcolor.hpp" />
     <ClInclude Include="src\SDK\farversion.hpp" />
     <ClInclude Include="src\SDK\plugin.hpp" />
+    <ClInclude Include="src\FarSettings.h" />
     <ClInclude Include="src\taskbarIcon.h" />
     <ClInclude Include="src\tools.h" />
     <ClInclude Include="src\ui.h" />
