@@ -27,8 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include <vector>
+
 #include "copyprogress.h"
-#include "classes.h"
+#include "Framework/FileNameStoreEnum.h"
 
 struct FileStruct
 {
@@ -68,7 +70,7 @@ PluginPanelItem* GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, int
 struct TPanelItem
 {
 public:
-	TPanelItem(int idx, bool active = true, bool selected = false)
+	TPanelItem(size_t idx, bool active = true, bool selected = false)
 	{
 		ppi = GetPanelItem(
 			active ? PANEL_ACTIVE : PANEL_PASSIVE, 
@@ -95,7 +97,7 @@ public:
 
 private:
 	FileNameStore SrcNames, DstNames;
-	ArrayStore<FileStruct> Files;
+	std::vector<FileStruct> Files;
 	FileNameStoreEnum FlushSrc, FlushDst;
 
 	int Parallel, BufSize, Streams, Rights, Move,
@@ -136,17 +138,10 @@ private:
 	int CheckOverwrite(int, const String&, const String&, String&);
 	int CheckOverwrite2(int, const String&, const String&, String&);
 	void SetOverwriteMode(int);
-	int AddFile(const String& _src, const String& _dst, int Attr,
-		__int64 Size, FILETIME &Modify, int Flags, int Level,
-		int PanelIndex=-1);
-	int AddFile(const String& Src, const String& Dst, 
-		WIN32_FIND_DATA &fd, int Flags, int Level,
-		int PanelIndex=-1);
-	void AddTopLevelDir(const String &dir, const String &dstmask, 
-		int Flags, wchar_t pc);
-	void RememberFile(const String& Src, const String& Dst, 
-		WIN32_FIND_DATA &fd, int Flags, int Level,
-		RememberStruct&);
+	int AddFile(const String& _src, const String& _dst, int Attr, __int64 Size, FILETIME &Modify, int Flags, int Level, int PanelIndex=-1);
+	int AddFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, int PanelIndex=-1);
+	void AddTopLevelDir(const String &dir, const String &dstmask, int Flags, FileName::Direction d);
+	void RememberFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, RememberStruct&);
 	int AddRemembered(RememberStruct&);
 	int DirStart(const String& dir, const String& dst);
 	int DirEnd(const String& dir, const String& dst);

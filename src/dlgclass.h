@@ -70,7 +70,7 @@ class FarDlgLineClass : public FarDlgObjectClass
 	}
 };
 
-int lablen(FarDialogItem& item);
+size_t lablen(FarDialogItem& item);
 String FormatWidth(const String& v, int len);
 
 class FarDlgLabelClass : public FarDlgObjectClass

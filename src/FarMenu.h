@@ -13,6 +13,7 @@ class FarMenu
 public:
 	FarMenu();
 	virtual ~FarMenu();
+
 	void SetTitle(const String&);
 	void SetBottom(const String&);
 	void SetHelpTopic(const String&);
@@ -22,11 +23,13 @@ public:
 	void AddSep();
 	void SetSelection(int n);
 	int Execute();
+
 protected:
-	void SetItemText(FarMenuItem* item, const String& text);
 	String Title, Bottom, HelpTopic;
 	int Flags, Selection;
 	std::vector<FarMenuItem> items;
+
+	void SetItemText(FarMenuItem* item, const String& text);
 };
 
 #endif

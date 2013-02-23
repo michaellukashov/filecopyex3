@@ -22,16 +22,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "framework/stdhdr.h"
+#include "Framework/stdhdr.h"
+#include "Framework/FileUtils.h"
 
 #include "common.h"
-#include "FileCopyEx.h"
+#include "FarPlugin.h"
 #include "engine.h"
 #include "EngineTools.h"
 #include "tools.h"
 #include "ui.h"
 
-void* Alloc(int size)
+void* Alloc(size_t size)
 {
   size = (size/4096+1)*4096;
   return VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE);
@@ -278,20 +279,6 @@ int Write(HANDLE h, void *buf, int size)
   if (!WriteFile(h, buf, size, &res, NULL)) return -1;
   return res;
 }
-
-void ClearInput()
-{
-  HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
-  while (1)
-  {
-    INPUT_RECORD rec;
-    DWORD rc;
-    PeekConsoleInput(h, &rec, 1, &rc);
-    if (!rc) break;
-    ReadConsoleInput(h, &rec, 1, &rc);
-  }
-}
-
 
 int Engine::EngineError(const String& s, const String& fn, int code, int& flg,
                         const String& title, const String& type_id)

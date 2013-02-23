@@ -56,7 +56,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define errfSkipAll 1024
 #define errfKeepFiles 2048
 
-void* Alloc(int size);
+void* Alloc(size_t size);
 void Free(void *ptr);
 void Compress(HANDLE handle, int f);
 int GetCompression(HANDLE handle);
@@ -78,7 +78,6 @@ void SetFileTime(const String& fn, FILETIME& time);
 void SetFileTime(HANDLE h, FILETIME& time);
 int Read(HANDLE h, void *buf, int size);
 int Write(HANDLE h, void *buf, int size);
-void ClearInput();
 int GetSectorSize(const String& path);
 
 #endif//__ENGINETOOLS_H__

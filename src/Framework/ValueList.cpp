@@ -44,25 +44,19 @@ int ValueList::Count() const
 void ValueList::Set(const String& n, const String& v)
 {
 	int i = Find(n);
-	if(i != -1)
-	{
+	if(i != -1)	{
 		items[i].value = v;
-	}
-	else 
-	{
-		ListItem itm;
-		itm.name=n;
-		itm.value=v;
-		items.Add(itm);
+	} else {
+		items.Add(ListItem(n, v));
 	}
 }
 
 void ValueList::Set(const String& s)
 {
-	int p=s.find("=");
-	if (p!=-1)
-		Set(s.substr(0, p).trim().trimquotes(), 
-		s.substr(p+1).trim().trimquotes());
+	int p = s.find("=");
+	if (p != -1) {
+		Set(s.substr(0, p).trim().trimquotes(), s.substr(p+1).trim().trimquotes());
+	}
 }
 
 //=============================================================================

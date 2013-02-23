@@ -22,19 +22,22 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "progress.h"
+#include "FarProgress.h"
 
 #include "Framework/StrUtils.h"
 #include "common.h"
 #include "ui.h"
 #include "tools.h"
+#include "guid.hpp"
+#include "SDK/farcolor.hpp"
 
 FarProgress::FarProgress(void)
 {
-  //XXX clrFrame = (int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOX);
-  //XXX clrTitle = (int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR, (void*)COL_DIALOGBOXTITLE);
-  //XXX clrBar=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,   (void*)COL_DIALOGTEXT);
-  //XXX clrText=(int)Info.AdvControl(Info.ModuleNumber, ACTL_GETCOLOR,  (void*)COL_DIALOGTEXT);
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGBOX, &clrFrame);
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGBOXTITLE, &clrTitle );
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrBar);
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrText);
+  // XXX !!!
   /* switch (clrFrame >> 4)
   {
     // [exp] color changed by CDK
@@ -44,6 +47,8 @@ FarProgress::FarProgress(void)
   }
   clrLabel=clrLabel | clrFrame & 0xF0;
   */
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrLabel); // !!! not sure
+
   WinType=WIN_NONE;
   hScreen=0;
   InverseBars=0;
@@ -66,7 +71,7 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String& capti
 	{
 		tpl += bkg;
 	}
-	//XXX Info.Message(Info.ModuleNumber, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t**)tpl.ptr(), 0, 0);
+	Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t**)tpl.ptr(), 0, 0);
 }
 
 void FarProgress::GetConSize(int& w, int &h)
@@ -138,7 +143,7 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
   }
   *bp=0;
   Info.Text(x1, y, &clrText, buf);
-  taskbar_icon.SetState(taskbar_icon.S_PROGRESS, pc);
+  taskbarIcon.SetState(taskbarIcon.S_PROGRESS, pc);
 }
 
 void FarProgress::SetPercent(float pc)
@@ -165,7 +170,7 @@ void FarProgress::Hide()
     hScreen=0;
   }
   WinType=WIN_NONE;
-  taskbar_icon.SetState(taskbar_icon.S_NO_PROGRESS);
+  taskbarIcon.SetState(taskbarIcon.S_NO_PROGRESS);
 }
 
 void FarProgress::DrawText(int x, int y, FarColor *c, const String& msg)
@@ -268,5 +273,5 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles,
   _snwprintf_s(buf, 256, sizeof(buf)/sizeof(wchar_t), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
 
   Info.Text(x1, y + 1, &clrText, buf);
-  taskbar_icon.SetState(taskbar_icon.S_WORKING);
+  taskbarIcon.SetState(taskbarIcon.S_WORKING);
 }

@@ -36,38 +36,48 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class FarPlugin
 {
 public:
-	FarPlugin() : flags(0), menu(NULL), config(NULL) {}
-	virtual ~FarPlugin();
-	virtual void Create();
-	virtual int Configure(int);
-	virtual void OpenPlugin(const struct OpenInfo *OInfo);
+	FarPlugin() : flags(0) {}
+	~FarPlugin();
+	void Create();
+	int Configure(const struct ConfigureInfo *Info);
+	void OpenPlugin(const struct OpenInfo *OInfo);
 	void InitLang();
-	virtual void LoadOptions();
-	virtual void SaveOptions();
-	virtual void InitOptions() {}
-
-	virtual void FillInfo(PluginInfo* info) const;
-
-	virtual const char* RegRootKey() const { return "UnknownPlugin"; }
+	void LoadOptions();
+	void SaveOptions();
+	void InitOptions();
+	void Config();
 
 	const LocaleList& Locale() const { return locale; }
 	PropertyList& Options() { return options; }
 	FarDialogList& Dialogs() { return dialogs; }
 
-protected:
+	virtual const char* RegRootKey() const { return "FileCopyEx"; }
+
+	const StringList& Descs() const { return descs; }
+	// void	MacroCommand(const FARMACROCOMMAND& cmd); // XXX???
+
+private:
 	String GetDLLPath();
 
 	FarDialogList dialogs;
 	PropertyList options;
-	StringList MenuItems;
-	StringList ConfigItems;
 	FarRegistry registry;
 	String CurLocaleFile;
 	LocaleList locale;
+	StringList descs;
 
 	int flags;
-	mutable const wchar_t** menu;
-	mutable const wchar_t** config;
+
+	void	About();
+	void	KeyConfig();
+
+	void	Bind(const String& key, const String& seq);
+	void	Unbind(const String& key);
+	int		Binded(const String &key);
+
+
 };
+
+// FileCopyExPlugin* Plugin();
 
 #endif//__PLUGIN_H__

@@ -145,7 +145,7 @@ void FarDlgComboboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 	obj("Text")=GetDlgText(dlg, obj.DialogItem);
 }
 
-int lablen(FarDialogItem& item)
+size_t lablen(FarDialogItem& item)
 {
   if (item.Flags & DIF_SHOWAMPERSAND) {
     return wcslen(item.Data);

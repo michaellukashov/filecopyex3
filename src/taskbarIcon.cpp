@@ -22,7 +22,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "taskbar_icon.h"
+#include "taskbarIcon.h"
 #include "Framework/StdHdr.h"
 #include "guid.hpp"
 #include "common.h"
@@ -30,6 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 TaskBarIcon::TaskBarIcon() : last_state(S_NO_PROGRESS)
 {
 }
+
 TaskBarIcon::~TaskBarIcon()
 {
 	if(last_state != S_NO_PROGRESS)
@@ -40,22 +41,31 @@ void TaskBarIcon::SetState(State state, float param)
 	switch(state)
 	{
 	case S_PROGRESS:
-		if(param > 1.0f)
+		if (param > 1.0f) {
 			param = 1.0f;
-		if(param < 0.0f)
+		}
+		if (param < 0.0f) {
 			param = 0.0f;
+		}
 		ProgressValue pv;
 		pv.Completed = __int64(param*100.0f);
 		pv.Total = 100;
-		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NORMAL, &pv);
-		//XXX Info.AdvControl(Info.ModuleNumber, ACTL_SETPROGRESSVALUE, &pv);
+		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NORMAL, NULL);
+		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSVALUE, 0, &pv);
 		break;
-	/* XXX
-	case S_NO_PROGRESS:		Info.AdvControl(Info.ModuleNumber, ACTL_SETPROGRESSSTATE, (void*)PS_NOPROGRESS);	break;
-	case S_WORKING:			Info.AdvControl(Info.ModuleNumber, ACTL_SETPROGRESSSTATE, (void*)PS_INDETERMINATE);	break;
-	case S_ERROR:			Info.AdvControl(Info.ModuleNumber, ACTL_SETPROGRESSSTATE, (void*)PS_ERROR);			break;
-	case S_PAUSED:			Info.AdvControl(Info.ModuleNumber, ACTL_SETPROGRESSSTATE, (void*)PS_PAUSED);		break;
-	*/
+	
+	case S_NO_PROGRESS:		
+		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NOPROGRESS, NULL);	
+		break;
+	case S_WORKING:			
+		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_INDETERMINATE, NULL);	
+		break;
+	case S_ERROR:			
+		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_ERROR, NULL);
+		break;
+	case S_PAUSED:			
+		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_PAUSED, NULL);
+		break;
 	}
 	last_state = state;
 }

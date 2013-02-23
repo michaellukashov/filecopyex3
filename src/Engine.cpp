@@ -24,15 +24,18 @@ along with this program.	If not, see <http://www.gnu.org/licenses/>.
 
 #include <process.h>
 
-#include "common.h"
-#include "engine.h"
-#include "EngineTools.h"
-#include "tools.h"
-#include "ui.h"
+#include "Framework/DescList.h"
 #include "Framework/ObjString.h"
+#include "Framework/FileUtils.h"
+#include "Framework/StringList.h"
 #include "Framework/StrUtils.h"
-#include "FileCopyEx.h"
-#include "guid.hpp"
+#include "Common.h"
+#include "Engine.h"
+#include "Guid.hpp"
+#include "FarPlugin.h"
+#include "EngineTools.h"
+#include "Tools.h"
+#include "UI.h"
 
 #define AllocAlign	65536
 
@@ -93,7 +96,7 @@ __int64 GetPhysMemorySize()
 	return ms.dwTotalPhys;
 }
 
-Engine::Engine(): FlushSrc(SrcNames), FlushDst(DstNames), BGThread(NULL), FlushEnd(NULL), UiFree(NULL)
+Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), FlushEnd(NULL), UiFree(NULL)
 {
 	Parallel=Streams=Rights=Move=SkipNewer=SkippedToTemp=0;
 	CompressMode=EncryptMode=ATTR_INHERIT;
@@ -262,8 +265,7 @@ del_retry:
 		WriteN++;
 
 		int dnum=fnum+1;
-		while (dnum<SrcNames.Count() 
-			&& Files[dnum].Flags & (FLG_DIR_POST | FLG_DIR_PRE | FLG_DESCFILE))
+		while (dnum<SrcNames.Count() && Files[dnum].Flags & (FLG_DIR_POST | FLG_DIR_PRE | FLG_DESCFILE))
 		{
 			if (!(Files[dnum].Flags & FLG_COPIED))
 			{
@@ -639,7 +641,8 @@ struct CurDirInfo
 void Engine::Copy()
 {
 	LastFile=-1;
-	Aborted=KeepFiles=0;
+	Aborted=0;
+	KeepFiles=0;
 	ReadCb=WriteCb=ReadTime=WriteTime=ReadN=WriteN=FirstWrite=0;
 	StartTime=GetTime();
 
@@ -665,8 +668,8 @@ void Engine::Copy()
 	CopyProgressBox.InverseBars=_InverseBars;
 	if (FileCount) CopyProgressBox.Start(Move);
 
-	FileNameStoreEnum Src(SrcNames);
-	FileNameStoreEnum Dst(DstNames);
+	FileNameStoreEnum Src(&SrcNames);
+	FileNameStoreEnum Dst(&DstNames);
 	Array<CurDirInfo> CurDirStack;
 
 	for (int i=0; i<Src.Count(); i++)
@@ -897,7 +900,7 @@ abort:
 	if (FileCount) CopyProgressBox.Stop();
 	else
 	{
-		FileNameStoreEnum Src(SrcNames);
+		FileNameStoreEnum Src(&SrcNames);
 		for (int i=0; i<Src.Count(); i++)
 		{
 			if (!(Files[i].Flags & FLG_COPIED))
@@ -932,8 +935,8 @@ void Engine::ShowWriteName(const String& fn)
 }
 
 void Engine::ShowProgress(__int64 read, __int64 write, __int64 total,
-													__int64 readTime, __int64 writeTime,
-													__int64 readN, __int64 writeN, __int64 totalN)
+	__int64 readTime, __int64 writeTime,
+	__int64 readN, __int64 writeN, __int64 totalN)
 {
 	if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
 
@@ -943,8 +946,7 @@ void Engine::ShowProgress(__int64 read, __int64 write, __int64 total,
 	SetEvent(UiFree);
 }
 
-int Engine::CheckOverwrite2(int fnum, const String& src, 
-														const String& dst, String& ren)
+int Engine::CheckOverwrite2(int fnum, const String& src, const String& dst, String& ren)
 {
 	WaitForSingleObject(UiFree, INFINITE);
 	int res=CheckOverwrite(fnum, src, dst, ren);
@@ -952,8 +954,7 @@ int Engine::CheckOverwrite2(int fnum, const String& src,
 	return res;
 }
 
-void Engine::Delay(__int64 time, __int64 cb, __int64& counter,
-									 __int64 limit)
+void Engine::Delay(__int64 time, __int64 cb, __int64& counter, __int64 limit)
 {
 	if (limit<=0) return;
 	__int64 wait=(__int64)((double)cb/limit*TicksPerSec())-time;
@@ -978,86 +979,81 @@ void Engine::FarToWin32FindData(const TPanelItem &tpi, WIN32_FIND_DATA &wfd)
 
 String Engine::FindDescFile(const String& dir, int *idx)
 {
-	for (int i=0; i<Plugin()->Descs().Count(); i++)
-		if(FileExists(AddEndSlash(dir)+Plugin()->Descs()[i]))
+	for (int i=0; i < plugin->Descs().Count(); i++) {
+		if(FileExists(AddEndSlash(dir)+plugin->Descs()[i]))
 		{
-			if(idx) *idx=i;
-			return Plugin()->Descs()[i];
+			if(idx) *idx = i;
+			return plugin->Descs()[i];
 		}
-	if(idx) *idx=-1;
+	}
+	if (idx) {
+		*idx = -1;
+	}
 	return "";
 }
 
 String Engine::FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx)
 {
 	HANDLE hf;
-	for (int i=0; i<Plugin()->Descs().Count(); i++)
-		if((hf=FindFirstFile((AddEndSlash(dir)+Plugin()->Descs()[i]).ptr(), &fd)) 
-			!= INVALID_HANDLE_VALUE)
+	for (int i=0; i < plugin->Descs().Count(); i++)
+		if((hf=FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
 		{
 			FindClose(hf);
-			if(idx) *idx=i;
-			return Plugin()->Descs()[i];
+			if (idx) *idx = i;
+			return plugin->Descs()[i];
 		}
-	if(idx) *idx=-1;
+	if (idx) *idx = -1;
 	return "";
 }
 
-int Engine::AddFile(const String& Src, const String& Dst, 
-										WIN32_FIND_DATA &fd, int Flags, int Level, int PanelIndex)
-{
-	return AddFile(Src, Dst, fd.dwFileAttributes, MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh),
-																		fd.ftLastWriteTime, Flags, Level, PanelIndex);
-}
-
-void Engine::AddTopLevelDir(const String &dir, const String &dstmask, int Flags, wchar_t pc)
+void Engine::AddTopLevelDir(const String &dir, const String &dstMask, int flags, FileName::Direction d)
 {
 	HANDLE hf;
 	WIN32_FIND_DATA fd;
 
-	SrcNames.AddRel(pc, dir.ptr());
-	DstNames.AddRel(pc, ExtractFilePath(
-		ApplyFileMaskPath(dir+"\\somefile.txt", dstmask)).ptr());
-	FileStruct _info;
-	memset(&_info, 0, sizeof(_info));
-	FileStruct &info=Files[Files.Add(_info)];
-	info.Flags=Flags;
-	info.Level=0;
-	info.PanelIndex=-1;
-	if((hf=FindFirstFile(dir.ptr(), &fd)) !=INVALID_HANDLE_VALUE) {
+	SrcNames.AddRel(d, dir);
+	DstNames.AddRel(d, ExtractFilePath(ApplyFileMaskPath(dir+"\\somefile.txt", dstMask)));
+
+	FileStruct info;
+	memset(&info, 0, sizeof(info));
+	info.Flags = flags;
+	info.Level = 0;
+	info.PanelIndex = -1;
+	if ((hf=FindFirstFile(dir.ptr(), &fd)) !=INVALID_HANDLE_VALUE)
+	{
 		FindClose(hf);
 		info.Attr=fd.dwFileAttributes;
 		info.Modify=fd.ftLastWriteTime;
 	}
+	Files.push_back(info);
 }
 
-int Engine::DirStart(const String& dir, const String& dstmask)
+int Engine::DirStart(const String& dir, const String& dstMask)
 {
-	if(_CopyDescs)
+	if(_CopyDescs) {
 		CurPathDesc=FindDescFile(dir, DescFindData);
+	}
 	CurPathFlags=CurPathAddFlags=0;
-	if(_ClearROFromCD && VolFlags(dir) & VF_CDROM) 
+	if(_ClearROFromCD && VolFlags(dir) & VF_CDROM) {
 		CurPathAddFlags|=AF_CLEAR_RO;
-	AddTopLevelDir(dir, dstmask, 
-		FLG_DIR_PRE | FLG_DIR_FORCE | FLG_TOP_DIR | CurPathFlags, '+');
+	}
+	AddTopLevelDir(dir, dstMask, FLG_DIR_PRE | FLG_DIR_FORCE | FLG_TOP_DIR | CurPathFlags, FileName::levelPlus);
 	return TRUE;
 }
 
-int Engine::DirEnd(const String& dir, const String& dstmask)
+int Engine::DirEnd(const String& dir, const String& dstMask)
 {
 	if(_CopyDescs && CurPathDesc != "")
 	{
-		if(!AddFile(dir+"\\"+CurPathDesc, 
-			AddEndSlash(ExtractFilePath(
-				ApplyFileMaskPath(dir+"\\"+CurPathDesc, dstmask)))+CurPathDesc,
-			DescFindData, AF_DESCFILE | AF_DESC_INVERSE | CurPathAddFlags, 1))
-				return FALSE;
+		if (!AddFile(dir+"\\"+CurPathDesc, 
+			AddEndSlash(ExtractFilePath(ApplyFileMaskPath(dir+"\\"+CurPathDesc, dstMask)))+CurPathDesc, DescFindData, AF_DESCFILE | AF_DESC_INVERSE | CurPathAddFlags, 1)
+		) {
+			return FALSE;
+		}
 	}
-	AddTopLevelDir(dir, dstmask, 
-		FLG_DIR_POST | FLG_DIR_NOREMOVE | CurPathFlags, '*');
+	AddTopLevelDir(dir, dstMask, FLG_DIR_POST | FLG_DIR_NOREMOVE | CurPathFlags, FileName::levelStar);
 	return TRUE;
 }
-
 
 String getPanelDir(HANDLE h_panel) {
   size_t bufSize = 512; // initial size
@@ -1075,7 +1071,6 @@ String getPanelDir(HANDLE h_panel) {
   return reinterpret_cast<FarPanelDirectory*>(buf.get())->Name;
 }
 
-
 Engine::MResult Engine::Main(int move, int curOnly)
 {
 	PropertyList& Options = plugin->Options();
@@ -1086,9 +1081,9 @@ Engine::MResult Engine::Main(int move, int curOnly)
 	_PreallocMin	= Options["PreallocMin"];
 	_UnbuffMin		= Options["UnbuffMin"];
 
-	_ClearROFromCD	= 1; //Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, NULL) & FSS_CLEARROATTRIBUTE;
-	_HideDescs = 0; //XXX Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_SETHIDDEN;
-	_UpdateRODescs	= 0; //XXX Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_UPDATEREADONLY;
+	_ClearROFromCD	= 1; //YYY Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, NULL) & FSS_CLEARROATTRIBUTE;
+	_HideDescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_SETHIDDEN;
+	_UpdateRODescs	= 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_UPDATEREADONLY;
 
 	FarDialog& dlg = plugin->Dialogs()["CopyDialog"];
 	dlg.ResetControls();
@@ -1204,7 +1199,7 @@ rep:
 	int dres = dlg.Execute();
 	switch (dres) {
 		case 2: {
-			((FileCopyExPlugin*)plugin)->Config();
+			plugin->Config();
 			goto rep;
 		}
 
@@ -1377,119 +1372,113 @@ rep:
 	//progress.ShowMessage(LOC("Status.CreatingList"));
 	ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
 
-	size_t s, e, curitem=curOnly;
-	if(!curitem)
-	{
-	curitem = !(TPanelItem(0, true, true)->Flags & PPIF_SELECTED);
+	size_t s, e, curItem=curOnly;
+
+	if (!curItem) {
+		curItem = !(TPanelItem(0, true, true)->Flags & PPIF_SELECTED);
 	}
-	if(curitem)
-		s=e=pi.CurrentItem;
-	else 
-	{
+
+	if (curItem) {
+		s = e = pi.CurrentItem;
+	} else 	{
 		s=0;
 		e=pi.ItemsNumber-1;
 	}
 //	PluginPanelItem *data = pi.PanelItems;
 	int c=0;
-	for (size_t i=s; i<=e; i++) 
-	{
-		if(curitem)
-		++c;
-	else
-	{
-		if(TPanelItem(i)->Flags & PPIF_SELECTED)
+	for (size_t i = s; i <= e; i++) {
+		if (curItem) {
 			++c;
+		} else {
+			if(TPanelItem(i)->Flags & PPIF_SELECTED) {
+				++c;
+			}
+		}
 	}
-	}
-	Array<int> SortIndex;
+	Array<size_t> SortIndex;
 	SortIndex.Resize(c);
 	c=0;
-	for (size_t i=s; i<=e; i++)
+	for (size_t i = s; i <= e; i++)
 	{
-		if(curitem)
-		SortIndex[c++]=i;
-	else
-	{
-		if(TPanelItem(i)->Flags & PPIF_SELECTED)
-			SortIndex[c++]=i;
-	}
+		if (curItem) {
+			SortIndex[c++] = i;
+		} else {
+			if(TPanelItem(i)->Flags & PPIF_SELECTED) {
+				SortIndex[c++]=i; 
+			}
+		}
 	}
 //	SortData=data;
 	//SortIndex.SetSorted(1, MyCompare);
 
-	String curpath;
-	int havecurpath=0;
+	String curPath;
+	int haveCurPath=0;
 
 	// bugfixed by slst: bug #23
-	for (int ii=0; ii<c; ii++)
+	for (size_t ii=0; ii<c; ii++)
 	{
-		int i=SortIndex[ii];
+		size_t i = SortIndex[ii];
 		TPanelItem pit(i);
-		String file= pit->FileName;
-		if(file == L"..")
-		continue;
-
-		String filepath=ExtractFilePath(file);
-		if(!havecurpath || filepath.icmp(curpath))
-		{
-		if(havecurpath && 
-			!DirEnd(curpath!=""?curpath:srcPath, dstPath)) goto fin;
-		curpath=filepath;
-		havecurpath=1;
-		if(!DirStart(curpath!=""?curpath:srcPath, dstPath)) goto fin;
+		String file = pit->FileName;
+		if (file == L"..") {
+			continue;
 		}
 
-		if(file.cfind('\\')==-1) file=AddEndSlash(srcPath)+file;
+		String filePath=ExtractFilePath(file);
+		if ( !haveCurPath || filePath.icmp(curPath)) {
+			if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
+			curPath=filePath;
+			haveCurPath=1;
+			if (!DirStart(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
+		}
+
+		if (file.cfind('\\')==-1) {
+			file = AddEndSlash(srcPath) + file;
+		}
 
 		if(_CopyDescs && !ExtractFileName(file).icmp(CurPathDesc))
 		{
-		if(ShowMessageEx(LOC("CopyDialog.Warning"), 
-			FormatWidthNoExt(file, 50)+"\n"+
-			LOC("CopyDialog.DescSelectedWarn")+"\n"+
-			LOC("CopyDialog.DescSelectedWarn1"), 
-			LOC("Framework.No")+"\n"+LOC("Framework.Yes"), 0)!=1)
-			continue;
-		else
-			CurPathDesc="";
+			if(ShowMessageEx(LOC("CopyDialog.Warning"), 
+				FormatWidthNoExt(file, 50)+"\n"+
+				LOC("CopyDialog.DescSelectedWarn")+"\n"+
+				LOC("CopyDialog.DescSelectedWarn1"), 
+				LOC("Framework.No")+"\n"+LOC("Framework.Yes"), 0)!=1) {
+				continue;
+			} else {
+				CurPathDesc="";
+			}
 		}
 
-		String dst=ApplyFileMaskPath(file, dstPath);
+		String dst = ApplyFileMaskPath(file, dstPath);
 		WIN32_FIND_DATA wfd;
 		FarToWin32FindData(pit, wfd);
-		if(!AddFile(file, dst, wfd, CurPathAddFlags, 1, i)) 
-		goto fin;
+		if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, (int)i)) {
+			goto fin;
+		}
 	} // for (int ii=0; ii<c; ii++)
 
-	if(havecurpath && !DirEnd(curpath!=""?curpath:srcPath, dstPath)) goto fin;
+	if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
 
-	if(OverwriteMode == OM_RESUME)
+	if (OverwriteMode == OM_RESUME)
 	{
-		FileNameStoreEnum Enum(DstNames);
+		FileNameStoreEnum Enum(&DstNames);
 		// bugfixed by slst: bug #24
 		//progress.ShowMessage(LOC("Status.ScanningDest"));
 		ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
-		for (int i=0; i<Enum.Count(); i++)
-		{
-			if(!(Files[i].Flags & FLG_SKIPPED) &
-				!(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY))
-			{
+		for (int i=0; i<Enum.Count(); i++) {
+			if(!(Files[i].Flags & FLG_SKIPPED) & !(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY)) {
 				__int64 sz=FileSize((String)Enum.GetByNum(i));
-				if(sz<Files[i].Size)
-				{
-					Files[i].ResumePos=sz/ReadAlign*ReadAlign;
-					TotalBytes-=Files[i].ResumePos;
-				}
-				else
-				{
+				if (sz < Files[i].Size) {
+					Files[i].ResumePos = sz/ReadAlign*ReadAlign;
+					TotalBytes -= Files[i].ResumePos;
+				} else {
 					Files[i].Flags|= FLG_SKIPPED;
-					TotalBytes-=Files[i].Size;
+					TotalBytes -= Files[i].Size;
 					TotalN--;
 				}
 			}
 		}
-	}
-	else if(OverwriteMode == OM_SKIP || OverwriteMode == OM_RENAME || SkipNewer)
-	{
+	} else if(OverwriteMode == OM_SKIP || OverwriteMode == OM_RENAME || SkipNewer) {
 		// bugfixed by slst: bug #24
 		//progress.ShowMessage(LOC("Status.ScanningDest"));
 		ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
@@ -1498,15 +1487,15 @@ rep:
 
 	ScanFoldersProgressBox.Hide();
 
-	if(Options["BufPercent"])
+	if (Options["BufPercent"]) {
 		BufSize=(int)(GetPhysMemorySize()/100*(int)Options["BufPercentVal"]);
-	else
+	} else {
 		BufSize=(int)Options["BufSizeVal"]*1024;
+	}
 
 	// bugfixed by slst: bug #32
 	// CheckFreeDiskSpace feature added
-	if(Options["CheckFreeDiskSpace"])
-	{
+	if (Options["CheckFreeDiskSpace"]) {
 		if(!CheckFreeDiskSpace(TotalBytes, Move, srcPath, dstPath))
 			return MRES_NONE; // not enough space
 	}
@@ -1525,12 +1514,12 @@ fin:
 
 	if(!Move)
 	{
-		int i=0;
 		Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, NULL);
-		while (i<Files.Count())	{
+		for (size_t i = 0; i < Files.size(); i++)	{
 			if(Files[i].PanelIndex!=-1) {
 				if(Files[i].Flags & FLG_DIR_PRE) {
-					int ok=1, j=i+1;
+					int ok=1;
+					size_t j=i+1;
 					while (Files[j].Level>Files[i].Level) {
 						if(!(Files[j].Flags & (FLG_DIR_PRE | FLG_DIR_POST | FLG_COPIED))) {
 							ok=0; 
@@ -1548,7 +1537,6 @@ fin:
 					}
 				}
 			}
-			i++;
 		}
 		Info.PanelControl(PANEL_ACTIVE, FCTL_ENDSELECTION, 0, NULL);
 		// fixed by Nsky: bug #40
@@ -1561,15 +1549,15 @@ fin:
 		rpi.TopPanelItem = pi.TopPanelItem;
 
 		String NewFileName;
-		for (int idx=0; idx<Files.Count(); idx++) {
-			if(Files[idx].PanelIndex == pi.CurrentItem)	{
+		for (size_t idx=0; idx<Files.size(); idx++) {
+			if (Files[idx].PanelIndex == pi.CurrentItem) {
 				NewFileName = DstNames.GetNameByNum(idx);
 				break;
 			}
 		}
 		NewFileName = NewFileName.toLower();
 
-		for (int i=0; i<pi.ItemsNumber; i++) {
+		for (size_t i=0; i<pi.ItemsNumber; i++) {
 			TPanelItem pit(i);
 			String NewPanelFilename = pit->FileName;
 			NewPanelFilename = NewPanelFilename.toLower();
@@ -1591,18 +1579,24 @@ fin:
 	return MRES_NONE;
 }
 
+int Engine::AddFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, int PanelIndex)
+{
+	return AddFile(Src, Dst, fd.dwFileAttributes, MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh), fd.ftLastWriteTime, Flags, Level, PanelIndex);
+}
 
-int Engine::AddFile(const String& _src, const String& _dst, int attr, 
-										 __int64 size, FILETIME& Modify, int flags, int Level,
-										int PanelIndex)
+int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 size, FILETIME& Modify, int flags, int Level, int PanelIndex)
 {
 	// bugfixed by slst: bug #23
-	if(CheckEscape(FALSE)) return FALSE;
+	if (CheckEscape(FALSE)) {
+		return FALSE;
+	}
 
-	if(attr==0xFFFFFFFF) return TRUE;
+	if (attr==0xFFFFFFFF) {
+		return TRUE;
+	}
 
-	String src = _src;
-	String dst = _dst;
+	String src(_src);
+	String dst(_dst);
 		
 	// bugfixed by slst:
 	// Get here the real file names 
@@ -1626,86 +1620,83 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 //			dst = _dst;
 	//////////////////////////////////////////////////////
 	
-	if(src==dst && !(flags & AF_DESCFILE)) return TRUE;
-
-	if(flags & AF_CLEAR_RO)
-		attr &= ~FILE_ATTRIBUTE_READONLY;
-	
-	__int64 sz1;
-	if(attr & FILE_ATTRIBUTE_DIRECTORY) sz1 = 0;
-	else sz1 = size;
-
-	FileStruct _info;
-	memset(&_info, 0, sizeof(_info));
-	FileStruct &info=Files[Files.Add(_info)];
-	info.Size=sz1;
-	info.Attr=attr;
-	info.Modify=Modify;
-	info.Level=Level;
-	info.PanelIndex=PanelIndex;
-	wchar_t pc;
-	if(attr & FILE_ATTRIBUTE_DIRECTORY) 
-	{
-		info.Flags|=FLG_DIR_PRE;
-		pc='+';
-	}
-	else pc=' ';
-
-	SrcNames.AddRel(pc, ExtractFileName(src).ptr());
-	DstNames.AddRel(pc, ExtractFileName(dst).ptr());
-
-	if(flags & AF_DESCFILE) 
-	{
-		info.Flags |= FLG_DESCFILE;
-		if(flags & AF_DESC_INVERSE) info.Flags |= FLG_DESC_INVERSE;
-		CopyCount++;
+	if (src==dst && !(flags & AF_DESCFILE)) {
 		return TRUE;
 	}
 
+	if (flags & AF_CLEAR_RO) {
+		attr &= ~FILE_ATTRIBUTE_READONLY;
+	}
+
+	__int64 sz1 = (attr & FILE_ATTRIBUTE_DIRECTORY)? 0 : size;
+	
+	FileStruct fs;
+	memset(&fs, 0, sizeof(fs));
+	std::vector<FileStruct>::iterator info = Files.insert(Files.end(), fs);
+
+	info->Size = sz1;
+	info->Attr = attr;
+	info->Modify = Modify;
+	info->Level = Level;
+	info->PanelIndex = PanelIndex;
+
+	FileName::Direction d;
+	if (attr & FILE_ATTRIBUTE_DIRECTORY) {
+		info->Flags |= FLG_DIR_PRE;
+		d = FileName::levelPlus;
+	} else {
+		d = FileName::levelSame;
+	}
+
+	SrcNames.AddRel(d, ExtractFileName(src));
+	DstNames.AddRel(d, ExtractFileName(dst));
+
+	if (flags & AF_DESCFILE) {
+		info->Flags |= FLG_DESCFILE;
+		if	(flags & AF_DESC_INVERSE) {
+			info->Flags |= FLG_DESC_INVERSE;
+		}
+		CopyCount++;
+		return TRUE;
+	}
+	
 	int owmode = OM_PROMPT;
-	if(!(flags & AF_STREAM))
-	{
-		if(Move)
-		{
-			retry:
-			if(MoveFile(src, dst, FALSE)) 
-			{
-				info.Flags |= FLG_COPIED | FLG_DELETED;
+	if (!(flags & AF_STREAM)) {
+		if (Move) {
+	retry:
+			if(MoveFile(src, dst, FALSE)) {
+				info->Flags |= FLG_COPIED | FLG_DELETED;
 				goto fin;
 			}
 			int err = GetLastError();
-			if(err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
-			{
-				if(OverwriteMode == OM_RESUME)
-				{
-					if(FileSize(dst)>=info.Size)
-					{
-						info.Flags |= FLG_SKIPPED;
+			if (err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY)) {
+				if(OverwriteMode == OM_RESUME) {
+					if(FileSize(dst)>=info->Size) {
+						info->Flags |= FLG_SKIPPED;
 						goto fin;
 					}
-				}
-				else
-				{
+				} else {
 					String ren;
 					int res, j = 0;
-					if(SkipNewer && Newer2(dst, Modify))
+					if (SkipNewer && Newer2(dst, Modify)){
 						res = OM_SKIP;
-					else if(OverwriteMode == OM_PROMPT)
+					}
+					else if(OverwriteMode == OM_PROMPT) {
 						res = CheckOverwrite(-1, src, dst, ren);
-					else 
+					} else {
 						res = OverwriteMode;
+					}
 					switch (res)
 					{
 						case OM_SKIP: 
-							info.Flags |= FLG_SKIPPED;
+							info->Flags |= FLG_SKIPPED;
 							goto fin;
 						break;
 
 						case OM_OVERWRITE: 
 							owmode = OM_OVERWRITE;
-							if(MoveFile(src, dst, TRUE)) 
-							{
-								info.Flags |= FLG_COPIED | FLG_DELETED;
+							if(MoveFile(src, dst, TRUE)) {
+								info->Flags |= FLG_COPIED | FLG_DELETED;
 								goto fin;
 							}
 						break;
@@ -1715,10 +1706,9 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 						break;
 
 						case OM_RENAME:
-							if(OverwriteMode != OM_RENAME)
+							if(OverwriteMode != OM_RENAME) {
 								dst=ren;
-							else
-							{
+							} else {
 								while (ExistsN(dst, j)) j++;
 								dst=DupName(dst, j);
 							}
@@ -1736,9 +1726,11 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 
 	CopyCount++;
 	TotalN++;
-	if(!(attr & FILE_ATTRIBUTE_DIRECTORY)) FileCount++; 
+	if (!(attr & FILE_ATTRIBUTE_DIRECTORY)) {
+		FileCount++; 
+	}
 	TotalBytes += sz1;
-	info.OverMode = owmode;
+	info->OverMode = owmode;
 
 	// bugfixed by slst: bug #24
 	// Updates folder scan progress dialog
@@ -1766,7 +1758,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 						int idx;
 						if(_CopyDescs && _DescsInDirs 
 							&& !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-							&& (idx=Plugin()->Descs().Find(fd.cFileName))!=-1)
+							&& (idx=plugin->Descs().Find(fd.cFileName))!=-1)
 						{
 							if(descidx=-1 || idx<descidx)
 							{
@@ -1856,16 +1848,16 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr,
 	}
 
 fin:
-	if(attr & FILE_ATTRIBUTE_DIRECTORY) 
-	{
-		FileStruct _info1;
-		memset(&_info1, 0, sizeof(_info1));
-		FileStruct &info1=Files[Files.Add(_info1)];
-		info1.Flags|=FLG_DIR_POST | info.Flags & (FLG_COPIED | FLG_DELETED);
-		info1.Level=Level;
-		info1.PanelIndex=-1;
-		SrcNames.AddRel('-', ExtractFileName(src).ptr());
-		DstNames.AddRel('-', ExtractFileName(dst).ptr());
+	if(attr & FILE_ATTRIBUTE_DIRECTORY) {
+		FileStruct info;
+		memset(&info, 0, sizeof(info));
+		info.Flags|=FLG_DIR_POST | info.Flags & (FLG_COPIED | FLG_DELETED);
+		info.Level = Level;
+		info.PanelIndex = -1;
+		Files.push_back(info);
+
+		SrcNames.AddRel(FileName::levelMinus, ExtractFileName(src));
+		DstNames.AddRel(FileName::levelMinus, ExtractFileName(dst));
 	}
 
 	return TRUE;
@@ -1873,7 +1865,7 @@ fin:
 
 void Engine::SetOverwriteMode(int Start)
 {
-	FileNameStoreEnum Enum(DstNames);
+	FileNameStoreEnum Enum(&DstNames);
 	for (int i=Start; i<Enum.Count(); i++)
 	{
 		String fn=Enum.GetByNum(i);
@@ -2007,10 +1999,9 @@ rep1:
 	return res;
 }
 
-
 void Engine::RememberFile(const String& Src, const String& Dst, 
-													WIN32_FIND_DATA &fd, int Flags, int Level,
-													RememberStruct &Remember)
+	WIN32_FIND_DATA &fd, int Flags, int Level,
+	RememberStruct &Remember)
 {
 	Remember.Src=Src;
 	Remember.Dst=Dst;
@@ -2023,15 +2014,13 @@ void Engine::RememberFile(const String& Src, const String& Dst,
 
 int Engine::AddRemembered(RememberStruct &Remember)
 {
-	return AddFile(Remember.Src, Remember.Dst, Remember.Attr,
-		Remember.Size, Remember.Modify, Remember.Flags, Remember.Level);
+	return AddFile(Remember.Src, Remember.Dst, Remember.Attr, Remember.Size, Remember.Modify, Remember.Flags, Remember.Level);
 }
-
 
 // bugfixed by slst: bug #32
 // Returns TRUE if there is enough space on target disk
 BOOL Engine::CheckFreeDiskSpace(const __int64 TotalBytesToProcess, const int MoveMode,
-																const String& srcpathstr, const String& dstpathstr)
+	const String& srcpathstr, const String& dstpathstr)
 {
 	//if(ReplaceMode == OM_OVERWRITE) return TRUE;
 
