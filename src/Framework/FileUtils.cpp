@@ -62,7 +62,7 @@ inline String CutEndSlash(const String& v)
 
 inline String AddEndSlash(const String& v)
 {
-  wchar endChar = v[v.len()-1];
+  wchar_t endChar = v[v.len()-1];
   if (endChar =='\\' || endChar == '/')
     return v;
   else
