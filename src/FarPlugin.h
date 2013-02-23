@@ -36,18 +36,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class FarPlugin
 {
 public:
-	FarPlugin() : flags(0), menu(NULL), config(NULL) {}
+	FarPlugin() : flags(0) {}
 	~FarPlugin();
 	void Create();
-	int Configure(int);
+	int Configure(const struct ConfigureInfo *Info);
 	void OpenPlugin(const struct OpenInfo *OInfo);
 	void InitLang();
 	void LoadOptions();
 	void SaveOptions();
 	void InitOptions();
 	void Config();
-
-	void FillInfo(PluginInfo* info) const;
 
 	const LocaleList& Locale() const { return locale; }
 	PropertyList& Options() { return options; }
@@ -63,16 +61,12 @@ private:
 
 	FarDialogList dialogs;
 	PropertyList options;
-	StringList MenuItems;
-	StringList ConfigItems;
 	FarRegistry registry;
 	String CurLocaleFile;
 	LocaleList locale;
 	StringList descs;
 
 	int flags;
-	mutable const wchar_t** menu;
-	mutable const wchar_t** config;
 
 	void	About();
 	void	KeyConfig();

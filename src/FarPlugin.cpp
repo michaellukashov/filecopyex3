@@ -38,8 +38,6 @@ const String menu_plug = "F11 $if(menu.Select(\"Extended copy\",2)<=0) MsgBox(\"
 
 FarPlugin::~FarPlugin()
 {
-	free(menu);
-	free(config);
 }
 
 void FarPlugin::InitLang()
@@ -66,33 +64,7 @@ void FarPlugin::Create()
 	InitOptions();
 	LoadOptions();
 
-	MenuItems.Add("Extended copy");
-	ConfigItems.Add("Extended copy");
 	descs.LoadFromString(registry.GetString("\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');
-}
-
-void FarPlugin::FillInfo(PluginInfo* info) const
-{
-	info->Flags = flags;
-	info->CommandPrefix = NULL;
-	//XXX info->DiskMenuStringsNumber = 0;
-	//XXX info->DiskMenuNumbers = NULL;
-	if(!menu)
-	{
-		menu = (const wchar_t**)malloc(sizeof(const wchar_t*)*MenuItems.Count());
-		for(int i = 0; i < MenuItems.Count(); ++i)
-			menu[i] = MenuItems[i].ptr();
-	}
-	if(!config)
-	{
-		config = (const wchar_t**)malloc(sizeof(const wchar_t*)*ConfigItems.Count());
-		for(int i = 0; i < ConfigItems.Count(); ++i)
-			config[i] = ConfigItems[i].ptr();
-	}
-	//XXX info->PluginMenuStringsNumber=plugin->MenuItems.Count();
-	//XXX info->PluginMenuStrings=menu;
-	//XXX info->PluginConfigStringsNumber=plugin->ConfigItems.Count();
-	//XXX info->PluginConfigStrings=config;
 }
 
 void FarPlugin::LoadOptions()
@@ -113,7 +85,7 @@ void FarPlugin::SaveOptions()
 	*/
 }
 
-int FarPlugin::Configure(int)
+int FarPlugin::Configure(const struct ConfigureInfo *Info)
 {
 	Config();
 	return TRUE;
