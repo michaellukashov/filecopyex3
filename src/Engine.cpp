@@ -264,8 +264,8 @@ del_retry:
 
 		WriteN++;
 
-		int dnum=fnum+1;
-		while (dnum<SrcNames.Count() && Files[dnum].Flags & (FLG_DIR_POST | FLG_DIR_PRE | FLG_DESCFILE))
+		size_t dnum=fnum+1;
+		while (dnum < SrcNames.Count() && Files[dnum].Flags & (FLG_DIR_POST | FLG_DIR_PRE | FLG_DESCFILE))
 		{
 			if (!(Files[dnum].Flags & FLG_COPIED))
 			{
@@ -672,7 +672,7 @@ void Engine::Copy()
 	FileNameStoreEnum Dst(&DstNames);
 	Array<CurDirInfo> CurDirStack;
 
-	for (int i=0; i<Src.Count(); i++)
+	for (size_t i=0; i<Src.Count(); i++)
 	{
 		String SrcName = Src.GetNext();
 		String DstName = Dst.GetNext();
@@ -901,7 +901,7 @@ abort:
 	else
 	{
 		FileNameStoreEnum Src(&SrcNames);
-		for (int i=0; i<Src.Count(); i++)
+		for (size_t i=0; i<Src.Count(); i++)
 		{
 			if (!(Files[i].Flags & FLG_COPIED))
 			{
@@ -1372,52 +1372,29 @@ rep:
 	//progress.ShowMessage(LOC("Status.CreatingList"));
 	ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
 
-	size_t s, e, curItem=curOnly;
-
+	size_t curItem = curOnly;
 	if (!curItem) {
 		curItem = !(TPanelItem(0, true, true)->Flags & PPIF_SELECTED);
 	}
 
+	std::vector<size_t> sortIndex;
 	if (curItem) {
-		s = e = pi.CurrentItem;
+		sortIndex.push_back(pi.CurrentItem);
 	} else 	{
-		s=0;
-		e=pi.ItemsNumber-1;
-	}
-//	PluginPanelItem *data = pi.PanelItems;
-	int c=0;
-	for (size_t i = s; i <= e; i++) {
-		if (curItem) {
-			++c;
-		} else {
-			if(TPanelItem(i)->Flags & PPIF_SELECTED) {
-				++c;
+		for (size_t i = 0; i < pi.ItemsNumber; i++) {
+			if (TPanelItem(i)->Flags & PPIF_SELECTED) {
+				sortIndex.push_back(i);
 			}
 		}
 	}
-	Array<size_t> SortIndex;
-	SortIndex.Resize(c);
-	c=0;
-	for (size_t i = s; i <= e; i++)
-	{
-		if (curItem) {
-			SortIndex[c++] = i;
-		} else {
-			if(TPanelItem(i)->Flags & PPIF_SELECTED) {
-				SortIndex[c++]=i; 
-			}
-		}
-	}
-//	SortData=data;
-	//SortIndex.SetSorted(1, MyCompare);
-
+	
 	String curPath;
 	int haveCurPath=0;
 
 	// bugfixed by slst: bug #23
-	for (size_t ii=0; ii<c; ii++)
+	for (size_t ii=0; ii < sortIndex.size(); ii++)
 	{
-		size_t i = SortIndex[ii];
+		size_t i = sortIndex[ii];
 		TPanelItem pit(i);
 		String file = pit->FileName;
 		if (file == L"..") {
@@ -1465,7 +1442,7 @@ rep:
 		// bugfixed by slst: bug #24
 		//progress.ShowMessage(LOC("Status.ScanningDest"));
 		ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
-		for (int i=0; i<Enum.Count(); i++) {
+		for (size_t i=0; i<Enum.Count(); i++) {
 			if(!(Files[i].Flags & FLG_SKIPPED) & !(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY)) {
 				__int64 sz=FileSize((String)Enum.GetByNum(i));
 				if (sz < Files[i].Size) {
@@ -1866,7 +1843,7 @@ fin:
 void Engine::SetOverwriteMode(int Start)
 {
 	FileNameStoreEnum Enum(&DstNames);
-	for (int i=Start; i<Enum.Count(); i++)
+	for (size_t i=Start; i<Enum.Count(); i++)
 	{
 		String fn=Enum.GetByNum(i);
 		FileStruct &info=Files[i];
@@ -1877,33 +1854,27 @@ void Engine::SetOverwriteMode(int Start)
 			TotalN++;
 		}
 		// bug #47 fixed by axxie
-		if(!(info.Flags & FLG_SKIPPED)		 && 
-				!(info.Flags & FLG_DIR_PRE)		 && 
-				!(info.Flags & FLG_DIR_POST)		&& 
-				FileExists(fn))
-		{
-			if(SkipNewer && Newer2(fn, info.Modify))
-			{
+		if (!(info.Flags & FLG_SKIPPED) && !(info.Flags & FLG_DIR_PRE) && !(info.Flags & FLG_DIR_POST) && FileExists(fn)) {
+			if(SkipNewer && Newer2(fn, info.Modify)) {
 				TotalBytes -= info.Size;
 				TotalN--;
 				info.Flags |= FLG_SKIPPED | FLG_SKIPNEWER;
-			}
-			else
-				switch (OverwriteMode)
-				{
-				case OM_SKIP:
-					TotalBytes -= info.Size;
-					TotalN--;
-					info.Flags |= FLG_SKIPPED;
-					break;
-				case OM_RENAME:
-					{
+			} else {
+				switch (OverwriteMode)	{
+					case OM_SKIP: {
+						TotalBytes -= info.Size;
+						TotalN--;
+						info.Flags |= FLG_SKIPPED;
+						break;
+					}
+					case OM_RENAME:	{
 						int j=0;
 						while (ExistsN(fn, j)) j++;
 						info.RenameNum = j;
+						break;
 					}
-					break;
 				}
+			}
 		}
 	}
 }
