@@ -28,10 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void FWError(const wchar_t *s)
 {
-	if (errorHandler)
+	if (errorHandler) {
 		errorHandler(s);
-	else
-	{
+	} else {
 		MessageBox(0, s, L"FileCopyEx plugin error", MB_OK | MB_ICONSTOP | MB_SETFOREGROUND);
 		DebugBreak();
 	}

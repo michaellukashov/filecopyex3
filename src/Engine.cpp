@@ -343,8 +343,8 @@ void Engine::ProcessDesc(int fnum)
 	{
 		if (Files[j].Level==Files[fnum].Level)
 		{
-			String sn=SrcNames.GetNameByNum(j),
-						 dn=DstNames.GetNameByNum(j);
+			String sn=SrcNames.GetNameByNum(j);
+			String dn=DstNames.GetNameByNum(j);
 			int Same=0;
 
 			// bug #43 fixed by axxie
@@ -1010,8 +1010,7 @@ int Engine::AddFile(const String& Src, const String& Dst,
 																		fd.ftLastWriteTime, Flags, Level, PanelIndex);
 }
 
-void Engine::AddTopLevelDir(const String &dir, const String &dstmask, 
-														int Flags, wchar_t pc)
+void Engine::AddTopLevelDir(const String &dir, const String &dstmask, int Flags, wchar_t pc)
 {
 	HANDLE hf;
 	WIN32_FIND_DATA fd;
@@ -1025,9 +1024,7 @@ void Engine::AddTopLevelDir(const String &dir, const String &dstmask,
 	info.Flags=Flags;
 	info.Level=0;
 	info.PanelIndex=-1;
-	if((hf=FindFirstFile(dir.ptr(), &fd))
-		!=INVALID_HANDLE_VALUE)
-	{
+	if((hf=FindFirstFile(dir.ptr(), &fd)) !=INVALID_HANDLE_VALUE) {
 		FindClose(hf);
 		info.Attr=fd.dwFileAttributes;
 		info.Modify=fd.ftLastWriteTime;
