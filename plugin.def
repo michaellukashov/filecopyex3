@@ -1,11 +1,9 @@
-LIBRARY        FileCopyEx
+LIBRARY        
+	FileCopyEx
 EXPORTS
-
-  GetMinFarVersionW
-  SetStartupInfoW
-  GetPluginInfoW
-  OpenW
-  ClosePluginW
-  ConfigureW
-  ExitFARW
-  GetGlobalInfoW
+	SetStartupInfoW
+	GetPluginInfoW
+	OpenW
+	ConfigureW
+	ExitFARW
+	GetGlobalInfoW
