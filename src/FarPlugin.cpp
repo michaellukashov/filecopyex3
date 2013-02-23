@@ -259,17 +259,18 @@ void FarPlugin::KeyConfig()
 	// MacroCommand(MCMD_LOADALL); // XXX
 }
 
+#define VersionStr0(a,b,c,d, bit) "version " #a "." #b "." #c "." #d " beta (" #bit " Unicode), " __DATE__
 #ifdef _WIN64
-#define VersionStr "version 2.0.0 beta (x64 Unicode), " __DATE__
+#define VersionStr(a,b,c,d) VersionStr0(a,b,c,d, x64) 
 #else
-#define VersionStr "version 2.0.0 beta (x86 Unicode), " __DATE__
+#define VersionStr(a,b,c,d) VersionStr0(a,b,c,d, x32) 
 #endif
 
 void FarPlugin::About()
 {
 	FarDialog& dlg = Dialogs()["AboutDialog"];
 	dlg.ResetControls();
-	dlg["Label2"]("Text") = String(VersionStr);
+	dlg["Label2"]("Text") = String(VersionStr(FARMANAGERVERSION_MAJOR, FARMANAGERVERSION_MINOR, PLUGIN_MAJOR, PLUGIN_BUILD));
 	dlg.Execute();
 }
 

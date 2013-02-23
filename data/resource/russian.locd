@@ -106,6 +106,7 @@ AboutDialog.Label7=Исправления: slst [slst@mail333.com], Ivanych,
 AboutDialog.Label8=CDK, Nsky, Alter и Axxie [axxie@filecopyex.org.ua]
 AboutDialog.Label9=Поддержка: slst и Axxie
 AboutDialog.Label10=Версия для Far2 + x64: djdron
+AboutDialog.Label11=Версия для Far3: Ruslan Petrenko (ruslanp@ruslanp.com)
 AboutDialog.OK=&ОК
 
 OverwriteDialog=Копирование/Перемещение
