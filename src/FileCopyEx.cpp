@@ -35,12 +35,12 @@ Far Manager вызывает функцию GetGlobalInfoW в первую очередь, для получения осно
 void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
 {
 	Info->StructSize = sizeof(GlobalInfo);
-	Info->MinFarVersion = MAKEFARVERSION(3, 0, 0, 2927, VS_RELEASE); // http://api.farmanager.com/ru/whatsnew.html
-	Info->Version = MAKEFARVERSION(3, 0, 0, 1, VS_ALPHA);
+	Info->MinFarVersion = PLUGIN_MIN_FAR_VERSION;
+	Info->Version = PLUGIN_VERSION;
 	Info->Guid = MainGuid;
-	Info->Title = L"FileCopyEx";
-	Info->Description = L"Extended File Copy plugin for Far 3 file manager main executable";
-	Info->Author = L"..., Ruslan Petrenko";
+	Info->Title = PLUGIN_TITLE;
+	Info->Description = PLUGIN_DESC;
+	Info->Author = PLUGIN_AUTHOR;
 }
 
 /*
