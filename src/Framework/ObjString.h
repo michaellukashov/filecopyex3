@@ -37,8 +37,8 @@ public:
 	String() {}
 	String(const char* v)
 	{
-		str.resize(strlen(v), '\0');
-		_atowcs((wchar_t*)ptr(), str.length()+1, v);
+		std::string s(v);
+		str.assign(s.begin(), s.end());
 	}
 	String(wchar_t ch, int len)
 	{
