@@ -322,7 +322,9 @@ void Engine::ProcessDesc(int fnum)
 
 	String DstPath=AddEndSlash(ExtractFilePath(DstName));
 	String df=FindDescFile(DstPath);
-	if (df!="") DstName=DstPath+df;
+	if (!df.empty()) {
+		DstName=DstPath+df;
+	}
 
 	DescList SrcList, DstList;
 	SrcList.LoadFromFile(SrcName);
@@ -980,9 +982,9 @@ void Engine::FarToWin32FindData(const TPanelItem &tpi, WIN32_FIND_DATA &wfd)
 String Engine::FindDescFile(const String& dir, int *idx)
 {
 	for (int i=0; i < plugin->Descs().Count(); i++) {
-		if(FileExists(AddEndSlash(dir)+plugin->Descs()[i]))
+		if (FileExists(AddEndSlash(dir)+plugin->Descs()[i]))
 		{
-			if(idx) *idx = i;
+			if (idx) *idx = i;
 			return plugin->Descs()[i];
 		}
 	}

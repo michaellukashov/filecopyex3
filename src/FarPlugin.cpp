@@ -66,10 +66,8 @@ void FarPlugin::Create()
 
 	// XXX descs.LoadFromString(registry.GetString("\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');
 	// XXX Workaround
-	descs.Add("Descript.ion");
-	descs.Add("Files.bbs");
-
-	
+	descs.AddString("Descript.ion");
+	descs.AddString("Files.bbs");
 }
 
 void FarPlugin::LoadOptions()
