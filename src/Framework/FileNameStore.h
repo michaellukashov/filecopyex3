@@ -29,7 +29,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 
-//#include "ValueList.h"
 #include "ObjString.h"
 
 class FileName 
@@ -66,7 +65,7 @@ public:
 	FileName& operator[](size_t n) { return items[n]; };
 
 private:
-		std::vector<FileName> items;
+	std::vector<FileName> items;
 };
 
 #endif

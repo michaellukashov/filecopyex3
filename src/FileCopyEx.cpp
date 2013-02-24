@@ -105,8 +105,3 @@ void WINAPI ExitFARW()
 	delete plugin;
 	DoneObjMgr();
 };
-
-const String& LOC(const String& l)
-{
-	return plugin->Locale()[l];
-}

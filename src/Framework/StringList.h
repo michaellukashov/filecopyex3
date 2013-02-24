@@ -27,34 +27,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "array.h"
-#include "objstring.h"
-
-enum TextFormat { tfANSI, tfUnicode, tfUnicodeBE };
+#include "Array.h"
+#include "objString.h"
+#include "StringParent.h"
 
 #define slSorted 1
 #define slIgnoreCase 2
 
-class StringList
+class StringList: public StringParent
 {
 public:
-	int Count() const;
-	const String& operator[](int) const;
+	virtual void Clear() { items.Clear(); };
+	virtual const String& operator[](size_t i) const { return items[i].str; };
+	virtual size_t AddString(const String& v) { return Add(v); };
+	virtual size_t Count() const { return items.Count(); };
+
 	int& Values(int);
 	void Set(int, const String&);
 	int Add(const String&, int=0);
 	void Delete(int);
 	void Exchange(int, int);
-	void Clear();
 
 	int Find(const String&, int=0) const;
-
-	int LoadFrom(FILE*);
-	int SaveTo(FILE*, TextFormat=tfANSI);
-	int Load(const String&);
-	int Save(const String&, TextFormat=tfANSI);
-	void LoadFromString(const String&, wchar_t);
-	void LoadFromString(const wchar_t*, wchar_t);
 
 	void AddList(StringList&);
 

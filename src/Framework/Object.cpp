@@ -48,14 +48,14 @@ void ObjectClass::AddProperty(const String& name, const String& def)
 int Object::LoadFrom(FILE *f)
 {
 	StringList temp;
-	return temp.LoadFrom(f) && LoadFromList(temp);
+	return temp.loadFromFile(f) && LoadFromList(temp);
 }
 
 int Object::SaveTo(FILE *f)
 {
 	StringList temp;
 	SaveToList(temp);
-	return temp.SaveTo(f);
+	return temp.saveToFile(f);
 }
 
 Property& Object::Property(const String& v)
@@ -70,14 +70,14 @@ Property& Object::Property(const String& v)
 int Object::Load(const String& fn)
 {
 	StringList temp;
-	return temp.Load(fn) && LoadFromList(temp);
+	return temp.loadFromFile(fn) && LoadFromList(temp);
 }
 
 int Object::Save(const String& fn)
 {
 	StringList temp;
 	SaveToList(temp);
-	return temp.Save(fn);
+	return temp.saveToFile(fn);
 }
 
 Object& Object::Child(const String& v)
@@ -110,30 +110,24 @@ int Object::LoadFromList(StringList &list, int start)
 	while (i<list.Count())
 	{
 		String line=list[i].trim();
-		if (line=="end")
-		{
+		if (line=="end") {
 			res=i;
 			break;
-		}
-		else if (!line.ncmp("object", 6))
-		{
+		} else if (!line.ncmp("object", 6)) {
 			int p=line.cfind(' '), p1=line.cfind(':');
-			if (p!=-1 && p1!=-1 && p<p1)
-			{
+			if (p!=-1 && p1!=-1 && p<p1) {
 				String pname=line.substr(p+1, p1-p-1).trim();
 				String ptype=line.substr(p1+1).trim();
 				Object *obj=objectManager->Create(ptype, pname, this);
-				if (obj)
+				if (obj) {
 					i=obj->LoadFromList(list, i+1);
-				else
+				} else {
 					FWError(Format(L"Object type %s is undefined", ptype.ptr()));
+				}
 			}
-		}
-		else 
-		{
+		} else  {
 			int p=line.cfind('=');
-			if (p!=-1)
-			{
+			if (p!=-1)	{
 				String pline=line.substr(0, p).trim();
 				String pval=line.substr(p+1).trim().trimquotes();
 				(*this)(pline)=pval;

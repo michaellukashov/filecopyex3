@@ -68,9 +68,6 @@
     <ClCompile Include="src\Framework\StrUtils.cpp">
       <Filter>Source\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="src\Framework\ValueList.cpp">
-      <Filter>Source\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="src\common.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -99,6 +96,12 @@
       <Filter>Source</Filter>
     </ClCompile>
     <ClCompile Include="src\Framework\StringList.cpp">
+      <Filter>Source\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framework\Locale.cpp">
+      <Filter>Source\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framework\StringParent.cpp">
       <Filter>Source\Framework</Filter>
     </ClCompile>
   </ItemGroup>
@@ -157,9 +160,6 @@
     <ClInclude Include="src\Framework\StrUtils.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="src\Framework\ValueList.h">
-      <Filter>Source\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="src\SDK\farcolor.hpp">
       <Filter>Source\SDK</Filter>
     </ClInclude>
@@ -194,6 +194,15 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Framework\StringList.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\framework\Locale.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framework\StringVector.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framework\StringParent.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
   </ItemGroup>

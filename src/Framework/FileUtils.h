@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "objstring.h"
-#include "properties.h"
 #include "StdHdr.h"
 
 #define MAX_FILENAME 4096

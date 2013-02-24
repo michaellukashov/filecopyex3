@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stdhdr.h"
 #include "lowlevelstr.h"
 #include "properties.h"
-#include "valuelist.h"
 
 Property::Property(int v)
 {
@@ -141,24 +140,4 @@ bool Property::operator==(const Property& v) const
 			return operator==((const String)v);
 	}
 	return false;
-}
-
-void PropertyStore::SaveToList(StringList& list, StringList& names)
-{
-	ValueList temp;
-	for (int i=0; i<Count(); i++)
-		temp.Set(names[i], (*this)[names.Values(i)]);
-	temp.SaveToList(list);
-}
-
-void PropertyStore::LoadFromList(StringList& list, StringList& names)
-{
-	ValueList temp;
-	temp.LoadFromList(list);
-	for (int i=0; i<temp.Count(); i++)
-	{
-		int j=names.Find(temp.Name(i));
-		if (j!=-1)
-			(*this)[names.Values(j)]=temp.Value(i);
-	}
 }

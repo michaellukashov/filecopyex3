@@ -319,7 +319,7 @@ int Engine::EngineError(const String& s, const String& fn, int code, int& flg,
     dlg["Label2"]("Text")=FormatWidthNoExt(fn, msgw());
     dlg["Label2"]("Visible")=1;
     StringList list;
-    list.LoadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
+    list.loadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
     for (int i=0; i<list.Count(); i++)
     {
       if (i<=7)

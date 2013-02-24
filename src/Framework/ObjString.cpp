@@ -136,3 +136,5 @@ const String String::toLower() const
 	CharLowerBuff(sp, len());
 	return sp;
 }
+
+const static String emptyString;

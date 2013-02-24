@@ -71,21 +71,7 @@ protected:
 	String vStr;
 };
 
-class PropertyStore
-{
-public:
-	Property& operator[](int i) { return Values[i]; }
-
-	int Add(const Property& p) { return Values.Add(p); }
-	int Count() const { return Values.Count(); }
-
-	void SaveToList(StringList&, StringList&);
-	void LoadFromList(StringList&, StringList&);
-
-private:
-	Array<Property> Values;
-};
-
+typedef Array<Property> PropertyStore;
 typedef std::map<String, Property> PropertyMap;
 
 #endif//__PROPERTIES_H__

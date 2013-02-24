@@ -62,3 +62,14 @@ BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID)
 	}
 	return TRUE;
 }
+
+
+const String& LOC(const String& l)
+{
+	try {
+		return plugin->getLocale().at(l);
+	} catch (std::exception &e) {
+		return emptyString; 
+	}
+	
+}

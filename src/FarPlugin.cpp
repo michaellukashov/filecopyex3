@@ -24,7 +24,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Framework/stdhdr.h"
 #include "Framework/lowlevelstr.h"
-#include "Framework/valuelist.h"
 #include "Framework/properties.h"
 #include "Framework/FileUtils.h"
 #include "Engine.h"
@@ -46,7 +45,7 @@ void FarPlugin::InitLang()
 	if (fn != CurLocaleFile)
 	{
 		CurLocaleFile = fn;
-		locale.Load(GetDLLPath() + "\\resource\\" + fn);
+		LoadLocale(GetDLLPath() + "\\resource\\" + fn, locale);
 	}
 }
 
@@ -122,7 +121,6 @@ void FarPlugin::OpenPlugin(const struct OpenInfo *OInfo)
 	FarMenu menu;
 	menu.SetFlags(FMENU_WRAPMODE);
 	menu.SetTitle(LOC("PluginName"));
-	menu.SetBottom(LOC("PluginCopyright"));
 	menu.SetHelpTopic("Menu");
 	menu.AddLine(LOC("Menu.CopyFiles"));
 	menu.AddLine(LOC("Menu.MoveFiles"));

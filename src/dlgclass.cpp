@@ -125,7 +125,7 @@ void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
     e.list.ItemsNumber=0;
   }
   StringList items;
-  items.LoadFromString(obj("Items"), '\n');
+  items.loadFromString(obj("Items"), '\n');
   if (items.Count())
   {
     e.list.ItemsNumber=items.Count();

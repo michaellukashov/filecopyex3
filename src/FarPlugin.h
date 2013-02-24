@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Framework/ObjString.h"
 #include "Framework/Properties.h"
-#include "Framework/ValueList.h"
+#include "Framework/Locale.h"
 #include "dlgobject.h"
 #include "FarSettings.h"
 
@@ -47,7 +47,7 @@ public:
 	void InitOptions();
 	void Config();
 
-	const LocaleList& Locale() const { return locale; }
+	const Locale& getLocale() const { return locale; }
 	PropertyMap& Options() { return options; }
 	FarDialogList& Dialogs() { return dialogs; }
 
@@ -61,7 +61,7 @@ private:
 	PropertyMap options;
 	FarSettings settings;
 	String CurLocaleFile;
-	LocaleList locale;
+	Locale locale;
 	StringList descs;
 
 	int flags;

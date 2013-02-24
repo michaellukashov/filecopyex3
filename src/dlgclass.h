@@ -28,7 +28,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Framework/Object.h"
-#include "Framework/ValueList.h"
 #include "SDK/plugin.hpp"
 #include "dlgobject.h"
 
