@@ -125,39 +125,24 @@ String FormatWidthNoExt(const String& s, int len)
 	}
 }
 
-static void stripnl(wchar_t *msg)
-{
-	wchar_t *pa=msg, *pm=msg;
-	while (*pa)
-	{
-		if (*pa!='\n' && *pa!='\r') *pm++=*pa;
-		pa++;
-	}
-	*pm=0;
-}
-
 String SplitWidth(const String &s, int w)
 {
-	wchar_t msg[1024], res[1024];
-	s.copyTo(msg, 1024);
-	stripnl(msg);
-	wchar_t *p=(wchar_t*)msg, *op=p;
-	res[0]=0;
-	do {
-		while (*p && *p!=' ') p++;
-		if (p-op>w) {
-			wchar_t t=*p;
-			*p=0;
-			wcscat_s(res, 1024, op);
-			wcscat_s(res, 1024, L"\n");
-			op=p+1;
-			*p=t;
+	String res;
+	res.reserve(s.len());
+	size_t curW = 0;
+	for (size_t i = 0; i < s.len(); i++) {
+		wchar_t c = s[i];
+
+		if (c == '\n' || c == '\r') {
+			continue;
 		}
-	}  while (*p++);
-	if (*op) {
-		wcscat_s(res, 1024, op);
-	}
-	p=(wchar_t*)_tcsend(res)-1;
-	while (p>=res && *p=='.') *p--=0;
+		if (c == ' ' && (curW > w)) {
+			res += '\n';
+			curW = 0;
+			continue;
+		}
+		res += c;
+		curW++;
+	};
 	return res;
 }

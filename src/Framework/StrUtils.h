@@ -34,8 +34,6 @@ String Format(const wchar_t* fmt, ...);
 String FormatNum(__int64);
 String FormatTime(const FILETIME&);
 
-String Replace(const String&, const String&, const String&);
-
 String FormatProgress(__int64 cb, __int64 total);
 String FormatSpeed(__int64 cb);
 String FormatValue(__int64 Value);

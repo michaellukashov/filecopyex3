@@ -186,7 +186,7 @@ void FarProgress::SetTitle(const String& v)
 void FarProgress::SetTitle2(const String& v)
 {
 	String far_desc = TitleBuf;
-	int x = far_desc.cfind(L'-');
+	int x = far_desc.find('-');
 	if(x != -1)
 		far_desc = far_desc.substr(x);
 	else

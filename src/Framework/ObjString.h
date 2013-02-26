@@ -31,38 +31,33 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lowlevelstr.h"
 
+int npos_minus1(size_t pos);
+
 class String
 {
 public:
-	String() {}
+	String() {};
+
 	String(const char* v)
 	{
 		std::string s(v);
 		str.assign(s.begin(), s.end());
 	}
+
 	String(wchar_t ch, int len)
 	{
 		str.resize(len, ch);
 	}
+
 	String(const wchar_t* v)
 	{
 		str = v;
 	}
+
 	String(const std::wstring& v)
 	{
 		str = v;
 	}
-	inline bool operator==(const String& v) const { return cmp(v)==0; }
-	inline bool operator!=(const String& v) const { return cmp(v)!=0; }
-	inline bool operator<(const String& v) const { return cmp(v)<0; }
-	inline bool operator>(const String& v) const { return cmp(v)>0; }
-	inline bool operator<=(const String& v) const { return cmp(v)<=0; }
-	inline bool operator>=(const String& v) const { return cmp(v)>=0; }
-	inline void operator+=(const String& v) { str += v.str; }
-	const String operator+(const String& v) const { return str + v.str; }
-
-	inline int len() const { return (int)str.length(); }
-	inline bool empty() const { return str.empty(); }
 
 	inline wchar_t operator[] (int i) const
 	{
@@ -70,93 +65,91 @@ public:
 		else return 0;
 	}
 
-	int AsInt() const { return _wtoi(ptr()); }
-	float AsFloat() const { return (float)_wtof(ptr()); }
-	bool AsBool() const { return (*this) == L"1"; } 
-	void copyTo(wchar_t* buf, size_t sz) const { wcscpy_s(buf, sz, c_str()); }
-
 	explicit String(int v)
 	{
 		wchar_t buf[64];
 		_itow_s(v, buf, 64, 10);
 		str = buf;
 	}
+
 	explicit String(__int64 v)
 	{
 		wchar_t buf[64];
 		_i64tow_s(v, buf, 64, 10);
 		str = buf;
 	}
+
 	explicit String(float v)
 	{
 		wchar_t buf[64];
 		swprintf_s(buf, 64, L"%g", v);
 		str = buf;
 	}
+
 	explicit String(bool v)
 	{
-		if (v) str = L"1";
-		else str = L"0";
+		str = v ? L"1" : L"0";
 	}
+
+	inline bool operator==(const String& v) const { return cmp(v)==0; }
+	inline bool operator!=(const String& v) const { return cmp(v)!=0; }
+	inline bool operator<(const String& v) const { return cmp(v)<0; }
+	inline bool operator>(const String& v) const { return cmp(v)>0; }
+	inline bool operator<=(const String& v) const { return cmp(v)<=0; }
+	inline bool operator>=(const String& v) const { return cmp(v)>=0; }
+	inline void operator+=(const String& v) { str += v.str; }
+	inline void operator+=(wchar_t c) { str += c; }
+	const String operator+(const String& v) const { return str + v.str; }
+	
+	inline int len() const { return (int)str.length(); }
+	inline bool empty() const { return str.empty(); }
+
+	inline wchar_t operator[] (size_t i) const
+	{
+		return  (i < str.length()) ? str[i] : 0;
+	};
+
+	int AsInt() const { return _wtoi(ptr()); }
+	float AsFloat() const { return (float)_wtof(ptr()); }
+	bool AsBool() const { return (*this) == L"1"; } 
+	void copyTo(wchar_t* buf, size_t sz) const { wcscpy_s(buf, sz, ptr()); }
 
 	int cmp(const String& v) const { return ncmp(v, 0x7FFFFFFF); }
 	int icmp(const String& v) const { return nicmp(v, 0x7FFFFFFF); }
 	int ncmp(const String& v, int sz) const { return wcsncmp(ptr(), v.ptr(), sz); }
 	int nicmp(const String& v, int sz) const { return _wcsnicmp(ptr(), v.ptr(), sz); }
 	// bug #46 fixed by axxie
-	const bool isbadchar(wchar_t c) const { return c >= '\0' && c <= ' '; }
 
-	const String substr(int s, int l = 0x7FFFFFFF) const;
-	const String left(int n) const { return substr(0, n); }
-	const String right(int n) const { return substr(len()-n, n); }
+	String substr(size_t pos = 0, size_t len = std::string::npos) const;
 
-	const String trim() const;
-	const String ltrim() const;
-	const String rtrim() const;
-	const String trimquotes() const;
+	const String left(size_t n) const { return substr(0, n); }
+	const String right(size_t n) const { return substr(len() - n, n); }
 
-	const String rev() const;
+	String trim() const;
+	String ltrim() const;
+	String rtrim() const;
+	String trimquotes() const;
 
-	const String replace(const String& what, const String& with, int nocase=0) const;
-	const String toUpper() const;
-	const String toLower() const;
+	String rev() const;
 
-	int find(const String& v, int start=0) const
-	{
-		const wchar_t* p=ptr(), *rp=wcsstr(p+start, v.ptr());
-		if (!rp) return -1; 
-		else return (int)(rp-p);
-	}
-	int cfind(wchar_t v, int start=0) const
-	{
-		const wchar_t* p=ptr(), *rp=wcschr(p+start, v);
-		if (!rp) return -1; 
-		else return (int)(rp-p);
-	}
-	int crfind(wchar_t v) const
-	{
-		const wchar_t* p=ptr(), *rp=wcsrchr(p, v);
-		if (!rp) return -1; 
-		else return (int)(rp-p);
-	}
-	int cfind(const String& v, int start=0) const
-	{
-		const wchar_t* p=ptr(), *rp=wcspbrk(p+start, v.ptr());
-		if (!rp) return -1; 
-		else return (int)(rp-p);
-	}
-	int crfind(const String& v) const 
-	{ 
-		const wchar_t* p=ptr(), *rp=_tcsrpbrk(p, v.ptr());
-		if (!rp) return -1; 
-		else return (int)(rp-p);
-	}
-	const wchar_t* ptr() const { return str.c_str(); }
+	String replace(const String& what, const String& with) const;
+	String toUpper() const;
+	String toLower() const;
+
+	int find(const String& v, size_t start = 0) const { return npos_minus1(str.find(v.str, start)); }
+	int find(wchar_t v, size_t start = 0) const { return npos_minus1(str.find(v, start)); }
+	int find_first_of(String v, size_t start = 0) const { return npos_minus1(str.find_first_of(v.str, start)); }
+	int rfind(const String& v, size_t start = std::string::npos) const { return npos_minus1(str.rfind(v.str, start)); }
+	int rfind(wchar_t v, size_t start = std::string::npos) const { return npos_minus1(str.rfind(v, start)); }
+	int find_last_of(String v, size_t start = std::string::npos) const { return npos_minus1(str.find_last_of(v.str, start)); }
+
+	const wchar_t* ptr() const { return c_str(); }
 	const wchar_t* c_str() const { return str.c_str(); }
 
+	void reserve(size_t n=0) { str.reserve(n); };
+
 private:
-	std::wstring str;
-};
+	std::wstring str;};
 
 extern const String emptyString;
 

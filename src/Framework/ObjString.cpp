@@ -25,116 +25,103 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stdhdr.h"
 #include "objstring.h"
 
-const String String::substr(int s, int l) const
+const bool isbadchar(wchar_t c) 
+{ 
+	return c >= '\0' && c <= ' '; 
+}
+
+String String::substr(size_t s, size_t l) const
 {
-	if(s>=len() || s<0 || l<=0)
+	if (s >= len()) {
 		return String();
-	if(l>len())
-		l=len();
+	}
 	return str.substr(s, l);
 }
 
-const String String::trim() const
+String String::trim() const
 {
-	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
-	const wchar_t *p = ptr();
-	wcscpy_s(sp, len() + 1, p);
-	wchar_t *ep=sp+len()-1;
-	// bug #46 fixed by axxie
-	while (*sp && isbadchar(*sp)) sp++;
-	while (ep>=sp && isbadchar(*ep)) ep--;
-	*(ep+1)=0;
-	return sp;
+	int start = 0, end = len()-1;
+	while (start <= end && isbadchar((*this)[start]) ) {
+		start++;
+	};
+	while (end >= start && isbadchar((*this)[end]) ) {
+		end--;
+	};
+	return substr(start, end-start+1);
 }
 
-const String String::ltrim() const
+String String::ltrim() const
 {
-	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
-	const wchar_t *p=ptr();
-	wcscpy_s(sp, len() + 1, p);
-	// bug #46 fixed by axxie
-	while (*sp && isbadchar(*sp)) sp++;
-	return sp;
+	int start = 0, end = len()-1;
+	while (start <= end && isbadchar((*this)[start]) ) {
+		start++;
+	};
+	return substr(start, end-start+1);
 }
 
-const String String::rtrim() const
+String String::rtrim() const
 {
-	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
-	const wchar_t *p=ptr();
-	wcscpy_s(sp, len() + 1, p);
-	wchar_t *ep=sp+len()-1;
-	// bug #46 fixed by axxie
-	while (ep>=sp && isbadchar(*ep)) ep--;
-	*(ep+1)=0;
-	return sp;
+	int start = 0, end = len()-1;
+	while (end >= start && isbadchar((*this)[end]) ) {
+		end--;
+	};
+	return substr(start, end-start+1);
+
 }
 
-const String String::trimquotes() const
+String String::trimquotes() const
 {
-	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
-	const wchar_t *p=ptr();
-	wcscpy_s(sp, len() + 1, p);
-	wchar_t *ep=sp+len()-1;
-	if (*sp && *sp=='"') sp++;
-	if (ep>=sp && *ep=='"') *ep=0;
-	return sp;
+	int start = 0, end = len()-1;
+	while (start <= end && ((*this)[start]) == '"' ) {
+		start++;
+	};
+	while (end >= start && ((*this)[end]) == '"' ) {
+		end--;
+	};
+	return substr(start, end-start+1);
 }
 
-const String String::rev() const
+String String::rev() const
 {
-	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
-	const wchar_t *p=ptr();
-	wchar_t *ep=sp+len()-1;
-	*(ep+1)=0;
-	while (*p) *ep--=*p++;
-	return sp;
-}
-
-const String String::replace(const String &what, const String &with,
-							 int nocase) const
-{
-	if (!what.len()) return *this;
 	String res;
-	int start=0, p;
-	if (!nocase)
-	{
-		while (p=find(what, start),p!=-1)
-		{
-			res+=substr(start, p-start);
-			res+=with;
-			start=p+with.len();
-		}
-	}
-	else
-	{
-		String what1=what.toUpper(), this1=toUpper();
-		while (p=this1.find(what1, start),p!=-1)
-		{
-			res+=substr(start, p-start);
-			res+=with;
-			start=p+with.len();
-		}
-	}
-	res+=substr(start);
+	res.str.assign(str.rend(), str.rbegin());
 	return res;
 }
 
-const String String::toUpper() const
+String String::replace(const String &what, const String &with) const
 {
-	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
-	const wchar_t *p=ptr();
-	wcscpy_s(sp, len()+1, p);
-	CharUpperBuff(sp, len());
-	return sp;
+	if (what.empty()) {
+		return *this;
+	}
+	String res;
+	int start=0;
+	int p;
+	while ((p = find(what, start)) != -1) {
+		res += substr(start, p-start);
+		res += with;
+		start = p + what.len();
+	}
+	res += substr(start);
+	return res;
 }
 
-const String String::toLower() const
+String String::toUpper() const
 {
-	wchar_t *sp=(wchar_t*)_alloca((len()+1)*sizeof(wchar_t));
-	const wchar_t *p=ptr();
-	wcscpy_s(sp, len() + 1, p);
-	CharLowerBuff(sp, len());
-	return sp;
+	String res(str);
+	CharUpperBuff((LPTSTR)res.c_str(), len());
+	return res;
+}
+
+String String::toLower() const
+{
+	String res(str);
+	CharLowerBuff((LPTSTR)res.c_str(), len());
+	return res;
 }
 
 const static String emptyString;
+
+int npos_minus1(size_t pos)
+{
+	return (pos == std::string::npos) ? -1 : (int)pos;
+}

@@ -49,14 +49,14 @@ int DescList::LoadFromList(StringVector &list)
 				desc = "";
 			}
 			if (c == '"') {
-				int lf=s.substr(1).cfind('"'); 
+				int lf=s.substr(1).find('"'); 
 				if (lf != -1) {
 					fn = s.substr(1, lf).trim();
 					desc = s.substr(lf+2).trim(); 
 					
 				}
 			} else {
-				int lf = s.cfind(" \t");
+				int lf = s.find_first_of(" \t");
 				if (lf != -1) {
 					fn = s.substr(0, lf).trim();
 					desc = s.substr(lf+1).trim();	
@@ -84,7 +84,7 @@ int DescList::SaveToFile(const String& fn)
 	for (DescListMap::iterator it = names.begin(); it != names.end(); it++ ) {
 		if (!(it->second.flags & dlNoSave))	{
 			String s;
-			if (it->first.cfind(' ')) {
+			if (it->first.find(' ')) {
 				s = String("\"") + it->first + "\"";
 			} else {
 				s = it->first;

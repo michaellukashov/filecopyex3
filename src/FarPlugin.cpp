@@ -23,7 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "Framework/stdhdr.h"
-#include "Framework/lowlevelstr.h"
+//#include "Framework/lowlevelstr.h"
 #include "Framework/properties.h"
 #include "Framework/FileUtils.h"
 #include "Engine.h"
@@ -145,7 +145,7 @@ String FarPlugin::GetDLLPath()
 	wchar_t buf[MAX_FILENAME];
 	GetModuleFileName((HMODULE)hInstance, buf, MAX_FILENAME);
 	String dlln = buf;
-	return dlln.substr(0, dlln.crfind('\\'));
+	return dlln.substr(0, dlln.rfind('\\'));
 }
 
 

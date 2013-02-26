@@ -1140,7 +1140,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
 		wcsncpy_s(buf, MAX_FILENAME, pit->FileName, MAX_FILENAME);
 		// _toansi(buf);
 		String fn=ExtractFileName(buf);
-		if (fn=="..") return MRES_NONE;
+		if (fn==L"..") return MRES_NONE;
 		String fmt;
 		if (!move) {
 			fmt=LOC("CopyDialog.CopyTo");
@@ -1148,7 +1148,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
 			fmt=LOC("CopyDialog.MoveTo");
 		}
 		prompt = Format(fmt.ptr(), fn.ptr());
-		if (curOnly || dstPath == "") dstPath=fn;
+		if (curOnly || dstPath.empty()) dstPath=fn;
 		/*else if(!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
 			&& dstpath!="queue:" && dstpath!="plugin:")
 				dstpath=AddEndSlash(dstpath)+fn;*/
@@ -1237,9 +1237,9 @@ rep:
 		dstText = L"nul";
 
 	// bugfixed by slst: bug #7		 
-	dstText = Replace(dstText, "\"", "");
+	dstText = dstText.replace("\"", "");
 
-	if(dstText=="plugin:") 
+	if (dstText == L"plugin:") 
 	{
 		if(allowPlug) {
 			return MRES_STDCOPY_RET;
@@ -1249,7 +1249,7 @@ rep:
 		}
 	}
 
-	String relDstPath = ExpandEnv(Replace(dstText, "/", "\\"));
+	String relDstPath = ExpandEnv(dstText.replace("/", "\\"));
 	dstPath = "";
 	
 	wchar_t CurrentDir[MAX_FILENAME];
@@ -1411,7 +1411,7 @@ rep:
 			if (!DirStart(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
 		}
 
-		if (file.cfind('\\')==-1) {
+		if (file.find('\\') == -1) {
 			file = AddEndSlash(srcPath) + file;
 		}
 
@@ -1741,7 +1741,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 si
 						{
 							if(descidx=-1 || idx<descidx)
 							{
-								RememberFile(src+"\\"+fd.cFileName, dst+"\\"+fd.cFileName, 
+								RememberFile(src+L"\\"+fd.cFileName, dst+L"\\"+fd.cFileName, 
 									fd, flags | AF_DESCFILE, Level+1, Remember);
 								descidx=idx;
 							}

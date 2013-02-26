@@ -66,19 +66,6 @@ String FormatTime(const FILETIME& ft)
                 (int)st.wHour, (int)st.wMinute, (int)st.wSecond);
 }
 
-String Replace(const String& s, const String& s1, const String& s2)
-{
-  String src=s, res;
-  int p;
-  while ((p=src.find(s1))!=-1)
-  {
-    res+=src.substr(0, p)+s2;
-    src=src.substr(p+s1.len());
-  }
-  res+=src;
-  return res;
-}
-
 String FormatProgress(__int64 cb, __int64 total)
 {
   __int64 n=total;

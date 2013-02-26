@@ -115,7 +115,7 @@ void FarDlgObject::PreInitItem(FarDialogItem& item)
 	//	SetItemText(&item, Name());
 
 	String p=Property("Text");
-	if (p=="") {
+	if (p.empty()) {
 		String t = Dialog->Name()+"."+Name();
 		p=LOC(t);
 	}
@@ -296,7 +296,7 @@ int FarDialog::Execute()
   memset(&frame, 0, sizeof(frame));
   frame.Type=DI_DOUBLEBOX;
   String p=Property("Title");
-  if (p=="") p=LOC(Name());
+  if (p.empty()) p=LOC(Name());
   SetItemText(frame, p);
   Items.Add(frame);
 

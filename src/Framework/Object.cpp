@@ -114,7 +114,8 @@ int Object::LoadFromList(StringList &list, int start)
 			res=i;
 			break;
 		} else if (!line.ncmp("object", 6)) {
-			int p=line.cfind(' '), p1=line.cfind(':');
+			int p=line.find(' ');
+			int p1=line.find(':');
 			if (p!=-1 && p1!=-1 && p<p1) {
 				String pname=line.substr(p+1, p1-p-1).trim();
 				String ptype=line.substr(p1+1).trim();
@@ -126,7 +127,7 @@ int Object::LoadFromList(StringList &list, int start)
 				}
 			}
 		} else  {
-			int p=line.cfind('=');
+			int p=line.find('=');
 			if (p!=-1)	{
 				String pline=line.substr(0, p).trim();
 				String pval=line.substr(p+1).trim().trimquotes();

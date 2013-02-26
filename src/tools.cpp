@@ -56,7 +56,7 @@ int GetDriveId(const String& path, String& res)
     if (!s.nicmp(tmp, tmp.len()))
     {
       s=s.substr(tmp.len());
-      res=s.left(s.cfind('\\'));
+      res=s.left(s.find('\\'));
       return TRUE;
     }
   }
@@ -104,13 +104,13 @@ int GetPhysDrive(const String& _path, int& res)
 int VolFlags(const String& _path)
 {
   String path=_path;
-  int sl=path.crfind("\\/"),
-      ml=path.cfind("*?");
+  int sl=path.find_last_of("\\/"),
+      ml=path.find_first_of("*?");
   if (ml!=-1 && ml<sl) return -1;
-  if (path.cfind("|<>")!=-1) return -1;
-  int cl=path.cfind(':');
-  if (cl!=-1 && (cl!=1 || cl!=path.crfind(':') || 
-    (cl!=path.len()-1 && path.cfind("\\/")!=2))) return -1;
+  if (path.find_first_of("|<>")!=-1) return -1;
+  int cl=path.find(':');
+  if (cl!=-1 && (cl!=1 || cl!=path.rfind(':') || 
+	  (cl!=path.len()-1 && path.find_first_of("\\/")!=2))) return -1;
   if (ml!=-1) path=ExtractFilePath(path);
   String root=GetFileRoot(path);
 

@@ -21,7 +21,7 @@ String FileNameStoreEnum::GetNext()
 
 		case FileName::levelMinus: {
 			buffer = curPath;
-			curPath = curPath.substr(0, curPath.crfind('\\'));
+			curPath = curPath.substr(0, curPath.rfind('\\'));
 
 			break;
 		}
@@ -62,7 +62,7 @@ void FileNameStoreEnum::Skip()
 		}
 
 		case FileName::levelMinus: {
-			curPath = curPath.substr(0, curPath.crfind('\\'));
+			curPath = curPath.substr(0, curPath.rfind('\\'));
 			break;
 		}
 

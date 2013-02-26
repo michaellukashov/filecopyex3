@@ -30,80 +30,87 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 inline String ExtractFileName(const String& v)
 {
-  return v.substr(v.crfind("\\/")+1);
+	return v.substr(v.find_last_of("\\/")+1);
 }
 
 inline String ExtractFilePath(const String& v)
 {
-  return v.substr(0, v.crfind("\\/"));
+	int pos = v.find_last_of("\\/");
+	return (pos == -1) ? "" : v.substr(0, pos);
 }
 
 String ExtractFileExt(const String& v)
 {
-  int p=v.crfind('.');
-  if (p==-1 || p<v.crfind("\\/")) return "";
-  else return v.substr(p);
+	int p = v.rfind('.');
+	if (p == -1 || p < v.find_last_of("\\/")) {
+		return "";
+	} else {
+		return v.substr(p);
+	}
 }
 
 String ChangeFileExt(const String& v, const String& ext)
 {
-  int p=v.crfind('.');
-  if (p==-1 || p<v.crfind("\\/")) return v+ext;
-  else return v.substr(0, p)+ext;
+	int p=v.rfind('.');
+	if ( p==-1 || p < v.find_last_of("\\/")) {
+		return v+ext;
+	} else {
+		return v.substr(0, p)+ext;
+	}
 }
 
 inline String CutEndSlash(const String& v)
 {
-  if (v[v.len()-1]=='\\' || v[v.len()-1]=='/')
-    return v.left(v.len()-1);
-  else
-    return v;
+	if (v[v.len()-1]=='\\' || v[v.len()-1]=='/') {
+		return v.left(v.len()-1);
+	} else {
+	    return v;
+	}
 }
 
 inline String AddEndSlash(const String& v)
 {
-  wchar_t endChar = v[v.len()-1];
-  if (endChar =='\\' || endChar == '/')
-    return v;
-  else
-    return v+"\\";
+	wchar_t endChar = v[v.len()-1];
+	if ( endChar =='\\' || endChar == '/') {
+		return v;
+	} else {
+		return v + "\\";
+	}
 }
 
 String GetFileNameRoot(const String& v)
 {
-  String l=v.left(2);
-  // Bug #12 fixed by axxie
-  if (v.left(3) == "\\\\.")
-  {
-    if (l=="\\\\" || l=="//")
-    {
-      l=v.substr(2); 
-      int p=l.cfind("\\/");
-      if (p!=-1)
-      {
-        l=l.substr(p+1);
-        p=l.cfind("\\/");
-        if (p!=-1)
-          return l.substr(0, p+1);
-      }
-    }
-  }
-  else if (l=="\\\\")
-  {
-    l=v.substr(2); 
-    int p=l.cfind("\\/");
-    if (p!=-1)
-    {
-      l=l.substr(p+1);
-      int p2=l.cfind("\\/");
-      // bug #12 refixed by axxie
-      if (p2!=-1)
-        return v.substr(0,p+p2+2+2);
-      else return v+"\\";
-    }
-  }
-  else if (l.cfind(':')==1) return l+"\\";
-  return "";
+	String l=v.left(2);
+	// Bug #12 fixed by axxie
+	if (v.left(3) == L"\\\\.")  {
+		if (l==L"\\\\" || l==L"//") {
+			l=v.substr(2); 
+			int p=l.find_first_of("\\/");
+			if (p!=-1) {
+				l = l.substr(p+1);
+				p = l.find_first_of("\\/");
+				if (p!=-1) {
+					return l.substr(0, p+1);
+				}
+			}
+		}
+	} else if (l=="\\\\") {
+		l = v.substr(2); 
+		int p=l.find_first_of("\\/");
+		if (p!=-1) {
+			l = l.substr(p+1);
+			int p2 = l.find_first_of("\\/");
+			// bug #12 refixed by axxie
+			if (p2!=-1) {
+				return v.substr(0,p+p2+2+2);
+			} else {
+				return v+"\\";
+			}
+		}
+	} else if (l.find(':')==1) {
+		return l+"\\";
+	}
+	return "";
 }
 
 //typedef
