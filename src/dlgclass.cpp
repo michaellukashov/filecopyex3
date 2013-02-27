@@ -88,7 +88,7 @@ void FarDlgEditClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
 		String p=obj("HistoryId");
 		if (p!="") {
 			FarDlgEdit &e=static_cast<FarDlgEdit&>(obj);
-			(String("FarFramework\\")+e.GetDialog()->Name()+"\\"+e.Name()).ToUnicode(e.HistoryId, sizeof(e.HistoryId)/sizeof(wchar_t));
+			(String("FarFramework\\")+e.GetDialog()->Name()+"\\"+e.Name()).copyTo(e.HistoryId, sizeof(e.HistoryId)/sizeof(wchar_t));
 			item.History=e.HistoryId;
 		}
 	}
@@ -118,27 +118,21 @@ void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
 
   FarDlgCombobox &e=static_cast<FarDlgCombobox&>(obj);
   item.ListItems=&e.list;
-  if (e.list.Items) 
-  {
-    free(e.list.Items);
-    e.list.Items=NULL;
-    e.list.ItemsNumber=0;
-  }
+	if (e.list.Items) {
+		delete(e.list.Items);
+		e.list.Items = NULL;
+		e.list.ItemsNumber = 0;
+	}
   StringList items;
   items.loadFromString(obj("Items"), '\n');
-  if (items.Count())
-  {
-    e.list.ItemsNumber=items.Count();
-    int sz=sizeof(FarListItem)*items.Count();
-    e.list.Items=(FarListItem*)malloc(sz);
-    memset(e.list.Items, 0, sz);
-    for (int i=0; i<items.Count(); i++)
-    {
-//      strncpy_s(e.list.Items[i].Text, 128, items[i].optr(), sizeof(e.list.Items[i].Text));
-      if (obj("Text")==items[i])
-        e.list.Items[i].Flags|=LIF_SELECTED;
-    }
-  }
+	if (items.Count()) {
+		e.list.ItemsNumber = items.Count();
+		e.list.Items = new FarListItem[items.Count()];
+		for (int i=0; i<items.Count(); i++) {
+			if (obj("Text")==items[i])
+			e.list.Items[i].Flags|=LIF_SELECTED;
+		}
+	}
 }
 void FarDlgComboboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 {
@@ -147,15 +141,15 @@ void FarDlgComboboxClass::RetrieveProperties(FarDlgObject& obj, HANDLE dlg)
 
 size_t lablen(FarDialogItem& item)
 {
-  if (item.Flags & DIF_SHOWAMPERSAND) {
-    return wcslen(item.Data);
-  } else {
-    int res=0;
-    for (const wchar_t *p=item.Data; *p; p++) {
-      if (*p!='&') res++; 
+	if (item.Flags & DIF_SHOWAMPERSAND) {
+		return wcslen(item.Data);
+	} else {
+	    int res=0;
+	    for (const wchar_t *p=item.Data; *p; p++) {
+			if (*p!='&') res++; 
+		}
+		return res;
 	}
-    return res;
-  }
 }
 
 void InitObjMgr()

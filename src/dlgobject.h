@@ -85,7 +85,7 @@ class FarDlgCombobox : public FarDlgObject
 public:
 	FarList list;
 	FarDlgCombobox(void) { list.ItemsNumber=0; list.Items=NULL; }
-	virtual ~FarDlgCombobox(void) { if (list.Items) free(list.Items); }
+	virtual ~FarDlgCombobox(void) { if (list.Items) delete(list.Items); }
 };
 
 class FarDlgContainer : public FarDlgObject

@@ -80,7 +80,7 @@ public:
 	}
 	~TPanelItem()
 	{
-		free(ppi);
+		delete(ppi);
 	}
 	PluginPanelItem* operator->() const { return ppi; }
 protected:

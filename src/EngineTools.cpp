@@ -91,79 +91,44 @@ void Encrypt(HANDLE handle, int f)
       Error(LOC("Error.Encrypt"), GetLastError());
 }
 
-void *_ReadACL(const String& fn, SECURITY_INFORMATION si)
-{
-  DWORD cb;
-  PSECURITY_DESCRIPTOR secbuf = (PSECURITY_DESCRIPTOR)malloc(16384);
-  int res=GetFileSecurity(fn.ptr(), si, secbuf, 16384, &cb);
-  if (res && cb)
-  {
-    secbuf = (PSECURITY_DESCRIPTOR)realloc(secbuf, cb);
-    res=GetFileSecurity(fn.ptr(), si, secbuf, 16384, &cb);
-  }
-  if (res) return secbuf;
-  else return NULL;
-}
-
-void  _WriteACL(const String& fn, SECURITY_INFORMATION si, void *buf)
-{
-  if (buf)
-    SetFileSecurity(fn.ptr(), si, buf);
-}
-
-void ReadACL(const String& fn, void **info1, void **info2)
-{
-  *info1=_ReadACL(fn, DACL_SECURITY_INFORMATION 
-    | GROUP_SECURITY_INFORMATION
-    | OWNER_SECURITY_INFORMATION);
-  *info2=_ReadACL(fn, SACL_SECURITY_INFORMATION);
-}
-
-void WriteACL(const String& fn, void *info1, void *info2)
-{
-  _WriteACL(fn, DACL_SECURITY_INFORMATION 
-    | GROUP_SECURITY_INFORMATION
-    | OWNER_SECURITY_INFORMATION, info1);
-  _WriteACL(fn, SACL_SECURITY_INFORMATION, info2);
-}
-
 void _CopyACL(const String& src, const String& dst, SECURITY_INFORMATION si)
 {
-  DWORD cb;
-  PSECURITY_DESCRIPTOR secbuf = (PSECURITY_DESCRIPTOR)malloc(16384);
-  int res=GetFileSecurity(src.ptr(), si, secbuf, 16384, &cb);
-  if (res && cb)
-  {
-    secbuf = (PSECURITY_DESCRIPTOR)realloc(secbuf, cb);
-    res=GetFileSecurity(src.ptr(), si, secbuf, 16384, &cb);
-  }
-  if (res)
-    SetFileSecurity(dst.ptr(), si, secbuf);
-  free(secbuf);
+	const int bufSize = 16384;
+
+	DWORD cb;
+	PSECURITY_DESCRIPTOR secbuf = (PSECURITY_DESCRIPTOR)new char[bufSize];
+	int res = GetFileSecurity(src.ptr(), si, secbuf, bufSize, &cb);
+	if (res && cb) {
+		delete(secbuf);
+		secbuf = (PSECURITY_DESCRIPTOR)new char[cb];
+		res=GetFileSecurity(src.ptr(), si, secbuf, cb, &cb);
+	}
+	if (res) {
+		SetFileSecurity(dst.ptr(), si, secbuf);
+	}
+	delete(secbuf);
 }
 
 int SACLPriv = 0;
 
 void CopyACL(const String& src, const String& dst)
 {
-  if (!SACLPriv)
-  {
-    HANDLE hToken;
-    LUID luid;
-    TOKEN_PRIVILEGES tkp;
-    OpenProcessToken(GetCurrentProcess(), 
-      TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
-    LookupPrivilegeValue(NULL, SE_SECURITY_NAME, &luid);
-    tkp.PrivilegeCount = 1;
-    tkp.Privileges[0].Luid = luid;
-    tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    AdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), NULL, NULL);
-    SACLPriv = 1;
-  }
-  _CopyACL(src, dst, DACL_SECURITY_INFORMATION 
-    | GROUP_SECURITY_INFORMATION
-    | OWNER_SECURITY_INFORMATION);
-  _CopyACL(src, dst, SACL_SECURITY_INFORMATION);
+	if (!SACLPriv) {
+		HANDLE hToken;
+		LUID luid;
+		TOKEN_PRIVILEGES tkp;
+		OpenProcessToken(GetCurrentProcess(), 
+			TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
+			LookupPrivilegeValue(NULL, SE_SECURITY_NAME, &luid
+		);
+		tkp.PrivilegeCount = 1;
+		tkp.Privileges[0].Luid = luid;
+		tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
+		AdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), NULL, NULL);
+		SACLPriv = 1;
+	}
+	_CopyACL(src, dst, DACL_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION);
+	_CopyACL(src, dst, SACL_SECURITY_INFORMATION);
 }
 
 

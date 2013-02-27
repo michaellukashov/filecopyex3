@@ -73,8 +73,7 @@ public:
 	int AsInt() const { return _wtoi(ptr()); }
 	float AsFloat() const { return (float)_wtof(ptr()); }
 	bool AsBool() const { return (*this) == L"1"; } 
-	void ToUnicode(wchar_t* buf, size_t sz) const { CopyTo(buf, sz); }
-	void CopyTo(wchar_t* buf, size_t sz) const { wcscpy_s(buf, sz, ptr()); }
+	void copyTo(wchar_t* buf, size_t sz) const { wcscpy_s(buf, sz, c_str()); }
 
 	explicit String(int v)
 	{

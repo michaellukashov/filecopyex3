@@ -10,15 +10,15 @@ FarMenu::FarMenu(): Flags(0), Selection(0)
 FarMenu::~FarMenu()
 {
 	for(int i = 0; i < items.size(); ++i) {
-		free((void*)items[i].Text);
+		delete(items[i].Text);
 	}
 }
 
 void FarMenu::SetItemText(FarMenuItem* item, const String& text)
 {
 	size_t len = text.len() + 1;
-	wchar_t* t = (wchar_t*)malloc(sizeof(wchar_t) * len);
-	text.ToUnicode(t, len);
+	wchar_t* t = new wchar_t[len];
+	text.copyTo(t, len);
 	item->Text = t;
 }
 

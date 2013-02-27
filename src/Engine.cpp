@@ -49,7 +49,7 @@ along with this program.	If not, see <http://www.gnu.org/licenses/>.
 PluginPanelItem* GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1)
 {
 	size_t Size = Info.PanelControl(hPlugin, Command, Param1, 0);
-	PluginPanelItem* item = (PluginPanelItem*)malloc(Size);
+	PluginPanelItem* item = (PluginPanelItem*)new char[Size];
 
 	if (item)
 	{

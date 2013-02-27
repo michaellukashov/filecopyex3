@@ -98,15 +98,15 @@ void FarDlgObject::SetItemText(FarDialogItem& item, const String& text)
 {
 	DestroyItemText(item);
 	size_t len = text.len() + 1;
-	wchar_t* t = (wchar_t*)malloc(sizeof(wchar_t) * len);
-	text.ToUnicode(t, len);
+	wchar_t* t = new wchar_t[len];
+	text.copyTo(t, len);
 	item.Data = t;
 	item.MaxLength = 0;
 }
 
 void FarDlgObject::DestroyItemText(FarDialogItem& item)
 {
-	free((wchar_t*)item.Data);
+	delete(item.Data);
 	item.Data = NULL;
 }
 

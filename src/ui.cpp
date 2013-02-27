@@ -139,7 +139,7 @@ static void stripnl(wchar_t *msg)
 String SplitWidth(const String &s, int w)
 {
 	wchar_t msg[1024], res[1024];
-	s.CopyTo(msg, 1024);
+	s.copyTo(msg, 1024);
 	stripnl(msg);
 	wchar_t *p=(wchar_t*)msg, *op=p;
 	res[0]=0;
