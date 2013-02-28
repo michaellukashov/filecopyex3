@@ -68,7 +68,7 @@ const String& LOC(const String& l)
 {
 	try {
 		return plugin->getLocale().at(l);
-	} catch (std::exception &e) {
+	} catch (const std::out_of_range&) {
 		return emptyString; 
 	}
 	
