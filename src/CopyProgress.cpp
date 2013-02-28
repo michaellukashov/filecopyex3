@@ -227,8 +227,8 @@ void CopyProgress::ShowProgress(__int64 read, __int64 write, __int64 total,
   if (GetTime()-lastupdate > interval)
   {
     lastupdate = GetTime();
-    DrawProgress(LOC("Engine.Reading"), 2, read, total, readTime, readN, totalN);
-    DrawProgress(LOC("Engine.Writing"), 6, write, total, writeTime, writeN, totalN);
+    DrawProgress(LOC(L"Engine.Reading"), 2, read, total, readTime, readN, totalN);
+    DrawProgress(LOC(L"Engine.Writing"), 6, write, total, writeTime, writeN, totalN);
     DrawTime(read, write, total, readTime, writeTime, readN, writeN, totalN,
               parallel, FirstWrite, StartTime, BufferSize);
     Info.Text(0, 0, 0, NULL);

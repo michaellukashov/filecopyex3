@@ -1,4 +1,4 @@
-/*
+﻿/*
 FileCopyEx - Extended File Copy plugin for Far 2 file manager
 
 Copyright (C) 2004 - 2010
@@ -38,21 +38,45 @@ String Format(const wchar_t* fmt, ...)
 
 String FormatNum(__int64 n)
 {
-  wchar_t num[64], buf[64];
-  swprintf_s(num, 64, L"%I64d", n);
-  wchar_t *s=_wcsrev(num), *d=buf;
-  int q=0;
-  while (*s) 
-  {
-    *d++=*s++; 
-    // Bug #9 fixed by axxie
-    if (!(++q % 3)) *d++=' ';
-  }
-  // Bug #9 fixed by axxie
-  if (*(d-1)==' ') d--;
-  *d = 0;
-  _wcsrev(buf);
-  return buf;
+	static bool first = true;
+	static NUMBERFMT fmt;
+	static wchar_t DecimalSep[4];
+	static wchar_t ThousandSep[4];
+
+	if (first)
+	{
+		GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_STHOUSAND,ThousandSep,ARRAYSIZE(ThousandSep));
+		GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_SDECIMAL,DecimalSep,ARRAYSIZE(DecimalSep));
+		DecimalSep[1]=0;  //Â âèíäå ñåïàðàòîðû öèôð ìîãóò áûòü áîëüøå îäíîãî ñèìâîëà
+		ThousandSep[1]=0; //íî äëÿ íàñ ýòî áóäåò íå î÷åíü õîðîøî
+
+		/*
+		if (LOWORD(Global->Opt->FormatNumberSeparators)) {
+			*DecimalSep=LOWORD(Global->Opt->FormatNumberSeparators);
+		}
+
+		if (HIWORD(Global->Opt->FormatNumberSeparators)) {
+			*ThousandSep=HIWORD(Global->Opt->FormatNumberSeparators);
+		}
+		*/
+
+		fmt.LeadingZero = 1;
+		fmt.Grouping = 3;
+		fmt.lpDecimalSep = DecimalSep;
+		fmt.lpThousandSep = ThousandSep;
+		fmt.NegativeOrder = 1;
+		fmt.NumDigits = 0;
+		first = false;
+	}
+	
+	String strSrc(n);
+	int size = GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, nullptr, 0);
+	wchar_t *lpwszDest = new wchar_t[size];
+	GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, lpwszDest, size);
+	String strDest(lpwszDest);
+	delete(lpwszDest);
+	
+	return strDest;
 }
 
 String FormatTime(const FILETIME& ft)
@@ -71,7 +95,7 @@ String FormatProgress(__int64 cb, __int64 total)
   __int64 n=total;
   int pw=0;
   __int64 div=1;
-  while (n>=100000) { div*=1024; n/=1024; pw++; }
+  while (n > 999999) { div*=1024; n/=1024; pw++; }
   String un;
   switch (pw) 
   {
