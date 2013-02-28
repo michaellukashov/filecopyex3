@@ -2,7 +2,7 @@
 
 #define PLUGIN_MIN_FAR_VERSION MAKEFARVERSION(3, 0, 0, 2927, VS_RELEASE) // http://api.farmanager.com/ru/whatsnew.html
 #define PLUGIN_MAJOR 1
-#define PLUGIN_BUILD 4
+#define PLUGIN_BUILD 5
 #define PLUGIN_VERSION MAKEFARVERSION(FARMANAGERVERSION_MAJOR, FARMANAGERVERSION_MINOR, PLUGIN_MAJOR, PLUGIN_BUILD, VS_BETA)
 #define PLUGIN_DESC L"Extended File Copy plugin for Far 3 file manager main executable"
 #define PLUGIN_TITLE L"FileCopyEx"
