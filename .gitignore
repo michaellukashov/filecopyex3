@@ -2,5 +2,5 @@ ipch/
 *.opensdf
 *.sdf
 *.suo
-/win32/
-/x64/
+/Debug Unicode/
+/Release Unicode/
