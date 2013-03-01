@@ -49,6 +49,7 @@ const wchar_t* GetMsg(int MsgId);
 const String& LOC(const String& l);
 
 extern PluginStartupInfo Info;
+extern FarStandardFunctions FSF;
 extern FarPlugin* plugin;
 
 #endif//__FWCOMMON_H__

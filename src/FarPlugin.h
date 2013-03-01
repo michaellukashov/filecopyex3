@@ -69,8 +69,8 @@ private:
 	void	About();
 	void	KeyConfig();
 
-	void	Bind(const String& key, const String& seq);
-	void	Unbind(const String& key);
+	void	Bind(const String& key, const String& seq, const String& desc, void *id);
+	void	Unbind(void *id);
 	int		Binded(const String &key);
 
 

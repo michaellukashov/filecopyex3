@@ -9,6 +9,8 @@
 #include "dlgclass.h"
 
 PluginStartupInfo Info;
+FarStandardFunctions FSF;
+
 FarPlugin* plugin = NULL;
 
 /*
@@ -51,6 +53,7 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *psi)
 {
 	if (psi->StructSize >= sizeof(PluginStartupInfo)) {
 		Info = *psi;
+		FSF = *Info.FSF;
 		if (!plugin) {
 			errorHandler = FarErrorHandler;
 			InitObjMgr();
