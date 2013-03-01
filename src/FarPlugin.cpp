@@ -27,13 +27,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/properties.h"
 #include "Framework/FileUtils.h"
 #include "Engine.h"
+#include "FarMacro.h"
 #include "FarMenu.h"
 #include "FarPlugin.h"
 #include "version.hpp"
 #include "common.h"
+#include "guid.hpp"
 
-const String regkey = "\\Software\\Far2\\KeyMacros\\Shell";
-const String menu_plug = "F11 $if(menu.Select(\"Extended copy\",2)<=0) MsgBox(\"Extended copy\",\"Plugin was not found in list!\",1) $Exit $end Enter ";
+#include "ui.h"
+
+void BindAll()
+{
+	Bind("F5", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0)", "FileCopyEx - Copy file(s)");
+	Bind("F6", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1)", "FileCopyEx - Move file(s)");
+	Bind("ShiftF5", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2)", "FileCopyEx - Copy current file");
+	Bind("ShiftF6", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3)", "FileCopyEx - Move current file");
+}
+
 
 FarPlugin::~FarPlugin()
 {
@@ -52,7 +62,6 @@ void FarPlugin::InitLang()
 void FarPlugin::Create()
 {
 	// bug #15 fixed by Ivanych
-	// XXX registry.root_key = ""; //XXX String(Info.RootKey) + "\\" + RegRootKey();
 	InitLang();
 
 	if(!dialogs.Load(GetDLLPath() + "\\resource\\dialogs.objd"))
@@ -116,19 +125,33 @@ void CallCopy(int move, int curOnly)
 
 void FarPlugin::OpenPlugin(const struct OpenInfo *OInfo)
 {
-	FarMenu menu;
-	menu.SetFlags(FMENU_WRAPMODE);
-	menu.SetTitle(LOC("PluginName"));
-	menu.SetHelpTopic("Menu");
-	menu.AddLine(LOC("Menu.CopyFiles"));
-	menu.AddLine(LOC("Menu.MoveFiles"));
-	menu.AddLine(LOC("Menu.CopyFilesUnderCursor"));
-	menu.AddLine(LOC("Menu.MoveFilesUnderCursor"));
-	menu.AddSep();
-	menu.AddLine(LOC("Menu.Config"));
+	int command = -1;
+
+	if (OInfo->OpenFrom == OPEN_FROMMACRO) {
+		OpenMacroInfo *macroInfo = (OpenMacroInfo*)OInfo->Data;
+		if (macroInfo->Count >= 1) {
+			FarMacroValue &v = macroInfo->Values[0];
+			if (v.Type == FMVT_DOUBLE) {
+				command = v.Double;
+			};
+		};
+	} 
+	if (command == -1) {
+		FarMenu menu;
+		menu.SetFlags(FMENU_WRAPMODE);
+		menu.SetTitle(LOC("PluginName"));
+		menu.SetHelpTopic("Menu");
+		menu.AddLine(LOC("Menu.CopyFiles"));
+		menu.AddLine(LOC("Menu.MoveFiles"));
+		menu.AddLine(LOC("Menu.CopyFilesUnderCursor"));
+		menu.AddLine(LOC("Menu.MoveFilesUnderCursor"));
+		menu.AddSep();
+		menu.AddLine(LOC("Menu.Config"));
+		command = menu.Execute();
+	}
 
 	int move=0, curOnly=0;
-	switch (menu.Execute())
+	switch (command)
 	{
 		case 0: move = 0; curOnly = 0; break;
 		case 1: move = 1; curOnly = 0; break;
@@ -172,44 +195,16 @@ void FarPlugin::InitOptions()
 }
 
 
-int FarPlugin::Binded(const String& key)
-{
-	//XXX String seq = registry.GetString(regkey + "\\" + key, "Sequence", "");
-	//XXX return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp("F5") || !seq.icmp("F6"));
-	return true;
-}
 
-void FarPlugin::Bind(const String& key, const String& seq)
-{
-	/* XXX
-	String src = regkey + "\\" + key;
-	registry.SetString(src, "Sequence", seq);
-	registry.SetInt(src, "DisableOutput", 1);
-	registry.SetInt(src, "NoPluginPanels", 0);
-	registry.SetInt(src, "PluginPanels", 1); 
-	*/
-}
-
-void FarPlugin::Unbind(const String& key)
-{
-	/* XXX
-	registry.DeleteKey(regkey + "\\" + key);
-	*/
-}
-
-// XXX I don't know how to replace FARMACROCOMMAND
-/*
-void FarPlugin::MacroCommand(const FARMACROCOMMAND& cmd)
-{
-	ActlKeyMacro prm;
-	memset(&prm, 0, sizeof(prm));
-	prm.Command = cmd;
-	Info.AdvControl(Info.ModuleNumber, ACTL_KEYMACRO, &prm);
-}
-*/
 
 void FarPlugin::KeyConfig()
 {
+	//int res = Info.MacroControl(&MainGuid, MCTL_SAVEALL, 0, NULL);
+	//
+	BindAll();
+	ShowMessage("", "Hotkeys binded", FMSG_MB_OK);
+	return;
+#if 0
 	FarDialog& dlg = Dialogs()["KeysDialog"];
 	dlg.ResetControls();
 
@@ -236,26 +231,30 @@ void FarPlugin::KeyConfig()
 
 	// MacroCommand(MCMD_SAVEALL); // XXX
 
-	Unbind("F5");			Unbind("ShiftF5");
-	Unbind("F6");			Unbind("ShiftF6");
+	Unbind("KEY_F5");	Unbind("ShiftF5");
+	Unbind("KEY_F5");			Unbind("ShiftF6");
 	Unbind("AltShiftF5");	Unbind("AltShiftF6");
 	Unbind("CtrlShiftF5");	Unbind("CtrlShiftF6");
 	Unbind("CtrlAltF5");	Unbind("CtrlAltF6");
 
 	if(dlg["BindToF5"]("Selected"))
 	{
-		Bind("F5", menu_plug + "1");
-		Bind("F6", menu_plug + "2");
-		Bind("ShiftF5", menu_plug + "3"); 
-		Bind("ShiftF6", menu_plug + "4");
+		Bind("F5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
+		Bind("F6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
+		Bind("ShiftF5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
+		Bind("ShiftF6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
+
+		/*
 		String key;
 		if(dlg["AltShiftF5"]("Selected")) key = "AltShift";
 		else if(dlg["CtrlShiftF5"]("Selected")) key = "CtrlShift";
 		else if(dlg["CtrlAltF5"]("Selected")) key = "CtrlAlt";
 		Bind(key + "F5", "F5");
 		Bind(key + "F6", "F6");
+		*/
 	}
 	// MacroCommand(MCMD_LOADALL); // XXX
+#endif
 }
 
 #define VersionStr0(a,b,c,d, bit) "version " #a "." #b "." #c "." #d " beta (" #bit " Unicode), " __DATE__

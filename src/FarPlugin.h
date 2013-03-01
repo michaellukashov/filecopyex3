@@ -68,12 +68,6 @@ private:
 
 	void	About();
 	void	KeyConfig();
-
-	void	Bind(const String& key, const String& seq);
-	void	Unbind(const String& key);
-	int		Binded(const String &key);
-
-
 };
 
 // FileCopyExPlugin* Plugin();
