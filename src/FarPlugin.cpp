@@ -192,6 +192,9 @@ void FarPlugin::InitOptions()
 	options["UnbuffMin"] = 64;
 	options["ReadFilesOpenedForWriting"] = 1;
 	options["CheckFreeDiskSpace"] = 1;
+	options["copyCreationTime"] = 1;
+	options["copyLastAccessTime"] = 1;
+	options["copyLastWriteTime"] = 1;
 }
 
 

@@ -193,35 +193,35 @@ __int64 FTell(HANDLE h)
   return FSeek(h, 0, FILE_CURRENT);
 }
 
-void setFileSizeAndTime(const String& fn, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
+void setFileSizeAndTime2(const String& fn, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
 {
 	HANDLE h = Open(fn, OPEN_WRITE_BUF);
 	if (!h) {
 		Error2(LOC("Error.FileOpen"), fn, GetLastError());
 	} else {
-		setFileSizeAndTime(h, size, creationTime, lastAccessTime, lastWriteTime);
+		setFileSizeAndTime2(h, size, creationTime, lastAccessTime, lastWriteTime);
 	}
 }
 
-void setFileSizeAndTime(HANDLE h, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
+void setFileSizeAndTime2(HANDLE h, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
 {
 	  FSeek(h, size, FILE_BEGIN);
 	  SetEndOfFile(h);
-	  setFileTime(h, creationTime, lastAccessTime, lastWriteTime);
+	  setFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
 }
 
-void setFileTime(const String& fn, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
+void setFileTime2(const String& fn, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
 {
 	HANDLE h = Open(fn, OPEN_WRITE_BUF);
 	if (!h) {
 		Error2(LOC("Error.FileOpen"), fn, GetLastError());
 	} else {
-		setFileTime(h, creationTime, lastAccessTime, lastWriteTime);
+		setFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
 		Close(h);
 	}
 }
 
-void setFileTime(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
+void setFileTime2(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
 {
 	SetFileTime(h, creationTime, lastAccessTime, lastWriteTime);
 }

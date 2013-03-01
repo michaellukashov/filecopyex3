@@ -106,6 +106,7 @@ private:
 	int ReadAlign;
 	int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
 		_HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
+	bool copyCreationTime, copyLastAccessTime, copyLastWriteTime;
 	int Aborted, LastFile, KeepFiles, FileCount, CopyCount;
 	void Copy();
 
@@ -146,6 +147,9 @@ private:
 	int DirEnd(const String& dir, const String& dst);
 	String FindDescFile(const String& dir, int *idx=NULL);
 	String FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx=NULL);
+
+	void setFileTime(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
+	void setFileSizeAndTime(const String& fn, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
 	
 	void FarToWin32FindData(
 		const TPanelItem &tpi, 

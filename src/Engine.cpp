@@ -220,7 +220,7 @@ void Engine::FinalizeBuf(BuffInfo *bi)
 
 	if (!(info.Flags & FLG_SKIPPED)) {
 		if (info.Flags & FLG_BUFFERED) {
-			SetFileTime(Handle, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+			setFileTime(Handle, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
 		}
 	}
 
@@ -1191,10 +1191,14 @@ Engine::MResult Engine::Main(int move, int curOnly)
 	if (!Win2K) {
 		advdlg["Encrypt"]("Disable") = 1;
 	}
+	advdlg["creationTime"]("Selected") = Options["copyCreationTime"];
+	advdlg["lastAccessTime"]("Selected") = Options["copyLastAccessTime"];
+	advdlg["lastWriteTime"]("Selected") = Options["copyLastWriteTime"];
 
 rep:
 
 	int dres = dlg.Execute();
+
 	switch (dres) {
 		case 2: {
 			plugin->Config();
@@ -1202,7 +1206,16 @@ rep:
 		}
 
 		case 1: {
-			if(advdlg.Execute()==0)	{
+			int advRes = advdlg.Execute();
+
+			if (advRes == 1) {
+				Options["copyCreationTime"] = advdlg["creationTime"]("Selected");
+				Options["copyLastAccessTime"] = advdlg["lastAccessTime"]("Selected");
+				Options["copyLastWriteTime"] = advdlg["lastWriteTime"]("Selected");
+				plugin->SaveOptions();
+			}
+
+			if (advRes == 0 || advRes == 1)	{
 				adv=1;
 				bool resume=advdlg["ResumeFiles"]("Selected");
 				dlg["Label2"]("Disable")=resume;
@@ -1280,6 +1293,10 @@ rep:
 			if(EncryptMode!=ATTR_INHERIT) CompressMode=ATTR_INHERIT;
 		}
 	}
+
+	copyCreationTime = advdlg["creationTime"]("Selected");
+	copyLastAccessTime = advdlg["lastAccessTime"]("Selected");
+	copyLastWriteTime = advdlg["lastWriteTime"]("Selected");
 
 	Parallel = dlg["ParallelCopy"]("Selected");
 	SkipNewer = dlg["SkipIfNewer"]("Selected");
@@ -2045,4 +2062,16 @@ BOOL Engine::CheckFreeDiskSpace(const __int64 TotalBytesToProcess, const int Mov
 	result = TRUE;
 
 	return result;
+}
+
+#define check(a, b) a ? b : NULL
+
+void Engine::setFileTime(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
+{
+	setFileTime2(h, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
+}
+
+void Engine::setFileSizeAndTime(const String& fn, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
+{
+	setFileSizeAndTime2(fn, size, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
 }

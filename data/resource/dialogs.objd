@@ -73,6 +73,12 @@ object AdvCopyDialog: FarDialog
     end
     object Streams: FarDlgCheckbox
     end
+    object creationTime: FarDlgCheckbox
+    end
+    object lastAccessTime: FarDlgCheckbox
+    end
+    object lastWriteTime: FarDlgCheckbox
+    end
     NoBreak=1
   end
   object Panel2: FarDlgPanel
@@ -119,6 +125,12 @@ object AdvCopyDialog: FarDialog
     CenterGroup=1
     Default=1
     Result=0
+  end
+  object Save: FarDlgButton
+    NoBreak=1
+    CenterGroup=1
+    Default=0
+    Result=1
   end
   object Cancel: FarDlgButton
     CenterGroup=1
