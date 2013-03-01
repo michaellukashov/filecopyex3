@@ -1254,18 +1254,15 @@ rep:
 	
 	wchar_t CurrentDir[MAX_FILENAME];
 	wchar_t dstbuf[MAX_FILENAME];
-	wchar_t *FNCPtr;
 	memset(dstbuf, 0, sizeof(dstbuf));
 	// Get absolute path for relative dstpath
-	GetCurrentDirectory(MAX_FILENAME, CurrentDir);
+	FSF.GetCurrentDirectory(MAX_FILENAME, CurrentDir);
 	// srcpath.ptr() for temporary file panel is empty 
 	// Current directory is set by Far to file path of selected file
 	BOOL SCDResult = SetCurrentDirectory(srcPath.ptr());
 	// fixed by Nsky: bug #28
-	if(relDstPath.icmp("nul")) {
-		if(GetFullPathName(relDstPath.ptr(), MAX_FILENAME, dstbuf, &FNCPtr)) {
-			dstPath = dstbuf;
-		}
+	if (relDstPath.icmp("nul") != 0) {
+		dstPath = convertPath(CPM_REAL, relDstPath);
 	} else {
 		dstPath = relDstPath;
 	}

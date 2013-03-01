@@ -232,3 +232,19 @@ void DebugLog(const wchar_t *DebugMsg, ...)
   va_end(ArgPtr);
   OutputDebugString(MsgBuf);
 }
+
+String convertPath(enum CONVERTPATHMODES mode, String src) 
+{
+	wchar_t fullName[MAX_PATH];
+	size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, MAX_PATH);
+	if (size <= MAX_PATH) {
+		String res(fullName);
+		return res;
+	} else {
+		wchar_t *fullNameBuf = new wchar_t[size];
+		FSF.ConvertPath(mode, src.c_str(), fullNameBuf, size);
+		String res(fullNameBuf);
+		delete fullNameBuf;
+		return res;
+	}
+}

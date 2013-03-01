@@ -88,6 +88,8 @@ void beep(int);
 
 void DebugLog(const wchar_t *DebugMsg, ...);
 
+String convertPath(enum CONVERTPATHMODES mode, String src);
+
 inline __int64 GetTime()
 {
 	LARGE_INTEGER res;
