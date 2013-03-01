@@ -181,22 +181,20 @@ int ExistsN(const String& fn, int n)
     return FileExists(DupName(fn, n));
 }
 
-int Newer(FILETIME &ft1, FILETIME &ft2)
+bool Newer(const FILETIME &ft1, const FILETIME &ft2)
 {
-  return CompareFileTime(&ft1, &ft2)>=0;
+	return CompareFileTime(&ft1, &ft2) >= 0;
 }
 
-int Newer2(const String& fn1, FILETIME &ft2)
+bool Newer(const String& fn1, const FILETIME &ft2)
 {
-  WIN32_FIND_DATA fd;
-  HANDLE hf = FindFirstFile(fn1.ptr(), &fd);
-  if (hf != INVALID_HANDLE_VALUE)
-  {
-    FindClose(hf);
-    return Newer(fd.ftLastWriteTime, ft2);
-  }
-  else 
-    return FALSE;
+	WIN32_FIND_DATA fd;
+	HANDLE hf = FindFirstFile(fn1.ptr(), &fd);
+	if (hf != INVALID_HANDLE_VALUE)  {
+		FindClose(hf);
+		return Newer(fd.ftLastWriteTime, ft2);
+	};
+	return FALSE;
 }
 
 int RmDir(const String& fn)

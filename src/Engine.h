@@ -34,10 +34,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 struct FileStruct
 {
-	int Attr, RenameNum, OverMode, Flags, Level, PanelIndex,
-		SectorSize;
+	int Attr, RenameNum, OverMode, Flags, Level, PanelIndex, SectorSize;
 	__int64 Size, Read, Written, ResumePos;
-	FILETIME Modify;
+	FILETIME creationTime, lastAccessTime, lastWriteTime;
 };
 
 struct BuffStruct
@@ -61,7 +60,7 @@ struct RememberStruct
 {
 	String Src, Dst;
 	__int64 Size;
-	FILETIME Modify;
+	FILETIME creationTime, lastAccessTime, lastWriteTime;
 	int Attr, Flags, Level;
 };
 
@@ -138,7 +137,7 @@ private:
 	int CheckOverwrite(int, const String&, const String&, String&);
 	int CheckOverwrite2(int, const String&, const String&, String&);
 	void SetOverwriteMode(int);
-	int AddFile(const String& _src, const String& _dst, int Attr, __int64 Size, FILETIME &Modify, int Flags, int Level, int PanelIndex=-1);
+	int AddFile(const String& _src, const String& _dst, int Attr, __int64 Size, const FILETIME& creationTime, const FILETIME& lastAccessTime, const FILETIME& lastWriteTime, int Flags, int Level, int PanelIndex=-1);
 	int AddFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, int PanelIndex=-1);
 	void AddTopLevelDir(const String &dir, const String &dstmask, int Flags, FileName::Direction d);
 	void RememberFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, RememberStruct&);

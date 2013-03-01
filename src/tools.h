@@ -75,8 +75,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 int ExistsN(const String& fn, int n);
 String DupName(const String& src, int n);
 int RmDir(const String& fn);
-int Newer(FILETIME& ft1, FILETIME& ft2);
-int Newer2(const String& fn1, FILETIME& ft2);
+bool Newer(const FILETIME& ft1, const FILETIME& ft2);
+bool Newer(const String& fn1, const FILETIME& ft2);
 int Delete(const String& fn);
 
 int VolFlags(const String& path);

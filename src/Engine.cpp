@@ -214,77 +214,72 @@ void Engine::FinalizeBuf(BuffInfo *bi)
 {
 	HANDLE Handle=bi->OutFile;
 	int fnum=bi->OutNum;
-	String 
-		&DstName=bi->DstName,	 
-		&SrcName=bi->SrcName;
+	String &DstName=bi->DstName;
+	String &SrcName=bi->SrcName;
 	FileStruct &info=Files[fnum];
 
-	if (!(info.Flags & FLG_SKIPPED))
-	{
-		if (info.Flags & FLG_BUFFERED)
-			SetFileTime(Handle, info.Modify);
+	if (!(info.Flags & FLG_SKIPPED)) {
+		if (info.Flags & FLG_BUFFERED) {
+			SetFileTime(Handle, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+		}
 	}
 
 	Close(Handle);
 
-	if (!(info.Flags & FLG_SKIPPED))
-	{
+	if (!(info.Flags & FLG_SKIPPED)) {
 		info.Flags|=FLG_COPIED;
 		LastFile=fnum;
 
-		if (!(info.Flags & FLG_BUFFERED))
-		{
-			if (info.OverMode==OM_APPEND)
-				SetFileSizeAndTime(DstName, bi->OrgSize+info.Size, info.Modify);
-			else
-				SetFileSizeAndTime(DstName, info.Size, info.Modify);
+		if (!(info.Flags & FLG_BUFFERED)) {
+			if (info.OverMode == OM_APPEND) {
+				setFileSizeAndTime(DstName, bi->OrgSize+info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+			} else {
+				setFileSizeAndTime(DstName, info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+			}
 		}
 
 		if (Rights) CopyACL(SrcName, DstName);
 		Encrypt(DstName, EncryptMode);
 		SetFileAttributes(DstName.ptr(), info.Attr);
 
-		if (Move)
-		{
+		if (Move) {
 del_retry:
 			// Bug #6 fixed by CDK
-			if (FileExists(SrcName) && !Delete(SrcName))
-			{
+			if (FileExists(SrcName) && !Delete(SrcName)) {
 				WaitForSingleObject(UiFree, INFINITE);
-				int flg=eeRetrySkipAbort | eeAutoSkipAll,
-						res=EngineError(LOC("Error.FileDelete"), SrcName, GetLastError(),
-						flg, "", "Error.FileDelete");
+				int flg=eeRetrySkipAbort | eeAutoSkipAll;
+				int res=EngineError(LOC("Error.FileDelete"), SrcName, GetLastError(), flg, "", "Error.FileDelete");
 				SetEvent(UiFree);
-				if (res==RES_RETRY) goto del_retry;
-				else if (res==RES_ABORT) Aborted=1;
-			}
-			else
+				if (res==RES_RETRY) {
+					goto del_retry;
+				} else {
+					if (res==RES_ABORT) {
+						Aborted=1;
+					}
+				}
+			} else {
 				info.Flags |= FLG_DELETED;
-		}
+			}
+		} // if (Move)
 
 		WriteN++;
 
 		size_t dnum=fnum+1;
 		while (dnum < SrcNames.Count() && Files[dnum].Flags & (FLG_DIR_POST | FLG_DIR_PRE | FLG_DESCFILE))
 		{
-			if (!(Files[dnum].Flags & FLG_COPIED))
-			{
-				if (Files[dnum].Flags & FLG_DESCFILE)
+			if (!(Files[dnum].Flags & FLG_COPIED)) {
+				if (Files[dnum].Flags & FLG_DESCFILE) {
 					ProcessDesc(dnum);
-				else if (Files[dnum].Flags & FLG_DIR_POST 
-					&& !(Files[dnum].Flags & FLG_DIR_NOREMOVE) && Move)
-				{
-					if (RmDir(FlushSrc.GetByNum(dnum)))
+				} else if (Files[dnum].Flags & FLG_DIR_POST && !(Files[dnum].Flags & FLG_DIR_NOREMOVE) && Move) {
+					if (RmDir(FlushSrc.GetByNum(dnum))) {
 						Files[dnum].Flags |= FLG_COPIED | FLG_DELETED;
+					}
 				}
 			}
 			dnum++;
 		}
-	}
-	else
-	{
-		if (!(info.Flags & FLG_DECSIZE))
-		{
+	} else {
+		if (!(info.Flags & FLG_DECSIZE)) {
 			WriteCb -= info.Written;
 			ReadCb -= info.Read;
 			TotalBytes -= info.Size;
@@ -292,21 +287,19 @@ del_retry:
 			info.Flags |= FLG_DECSIZE;
 		}
 
-		if (Handle)
-		{
-			if (info.OverMode==OM_APPEND || info.OverMode==OM_RESUME)
-			{
-				if (KeepFiles || (info.Flags & FLG_KEEPFILE)) 
-					SetFileSizeAndTime(DstName, bi->OrgSize+info.Written, info.Modify);
-				else
-					SetFileSizeAndTime(DstName, bi->OrgSize, info.Modify);
-			}
-			else 
-			{
-				if (KeepFiles || (info.Flags & FLG_KEEPFILE)) 
-					SetFileSizeAndTime(DstName, info.Written, info.Modify);
-				else
+		if (Handle) {
+			if (info.OverMode == OM_APPEND || info.OverMode == OM_RESUME) {
+				if (KeepFiles || (info.Flags & FLG_KEEPFILE)) {
+					setFileSizeAndTime(DstName, bi->OrgSize+info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+				} else {
+					setFileSizeAndTime(DstName, bi->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+				}
+			} else {
+				if (KeepFiles || (info.Flags & FLG_KEEPFILE)) {
+					setFileSizeAndTime(DstName, info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+				} else {
 					Delete(DstName);
+				}
 			}
 			SetFileAttributes(DstName.ptr(), info.Attr);
 		}
@@ -701,8 +694,9 @@ void Engine::Copy()
 					if (hd != INVALID_HANDLE_VALUE)
 					{
 						Compress(hd, CompressMode);
-						if (!(info.Flags & FLG_DIR_FORCE))
-							SetFileTime(hd, NULL, NULL, &info.Modify);
+						if (!(info.Flags & FLG_DIR_FORCE)) {
+							setFileTime(hd, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+						}
 						CloseHandle(hd);
 					}
 					if (EncryptMode != ATTR_INHERIT)
@@ -1024,8 +1018,10 @@ void Engine::AddTopLevelDir(const String &dir, const String &dstMask, int flags,
 	if ((hf=FindFirstFile(dir.ptr(), &fd)) !=INVALID_HANDLE_VALUE)
 	{
 		FindClose(hf);
-		info.Attr=fd.dwFileAttributes;
-		info.Modify=fd.ftLastWriteTime;
+		info.Attr = fd.dwFileAttributes;
+		info.creationTime = fd.ftCreationTime;
+		info.lastAccessTime = fd.ftLastAccessTime;
+		info.lastWriteTime = fd.ftLastWriteTime;
 	}
 	Files.push_back(info);
 }
@@ -1557,10 +1553,10 @@ fin:
 
 int Engine::AddFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, int PanelIndex)
 {
-	return AddFile(Src, Dst, fd.dwFileAttributes, MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh), fd.ftLastWriteTime, Flags, Level, PanelIndex);
+	return AddFile(Src, Dst, fd.dwFileAttributes, MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh), fd.ftCreationTime, fd.ftLastAccessTime, fd.ftLastWriteTime, Flags, Level, PanelIndex);
 }
 
-int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 size, FILETIME& Modify, int flags, int Level, int PanelIndex)
+int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 size, const FILETIME& creationTime, const FILETIME& lastAccessTime, const FILETIME& lastWriteTime, int flags, int Level, int PanelIndex)
 {
 	// bugfixed by slst: bug #23
 	if (CheckEscape(FALSE)) {
@@ -1612,7 +1608,10 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 si
 
 	info->Size = sz1;
 	info->Attr = attr;
-	info->Modify = Modify;
+	info->creationTime = creationTime;
+	info->lastAccessTime = lastAccessTime;
+	info->lastWriteTime = lastWriteTime;
+
 	info->Level = Level;
 	info->PanelIndex = PanelIndex;
 
@@ -1654,7 +1653,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 si
 				} else {
 					String ren;
 					int res, j = 0;
-					if (SkipNewer && Newer2(dst, Modify)){
+					if (SkipNewer && Newer(dst, lastWriteTime)){
 						res = OM_SKIP;
 					}
 					else if(OverwriteMode == OM_PROMPT) {
@@ -1807,7 +1806,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 si
 					{
 						strn[sid.dwStreamNameSize/2]=0;
 						if(!AddFile(src+strn, dst+strn, attr, 
-							sid.Size.QuadPart, Modify, flags | AF_STREAM, Level+1))
+							sid.Size.QuadPart, creationTime, lastAccessTime, lastWriteTime, flags | AF_STREAM, Level+1))
 						{
 							BackupRead(NULL, NULL, 0, NULL, TRUE, FALSE, &ctx);
 							CloseHandle(hf);
@@ -1854,7 +1853,7 @@ void Engine::SetOverwriteMode(int Start)
 		}
 		// bug #47 fixed by axxie
 		if (!(info.Flags & FLG_SKIPPED) && !(info.Flags & FLG_DIR_PRE) && !(info.Flags & FLG_DIR_POST) && FileExists(fn)) {
-			if(SkipNewer && Newer2(fn, info.Modify)) {
+			if(SkipNewer && Newer(fn, info.lastWriteTime)) {
 				TotalBytes -= info.Size;
 				TotalN--;
 				info.Flags |= FLG_SKIPPED | FLG_SKIPNEWER;
@@ -1977,14 +1976,16 @@ void Engine::RememberFile(const String& Src, const String& Dst,
 	Remember.Dst=Dst;
 	Remember.Attr=fd.dwFileAttributes;
 	Remember.Size=MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh);
-	Remember.Modify=fd.ftLastWriteTime;
+	Remember.creationTime = fd.ftCreationTime;
+	Remember.lastAccessTime = fd.ftLastAccessTime;
+	Remember.lastWriteTime = fd.ftLastWriteTime;
 	Remember.Flags=Flags;
 	Remember.Level=Level;
 }
 
 int Engine::AddRemembered(RememberStruct &Remember)
 {
-	return AddFile(Remember.Src, Remember.Dst, Remember.Attr, Remember.Size, Remember.Modify, Remember.Flags, Remember.Level);
+	return AddFile(Remember.Src, Remember.Dst, Remember.Attr, Remember.Size, Remember.creationTime, Remember.lastAccessTime, Remember.lastWriteTime, Remember.Flags, Remember.Level);
 }
 
 // bugfixed by slst: bug #32
