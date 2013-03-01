@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/properties.h"
 #include "Framework/FileUtils.h"
 #include "Engine.h"
+#include "FarMacro.h"
 #include "FarMenu.h"
 #include "FarPlugin.h"
 #include "version.hpp"
@@ -35,40 +36,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ui.h"
 
-//const String menu_plug = L'code="Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", )';
-
-void Bind(const String& key, const String& seq, const String& desc, void *id)
-{
-	/* XXX
-	String src = regkey + "\\" + key;
-	registry.SetString(src, "Sequence", seq);
-	+registry.SetInt(src, "DisableOutput", 1);
-	registry.SetInt(src, "NoPluginPanels", 0);
-	registry.SetInt(src, "PluginPanels", 1); 
-	*/
-	
-	MacroAddMacro macro = { sizeof(MacroAddMacro) };
-	macro.Id = id;
-	macro.SequenceText = seq.c_str();
-	macro.Description = desc.c_str(); // !!! put something
-	macro.Flags = KMFLAGS_DISABLEOUTPUT;
-	INPUT_RECORD ir;
-	int resKey = FSF.FarNameToInputRecord(key.c_str(), &ir);
-	macro.AKey = ir;
-	//ShowMessage("Bind - key convert", String(resKey), FMSG_MB_OK);
-	macro.Area = MACROAREA_SHELL;
-	macro.Callback = NULL;
-	int res = Info.MacroControl(&MainGuid, MCTL_ADDMACRO, 0, &macro);
-	ShowMessage("Bind", key + L": " + String(res), FMSG_MB_OK);
-}
-
 void BindAll()
 {
-	Bind("F5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", (void*)0);
-	Bind("F6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", (void*)1);
-	Bind("ShiftF5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 2)", "", (void*)2);
-	Bind("ShiftF6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 3)", "", (void*)3);
+	Bind("F5", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0)", "FileCopyEx - Copy file(s)");
+	Bind("F6", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1)", "FileCopyEx - Move file(s)");
+	Bind("ShiftF5", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2)", "FileCopyEx - Copy current file");
+	Bind("ShiftF6", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3)", "FileCopyEx - Move current file");
 }
+
 
 FarPlugin::~FarPlugin()
 {
@@ -97,10 +72,6 @@ void FarPlugin::Create()
 	InitOptions();
 	settings.create();
 	LoadOptions();
-
-	if (options["BindF5F6"]) {
-		BindAll();
-	};
 
 	// XXX descs.LoadFromString(registry.GetString("\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');
 	// XXX Workaround
@@ -221,64 +192,19 @@ void FarPlugin::InitOptions()
 	options["UnbuffMin"] = 64;
 	options["ReadFilesOpenedForWriting"] = 1;
 	options["CheckFreeDiskSpace"] = 1;
-	options["BindF5F6"] = 1;
 }
 
 
-int FarPlugin::Binded(const String& key)
-{
-	//XXX String seq = registry.GetString(regkey + "\\" + key, "Sequence", "");
-	//XXX return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp("F5") || !seq.icmp("F6"));
-	return true;
-}
 
-void FarPlugin::Bind(const String& key, const String& seq, const String& desc, void *id)
-{
-	/* XXX
-	String src = regkey + "\\" + key;
-	registry.SetString(src, "Sequence", seq);
-	+registry.SetInt(src, "DisableOutput", 1);
-	registry.SetInt(src, "NoPluginPanels", 0);
-	registry.SetInt(src, "PluginPanels", 1); 
-	*/
-	
-	MacroAddMacro macro = { sizeof(MacroAddMacro) };
-	macro.Id = id;
-	macro.SequenceText = seq.c_str();
-	macro.Description = desc.c_str(); // !!! put something
-	macro.Flags = KMFLAGS_DISABLEOUTPUT;
-	INPUT_RECORD ir;
-	int resKey = FSF.FarNameToInputRecord(key.c_str(), &ir);
-	macro.AKey = ir;
-	//ShowMessage("Bind - key convert", String(resKey), FMSG_MB_OK);
-	macro.Area = MACROAREA_SHELL;
-	macro.Callback = NULL;
-	int res = Info.MacroControl(&MainGuid, MCTL_ADDMACRO, 0, &macro);
-	ShowMessage("Bind", key + L": " + String(res), FMSG_MB_OK);
-}
-
-void FarPlugin::Unbind(void *id)
-{
-	Info.MacroControl(&MainGuid, MCTL_DELMACRO, 0, id);
-}
-
-// XXX I don't know how to replace FARMACROCOMMAND
-/*
-void FarPlugin::MacroCommand(const FARMACROCOMMAND& cmd)
-{
-	ActlKeyMacro prm;
-	memset(&prm, 0, sizeof(prm));
-	prm.Command = cmd;
-	Info.AdvControl(Info.ModuleNumber, ACTL_KEYMACRO, &prm);
-}
-*/
 
 void FarPlugin::KeyConfig()
 {
-	int res = Info.MacroControl(&MainGuid, MCTL_SAVEALL, 0, NULL);
-	ShowMessage("Bind - SaveAll", String(res), FMSG_MB_OK);
+	//int res = Info.MacroControl(&MainGuid, MCTL_SAVEALL, 0, NULL);
+	//
+	BindAll();
+	ShowMessage("", "Hotkeys binded", FMSG_MB_OK);
 	return;
-
+#if 0
 	FarDialog& dlg = Dialogs()["KeysDialog"];
 	dlg.ResetControls();
 
@@ -328,6 +254,7 @@ void FarPlugin::KeyConfig()
 		*/
 	}
 	// MacroCommand(MCMD_LOADALL); // XXX
+#endif
 }
 
 #define VersionStr0(a,b,c,d, bit) "version " #a "." #b "." #c "." #d " beta (" #bit " Unicode), " __DATE__

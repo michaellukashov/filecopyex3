@@ -104,6 +104,9 @@
     <ClCompile Include="src\Framework\StringParent.cpp">
       <Filter>Source\Framework</Filter>
     </ClCompile>
+    <ClCompile Include="src\FarMacro.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h">
@@ -204,6 +207,9 @@
     </ClInclude>
     <ClInclude Include="src\Framework\StringParent.h">
       <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FarMacro.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

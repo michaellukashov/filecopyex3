@@ -274,6 +274,7 @@
     <ClCompile Include="src\dlgobject.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EngineTools.cpp" />
+    <ClCompile Include="src\FarMacro.cpp" />
     <ClCompile Include="src\FarMenu.cpp" />
     <ClCompile Include="src\FarPlugin.cpp" />
     <ClCompile Include="src\FarProgress.cpp" />
@@ -301,6 +302,7 @@
     <ClInclude Include="src\dlgobject.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\EngineTools.h" />
+    <ClInclude Include="src\FarMacro.h" />
     <ClInclude Include="src\FarMenu.h" />
     <ClInclude Include="src\FarPlugin.h" />
     <ClInclude Include="src\FarProgress.h" />
