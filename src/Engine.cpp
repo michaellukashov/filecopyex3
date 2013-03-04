@@ -1194,6 +1194,12 @@ Engine::MResult Engine::Main(int move, int curOnly)
 	advdlg["creationTime"]("Selected") = Options["copyCreationTime"];
 	advdlg["lastAccessTime"]("Selected") = Options["copyLastAccessTime"];
 	advdlg["lastWriteTime"]("Selected") = Options["copyLastWriteTime"];
+	advdlg["Compress"]("Selected") = Options["compressDef"];
+	advdlg["Encrypt"]("Selected") = Options["encryptDef"];
+	advdlg["ReadSpeedLimit"]("Selected") = Options["readSpeedLimitDef"];
+	advdlg["ReadSpeedLimitValue"]("Text") = Options["readSpeedLimitValueDef"];
+	advdlg["WriteSpeedLimit"]("Selected") = Options["writeSpeedLimitDef"];
+	advdlg["WriteSpeedLimitValue"]("Text") = Options["writeSpeedLimitLimitDef"];
 
 rep:
 
@@ -1212,6 +1218,12 @@ rep:
 				Options["copyCreationTime"] = advdlg["creationTime"]("Selected");
 				Options["copyLastAccessTime"] = advdlg["lastAccessTime"]("Selected");
 				Options["copyLastWriteTime"] = advdlg["lastWriteTime"]("Selected");
+				Options["compressDef"] = advdlg["Compress"]("Selected");
+				Options["encryptDef"] = advdlg["Encrypt"]("Selected");
+				Options["readSpeedLimitDef"] = advdlg["ReadSpeedLimit"]("Selected");
+				Options["readSpeedLimitValueDef"] = advdlg["ReadSpeedLimitValue"]("Text");
+				Options["writeSpeedLimitDef"] = advdlg["WriteSpeedLimit"]("Selected");
+				Options["writeSpeedLimitLimitDef"] = advdlg["WriteSpeedLimitValue"]("Text");
 				plugin->SaveOptions();
 			}
 

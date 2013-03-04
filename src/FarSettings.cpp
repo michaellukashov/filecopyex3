@@ -84,7 +84,9 @@ bool saveOptions(const PropertyMap &options, FarSettings &settings)
 {
 	bool ok = true;
 	for (PropertyMap::const_iterator it = options.begin(); it != options.end(); ++it) {
-		ok = settings.set(it->first, (String)it->second) && ok;
+		if (!settings.set(it->first, (String)it->second)) {
+			ok = false;
+		};
 	}
 
 	return ok;

@@ -171,7 +171,6 @@ String FarPlugin::GetDLLPath()
 	return dlln.substr(0, dlln.rfind('\\'));
 }
 
-
 void FarPlugin::InitOptions()
 {
 	options["BufPercent"] = 1;
@@ -195,10 +194,13 @@ void FarPlugin::InitOptions()
 	options["copyCreationTime"] = 1;
 	options["copyLastAccessTime"] = 1;
 	options["copyLastWriteTime"] = 1;
-}
-
-
-
+	options["compressDef"] = 2;
+	options["encryptDef"] = 2;
+	options["readSpeedLimitDef"] = 0;
+	options["readSpeedLimitValueDef"] = String("");
+	options["writeSpeedLimitDef"] = 0;
+	options["writeSpeedLimitLimitDef"] = String("");
+};
 
 void FarPlugin::KeyConfig()
 {
