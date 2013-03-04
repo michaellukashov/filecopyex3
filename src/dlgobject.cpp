@@ -114,10 +114,11 @@ void FarDlgObject::PreInitItem(FarDialogItem& item)
 {
 	//	SetItemText(&item, Name());
 
-	String p=Property("Text");
+	String p = Property("Text");
 	if (p.empty()) {
-		String t = Dialog->Name()+"."+Name();
-		p=LOC(t);
+		String name = Dialog->Name() + "." + Name();
+		String loc = LOC(name);
+		p = (name == loc) ? "": loc;
 	}
 	SetItemText(item, p);
 
