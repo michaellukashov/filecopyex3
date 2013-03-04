@@ -30,35 +30,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "array.h"
 #include "stringlist.h"
 #include "properties.h"
+#include "ObjectClass.h"
 
+class ObjectClass;
 class Object;
 
-class ObjectClass
-{
-protected:
-	virtual Object* Create() { return NULL; }
-	virtual const String TypeName() { return String(); }
-	virtual void DefineProperties() {}
-
-	void AddProperty(const String& name, int def);
-	void AddProperty(const String& name, float def);
-	void AddProperty(const String& name, const String& def);
-
-private:
-	StringList PropertyNames;
-	PropertyStore Properties;
-
-	friend class ObjectManager;
-	friend class Object;
-};
-
-#define DEFINE_CLASS(name, type) \
-protected: \
-	Object* Create() { return (Object*)new type; } \
-	virtual const String TypeName() { return name; }
-
 typedef Array<Object*> Objects;
-typedef Array<ObjectClass*> ObjectClasses;
 
 class Object
 {
@@ -111,34 +88,10 @@ protected:
 	friend class ObjectClass;
 };
 
-template <class ChildType, class ParentType, class ClassType>
-class CastObject : public Object
-{
-public:
-	ClassType* Class() { return (ClassType*)_class; }
-	ParentType* Parent() { return (ParentType*)_parent; }
-	ChildType& operator[](int i) { return Child(i); }
-	ChildType& operator[](const String& v) { return Child(v); }
+#define DEFINE_CLASS(name, type) \
+protected: \
+	Object* Create() { return (Object*)new type; } \
+	virtual const String TypeName() { return name; }
 
-protected:
-	ChildType& Child(int i) { return static_cast<ChildType&>(Object::Child(i)); }
-	ChildType& Child(const String& v) { return static_cast<ChildType&>(Object::Child(v)); }
-};
 
-class ObjectManager
-{
-public:
-	~ObjectManager();
-	void RegClass(ObjectClass* cl);
-	Object* Create(const String& type, const String& name, Object* parent);
-
-private:
-	ObjectClass* FindClass(const String& type);
-	ObjectClasses reg_classes;
-};
-
-extern ObjectManager* objectManager;
-
-#define CAST(type, ref) (static_cast<type&>(ref))
-
-#endif//__OBJECT_H__
+#endif //__OBJECT_H__
