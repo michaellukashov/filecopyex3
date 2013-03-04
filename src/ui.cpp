@@ -31,6 +31,11 @@ int ShowMessage(const String& title, const String& msg, int Flags)
 	return ShowMessageHelp(title, msg, Flags, "");
 }
 
+int ShowMessageOK(const String& title, const String& msg)
+{
+	return ShowMessage(title, msg, FMSG_MB_OK);
+}
+
 int ShowMessageHelp(const String& title, const String& msg, int Flags, const String& help)
 {
 	String msgbuf=title+"\n"+msg+"\n\x01";

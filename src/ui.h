@@ -26,6 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define	__UI_H__
 
 int ShowMessage(const String&, const String&, int);
+int ShowMessageOK(const String&, const String&);
 int ShowMessageHelp(const String&, const String&, int, const String&);
 int ShowMessageEx(const String&, const String&, const String&, int);
 int ShowMessageExHelp(const String&, const String&, const String&, int, const String&);
