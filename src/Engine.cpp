@@ -2087,3 +2087,85 @@ void Engine::setFileSizeAndTime(const String& fn, __int64 size, FILETIME *creati
 {
 	setFileSizeAndTime2(fn, size, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
 }
+
+int Engine::EngineError(const String& s, const String& fn, int code, int& flg, const String& title, const String& type_id)
+{
+    int ix=-1;
+    if (flg & eeAutoSkipAll) {
+        ix=errTypes.Find(type_id);
+        if (ix==-1) {
+            ix = errTypes.Add(type_id);
+        }
+        if (errTypes.Values(ix) & errfSkipAll) {
+            if (flg & eeShowKeepFiles && errTypes.Values(ix) & errfKeepFiles) {
+                flg |= eerKeepFiles;
+            }
+            return RES_SKIP;
+        }
+    }
+
+    FarDialog& dlg = plugin->Dialogs()["CopyError"];
+    dlg.ResetControls();
+    if (!title.empty()) {
+        dlg("Title") = title;
+    }
+  
+    if (flg & eeShowReopen) {
+        dlg["Reopen"]("Visible")=1;
+    }
+    if (flg & eeShowKeepFiles) {
+        dlg["KeepFiles"]("Visible")=1;
+    }
+    if (flg & eeYesNo) {
+        dlg["YesNo"]("Visible")=1;
+    }
+    if (flg & eeRetrySkipAbort) {
+        dlg["RetrySkipAbort"]("Visible")=1;
+        if (flg & eeAutoSkipAll) {
+            dlg["SkipAll"]("Visible")=1;
+        }
+    }
+    dlg["Label1"]("Text") = s;
+    dlg["Label1"]("Visible") = 1;
+    if (flg & eeOneLine) {
+        dlg["Sep1"]("Visible")=0;
+    } else {
+        dlg["Label2"]("Text") = FormatWidthNoExt(fn, msgw());
+        dlg["Label2"]("Visible") = 1;
+        StringVector list;
+        list.loadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
+        for (int i=0; i<list.Count(); i++) {
+            if (i<=7) {
+                String name=String("Label")+String(i+3);
+                dlg[name]("Visible")=1;
+                dlg[name]("Text")=list[i];
+            }
+        }
+    }
+
+    if (!(flg & eeShowReopen) && !(flg & eeShowKeepFiles)) {
+        dlg["Sep1"]("Visible")=0;
+    }
+
+    int res=dlg.Execute();
+
+    if ((bool)dlg["Reopen"]("Selected")) flg |= eerReopen;
+    if ((bool)dlg["KeepFiles"]("Selected")) flg |= eerKeepFiles;
+
+    if (flg & eeYesNo)  {
+        if (res == 0) return RES_YES;
+        if (res == -1) return RES_NO;
+    } else if (flg & eeRetrySkipAbort) {
+        if (res == 0) return RES_RETRY;
+        if (res == 1) return RES_SKIP;
+        if (res == -1) return RES_ABORT;
+        if (res == 2)  {
+            if (ix!=-1) {
+                errTypes.Values(ix) |= errfSkipAll;
+                if (flg & eerKeepFiles) errTypes.Values(ix) |= errfKeepFiles;
+            }
+            return RES_SKIP;
+        }
+    }   
+    return -1;
+}
