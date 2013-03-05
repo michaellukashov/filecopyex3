@@ -28,8 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Framework/ObjString.h"
-#include "Framework/Properties.h"
 #include "Framework/Locale.h"
+#include "Framework/Properties.h"
+#include "Framework/StringList.h"
 #include "dlgobject.h"
 #include "FarSettings.h"
 

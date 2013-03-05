@@ -284,6 +284,8 @@
     <ClCompile Include="src\Framework\Locale.cpp" />
     <ClCompile Include="src\Framework\LowLevelStr.cpp" />
     <ClCompile Include="src\Framework\Object.cpp" />
+    <ClCompile Include="src\Framework\ObjectClass.cpp" />
+    <ClCompile Include="src\Framework\ObjectManager.cpp" />
     <ClCompile Include="src\Framework\ObjString.cpp" />
     <ClCompile Include="src\Framework\Properties.cpp" />
     <ClCompile Include="src\Framework\StringList.cpp" />
@@ -307,6 +309,7 @@
     <ClInclude Include="src\FarPlugin.h" />
     <ClInclude Include="src\FarProgress.h" />
     <ClInclude Include="src\Framework\Array.h" />
+    <ClInclude Include="src\Framework\CastObject.h" />
     <ClInclude Include="src\Framework\DescList.h" />
     <ClInclude Include="src\framework\FileNameStore.h" />
     <ClInclude Include="src\framework\FileNameStoreEnum.h" />
@@ -314,6 +317,8 @@
     <ClInclude Include="src\framework\Locale.h" />
     <ClInclude Include="src\Framework\LowLevelStr.h" />
     <ClInclude Include="src\Framework\Object.h" />
+    <ClInclude Include="src\Framework\ObjectClass.h" />
+    <ClInclude Include="src\Framework\ObjectManager.h" />
     <ClInclude Include="src\Framework\ObjString.h" />
     <ClInclude Include="src\Framework\Properties.h" />
     <ClInclude Include="src\Framework\StdHdr.h" />

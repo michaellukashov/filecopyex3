@@ -29,6 +29,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#include "plugin.h"
 #include "common.h"
 #include "Framework/Object.h"
+#include "Framework/ObjectManager.h"
+#include "Framework/StringVector.h"
 
 static const Attribute _Attrib[] =
 {
@@ -123,7 +125,7 @@ void FarDlgComboboxClass::InitItem(FarDialogItem& item, FarDlgObject& obj)
 		e.list.Items = NULL;
 		e.list.ItemsNumber = 0;
 	}
-  StringList items;
+  StringVector items;
   items.loadFromString(obj("Items"), '\n');
 	if (items.Count()) {
 		e.list.ItemsNumber = items.Count();

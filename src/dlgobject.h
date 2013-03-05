@@ -28,7 +28,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Framework/Array.h"
+#include "Framework/CastObject.h"
 #include "Framework/Object.h"
+
 #include "sdk/plugin.hpp"
 
 class FarDlgObjectClass;

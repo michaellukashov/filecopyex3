@@ -164,8 +164,7 @@ void FarDlgContainer::DefSize(int& sumw, int& sumh, int& fit)
 			obj.DefSize(w, h, f);
 			groupw+=w+2;
 			if (h>grouph) grouph=h;
-			if (!obj.Property("NoBreak"))
-			{
+			if (!obj.Property("NoBreak")) {
 				if (groupw-2>sumw) sumw=groupw-2;
 				sumh+=grouph;
 				groupw=grouph=0;

@@ -3,7 +3,6 @@
 
 #include <map>
 
-//#include "StringList.h"
 #include "StringVector.h"
 
 class DescList

@@ -27,10 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "array.h"
-#include "stringlist.h"
-#include "properties.h"
+//#include "Array.h"
+#include "Properties.h"
 #include "ObjectClass.h"
+#include "StringVector.h"
 
 class ObjectClass;
 class Object;
@@ -52,11 +52,13 @@ public:
 	const String& Type() const { return _type; }
 
 	int LoadFrom(FILE*);
-	int SaveTo(FILE*);
+	//int SaveTo(FILE*);
 	int Load(const String&);
-	int Save(const String&);
+	//int Save(const String&);
 	void ReloadProperties();
 	void ReloadPropertiesRecursive();
+
+	void init(const String &name, const String &type, ObjectClass* cl, Object* parent);
 
 protected:
 	void ClearChilds();
@@ -68,24 +70,19 @@ protected:
 	virtual void AfterLoad() {}
 	virtual void BeforeLoad() {}
 
-	PropertyStore properties;
-	PropertyStore loaded_properties;
+	PropertyMap prop;
+	PropertyMap loadedProp;
+
 	Objects childs;
-
-private:
-	int LoadFromList(StringList&, int start=0);
-	void SaveToList(StringList&, int clear=1, int level=0);
-
-protected:
 	ObjectClass* _class;
 	Object* _parent;
 	String _name;
 	String _type;
 
-	::Property undef_property;
+private:
+	size_t LoadFromList(StringParent&, size_t start = 0);
+	//void SaveToList(StringVector&, int clear=1, int level=0);
 
-	friend class ObjectManager;
-	friend class ObjectClass;
 };
 
 #define DEFINE_CLASS(name, type) \

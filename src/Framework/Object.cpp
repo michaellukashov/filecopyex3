@@ -31,38 +31,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int Object::LoadFrom(FILE *f)
 {
-	StringList temp;
+	StringVector temp;
 	return temp.loadFromFile(f) && LoadFromList(temp);
 }
 
+/*
 int Object::SaveTo(FILE *f)
 {
-	StringList temp;
+	StringVector temp;
 	SaveToList(temp);
 	return temp.saveToFile(f);
 }
+*/
 
 Property& Object::Property(const String& v)
 {
-	int j=_class->PropertyNames.Find(v);
-	if (j!=-1)
-		return properties[_class->PropertyNames.Values(j)];
-	else 
-		return undef_property;
+	return prop[v];
 }
 
 int Object::Load(const String& fn)
 {
-	StringList temp;
+	StringVector temp;
 	return temp.loadFromFile(fn) && LoadFromList(temp);
 }
 
+/*
 int Object::Save(const String& fn)
 {
-	StringList temp;
+	StringVector temp;
 	SaveToList(temp);
 	return temp.saveToFile(fn);
 }
+*/
 
 Object& Object::Child(const String& v)
 {
@@ -85,27 +85,27 @@ void Object::ClearChilds()
 }
 
 
-int Object::LoadFromList(StringList &list, int start)
+size_t Object::LoadFromList(StringParent &list, size_t start)
 {
 	ClearChilds();
 	BeforeLoad();
 
-	int i=start, res=list.Count()-1;
-	while (i<list.Count())
-	{
-		String line=list[i].trim();
-		if (line=="end") {
+	size_t res = list.Count() - 1;
+
+	for (size_t i = start; i < list.Count(); i++) {
+		String line = list[i].trim();
+		if (line == "end") {
 			res=i;
 			break;
 		} else if (!line.ncmp("object", 6)) {
-			int p=line.find(' ');
-			int p1=line.find(':');
+			int p = line.find(' ');
+			int p1 = line.find(':');
 			if (p!=-1 && p1!=-1 && p<p1) {
-				String pname=line.substr(p+1, p1-p-1).trim();
-				String ptype=line.substr(p1+1).trim();
-				Object *obj=objectManager->Create(ptype, pname, this);
+				String pname = line.substr(p+1, p1-p-1).trim();
+				String ptype = line.substr(p1+1).trim();
+				Object *obj = objectManager->Create(ptype, pname, this);
 				if (obj) {
-					i=obj->LoadFromList(list, i+1);
+					i = obj->LoadFromList(list, i+1);
 				} else {
 					FWError(Format(L"Object type %s is undefined", ptype.ptr()));
 				}
@@ -118,15 +118,15 @@ int Object::LoadFromList(StringList &list, int start)
 				(*this)(pline)=pval;
 			}
 		}
-		i++;
 	}
 
 	AfterLoad();
-	loaded_properties = properties;
+	loadedProp = prop;
 	return res;
 }
 
-void Object::SaveToList(StringList &list, int clear, int level)
+/*
+void Object::SaveToList(StringVector &list, int clear, int level)
 {
 	if (clear) list.Clear();
 	String pfx;
@@ -143,16 +143,28 @@ void Object::SaveToList(StringList &list, int clear, int level)
 		list.Add(pfx+"end");
 	}
 }
+*/
 
 void Object::ReloadProperties()
 {
-	properties = loaded_properties;
+	prop = loadedProp;
 }
 
 void Object::ReloadPropertiesRecursive()
 {
 	ReloadProperties();
-	for (int i=0; i<childs.Count(); i++)
+	for (int i=0; i<childs.Count(); i++) {
 		childs[i]->ReloadPropertiesRecursive();
+	}
 }
 
+void Object::init(const String &name, const String &type, ObjectClass* cl, Object* parent) {
+	_class = cl;
+	_type = type;
+	_name = name;
+	_parent = parent;
+	prop = cl->getProps();
+	if (parent) {
+		parent->childs.Add(this);
+	}
+};

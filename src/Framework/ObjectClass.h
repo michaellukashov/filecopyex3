@@ -16,16 +16,9 @@ public:
 	void AddProperty(const String& name, float def);
 	void AddProperty(const String& name, const String& def);
 
-	Property& operator()(const String& v) { return Property(v); }
-
-	Property& Property(const String& v);
-
+	const PropertyMap& getProps() { return baseProp; };
 private:
-	StringList PropertyNames;
-	PropertyStore Properties;
-
-	friend class ObjectManager;
-	friend class Object;
+	PropertyMap baseProp;
 };
 
 #endif // __OBJECTCLASS_H__

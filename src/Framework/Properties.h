@@ -32,7 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Array.h"
 #include "ObjString.h"
-#include "StringList.h"
 
 class Property
 {
