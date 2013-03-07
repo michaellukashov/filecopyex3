@@ -78,7 +78,7 @@ int Node::Save(const String& fn)
 
 Node& Node::child(const String& v)
 {
-	for(size_t i = 0; i < childs.Count(); ++i)
+	for(size_t i = 0; i < childs.size(); ++i)
 	{
 		if(childs[i]->getName() == v) {
 			return child(i);
@@ -90,11 +90,11 @@ Node& Node::child(const String& v)
 
 void Node::ClearChilds()
 {
-	for(size_t i = 0; i < childs.Count(); ++i)
+	for(size_t i = 0; i < childs.size(); ++i)
 	{
 		delete childs[i];
 	}
-	childs.Clear();
+	childs.clear();
 }
 
 size_t Node::LoadFromList(StringParent &list, size_t start)
@@ -165,7 +165,7 @@ void Node::ReloadProperties()
 void Node::ReloadPropertiesRecursive()
 {
 	ReloadProperties();
-	for (int i=0; i<childs.Count(); i++) {
+	for (int i=0; i < childs.size(); i++) {
 		childs[i]->ReloadPropertiesRecursive();
 	}
 }

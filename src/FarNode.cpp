@@ -105,7 +105,7 @@ void FarDlgContainer::DefSize(int& sumw, int& sumh, int& fit)
 	sumw = sumh = 0;
 	int groupw = 0, grouph = 0;
 	fit = Property("FitWidth");
-	for (size_t i=0; i<childs.Count(); i++)
+	for (size_t i=0; i<childs.size(); i++)
 	{
 		FarDlgNode &obj = child(i);
 		if (obj("Visible")) {
@@ -125,10 +125,10 @@ void FarDlgContainer::DefSize(int& sumw, int& sumh, int& fit)
 void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetCodes, int curX, int curY, int curW)
 {
 	int sumw=0, sumh=0;
-	Array<_group> Groups;
+	std::vector<_group> Groups;
 	_group group;
 	group.start=group.w=group.h=group.nfit=0;
-	for (int i=0; i<childs.Count(); i++)
+	for (int i=0; i<childs.size(); i++)
 	{
 		FarDlgNode &obj=child(i);
 		if (obj("Visible")) 
@@ -148,14 +148,14 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& Re
 				if (group.w>sumw) sumw=group.w;
 				sumh+=group.h;
 				group.end=i;
-				Groups.Add(group);
+				Groups.push_back(group);
 				group.w=group.h=group.nfit=0;
 				group.start=i+1;
 			}
 		}
 	}
 	int x=curX, y=curY;
-	for (int j=0; j<Groups.Count(); j++)
+	for (int j=0; j<Groups.size(); j++)
 	{
 		for (int i=Groups[j].start; i<=Groups[j].end; i++)
 		{
@@ -178,7 +178,7 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& Re
 
 void FarDlgContainer::LoadState(PropertyMap& state)
 {
-	for (int i=0; i<childs.Count(); i++) {
+	for (int i=0; i<childs.size(); i++) {
 		if (child(i).IsContainer() || (bool)child(i)("Persistent")) {
 			child(i).LoadState(state);
 		}
@@ -187,14 +187,14 @@ void FarDlgContainer::LoadState(PropertyMap& state)
 
 void FarDlgContainer::SaveState(PropertyMap& state)
 {
-	for (int i=0; i<childs.Count(); i++)
+	for (int i=0; i<childs.size(); i++)
 		if (child(i).IsContainer() || (bool)child(i)("Persistent"))
 			child(i).SaveState(state);
 }
 
 void FarDlgContainer::RetrieveProperties(HANDLE dlg)
 {
-	int cnt = childs.Count();
+	int cnt = childs.size();
 	for (int i=0; i<cnt; i++) {
 		FarDlgNode& fdo = child(i);
 		if (fdo.getPayload().getDialogItem()!=-1 || fdo.IsContainer())
@@ -207,7 +207,7 @@ void FarDlgContainer::ClearDialogItems(Array<FarDialogItem>& Items)
 	for (size_t i = 0; i < Items.Count(); i++)	{
 		DestroyItemText(Items[i]);
 	}
-	for (int i=0; i<childs.Count(); i++) {
+	for (int i=0; i<childs.size(); i++) {
 		child(i).ClearDialogItem();
 	}
 }
@@ -215,7 +215,7 @@ void FarDlgContainer::ClearDialogItems(Array<FarDialogItem>& Items)
 FarDlgNode* FarDlgContainer::FindChild(const String& name)
 {
 	if (getName() == name) return this;
-	for (int i=0; i<childs.Count(); i++)
+	for (int i=0; i<childs.size(); i++)
 	{
 		FarDlgNode* obj=child(i).FindChild(name);
 		if (obj) return obj;

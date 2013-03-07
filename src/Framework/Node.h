@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-//#include "Array.h"
 #include "Properties.h"
 #include "Payload.h"
 #include "StringVector.h"
@@ -37,12 +36,11 @@ class Payload;
 class Node
 {
 public:
-	//Object(ObjectClass* __class) { _class = __class; _parent = NULL; };
 	Node(Payload* _payload, Node *_parent) { 
 		payload = _payload; 
 		parent = _parent; 
 		if (parent) {
-			parent->childs.Add(this);
+			parent->childs.push_back(this);
 		}
 	};
 	virtual ~Node() { ClearChilds(); }
@@ -74,10 +72,7 @@ protected:
 	virtual void AfterLoad() {}
 	virtual void BeforeLoad() {}
 
-	//PropertyMap prop;
-	//PropertyMap loadedProp;
-
-	Array<Node*> childs;
+	std::vector<Node*> childs;
 	Payload* payload;
 	Node* parent;
 
