@@ -24,124 +24,74 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //#include "../stdhdr.h"
 //#include "../valuelist.h"
-#include "dlgclass.h"
+#include "FarNode.h"
 //#include "plugin.h"
-#include "dlgobject.h"
+#include "FarPayload.h"
 #include "common.h"
 #include "Framework/StrUtils.h"
 #include "Framework/ObjString.h"
 #include "guid.hpp"
 
-FarDlgObject::FarDlgObject(void)
-{
-	DialogItem=-1;
-}
 
-FarDlgObject::~FarDlgObject(void)
+// FarDlgNode
+FarDlgNode::FarDlgNode(void)
 {
 }
 
-void FarDlgObject::InitItem(FarDialogItem& item)
+FarDlgNode::~FarDlgNode(void)
+{
+}
+
+void FarDlgNode::InitItem(FarDialogItem& item)
 { 
 	PreInitItem(item);
-	Class()->InitItem(item, *this); 
+	getPayload().InitItem(item); 
 }
 
-void FarDlgObject::RetrieveProperties(HANDLE dlg)
+void FarDlgNode::RetrieveProperties(HANDLE dlg)
 { 
-	Class()->RetrieveProperties(*this, dlg); 
+	getPayload().RetrieveProperties(dlg); 
 }
 
-void FarDlgObject::BeforeAdd(FarDialogItem& item)
+void FarDlgNode::BeforeAdd(FarDialogItem& item)
 { 
-	Class()->BeforeAdd(item, *this); 
+	getPayload().BeforeAdd(item); 
 }
 
-void FarDlgObject::LoadState(PropertyMap &state)
+void FarDlgNode::LoadState(PropertyMap &state)
 { 
-	Class()->LoadState(state, *this); 
+	getPayload().LoadState(state); 
 }
 
-void FarDlgObject::SaveState(PropertyMap &state)
+void FarDlgNode::SaveState(PropertyMap &state)
 { 
-	Class()->SaveState(state, *this); 
+	getPayload().SaveState(state); 
 }
 
-void FarDlgObject::AddToItems(Array<FarDialogItem>& Items, 
-							  Array<RetCode>& RetCodes, 
-							  int curX, int curY, int curW)
+void FarDlgNode::AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetCodes, int curX, int curY, int curW)
 {
-	FarDialogItem item;
-	memset(&item, 0, sizeof(item));
-	item.X1=curX;
-	item.Y1=curY;
-	item.Y2=curY;
-	InitItem(item);
-	item.X2=item.X1+curW-1;
-	BeforeAdd(item);
-	Items.Add(item);
-	DialogItem=Items.Count()-1;
-	if (item.Type==DI_BUTTON && !(item.Flags & DIF_BTNNOCLOSE))
-	{
-		int res=Property("Result");
-		if (res!=-1)
-		{
-			RetCode rc;
-			rc.itemNo=Items.Count()-1;
-			rc.retCode=res;
-			RetCodes.Add(rc);
-		}
-	}
+	getPayload().AddToItems(Items, RetCodes, curX, curY, curW);
 }
 
-void FarDlgObject::SetItemText(FarDialogItem& item, const String& text)
+
+void FarDlgNode::PreInitItem(FarDialogItem& item)
 {
-	DestroyItemText(item);
-	size_t len = text.len() + 1;
-	wchar_t* t = new wchar_t[len];
-	text.copyTo(t, len);
-	item.Data = t;
-	item.MaxLength = 0;
+	getPayload().PreInitItem(item);
 }
 
-void FarDlgObject::DestroyItemText(FarDialogItem& item)
+void FarDlgNode::DefSize(int& w, int& h, int& fit)
 {
-	delete(item.Data);
-	item.Data = NULL;
+	getPayload().DefSize(w, h, fit);
 }
 
-void FarDlgObject::PreInitItem(FarDialogItem& item)
-{
-	//	SetItemText(&item, Name());
-
-	String p = Property("Text");
-	if (p.empty()) {
-		String name = Dialog->Name() + "." + Name();
-		String loc = LOC(name);
-		p = (name == loc) ? "": loc;
-	}
-	SetItemText(item, p);
-
-	for (int i=0; i<AttribCount(); i++)
-		if (Property(Attrib(i).Name))
-			item.Flags |= Attrib(i).Flag;
-	if (Property("Focus")) item.Flags |= DIF_FOCUS;
+void FarDlgNode::ClearDialogItem() 
+{ 
+	getPayload().ClearDialogItem(); 
 }
 
-void FarDlgObject::DefSize(int& w, int& h, int& fit)
+FarDlgNode* FarDlgNode::FindChild(const String& name)
 {
-	FarDialogItem item;
-	memset(&item, 0, sizeof(item));
-	InitItem(item);
-	fit=Property("FitWidth");
-	w=item.X2-item.X1+1;
-	h=item.Y2-item.Y1+1;
-	DestroyItemText(item);
-}
-
-FarDlgObject* FarDlgObject::FindChild(const String& name)
-{
-	if (Name()==name) return this;
+	if (getName() == name) return this;
 	else return NULL;
 }
 
@@ -152,19 +102,18 @@ struct _group
 
 void FarDlgContainer::DefSize(int& sumw, int& sumh, int& fit)
 {
-	sumw=sumh=0;
-	int groupw=0, grouph=0;
-	fit=Property("FitWidth");
-	for (int i=0; i<childs.Count(); i++)
+	sumw = sumh = 0;
+	int groupw = 0, grouph = 0;
+	fit = Property("FitWidth");
+	for (size_t i=0; i<childs.Count(); i++)
 	{
-		FarDlgObject &obj=Child(i);
-		if (obj.Property("Visible"))
-		{
+		FarDlgNode &obj = child(i);
+		if (obj("Visible")) {
 			int w, h, f;
 			obj.DefSize(w, h, f);
-			groupw+=w+2;
+			groupw += w+2;
 			if (h>grouph) grouph=h;
-			if (!obj.Property("NoBreak")) {
+			if (!obj("NoBreak")) {
 				if (groupw-2>sumw) sumw=groupw-2;
 				sumh+=grouph;
 				groupw=grouph=0;
@@ -173,9 +122,7 @@ void FarDlgContainer::DefSize(int& sumw, int& sumh, int& fit)
 	}
 }
 
-void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items, 
-								 Array<RetCode>& RetCodes,
-								 int curX, int curY, int curW)
+void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetCodes, int curX, int curY, int curW)
 {
 	int sumw=0, sumh=0;
 	Array<_group> Groups;
@@ -183,8 +130,8 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items,
 	group.start=group.w=group.h=group.nfit=0;
 	for (int i=0; i<childs.Count(); i++)
 	{
-		FarDlgObject &obj=Child(i);
-		if (obj.Property("Visible")) 
+		FarDlgNode &obj=child(i);
+		if (obj("Visible")) 
 		{
 			int w, h, f;
 			obj.DefSize(w, h, f);
@@ -195,7 +142,7 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items,
 			} 
 			group.w+=w+2;
 			if (h>group.h) group.h=h;
-			if (!obj.Property("NoBreak"))
+			if (!obj("NoBreak"))
 			{
 				group.w-=2;
 				if (group.w>sumw) sumw=group.w;
@@ -212,8 +159,8 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items,
 	{
 		for (int i=Groups[j].start; i<=Groups[j].end; i++)
 		{
-			FarDlgObject &obj=Child(i);
-			if (obj.Property("Visible"))
+			FarDlgNode &obj = child(i);
+			if (obj("Visible"))
 			{
 				int w, h, f;
 				obj.DefSize(w, h, f);
@@ -231,52 +178,54 @@ void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items,
 
 void FarDlgContainer::LoadState(PropertyMap& state)
 {
-	for (int i=0; i<childs.Count(); i++)
-		if (Child(i).IsContainer() || (bool)Child(i)("Persistent"))
-			Child(i).LoadState(state);
+	for (int i=0; i<childs.Count(); i++) {
+		if (child(i).IsContainer() || (bool)child(i)("Persistent")) {
+			child(i).LoadState(state);
+		}
+	}
 }
 
 void FarDlgContainer::SaveState(PropertyMap& state)
 {
 	for (int i=0; i<childs.Count(); i++)
-		if (Child(i).IsContainer() || (bool)Child(i)("Persistent"))
-			Child(i).SaveState(state);
+		if (child(i).IsContainer() || (bool)child(i)("Persistent"))
+			child(i).SaveState(state);
 }
 
 void FarDlgContainer::RetrieveProperties(HANDLE dlg)
 {
 	int cnt = childs.Count();
 	for (int i=0; i<cnt; i++) {
-		FarDlgObject& fdo = Child(i);
-		if (fdo.DialogItem!=-1 || fdo.IsContainer())
+		FarDlgNode& fdo = child(i);
+		if (fdo.getPayload().getDialogItem()!=-1 || fdo.IsContainer())
 			fdo.RetrieveProperties(dlg);
 	}
 }
 
 void FarDlgContainer::ClearDialogItems(Array<FarDialogItem>& Items)
 {
-	for(int i = 0; i < Items.Count(); ++i)
-	{
+	for (size_t i = 0; i < Items.Count(); i++)	{
 		DestroyItemText(Items[i]);
 	}
-	for (int i=0; i<childs.Count(); i++)
-		Child(i).ClearDialogItem();
+	for (int i=0; i<childs.Count(); i++) {
+		child(i).ClearDialogItem();
+	}
 }
 
-FarDlgObject* FarDlgContainer::FindChild(const String& name)
+FarDlgNode* FarDlgContainer::FindChild(const String& name)
 {
-	if (Name()==name) return this;
+	if (getName() == name) return this;
 	for (int i=0; i<childs.Count(); i++)
 	{
-		FarDlgObject* obj=Child(i).FindChild(name);
+		FarDlgNode* obj=child(i).FindChild(name);
 		if (obj) return obj;
 	}
 	return NULL;
 }
 
-void FarDlgObject::BeforeLoad()
+void FarDlgNode::BeforeLoad()
 {
-	Dialog=Parent()->Dialog;
+	getPayload().setDialog(Parent()->getPayload().getDialog());
 }
 
 // ===== FarDialog:: =====
@@ -295,8 +244,8 @@ int FarDialog::Execute()
   FarDialogItem frame;
   memset(&frame, 0, sizeof(frame));
   frame.Type=DI_DOUBLEBOX;
-  String p=Property("Title");
-  if (p.empty()) p=LOC(Name());
+  String p=(*this)("Title");
+  if (p.empty()) p=LOC(getName());
   SetItemText(frame, p);
   Items.Add(frame);
 
@@ -308,9 +257,9 @@ int FarDialog::Execute()
   Items[0].X2=w+6; Items[0].Y2=h+2;
 
 	HANDLE hnd = Info.DialogInit(&MainGuid, &MainDialog, -1, -1, w+10, h+4, 
-		String(Property("HelpTopic")).c_str(), 
+		String((*this)("HelpTopic")).c_str(), 
 		(FarDialogItem*)Items.Storage(), Items.Count(),
-		0, bool(Property("Warning")) ? FDLG_WARNING : 0,
+		0, bool((*this)("Warning")) ? FDLG_WARNING : 0,
 		Info.DefDlgProc, 0
 	);  // !!! Need real Dialog GUID, instead of MainDialog
 	int ret=-1;
@@ -332,7 +281,7 @@ int FarDialog::Execute()
 
 void FarDialog::BeforeLoad()
 {
-  Dialog=this;
+	getPayload().setDialog(this);
 }
 
 void FarDialog::ResetControls()
@@ -340,11 +289,10 @@ void FarDialog::ResetControls()
   ReloadPropertiesRecursive();
 }
 
-FarDlgObject& FarDialog::operator[](const String& n)
+FarDlgNode& FarDialog::operator[](const String& n)
 {
-  FarDlgObject *obj=FindChild(n);
+  FarDlgNode *obj=FindChild(n);
   if (!obj)
     FWError(Format(L"Request to undefined object %s", n.ptr()));
   return *obj;
 }
-

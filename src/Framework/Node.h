@@ -29,27 +29,32 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 //#include "Array.h"
 #include "Properties.h"
-#include "ObjectClass.h"
+#include "Payload.h"
 #include "StringVector.h"
 
-class ObjectClass;
-class Object;
+class Payload;
 
-typedef Array<Object*> Objects;
-
-class Object
+class Node
 {
 public:
-	virtual ~Object() { ClearChilds(); }
+	//Object(ObjectClass* __class) { _class = __class; _parent = NULL; };
+	Node(Payload* _payload, Node *_parent) { 
+		payload = _payload; 
+		parent = _parent; 
+		if (parent) {
+			parent->childs.Add(this);
+		}
+	};
+	virtual ~Node() { ClearChilds(); }
 
-	Object& operator[](int i) { return Child(i); }
-	Object& operator[](const String& v) { return Child(v); }
-	Property& operator()(const String& v) { return Property(v); }
+	Node& operator[](size_t i) { return child(i); };
+	Node& operator[](const String& v) { return child(v); };
+	Property& operator()(const String& name);
 
-	ObjectClass* Class() { return _class; }
-	Object* Parent() { return _parent; }
-	const String& Name() const { return _name; }
-	const String& Type() const { return _type; }
+	Payload& getPayload() const { return *payload; }
+	Node* getParent() { return parent; }
+	const String getName() const;
+	//const String getType() const;
 
 	int LoadFrom(FILE*);
 	//int SaveTo(FILE*);
@@ -58,37 +63,28 @@ public:
 	void ReloadProperties();
 	void ReloadPropertiesRecursive();
 
-	void init(const String &name, const String &type, ObjectClass* cl, Object* parent);
+	//void init(const String &name, const String &type, ObjectClass* cl, Object* parent);
 
 protected:
 	void ClearChilds();
-	Object& Child(int i) { return *childs[i]; }
-	Object& Child(const String& v);
-	Property& Property(const String& v);
+	Node& child(size_t i) { return *childs[i]; }
+	Node& child(const String& v);
 
-	Object() {}
+	Node() {}
 	virtual void AfterLoad() {}
 	virtual void BeforeLoad() {}
 
-	PropertyMap prop;
-	PropertyMap loadedProp;
+	//PropertyMap prop;
+	//PropertyMap loadedProp;
 
-	Objects childs;
-	ObjectClass* _class;
-	Object* _parent;
-	String _name;
-	String _type;
+	Array<Node*> childs;
+	Payload* payload;
+	Node* parent;
 
 private:
 	size_t LoadFromList(StringParent&, size_t start = 0);
 	//void SaveToList(StringVector&, int clear=1, int level=0);
 
 };
-
-#define DEFINE_CLASS(name, type) \
-protected: \
-	Object* Create() { return (Object*)new type; } \
-	virtual const String TypeName() { return name; }
-
 
 #endif //__OBJECT_H__

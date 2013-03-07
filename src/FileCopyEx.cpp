@@ -6,7 +6,7 @@
 #include "SDK/plugin.hpp"
 #include "FarPlugin.h"
 #include "version.hpp"
-#include "dlgclass.h"
+#include "FarPayload.h"
 
 PluginStartupInfo Info;
 FarStandardFunctions FSF;

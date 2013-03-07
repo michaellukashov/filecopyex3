@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/Locale.h"
 #include "Framework/Properties.h"
 #include "Framework/StringList.h"
-#include "dlgobject.h"
+#include "FarNode.h"
 #include "FarSettings.h"
 
 class FarPlugin

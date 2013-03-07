@@ -270,8 +270,8 @@
   <ItemGroup>
     <ClCompile Include="src\common.cpp" />
     <ClCompile Include="src\CopyProgress.cpp" />
-    <ClCompile Include="src\dlgclass.cpp" />
-    <ClCompile Include="src\dlgobject.cpp" />
+    <ClCompile Include="src\FarPayload.cpp" />
+    <ClCompile Include="src\FarNode.cpp" />
     <ClCompile Include="src\Engine.cpp" />
     <ClCompile Include="src\EngineTools.cpp" />
     <ClCompile Include="src\FarMacro.cpp" />
@@ -283,8 +283,8 @@
     <ClCompile Include="src\Framework\FileUtils.cpp" />
     <ClCompile Include="src\Framework\Locale.cpp" />
     <ClCompile Include="src\Framework\LowLevelStr.cpp" />
-    <ClCompile Include="src\Framework\Object.cpp" />
-    <ClCompile Include="src\Framework\ObjectClass.cpp" />
+    <ClCompile Include="src\Framework\Node.cpp" />
+    <ClCompile Include="src\Framework\Payload.cpp" />
     <ClCompile Include="src\Framework\ObjectManager.cpp" />
     <ClCompile Include="src\Framework\ObjString.cpp" />
     <ClCompile Include="src\Framework\Properties.cpp" />
@@ -300,8 +300,8 @@
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
     <ClInclude Include="src\CopyProgress.h" />
-    <ClInclude Include="src\dlgclass.h" />
-    <ClInclude Include="src\dlgobject.h" />
+    <ClInclude Include="src\FarPayload.h" />
+    <ClInclude Include="src\FarNode.h" />
     <ClInclude Include="src\Engine.h" />
     <ClInclude Include="src\EngineTools.h" />
     <ClInclude Include="src\FarMacro.h" />
@@ -309,15 +309,15 @@
     <ClInclude Include="src\FarPlugin.h" />
     <ClInclude Include="src\FarProgress.h" />
     <ClInclude Include="src\Framework\Array.h" />
-    <ClInclude Include="src\Framework\CastObject.h" />
+    <ClInclude Include="src\Framework\CastNode.h" />
     <ClInclude Include="src\Framework\DescList.h" />
     <ClInclude Include="src\framework\FileNameStore.h" />
     <ClInclude Include="src\framework\FileNameStoreEnum.h" />
     <ClInclude Include="src\Framework\FileUtils.h" />
     <ClInclude Include="src\framework\Locale.h" />
     <ClInclude Include="src\Framework\LowLevelStr.h" />
-    <ClInclude Include="src\Framework\Object.h" />
-    <ClInclude Include="src\Framework\ObjectClass.h" />
+    <ClInclude Include="src\Framework\Node.h" />
+    <ClInclude Include="src\Framework\Payload.h" />
     <ClInclude Include="src\Framework\ObjectManager.h" />
     <ClInclude Include="src\Framework\ObjString.h" />
     <ClInclude Include="src\Framework\Properties.h" />

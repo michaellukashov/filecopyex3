@@ -4,35 +4,23 @@ ObjectManager *objectManager;
 
 ObjectManager::~ObjectManager()
 {
-	for(int i = 0; i < reg_classes.Count(); ++i)
-	{
-		delete reg_classes[i];
-	}
 }
 
-void ObjectManager::RegClass(ObjectClass* cl) 
+
+void ObjectManager::regClass(const String& type, createFunc f)
 {
-	cl->DefineProperties();
-	reg_classes.Add(cl);
+	classes[type] = f;
 }
 
-Object* ObjectManager::Create(const String& type, const String& name, Object* parent)
+Node* ObjectManager::create(const String& type, const String& name, Node* parent)
 {
-	ObjectClass* cl = FindClass(type);
-	if (cl) {
-		Object* obj = cl->Create();
-		obj->init(name, type, cl, parent);
-		return obj;
+	createFunc *clCreate = classes[type];
+	if (clCreate) {
+		Payload *payload = (*clCreate)();
+		payload->init(name);
+		Node* node = new Node(payload, parent);
+		return node;
 	}
 	return NULL;
 }
 
-ObjectClass* ObjectManager::FindClass(const String& type)
-{
-	for (int i = 0; i < reg_classes.Count(); ++i) {
-		if (reg_classes[i]->TypeName() == type) {
-			return reg_classes[i];
-		}
-	}
-	return NULL;
-}

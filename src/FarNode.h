@@ -28,12 +28,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Framework/Array.h"
-#include "Framework/CastObject.h"
-#include "Framework/Object.h"
+#include "Framework/Node.h"
+#include "Framework/CastNode.h"
+#include "Framework/ObjectManager.h"
 
 #include "sdk/plugin.hpp"
 
-class FarDlgObjectClass;
+class FarDlgPayload;
 class FarDialogClass;
 
 struct RetCode
@@ -44,65 +45,49 @@ struct RetCode
 class FarDialog;
 class ValueList;
 
-class FarDlgObject : public CastObject<FarDlgObject, FarDlgObject, FarDlgObjectClass>
+class FarDlgNode : public CastNode<FarDlgNode,FarDlgNode,FarDlgPayload>
 {
 public:
-	FarDlgObject(void);
-	virtual ~FarDlgObject(void);
+	FarDlgNode(void);
+	virtual ~FarDlgNode(void);
 
 	virtual void InitItem(FarDialogItem& item);
 	virtual void RetrieveProperties(HANDLE dlg);
 	virtual void BeforeAdd(FarDialogItem& item);
 	virtual void LoadState(PropertyMap &state);
 	virtual void SaveState(PropertyMap &state);
-	int DialogItem;
 
-	FarDialog* GetDialog() { return Dialog; }
+	virtual void DefSize(int&, int&, int&);
+
+	virtual int IsContainer() { return 0; };
+	void AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetCodes, int curX, int curY, int curW);
+	virtual void ClearDialogItem();
+	virtual FarDlgNode* FindChild(const String&);
 
 protected:
-	virtual void AddToItems(Array<FarDialogItem>&, Array<RetCode>&, int, int, int);
 	void PreInitItem(FarDialogItem& item);
-	void SetItemText(FarDialogItem& item, const String& text);
-	void DestroyItemText(FarDialogItem& item);
+	//void SetItemText(FarDialogItem& item, const String& text);
+	//void DestroyItemText(FarDialogItem& item);
 
-	FarDialog *Dialog;
 	virtual void BeforeLoad();
-	virtual void DefSize(int&, int&, int&);
-	virtual void ClearDialogItem() { DialogItem=-1; }
-	virtual FarDlgObject* FindChild(const String&);
-
-	virtual int IsContainer() { return 0; }
-
-	friend class FarDlgContainer;
+	
+	
 };
 
-class FarDlgEdit : public FarDlgObject
+class FarDlgContainer : public FarDlgNode
 {
 public:
-	wchar_t HistoryId[64];
-};
+	virtual int IsContainer() { return 1; }
 
-class FarDlgCombobox : public FarDlgObject
-{
-public:
-	FarList list;
-	FarDlgCombobox(void) { list.ItemsNumber=0; list.Items=NULL; }
-	virtual ~FarDlgCombobox(void) { if (list.Items) delete(list.Items); }
-};
-
-class FarDlgContainer : public FarDlgObject
-{
 protected:
 	void AddToItems(Array<FarDialogItem>&, Array<RetCode>&, int, int, int);
 
 	void DefSize(int&, int&, int&);
 	void ClearDialogItems(Array<FarDialogItem>&);
-	FarDlgObject* FindChild(const String&);
+	FarDlgNode* FindChild(const String&);
 	void LoadState(PropertyMap &state);
 	void SaveState(PropertyMap &state);
 	void RetrieveProperties(HANDLE dlg);
-
-	int IsContainer() { return 1; }
 };
 
 class FarDialog : public FarDlgContainer
@@ -113,7 +98,7 @@ public:
 	int Execute();
 	void ResetControls();
 
-	FarDlgObject& operator[](const String&);
+	FarDlgNode& operator[](const String&);
 
 	void LoadState(PropertyMap &state) { FarDlgContainer::LoadState(state); }
 	void SaveState(PropertyMap &state)	{ FarDlgContainer::SaveState(state); }
@@ -122,7 +107,7 @@ protected:
 	void BeforeLoad();
 };
 
-class FarDialogList : public CastObject<FarDialog, FarDialogList, FarDialogClass>
+class FarDialogList : public CastNode<FarDialog,FarDialog,FarDialogClass>
 {
 };
 

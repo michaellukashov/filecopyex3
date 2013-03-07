@@ -23,20 +23,37 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "stdhdr.h"
-#include "object.h"
+#include "Node.h"
 #include "../common.h"
 #include "lowlevelstr.h"
 #include "strutils.h"
 #include "ObjectManager.h"
 
-int Object::LoadFrom(FILE *f)
+Property& Node::operator()(const String& v) 
+{ 
+	return getPayload()(v); 
+}
+
+const String Node::getName() const 
+{ 
+	return getPayload().getName(); 
+}
+
+/*
+const String Node::getType() const 
+{ 
+	return getPayload().getType(); 
+}
+*/
+
+int Node::LoadFrom(FILE *f)
 {
 	StringVector temp;
 	return temp.loadFromFile(f) && LoadFromList(temp);
 }
 
 /*
-int Object::SaveTo(FILE *f)
+int Node::SaveTo(FILE *f)
 {
 	StringVector temp;
 	SaveToList(temp);
@@ -44,19 +61,14 @@ int Object::SaveTo(FILE *f)
 }
 */
 
-Property& Object::Property(const String& v)
-{
-	return prop[v];
-}
-
-int Object::Load(const String& fn)
+int Node::Load(const String& fn)
 {
 	StringVector temp;
 	return temp.loadFromFile(fn) && LoadFromList(temp);
 }
 
 /*
-int Object::Save(const String& fn)
+int Node::Save(const String& fn)
 {
 	StringVector temp;
 	SaveToList(temp);
@@ -64,28 +76,28 @@ int Object::Save(const String& fn)
 }
 */
 
-Object& Object::Child(const String& v)
+Node& Node::child(const String& v)
 {
-	for(int i = 0; i < childs.Count(); ++i)
+	for(size_t i = 0; i < childs.Count(); ++i)
 	{
-		if(childs[i]->Name() == v)
-			return Child(i);
+		if(childs[i]->getName() == v) {
+			return child(i);
+		}
 	}
 	FWError(Format(L"Request to undefined object %s", v.ptr()));
-	return *((Object*)NULL);
+	return Node();
 }
 
-void Object::ClearChilds()
+void Node::ClearChilds()
 {
-	for(int i = 0; i < childs.Count(); ++i)
+	for(size_t i = 0; i < childs.Count(); ++i)
 	{
 		delete childs[i];
 	}
 	childs.Clear();
 }
 
-
-size_t Object::LoadFromList(StringParent &list, size_t start)
+size_t Node::LoadFromList(StringParent &list, size_t start)
 {
 	ClearChilds();
 	BeforeLoad();
@@ -103,7 +115,7 @@ size_t Object::LoadFromList(StringParent &list, size_t start)
 			if (p!=-1 && p1!=-1 && p<p1) {
 				String pname = line.substr(p+1, p1-p-1).trim();
 				String ptype = line.substr(p1+1).trim();
-				Object *obj = objectManager->Create(ptype, pname, this);
+				Node *obj = objectManager->create(ptype, pname, this);
 				if (obj) {
 					i = obj->LoadFromList(list, i+1);
 				} else {
@@ -121,12 +133,12 @@ size_t Object::LoadFromList(StringParent &list, size_t start)
 	}
 
 	AfterLoad();
-	loadedProp = prop;
+	getPayload().propSave(); // loadedProp = prop;
 	return res;
 }
 
 /*
-void Object::SaveToList(StringVector &list, int clear, int level)
+void Node::SaveToList(StringVector &list, int clear, int level)
 {
 	if (clear) list.Clear();
 	String pfx;
@@ -145,12 +157,12 @@ void Object::SaveToList(StringVector &list, int clear, int level)
 }
 */
 
-void Object::ReloadProperties()
+void Node::ReloadProperties()
 {
-	prop = loadedProp;
+	getPayload().propLoad();
 }
 
-void Object::ReloadPropertiesRecursive()
+void Node::ReloadPropertiesRecursive()
 {
 	ReloadProperties();
 	for (int i=0; i<childs.Count(); i++) {
@@ -158,13 +170,15 @@ void Object::ReloadPropertiesRecursive()
 	}
 }
 
-void Object::init(const String &name, const String &type, ObjectClass* cl, Object* parent) {
+/*
+void Node::init(const String &name, const String &type, ObjectClass* cl, Object* parent) {
 	_class = cl;
-	_type = type;
-	_name = name;
+	//!!! _type = type;
+	//!!! _name = name;
 	_parent = parent;
-	prop = cl->getProps();
+	//!!! prop = cl->getProps();
 	if (parent) {
 		parent->childs.Add(this);
 	}
 };
+*/

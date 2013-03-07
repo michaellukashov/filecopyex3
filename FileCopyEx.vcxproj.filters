@@ -32,12 +32,6 @@
     <ClCompile Include="src\CopyProgress.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\dlgclass.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
-    <ClCompile Include="src\dlgobject.cpp">
-      <Filter>Source</Filter>
-    </ClCompile>
     <ClCompile Include="src\Engine.cpp">
       <Filter>Source</Filter>
     </ClCompile>
@@ -54,9 +48,6 @@
       <Filter>Source\Framework</Filter>
     </ClCompile>
     <ClCompile Include="src\Framework\LowLevelStr.cpp">
-      <Filter>Source\Framework</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Framework\Object.cpp">
       <Filter>Source\Framework</Filter>
     </ClCompile>
     <ClCompile Include="src\Framework\ObjString.cpp">
@@ -107,11 +98,20 @@
     <ClCompile Include="src\FarMacro.cpp">
       <Filter>Source</Filter>
     </ClCompile>
-    <ClCompile Include="src\Framework\ObjectClass.cpp">
-      <Filter>Source\Framework</Filter>
-    </ClCompile>
     <ClCompile Include="src\Framework\ObjectManager.cpp">
       <Filter>Source\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framework\Node.cpp">
+      <Filter>Source\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framework\Payload.cpp">
+      <Filter>Source\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FarPayload.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
+    <ClCompile Include="src\FarNode.cpp">
+      <Filter>Source</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,12 +119,6 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\CopyProgress.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\dlgclass.h">
-      <Filter>Source</Filter>
-    </ClInclude>
-    <ClInclude Include="src\dlgobject.h">
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="src\Engine.h">
@@ -152,9 +146,6 @@
       <Filter>Source\Framework</Filter>
     </ClInclude>
     <ClInclude Include="src\Framework\LowLevelStr.h">
-      <Filter>Source\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Framework\Object.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
     <ClInclude Include="src\Framework\ObjString.h">
@@ -217,14 +208,23 @@
     <ClInclude Include="src\FarMacro.h">
       <Filter>Source</Filter>
     </ClInclude>
-    <ClInclude Include="src\Framework\CastObject.h">
-      <Filter>Source\Framework</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Framework\ObjectClass.h">
-      <Filter>Source\Framework</Filter>
-    </ClInclude>
     <ClInclude Include="src\Framework\ObjectManager.h">
       <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framework\Node.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framework\Payload.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framework\CastNode.h">
+      <Filter>Source\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FarPayload.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="src\FarNode.h">
+      <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
