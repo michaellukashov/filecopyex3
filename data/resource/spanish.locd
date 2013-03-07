@@ -46,12 +46,16 @@ AdvCopyDialog.SkippedToTemp=Poner archivos salteados en panel &temporal
 AdvCopyDialog.ResumeFiles=&Resumir archivos incompletos
 AdvCopyDialog.Rights=Copiar &derechos de acceso NTFS
 AdvCopyDialog.Streams=Copiar streams &NTFS
+AdvCopyDialog.creationTime=Copiar hora de creación
+AdvCopyDialog.lastAccessTime=Copiar hora de último acceso
+AdvCopyDialog.lastWriteTime=Copiar hora de modificación
 AdvCopyDialog.Compress=Co&mpresión
 AdvCopyDialog.Encrypt=Ci&frar
 AdvCopyDialog.ReadSpeedLimit="Limitar velocidad de &lectura a: "
 AdvCopyDialog.WriteSpeedLimit=Limitar velocidad de &escritura a:
 AdvCopyDialog.Label3=Kb/s
 AdvCopyDialog.Label4=Kb/s
+AdvCopyDialog.Save=&Guardar
 AdvCopyDialog.OK=&Aceptar
 AdvCopyDialog.Cancel=&Cancelar
 
