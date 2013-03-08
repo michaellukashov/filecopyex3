@@ -308,7 +308,6 @@
     <ClInclude Include="src\FarMenu.h" />
     <ClInclude Include="src\FarPlugin.h" />
     <ClInclude Include="src\FarProgress.h" />
-    <ClInclude Include="src\Framework\Array.h" />
     <ClInclude Include="src\Framework\CastNode.h" />
     <ClInclude Include="src\Framework\DescList.h" />
     <ClInclude Include="src\framework\FileNameStore.h" />

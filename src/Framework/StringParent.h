@@ -13,7 +13,7 @@ public:
 
 	virtual void Clear() =0;
 	virtual const String& operator[](size_t) const =0;
-	virtual size_t AddString(const String&) =0;
+	virtual void AddString(const String&) =0;
 	virtual size_t Count() const =0;
 
 	int loadFromFile(FILE* f);

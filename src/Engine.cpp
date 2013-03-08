@@ -665,7 +665,7 @@ void Engine::Copy()
 
 	FileNameStoreEnum Src(&SrcNames);
 	FileNameStoreEnum Dst(&DstNames);
-	Array<CurDirInfo> CurDirStack;
+	std::vector<CurDirInfo> CurDirStack;
 
 	for (size_t i=0; i<Src.Count(); i++)
 	{
@@ -708,22 +708,21 @@ void Engine::Copy()
 
 			CurDirInfo cdi;
 			int dattr=GetFileAttributes(DstName.ptr());
-			if (!CurDirStack.Count() || dattr != 0xFFFFFFFF 
-				&& dattr & FILE_ATTRIBUTE_REPARSE_POINT)
-					cdi.SectorSize=GetSectorSize(DstName);
-			else
-				cdi.SectorSize=
-					CurDirStack[CurDirStack.Count()-1].SectorSize;
-			CurDirStack.Add(cdi);
+			if (!CurDirStack.size() || dattr != 0xFFFFFFFF && dattr & FILE_ATTRIBUTE_REPARSE_POINT) {
+				cdi.SectorSize = GetSectorSize(DstName);
+			} else {
+				cdi.SectorSize = CurDirStack.back().SectorSize;
+				CurDirStack.pop_back();
+			}
+			CurDirStack.push_back(cdi);
 			SectorSize=cdi.SectorSize;
 			continue;
 		} // if (info.Flags & FLG_DIR_PRE) 
 
-		if (info.Flags & FLG_DIR_POST) 
-		{
-			CurDirStack.Delete(CurDirStack.Count()-1);
-			if(CurDirStack.Count()) {
-				SectorSize=CurDirStack[CurDirStack.Count()-1].SectorSize;
+		if (info.Flags & FLG_DIR_POST) {
+			CurDirStack.pop_back();
+			if(CurDirStack.size()) {
+				SectorSize=CurDirStack[CurDirStack.size()-1].SectorSize;
 			}
 			continue;
 		}
@@ -2090,14 +2089,11 @@ void Engine::setFileSizeAndTime(const String& fn, __int64 size, FILETIME *creati
 
 int Engine::EngineError(const String& s, const String& fn, int code, int& flg, const String& title, const String& type_id)
 {
-    int ix=-1;
-    if (flg & eeAutoSkipAll) {
-        ix=errTypes.Find(type_id);
-        if (ix==-1) {
-            ix = errTypes.Add(type_id);
-        }
-        if (errTypes.Values(ix) & errfSkipAll) {
-            if (flg & eeShowKeepFiles && errTypes.Values(ix) & errfKeepFiles) {
+    int *ix;
+	if (flg & eeAutoSkipAll) {
+		ix = &errTypes[type_id];
+		if (*ix & errfSkipAll) {
+			if (flg & eeShowKeepFiles && *ix & errfKeepFiles) {
                 flg |= eerKeepFiles;
             }
             return RES_SKIP;
@@ -2106,23 +2102,24 @@ int Engine::EngineError(const String& s, const String& fn, int code, int& flg, c
 
     FarDialog& dlg = plugin->Dialogs()["CopyError"];
     dlg.ResetControls();
+
     if (!title.empty()) {
         dlg("Title") = title;
     }
   
     if (flg & eeShowReopen) {
-        dlg["Reopen"]("Visible")=1;
+        dlg["Reopen"]("Visible") = 1;
     }
     if (flg & eeShowKeepFiles) {
-        dlg["KeepFiles"]("Visible")=1;
+        dlg["KeepFiles"]("Visible") = 1;
     }
     if (flg & eeYesNo) {
-        dlg["YesNo"]("Visible")=1;
+        dlg["YesNo"]("Visible") = 1;
     }
     if (flg & eeRetrySkipAbort) {
-        dlg["RetrySkipAbort"]("Visible")=1;
+		dlg["RetrySkipAbort"]("Visible") = 1;
         if (flg & eeAutoSkipAll) {
-            dlg["SkipAll"]("Visible")=1;
+            dlg["SkipAll"]("Visible") = 1;
         }
     }
     dlg["Label1"]("Text") = s;
@@ -2136,9 +2133,9 @@ int Engine::EngineError(const String& s, const String& fn, int code, int& flg, c
         list.loadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
         for (int i=0; i<list.Count(); i++) {
             if (i<=7) {
-                String name=String("Label")+String(i+3);
-                dlg[name]("Visible")=1;
-                dlg[name]("Text")=list[i];
+                String name = String("Label")+String(i+3);
+                dlg[name]("Visible") = 1;
+                dlg[name]("Text") = list[i];
             }
         }
     }
@@ -2160,12 +2157,12 @@ int Engine::EngineError(const String& s, const String& fn, int code, int& flg, c
         if (res == 1) return RES_SKIP;
         if (res == -1) return RES_ABORT;
         if (res == 2)  {
-            if (ix!=-1) {
-                errTypes.Values(ix) |= errfSkipAll;
-                if (flg & eerKeepFiles) errTypes.Values(ix) |= errfKeepFiles;
-            }
-            return RES_SKIP;
-        }
+            *ix |= errfSkipAll;
+            if (flg & eerKeepFiles) {
+				*ix |= errfKeepFiles;
+			}
+			return RES_SKIP;
+		}
     }   
     return -1;
 }

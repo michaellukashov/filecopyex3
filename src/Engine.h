@@ -159,7 +159,7 @@ private:
 	int CurPathFlags, CurPathAddFlags;
 	WIN32_FIND_DATA DescFindData;
 
-	StringList errTypes;
+	std::map<String,int> errTypes;
 	int EngineError(const String& s, const String& fn, int code, int& flg,
 		const String& title="", const String& type_id="");
 

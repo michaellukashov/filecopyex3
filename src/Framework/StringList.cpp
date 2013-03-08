@@ -39,14 +39,15 @@ int& StringList::Values(int n)
 	return items[n].Data;
 }
 
-int StringList::Add(const String& v, int data)
+void StringList::Add(const String& v, int data)
 {
 	ListItem itm;
 	itm.Data=data;
 	itm.str=v;
-	return items.Add(itm);
+	items.push_back(itm);
 }
 
+/*
 void StringList::Delete(int n)
 {
 	items.Delete(n, 1);
@@ -56,11 +57,13 @@ void StringList::Exchange(int i, int j)
 {
 	items.Exchange(i, j);
 }
+*/
 
 void StringList::AddList(StringList &src)
 {
-	for (int i=0; i<src.Count(); i++)
+	for (int i=0; i<src.Count(); i++) {
 		Add(src[i]);
+	}
 }
 
 int StringList::Find(const String& v, int start) const

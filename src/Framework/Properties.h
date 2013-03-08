@@ -30,7 +30,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <map>
 #include <vector>
 
-#include "Array.h"
 #include "ObjString.h"
 
 class Property
@@ -70,7 +69,6 @@ protected:
 	String vStr;
 };
 
-typedef Array<Property> PropertyStore;
 typedef std::map<String, Property> PropertyMap;
 
 #endif//__PROPERTIES_H__

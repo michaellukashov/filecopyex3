@@ -27,7 +27,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Array.h"
+#include <vector>
+
 #include "objString.h"
 #include "StringParent.h"
 
@@ -37,16 +38,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class StringList: public StringParent
 {
 public:
-	virtual void Clear() { items.Clear(); };
+	virtual void Clear() { items.clear(); };
 	virtual const String& operator[](size_t i) const { return items[i].str; };
-	virtual size_t AddString(const String& v) { return Add(v); };
-	virtual size_t Count() const { return items.Count(); };
+	virtual void AddString(const String& v) { Add(v); };
+	virtual size_t Count() const { return items.size(); };
 
 	int& Values(int);
 	void Set(int, const String&);
-	int Add(const String&, int=0);
-	void Delete(int);
-	void Exchange(int, int);
+	void Add(const String&, int=0);
+	//void Delete(int);
+	//void Exchange(int, int);
 
 	int Find(const String&, int=0) const;
 
@@ -59,7 +60,7 @@ public:
 	};
 
 private:
-	Array<ListItem> items;
+	std::vector<ListItem> items;
 };
 
 #endif//__STRINGLIST_H__
