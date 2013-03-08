@@ -22,11 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#include "../stdhdr.h"
-//#include "interface/plugin.hpp"
 #include "FarNode.h"
 #include "FarPayload.h"
-//#include "plugin.h"
 #include "common.h"
 #include "Framework/Node.h"
 #include "Framework/ObjectManager.h"
@@ -105,11 +102,11 @@ void FarDlgPayload::init(const String &_name)
 	addProperty("Text", "");
 }
 
-void FarDlgPayload::PreInitItem(FarDialogItem& item)
+void FarDlgPayload::preInitItem(FarDialogItem& item)
 {
 	//	SetItemText(&item, Name());
 
-	String p = Property("Text");
+	String p = getProp("Text");
 	if (p.empty()) {
 		String name = getDialog()->getName() + "." + getName();
 		String loc = LOC(name);
@@ -118,13 +115,23 @@ void FarDlgPayload::PreInitItem(FarDialogItem& item)
 	SetItemText(item, p);
 
 	for (int i=0; i<AttribCount(); i++) {
-		if (Property(Attrib(i).Name)) {
+		if (getProp(Attrib(i).Name)) {
 			item.Flags |= Attrib(i).Flag;
 		}
 	}
-	if (Property("Focus")) {
+	if (getProp("Focus")) {
 		item.Flags |= DIF_FOCUS;
 	}
+}
+
+void FarDlgPayload::realInitItem(FarDialogItem& item ) 
+{ 
+}
+
+void FarDlgPayload::InitItem(FarDialogItem& item ) 
+{ 
+	preInitItem(item); 
+	realInitItem(item);
 }
 
 void FarDlgPayload::DefSize(int& w, int& h, int& fit)
@@ -132,13 +139,13 @@ void FarDlgPayload::DefSize(int& w, int& h, int& fit)
 	FarDialogItem item;
 	memset(&item, 0, sizeof(item));
 	InitItem(item);
-	fit=Property("FitWidth");
+	fit=getProp("FitWidth");
 	w=item.X2-item.X1+1;
 	h=item.Y2-item.Y1+1;
 	DestroyItemText(item);
 }
 
-void FarDlgPayload::AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetCodes, int curX, int curY, int curW)
+void FarDlgPayload::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW)
 {
 	FarDialogItem item;
 	memset(&item, 0, sizeof(item));
@@ -148,15 +155,15 @@ void FarDlgPayload::AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetC
 	InitItem(item);
 	item.X2 = item.X1 + curW - 1;
 	BeforeAdd(item);
-	Items.Add(item);
-	dialogItem = Items.Count()-1;
+	Items.push_back(item);
+	dialogItem = Items.size()-1;
 	if (item.Type == DI_BUTTON && !(item.Flags & DIF_BTNNOCLOSE)) {
-		int res = Property("Result");
+		int res = getProp("Result");
 		if (res != -1) {
 			RetCode rc;
-			rc.itemNo = Items.Count()-1;
+			rc.itemNo = Items.size()-1;
 			rc.retCode = res;
-			RetCodes.Add(rc);
+			RetCodes.push_back(rc);
 		}
 	}
 }
@@ -168,7 +175,7 @@ void FarDlgCheckboxPayload::RetrieveProperties(HANDLE dlg)
 }
 
 // FarDlgEditPayload
-void FarDlgEditPayload::InitItem(FarDialogItem& item)
+void FarDlgEditPayload::realInitItem(FarDialogItem& item)
 {
 	item.Type=DI_EDIT;
 	int w = getProp("Width");
@@ -199,7 +206,7 @@ void FarDlgEditPayload::RetrieveProperties(HANDLE dlg)
 }
 
 // FarDlgComboboxPayload
-void FarDlgComboboxPayload::InitItem(FarDialogItem& item)
+void FarDlgComboboxPayload::realInitItem(FarDialogItem& item)
 {
 	item.Type=DI_COMBOBOX;
 	int w = getProp("Width");
@@ -223,6 +230,7 @@ void FarDlgComboboxPayload::InitItem(FarDialogItem& item)
 		}
 	}
 }
+
 void FarDlgComboboxPayload::RetrieveProperties(HANDLE dlg)
 {
 	getProp("Text") = GetDlgText(dlg, dialogItem);
@@ -244,15 +252,18 @@ size_t lablen(FarDialogItem& item)
 void InitObjMgr()
 {
 	objectManager = new ObjectManager;
-	objectManager->regClass("FarDlgLine", &FarDlgLinePayload::create);
-	objectManager->regClass("FarDlgLabel", &FarDlgLabelPayload::create);
-	objectManager->regClass("FarDlgPanel", &FarDlgPanelPayload::create);
-	objectManager->regClass("FarDlgButton", &FarDlgButtonPayload::create);
-	objectManager->regClass("FarDlgCheckbox", &FarDlgCheckboxPayload::create);
-	objectManager->regClass("FarDlgRadioButton", &FarDlgRadioButtonPayload::create);
-	objectManager->regClass("FarDlgEdit", &FarDlgEditPayload::create);
-	objectManager->regClass("FarDlgCombobox", &FarDlgComboboxPayload::create);
-	objectManager->regClass("FarDialog", &FarDialogPayload::create);
+	objectManager->regClass("FarDlgLine", &FarDlgLinePayload::create, &FarDlgNode::create);
+	objectManager->regClass("FarDlgLabel", &FarDlgLabelPayload::create, &FarDlgNode::create);
+	objectManager->regClass("FarDlgButton", &FarDlgButtonPayload::create, &FarDlgNode::create);
+	objectManager->regClass("FarDlgCheckbox", &FarDlgCheckboxPayload::create, &FarDlgNode::create);
+	objectManager->regClass("FarDlgRadioButton", &FarDlgRadioButtonPayload::create, &FarDlgNode::create);
+	objectManager->regClass("FarDlgEdit", &FarDlgEditPayload::create, &FarDlgNode::create);
+	objectManager->regClass("FarDlgCombobox", &FarDlgComboboxPayload::create, &FarDlgNode::create);
+
+	objectManager->regClass("FarDlgPanel", &FarDlgPanelPayload::create, &FarDlgContainer::create);
+
+	objectManager->regClass("FarDialog", &FarDialogPayload::create, &FarDialog::create);
+
 }
 
 void DoneObjMgr()

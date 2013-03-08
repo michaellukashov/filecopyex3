@@ -29,6 +29,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "strutils.h"
 #include "ObjectManager.h"
 
+Node::Node() {
+	parent = NULL;
+	payload = new Payload();
+}
+
+void Node::init(Payload* _payload, Node *_parent) { 
+	if (payload) {
+		delete(payload);
+	}
+	payload = _payload; 
+	parent = _parent; 
+	if (parent) {
+		parent->childs.push_back(this);
+	}
+};
+
+Node::~Node() { 
+	ClearChilds(); 
+	if (payload) {
+		delete(payload);
+	}
+}
+
 Property& Node::operator()(const String& v) 
 { 
 	return getPayload()(v); 
@@ -85,7 +108,7 @@ Node& Node::child(const String& v)
 		}
 	}
 	FWError(Format(L"Request to undefined object %s", v.ptr()));
-	return Node();
+	return *(new Node()); // !!! bad :(
 }
 
 void Node::ClearChilds()

@@ -36,14 +36,10 @@ class Payload;
 class Node
 {
 public:
-	Node(Payload* _payload, Node *_parent) { 
-		payload = _payload; 
-		parent = _parent; 
-		if (parent) {
-			parent->childs.push_back(this);
-		}
-	};
-	virtual ~Node() { ClearChilds(); }
+	Node();
+	virtual ~Node();
+
+	virtual void init(Payload* _payload, Node *_parent);
 
 	Node& operator[](size_t i) { return child(i); };
 	Node& operator[](const String& v) { return child(v); };
@@ -68,7 +64,6 @@ protected:
 	Node& child(size_t i) { return *childs[i]; }
 	Node& child(const String& v);
 
-	Node() {}
 	virtual void AfterLoad() {}
 	virtual void BeforeLoad() {}
 
@@ -81,5 +76,8 @@ private:
 	//void SaveToList(StringVector&, int clear=1, int level=0);
 
 };
+
+#define DEFINE_NODE_CLASS(type) \
+	static Node* create() { return new type(); };
 
 #endif //__OBJECT_H__

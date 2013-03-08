@@ -22,10 +22,7 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#include "../stdhdr.h"
-//#include "../valuelist.h"
 #include "FarNode.h"
-//#include "plugin.h"
 #include "FarPayload.h"
 #include "common.h"
 #include "Framework/StrUtils.h"
@@ -44,7 +41,6 @@ FarDlgNode::~FarDlgNode(void)
 
 void FarDlgNode::InitItem(FarDialogItem& item)
 { 
-	PreInitItem(item);
 	getPayload().InitItem(item); 
 }
 
@@ -68,15 +64,9 @@ void FarDlgNode::SaveState(PropertyMap &state)
 	getPayload().SaveState(state); 
 }
 
-void FarDlgNode::AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetCodes, int curX, int curY, int curW)
+void FarDlgNode::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW)
 {
 	getPayload().AddToItems(Items, RetCodes, curX, curY, curW);
-}
-
-
-void FarDlgNode::PreInitItem(FarDialogItem& item)
-{
-	getPayload().PreInitItem(item);
 }
 
 void FarDlgNode::DefSize(int& w, int& h, int& fit)
@@ -104,7 +94,7 @@ void FarDlgContainer::DefSize(int& sumw, int& sumh, int& fit)
 {
 	sumw = sumh = 0;
 	int groupw = 0, grouph = 0;
-	fit = Property("FitWidth");
+	fit = getPayload()("FitWidth");
 	for (size_t i=0; i<childs.size(); i++)
 	{
 		FarDlgNode &obj = child(i);
@@ -122,7 +112,7 @@ void FarDlgContainer::DefSize(int& sumw, int& sumh, int& fit)
 	}
 }
 
-void FarDlgContainer::AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetCodes, int curX, int curY, int curW)
+void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW)
 {
 	int sumw=0, sumh=0;
 	std::vector<_group> Groups;
@@ -202,9 +192,9 @@ void FarDlgContainer::RetrieveProperties(HANDLE dlg)
 	}
 }
 
-void FarDlgContainer::ClearDialogItems(Array<FarDialogItem>& Items)
+void FarDlgContainer::ClearDialogItems(std::vector<FarDialogItem>& Items)
 {
-	for (size_t i = 0; i < Items.Count(); i++)	{
+	for (size_t i = 0; i < Items.size(); i++)	{
 		DestroyItemText(Items[i]);
 	}
 	for (int i=0; i<childs.size(); i++) {
@@ -229,54 +219,58 @@ void FarDlgNode::BeforeLoad()
 }
 
 // ===== FarDialog:: =====
-FarDialog::FarDialog(void)
+FarDialog::FarDialog()
 {
 }
 
-FarDialog::~FarDialog(void)
+FarDialog::~FarDialog()
 {
 }
 
 int FarDialog::Execute()
 {
-  Array<FarDialogItem> Items;
-  Array<RetCode> RetCodes;
-  FarDialogItem frame;
-  memset(&frame, 0, sizeof(frame));
-  frame.Type=DI_DOUBLEBOX;
-  String p=(*this)("Title");
-  if (p.empty()) p=LOC(getName());
-  SetItemText(frame, p);
-  Items.Add(frame);
+	std::vector<FarDialogItem> Items;
+	std::vector<RetCode> RetCodes;
+	FarDialogItem frame;
+	memset(&frame, 0, sizeof(frame));
+	frame.Type=DI_DOUBLEBOX;
+	String p=(*this)("Title");
+	if (p.empty()) {
+		p=LOC(getName());
+	}
+	SetItemText(frame, p);
+	Items.push_back(frame);
 
-  int w, h, f;
-  DefSize(w, h, f);
-  AddToItems(Items, RetCodes, 5, 2, w);
+	int w, h, f;
+	DefSize(w, h, f);
+	AddToItems(Items, RetCodes, 5, 2, w);
 
-  Items[0].X1=3; Items[0].Y1=1; 
-  Items[0].X2=w+6; Items[0].Y2=h+2;
+	Items[0].X1=3; 
+	Items[0].Y1=1; 
+	Items[0].X2=w+6; 
+	Items[0].Y2=h+2;
 
 	HANDLE hnd = Info.DialogInit(&MainGuid, &MainDialog, -1, -1, w+10, h+4, 
 		String((*this)("HelpTopic")).c_str(), 
-		(FarDialogItem*)Items.Storage(), Items.Count(),
+		Items.data(), Items.size(),
 		0, bool((*this)("Warning")) ? FDLG_WARNING : 0,
 		Info.DefDlgProc, 0
 	);  // !!! Need real Dialog GUID, instead of MainDialog
 	int ret=-1;
 	if (hnd!=INVALID_HANDLE_VALUE) {
-	int res = Info.DialogRun(hnd);
-    for (int i=0; i<RetCodes.Count(); i++) {
-		if (RetCodes[i].itemNo == res) {
-			if (RetCodes[i].retCode!=-1) {
-				RetrieveProperties(hnd);
+		int res = Info.DialogRun(hnd);
+		for (int i=0; i<RetCodes.size(); i++) {
+			if (RetCodes[i].itemNo == res) {
+				if (RetCodes[i].retCode!=-1) {
+					RetrieveProperties(hnd);
+				}
+				ret=RetCodes[i].retCode;
+				break;
 			}
-			ret=RetCodes[i].retCode;
-			break;
 		}
 	}
-  }
-  ClearDialogItems(Items);
-  return ret;
+	ClearDialogItems(Items);
+	return ret;
 }
 
 void FarDialog::BeforeLoad()

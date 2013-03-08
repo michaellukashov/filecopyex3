@@ -56,14 +56,13 @@ public:
 	~FarDlgPayload();
 
 	virtual void init(const String &_name);
-
-	virtual void InitItem(FarDialogItem& ) { ; }
+	
+	virtual void InitItem(FarDialogItem& item );
 	virtual void RetrieveProperties(HANDLE) { ; }
 	virtual void BeforeAdd(FarDialogItem&) { ; }
 	virtual void LoadState(PropertyMap &state) { ; }
 	virtual void SaveState(PropertyMap &state) { ; }
 	
-	void PreInitItem(FarDialogItem& item);
 	virtual void DefSize(int&, int&, int&);
 	virtual void ClearDialogItem() { dialogItem = -1; }
 
@@ -71,9 +70,12 @@ public:
 	void setDialog(FarDialog *_dialog) { dialog = _dialog; };
 	int getDialogItem() { return dialogItem; };
 
-	void AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetCodes, int curX, int curY, int curW);
+	void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW);
 
 protected:
+	virtual void preInitItem(FarDialogItem& item);
+	virtual void realInitItem(FarDialogItem& item);
+
 	FarDialog *dialog;
 	int dialogItem; // should be int, we are using -1
 };
@@ -84,11 +86,7 @@ class FarDlgLinePayload : public FarDlgPayload
 public:
 	DEFINE_CLASS("FarDlgLine", FarDlgLinePayload)
 
-	virtual void init(const String &_name) { 
-		FarDlgPayload::init(_name); 
-	};
-
-	void InitItem(FarDialogItem& item)
+	void realInitItem(FarDialogItem& item)
 	{
 		item.Type=DI_TEXT;
 		item.Flags|=DIF_SEPARATOR | DIF_BOXCOLOR;
@@ -108,11 +106,12 @@ protected:
 		addProperty("Shorten", 0);
 	}
 
-	void InitItem(FarDialogItem& item)
+	void realInitItem(FarDialogItem& item)
 	{
 		item.Type=DI_TEXT;
-		item.X2= getProp("Shorten") ? item.X1-1 : item.X1+lablen(item)-1;
+		item.X2 = getProp("Shorten") ? (item.X1-1) : (item.X1+lablen(item)-1);
 	}
+
 	void BeforeAdd(FarDialogItem& item, FarDlgNode& obj)
 	{
 //		if (obj("Shorten"))
@@ -134,7 +133,7 @@ protected:
 		addProperty("Default", 0);
 		addProperty("Result", -1);
 	}
-	virtual void InitItem(FarDialogItem& item)
+	virtual void realInitItem(FarDialogItem& item)
 	{
 		item.Type = DI_BUTTON;
 		item.X2 = item.X1 + lablen(item) + 4 - 1;
@@ -167,7 +166,7 @@ protected:
 		addProperty("Selected", 0);
 	}
 
-	void InitItem(FarDialogItem& item)
+	void realInitItem(FarDialogItem& item)
 	{
 		item.Type=DI_CHECKBOX;
 		item.X2=item.X1+lablen(item)+4-1;
@@ -195,9 +194,9 @@ public:
 
 protected:
 
-	void InitItem(FarDialogItem& item)
+	void realInitItem(FarDialogItem& item)
 	{
-		FarDlgCheckboxPayload::InitItem(item);
+		FarDlgCheckboxPayload::realInitItem(item);
 
 		item.Type=DI_RADIOBUTTON;
 	}
@@ -219,7 +218,7 @@ protected:
 		addProperty("Width", 10);
 	}
 
-	void InitItem(FarDialogItem& item);
+	void realInitItem(FarDialogItem& item);
 	void RetrieveProperties(HANDLE dlg);
 	void LoadState(PropertyMap &state)
 	{
@@ -258,7 +257,7 @@ protected:
 		addProperty("Items", "");
 	}
 
-	void InitItem(FarDialogItem& item);
+	void realInitItem(FarDialogItem& item);
 	void RetrieveProperties(HANDLE dlg);
 	void LoadState(PropertyMap &state)
 	{

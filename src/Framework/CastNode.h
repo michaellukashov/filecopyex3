@@ -7,7 +7,6 @@ template <class ChildType, class ParentType, class PayloadType>
 class CastNode : public Node
 {
 public:
-	//PayloadType* getPayload() { return (PayloadType*)payload; }
 	ParentType* Parent() { return (ParentType*) parent; }
 	ChildType& operator[](int i) { return child(i); }
 	ChildType& operator[](const String& name) { return child(name); }

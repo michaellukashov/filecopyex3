@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Framework/Array.h"
 #include "Framework/Node.h"
 #include "Framework/CastNode.h"
 #include "Framework/ObjectManager.h"
@@ -48,8 +47,10 @@ class ValueList;
 class FarDlgNode : public CastNode<FarDlgNode,FarDlgNode,FarDlgPayload>
 {
 public:
-	FarDlgNode(void);
+	FarDlgNode();
 	virtual ~FarDlgNode(void);
+
+	DEFINE_NODE_CLASS(FarDlgNode);
 
 	virtual void InitItem(FarDialogItem& item);
 	virtual void RetrieveProperties(HANDLE dlg);
@@ -60,34 +61,31 @@ public:
 	virtual void DefSize(int&, int&, int&);
 
 	virtual int IsContainer() { return 0; };
-	void AddToItems(Array<FarDialogItem>& Items, Array<RetCode>& RetCodes, int curX, int curY, int curW);
+	virtual void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW);
 	virtual void ClearDialogItem();
 	virtual FarDlgNode* FindChild(const String&);
 
 protected:
-	void PreInitItem(FarDialogItem& item);
-	//void SetItemText(FarDialogItem& item, const String& text);
-	//void DestroyItemText(FarDialogItem& item);
-
 	virtual void BeforeLoad();
-	
-	
 };
 
 class FarDlgContainer : public FarDlgNode
 {
 public:
+	DEFINE_NODE_CLASS(FarDlgContainer);
+
 	virtual int IsContainer() { return 1; }
-
+	
+	virtual void LoadState(PropertyMap &state);
+	virtual void SaveState(PropertyMap &state);
 protected:
-	void AddToItems(Array<FarDialogItem>&, Array<RetCode>&, int, int, int);
+	virtual void AddToItems(std::vector<FarDialogItem>&, std::vector<RetCode>&, int, int, int);
 
-	void DefSize(int&, int&, int&);
-	void ClearDialogItems(Array<FarDialogItem>&);
-	FarDlgNode* FindChild(const String&);
-	void LoadState(PropertyMap &state);
-	void SaveState(PropertyMap &state);
-	void RetrieveProperties(HANDLE dlg);
+	virtual void DefSize(int&, int&, int&);
+	virtual void ClearDialogItems(std::vector<FarDialogItem>&);
+	virtual FarDlgNode* FindChild(const String&);
+	
+	virtual void RetrieveProperties(HANDLE dlg);
 };
 
 class FarDialog : public FarDlgContainer
@@ -95,13 +93,13 @@ class FarDialog : public FarDlgContainer
 public:
 	FarDialog();
 	virtual ~FarDialog();
+
+	DEFINE_NODE_CLASS(FarDialog);
+
 	int Execute();
 	void ResetControls();
 
 	FarDlgNode& operator[](const String&);
-
-	void LoadState(PropertyMap &state) { FarDlgContainer::LoadState(state); }
-	void SaveState(PropertyMap &state)	{ FarDlgContainer::SaveState(state); }
 
 protected:
 	void BeforeLoad();

@@ -1,7 +1,6 @@
 #ifndef __OBJECTMANAGER_H__
 #define __OBJECTMANAGER_H__
 
-//#include "Array.h"
 #include "Payload.h"
 #include "Node.h"
 
@@ -10,13 +9,23 @@ class ObjectManager
 public:
 	~ObjectManager();
 
-	typedef Payload* createFunc();
+	typedef Payload* createPayloadFunc();
+	typedef Node* createNodeFunc();
 
-	void regClass(const String& type, createFunc f);
+	void regClass(const String& type, createPayloadFunc pf, createNodeFunc nf);
 	Node* create(const String& type, const String& name, Node* parent);
 	
 private:
-	std::map<String, createFunc*> classes;
+	class createFuncs {
+	public:
+		createPayloadFunc *pf;
+		createNodeFunc *nf;
+
+		createFuncs() {};
+		createFuncs(createPayloadFunc *_pf, createNodeFunc *_nf): pf(_pf), nf(_nf) {};
+	};
+
+	std::map<String, createFuncs> classes;
 };
 
 extern ObjectManager *objectManager;
