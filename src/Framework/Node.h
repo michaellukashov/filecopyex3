@@ -75,6 +75,9 @@ private:
 	size_t LoadFromList(StringParent&, size_t start = 0);
 	//void SaveToList(StringVector&, int clear=1, int level=0);
 
+private:
+	Node(const Node&);
+	Node& operator = (const Node&);
 };
 
 #define DEFINE_NODE_CLASS(type) \
