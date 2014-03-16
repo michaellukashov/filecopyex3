@@ -374,13 +374,13 @@ int FileExists(const String& name)
   return GetFileAttributes(name.ptr())!=0xFFFFFFFF;
 }
 
-__int64 FileSize(HANDLE h)
+int64_t FileSize(HANDLE h)
 {
   ULONG hsz, lsz=GetFileSize(h, &hsz);
   return MAKEINT64(lsz, hsz);
 }
 
-__int64 FileSize(const String& fn)
+int64_t FileSize(const String& fn)
 {
   WIN32_FIND_DATA fd;
   HANDLE h = FindFirstFile(fn.ptr(), &fd);

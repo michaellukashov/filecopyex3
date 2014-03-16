@@ -72,7 +72,7 @@ public:
 		str = buf;
 	}
 
-	explicit String(__int64 v)
+	explicit String(int64_t v)
 	{
 		wchar_t buf[64];
 		_i64tow_s(v, buf, 64, 10);

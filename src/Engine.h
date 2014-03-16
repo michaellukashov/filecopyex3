@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 struct FileStruct
 {
 	int Attr, RenameNum, OverMode, Flags, Level, PanelIndex, SectorSize;
-	__int64 Size, Read, Written, ResumePos;
+	int64_t Size, Read, Written, ResumePos;
 	FILETIME creationTime, lastAccessTime, lastWriteTime;
 };
 
@@ -49,7 +49,7 @@ struct BuffInfo
 {
 	unsigned char *Buffer;
 	int BuffSize;
-	__int64 OrgSize;
+	int64_t OrgSize;
 	HANDLE OutFile;
 	int OutNum;
 	BuffStruct *BuffInf;
@@ -59,7 +59,7 @@ struct BuffInfo
 struct RememberStruct
 {
 	String Src, Dst;
-	__int64 Size;
+	int64_t Size;
 	FILETIME creationTime, lastAccessTime, lastWriteTime;
 	int Attr, Flags, Level;
 };
@@ -72,8 +72,8 @@ public:
 	TPanelItem(size_t idx, bool active = true, bool selected = false)
 	{
 		ppi = GetPanelItem(
-			active ? PANEL_ACTIVE : PANEL_PASSIVE, 
-			selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM, 
+			active ? PANEL_ACTIVE : PANEL_PASSIVE,
+			selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM,
 			idx
 		);
 	}
@@ -102,7 +102,7 @@ private:
 	int Parallel, BufSize, Streams, Rights, Move,
 		CompressMode, EncryptMode, OverwriteMode,
 		SkipNewer, SkippedToTemp;
-	__int64 ReadSpeedLimit, WriteSpeedLimit;
+	int64_t ReadSpeedLimit, WriteSpeedLimit;
 	int ReadAlign;
 	int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
 		_HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
@@ -125,20 +125,20 @@ private:
 	void ProcessDesc(int fnum);
 	void ShowReadName(const String&);
 	void ShowWriteName(const String&);
-	void ShowProgress(__int64, __int64, __int64, __int64, __int64, 
-		__int64, __int64, __int64);
+	void ShowProgress(int64_t, int64_t, int64_t, int64_t, int64_t,
+		int64_t, int64_t, int64_t);
 	int CheckOverwrite(int fnum, String& ren);
 	CopyProgress CopyProgressBox;
 	FarProgress ScanFoldersProgressBox;
-	__int64 ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
+	int64_t ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
 		ReadN, WriteN, TotalN, FirstWrite, StartTime;
-	void Delay(__int64, __int64, __int64&, __int64);
+	void Delay(int64_t, int64_t, int64_t&, int64_t);
 	int SectorSize;
 
 	int CheckOverwrite(int, const String&, const String&, String&);
 	int CheckOverwrite2(int, const String&, const String&, String&);
 	void SetOverwriteMode(int);
-	int AddFile(const String& _src, const String& _dst, int Attr, __int64 Size, const FILETIME& creationTime, const FILETIME& lastAccessTime, const FILETIME& lastWriteTime, int Flags, int Level, int PanelIndex=-1);
+	int AddFile(const String& _src, const String& _dst, int Attr, int64_t Size, const FILETIME& creationTime, const FILETIME& lastAccessTime, const FILETIME& lastWriteTime, int Flags, int Level, int PanelIndex=-1);
 	int AddFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, int PanelIndex=-1);
 	void AddTopLevelDir(const String &dir, const String &dstmask, int Flags, FileName::Direction d);
 	void RememberFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, RememberStruct&);
@@ -149,7 +149,7 @@ private:
 	String FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx=NULL);
 
 	void setFileTime(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
-	void setFileSizeAndTime(const String& fn, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
+	void setFileSizeAndTime(const String& fn, int64_t size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
 
 	void FarToWin32FindData(
 		const TPanelItem &tpi,
@@ -164,7 +164,7 @@ private:
 		const String& title="", const String& type_id="");
 
 
-	BOOL CheckFreeDiskSpace(const __int64 TotalBytesToProcess, const int MoveMode,
+	BOOL CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,
 		const String& srcpathstr, const String& dstpathstr);
 };
 

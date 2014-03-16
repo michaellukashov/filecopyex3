@@ -179,7 +179,7 @@ void Close(HANDLE h)
 }
 
 
-__int64 FSeek(HANDLE h, __int64 pos, int method)
+int64_t FSeek(HANDLE h, int64_t pos, int method)
 {
   LONG hi32=HI32(pos), lo32=SetFilePointer(h, LO32(pos), &hi32, method);
   if (lo32==INVALID_SET_FILE_POINTER && GetLastError())
@@ -188,12 +188,12 @@ __int64 FSeek(HANDLE h, __int64 pos, int method)
     return MAKEINT64(lo32, hi32);
 }
 
-__int64 FTell(HANDLE h)
+int64_t FTell(HANDLE h)
 {
   return FSeek(h, 0, FILE_CURRENT);
 }
 
-void setFileSizeAndTime2(const String& fn, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
+void setFileSizeAndTime2(const String& fn, int64_t size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
 {
 	HANDLE h = Open(fn, OPEN_WRITE_BUF);
 	if (!h) {
@@ -203,7 +203,7 @@ void setFileSizeAndTime2(const String& fn, __int64 size, FILETIME *creationTime,
 	}
 }
 
-void setFileSizeAndTime2(HANDLE h, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
+void setFileSizeAndTime2(HANDLE h, int64_t size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
 {
 		FSeek(h, size, FILE_BEGIN);
 		SetEndOfFile(h);

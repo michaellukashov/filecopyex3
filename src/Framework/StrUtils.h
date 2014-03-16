@@ -31,11 +31,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 String Format(const wchar_t* fmt, ...);
 
-String FormatNum(__int64);
+String FormatNum(int64_t);
 String FormatTime(const FILETIME&);
 
-String FormatProgress(__int64 cb, __int64 total);
-String FormatSpeed(__int64 cb);
-String FormatValue(__int64 Value);
+String FormatProgress(int64_t cb, int64_t total);
+String FormatSpeed(int64_t cb);
+String FormatValue(int64_t Value);
 
 #endif//__STRUTILS_H__

@@ -91,7 +91,7 @@ void ShowErrorMessage(const String& s)
 }
 
 
-__int64 GetPhysMemorySize()
+int64_t GetPhysMemorySize()
 {
 	MEMORYSTATUS ms;
 	GlobalMemoryStatus(&ms);
@@ -470,11 +470,11 @@ open_retry:
 					//Encrypt(bi->OutFile, EncryptMode);
 					bi->OrgSize = FileSize(bi->OutFile);
 
-					__int64 size=info.OverMode==OM_APPEND?bi->OrgSize+info.Size:info.Size;
+					int64_t size=info.OverMode==OM_APPEND?bi->OrgSize+info.Size:info.Size;
 					if (size>=_PreallocMin*1024
 						&& GetCompression(bi->OutFile)==0)
 					{
-						__int64 sp;
+						int64_t sp;
 						if (!(info.Flags & FLG_BUFFERED))
 						{
 							sp=size/info.SectorSize;
@@ -482,7 +482,7 @@ open_retry:
 							sp*=info.SectorSize;
 						}
 						else sp=size;
-						__int64 bp=FTell(bi->OutFile);
+						int64_t bp=FTell(bi->OutFile);
 						FSeek(bi->OutFile, sp, FILE_BEGIN);
 						SetEndOfFile(bi->OutFile);
 						FSeek(bi->OutFile, bp, FILE_BEGIN);
@@ -518,7 +518,7 @@ open_retry:
 				if (info.Flags & FLG_BUFFERED)
 					wsz = (int)std::min((long long)wsz, info.Size-info.Written);
 retry:
-				__int64 st = GetTime();
+				int64_t st = GetTime();
 				int k = Write(bi->OutFile, bi->Buffer+Pos, wsz);
 
 				if (k < wsz)
@@ -532,7 +532,7 @@ retry:
 					{
 						if (flg & eerReopen)
 						{
-							__int64 Pos=info.Written;
+							int64_t Pos=info.Written;
 							if (info.OverMode==OM_RESUME) Pos+=info.ResumePos;
 							Close(bi->OutFile);
 reopen_retry:
@@ -570,7 +570,7 @@ reopen_retry:
 					}
 				}
 
-				__int64 wt = GetTime()-st;
+				int64_t wt = GetTime()-st;
 				WriteTime += wt;
 				info.Written += k;
 				WriteCb += k;
@@ -768,7 +768,7 @@ open_retry:
 				if (info.Flags & FLG_SKIPPED) break;
 				int j, cb = std::min(ReadBlock, bi->BuffSize-BuffPos);
 retry:
-				__int64 st = GetTime();
+				int64_t st = GetTime();
 				j = Read(InputFile, bi->Buffer+BuffPos, cb);
 
 				if (j==-1)
@@ -782,7 +782,7 @@ retry:
 					{
 						if (flg & eerReopen)
 						{
-							__int64 Pos=info.Read;
+							int64_t Pos=info.Read;
 							if (info.OverMode==OM_RESUME) Pos+=info.ResumePos;
 							Close(InputFile);
 reopen_retry:
@@ -818,7 +818,7 @@ reopen_retry:
 					}
 				} // if (j==-1)
 
-				__int64 rt = GetTime()-st;
+				int64_t rt = GetTime()-st;
 				ReadTime += rt;
 				info.Read += j;
 				ReadCb += j;
@@ -931,9 +931,9 @@ void Engine::ShowWriteName(const String& fn)
 	SetEvent(UiFree);
 }
 
-void Engine::ShowProgress(__int64 read, __int64 write, __int64 total,
-	__int64 readTime, __int64 writeTime,
-	__int64 readN, __int64 writeN, __int64 totalN)
+void Engine::ShowProgress(int64_t read, int64_t write, int64_t total,
+	int64_t readTime, int64_t writeTime,
+	int64_t readN, int64_t writeN, int64_t totalN)
 {
 	if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
 
@@ -951,10 +951,10 @@ int Engine::CheckOverwrite2(int fnum, const String& src, const String& dst, Stri
 	return res;
 }
 
-void Engine::Delay(__int64 time, __int64 cb, __int64& counter, __int64 limit)
+void Engine::Delay(int64_t time, int64_t cb, int64_t& counter, int64_t limit)
 {
 	if (limit<=0) return;
-	__int64 wait=(__int64)((double)cb/limit*TicksPerSec())-time;
+	int64_t wait=(int64_t)((double)cb/limit*TicksPerSec())-time;
 	if (wait>0)
 	{
 		Sleep((int)((double)wait/TicksPerSec()*1000));
@@ -1391,7 +1391,7 @@ rep:
 	TotalBytes=0;
 	TotalN=0;
 	FileCount=CopyCount=0;
-	__int64 Start=GetTime();
+	int64_t Start=GetTime();
 
 	// bugfixed by slst: bug #24
 	//progress.ShowMessage(LOC("Status.CreatingList"));
@@ -1469,7 +1469,7 @@ rep:
 		ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
 		for (size_t i=0; i<Enum.Count(); i++) {
 			if(!(Files[i].Flags & FLG_SKIPPED) & !(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY)) {
-				__int64 sz=FileSize((String)Enum.GetByNum(i));
+				int64_t sz=FileSize((String)Enum.GetByNum(i));
 				if (sz < Files[i].Size) {
 					Files[i].ResumePos = sz/ReadAlign*ReadAlign;
 					TotalBytes -= Files[i].ResumePos;
@@ -1586,7 +1586,7 @@ int Engine::AddFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, i
 	return AddFile(Src, Dst, fd.dwFileAttributes, MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh), fd.ftCreationTime, fd.ftLastAccessTime, fd.ftLastWriteTime, Flags, Level, PanelIndex);
 }
 
-int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 size, const FILETIME& creationTime, const FILETIME& lastAccessTime, const FILETIME& lastWriteTime, int flags, int Level, int PanelIndex)
+int Engine::AddFile(const String& _src, const String& _dst, int attr, int64_t size, const FILETIME& creationTime, const FILETIME& lastAccessTime, const FILETIME& lastWriteTime, int flags, int Level, int PanelIndex)
 {
 	// bugfixed by slst: bug #23
 	if (CheckEscape(FALSE)) {
@@ -1630,7 +1630,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr, __int64 si
 		attr &= ~FILE_ATTRIBUTE_READONLY;
 	}
 
-	__int64 sz1 = (attr & FILE_ATTRIBUTE_DIRECTORY)? 0 : size;
+	int64_t sz1 = (attr & FILE_ATTRIBUTE_DIRECTORY)? 0 : size;
 
 	FileStruct fs;
 	memset(&fs, 0, sizeof(fs));
@@ -2020,7 +2020,7 @@ int Engine::AddRemembered(RememberStruct &Remember)
 
 // bugfixed by slst: bug #32
 // Returns TRUE if there is enough space on target disk
-BOOL Engine::CheckFreeDiskSpace(const __int64 TotalBytesToProcess, const int MoveMode,
+BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,
 	const String& srcpathstr, const String& dstpathstr)
 {
 	//if(ReplaceMode == OM_OVERWRITE) return TRUE;
@@ -2084,7 +2084,7 @@ void Engine::setFileTime(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessT
 	setFileTime2(h, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
 }
 
-void Engine::setFileSizeAndTime(const String& fn, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
+void Engine::setFileSizeAndTime(const String& fn, int64_t size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
 {
 	setFileSizeAndTime2(fn, size, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
 }

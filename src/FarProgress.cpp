@@ -237,7 +237,7 @@ void FarProgress::ShowScanProgress(const String& msg)
 
 // bugfixed by slst: bug #24
 // New class member function
-void FarProgress::SetScanProgressInfo(__int64 NumberOfFiles, __int64 TotalSize)
+void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
 {
   if (WinType==WIN_SCAN_PROGRESS)
   {
@@ -253,7 +253,7 @@ void FarProgress::SetScanProgressInfo(__int64 NumberOfFiles, __int64 TotalSize)
 
 // bugfixed by slst: bug #24
 // New class member function
-void FarProgress::DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles, __int64 TotalSize)
+void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize)
 {
   String FilesFmtStr = LOC("Status.FilesString") + " %-6I64d";
   wchar_t FilesStr[256];

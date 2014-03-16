@@ -59,8 +59,8 @@ int FileExists(const String& name);
 int MoveFile(const String& src, const String& dst, int replace);
 void ForceDirectories(const String& s);
 
-__int64 FileSize(HANDLE h);
-__int64 FileSize(const String& fn);
+int64_t FileSize(HANDLE h);
+int64_t FileSize(const String& fn);
 
 String TempName();
 String TempPath();

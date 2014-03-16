@@ -37,7 +37,7 @@ void FWError(const String&);
 void FWError(const wchar_t*);
 extern ErrorHandler errorHandler;
 
-#define MAKEINT64(low, high) ((((__int64)(high))<<32)|((__int64)low))
+#define MAKEINT64(low, high) ((((int64_t)(high))<<32)|((int64_t)low))
 
 extern int WinNT, WinNT4, Win2K, WinXP;
 extern HANDLE hInstance;

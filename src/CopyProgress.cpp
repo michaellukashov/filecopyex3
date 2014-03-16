@@ -70,11 +70,11 @@ void CopyProgress::Stop()
 }
 
 
-void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 TotalBytes,
-                            __int64 ReadTime, __int64 WriteTime,
-                            __int64 ReadN, __int64 WriteN, __int64 TotalN,
-                            int ParallelMode, __int64 FirstWriteTime, 
-                            __int64 StartTime, int BufferSize)
+void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t TotalBytes,
+                            int64_t ReadTime, int64_t WriteTime,
+                            int64_t ReadN, int64_t WriteN, int64_t TotalN,
+                            int ParallelMode, int64_t FirstWriteTime,
+                            int64_t StartTime, int BufferSize)
 {
   double TotalTime     = 0;
   double ElapsedTime   = (double)(GetTime()-StartTime);
@@ -83,8 +83,8 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
   //DebugLog(_T("RBytes: %I64d  WBytes: %I64d  RdTime: %I64d  WrTime: %I64d  StTime: %I64d\n"),
   //          ReadBytes, WriteBytes, ReadTime, WriteTime, StartTime);
 
-  const __int64 MinRWValue = 0x10000;
-  
+  const int64_t MinRWValue = 0x10000;
+
   // bugfixed by slst: bug #18
   if (((ReadBytes > MinRWValue)  && (WriteBytes > MinRWValue)) ||
       ((TotalBytes < BufferSize) && (ReadBytes > MinRWValue))) // if selected files size < buffer size
@@ -175,8 +175,8 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
 }
 
 
-void CopyProgress::DrawProgress(const String& pfx, int y, __int64 cb, __int64 total,
-                                __int64 time, __int64 n, __int64 totaln)
+void CopyProgress::DrawProgress(const String& pfx, int y, int64_t cb, int64_t total,
+                                int64_t time, int64_t n, int64_t totaln)
 {
   if (cb>total) cb=total;
   DrawText(X1+MG, Y1+y, &clrLabel, pfx);
@@ -186,7 +186,7 @@ void CopyProgress::DrawProgress(const String& pfx, int y, __int64 cb, __int64 to
 
   FarProgress::DrawProgress(X1+MG, X2-MG, Y1+y+1, total?((float)cb/total):0);
 
-  __int64 rate = (__int64) (time ? (float)cb / time * TicksPerSec() : 0);
+  int64_t rate = (int64_t) (time ? (float)cb / time * TicksPerSec() : 0);
   buf= FormatSpeed(rate);
   DrawText(X2-MG-buf.len()+1, Y1+y, &clrText, buf);
 }
@@ -218,11 +218,11 @@ void CopyProgress::ShowWriteName(const String& fn)
   }
 }
 
-void CopyProgress::ShowProgress(__int64 read, __int64 write, __int64 total,
-                                __int64 readTime, __int64 writeTime,
-                                __int64 readN, __int64 writeN,
-                                __int64 totalN, int parallel, 
-                                __int64 FirstWrite, __int64 StartTime, int BufferSize)
+void CopyProgress::ShowProgress(int64_t read, int64_t write, int64_t total,
+                                int64_t readTime, int64_t writeTime,
+                                int64_t readN, int64_t writeN,
+                                int64_t totalN, int parallel,
+                                int64_t FirstWrite, int64_t StartTime, int BufferSize)
 {
   if (GetTime()-lastupdate > interval)
   {

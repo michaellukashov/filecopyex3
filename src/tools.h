@@ -91,14 +91,14 @@ void DebugLog(const wchar_t *DebugMsg, ...);
 
 String convertPath(enum CONVERTPATHMODES mode, String src);
 
-inline __int64 GetTime()
+inline int64_t GetTime()
 {
 	LARGE_INTEGER res;
 	QueryPerformanceCounter(&res);
 	return res.QuadPart;
 }
 
-inline __int64 TicksPerSec()
+inline int64_t TicksPerSec()
 {
 	LARGE_INTEGER res;
 	QueryPerformanceFrequency(&res);

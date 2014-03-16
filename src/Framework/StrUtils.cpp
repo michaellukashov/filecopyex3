@@ -36,7 +36,7 @@ String Format(const wchar_t* fmt, ...)
 	return buf;
 }
 
-String FormatNum(__int64 n)
+String FormatNum(int64_t n)
 {
 	static bool first = true;
 	static NUMBERFMT fmt;
@@ -90,11 +90,11 @@ String FormatTime(const FILETIME& ft)
                 (int)st.wHour, (int)st.wMinute, (int)st.wSecond);
 }
 
-String FormatProgress(__int64 cb, __int64 total)
+String FormatProgress(int64_t cb, int64_t total)
 {
-  __int64 n=total;
+  int64_t n=total;
   int pw=0;
-  __int64 div=1;
+  int64_t div=1;
   while (n > 999999) { div*=1024; n/=1024; pw++; }
   String un;
   switch (pw)
@@ -110,11 +110,11 @@ String FormatProgress(__int64 cb, __int64 total)
                 FormatNum(total/div).ptr(), un.ptr(), (int)(total?(float)cb/total*100:0));
 }
 
-String FormatSpeed(__int64 cb)
+String FormatSpeed(int64_t cb)
 {
-  __int64 n=cb;
+  int64_t n=cb;
   int pw=0;
-  __int64 div=1;
+  int64_t div=1;
   while (n>=100000) { div*=1024; n/=1024; pw++; }
   String un;
   switch (pw)
@@ -130,10 +130,10 @@ String FormatSpeed(__int64 cb)
   return Format(L"%s %s/%s", FormatNum(cb/div).ptr(), un.ptr(), LOC("Engine.Sec").ptr());
 }
 
-String FormatValue(__int64 Value)
+String FormatValue(int64_t Value)
 {
   int pw = 0;
-  __int64 div = 1;
+  int64_t div = 1;
   while (Value >= 100000) { div *= 1024; Value /= 1024; pw++; }
   String UnitStr;
   switch (pw)

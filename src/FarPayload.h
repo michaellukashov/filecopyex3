@@ -37,7 +37,7 @@ class FarDialog;
 struct Attribute
 {
 	const char* Name;
-	unsigned __int64 Flag;
+	uint64_t Flag;
 };
 const Attribute& Attrib(int i);
 int AttribCount();

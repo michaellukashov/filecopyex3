@@ -43,7 +43,7 @@ public:
 	void ShowMessage(const String&);
 	void ShowProgress(const String&);
 	void ShowScanProgress(const String& msg);
-	void SetScanProgressInfo(__int64 NumberOfFiles, __int64 TotalSize);
+	void SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize);
 	void Hide();
 	void SetPercent(float);
 	int InverseBars;
@@ -59,8 +59,8 @@ protected:
 	void SetTitle2(const String&);
 	String GetTitle();
 	String TitleBuf, ProgTitle;
-	void DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles, __int64 TotalSize);
-	__int64 LastUpdate;
+	void DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize);
+	int64_t LastUpdate;
 
 	TaskBarIcon taskbarIcon;
 };
