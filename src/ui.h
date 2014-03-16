@@ -42,6 +42,6 @@ String GetErrText(int code);
 
 String FormatWidth(const String&, int);
 String FormatWidthNoExt(const String&, int);
-String SplitWidth(const String&, int);
+String SplitWidth(const String&, size_t);
 
 #endif//__UI_H__

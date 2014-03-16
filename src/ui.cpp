@@ -130,7 +130,7 @@ String FormatWidthNoExt(const String& s, int len)
 	}
 }
 
-String SplitWidth(const String &s, int w)
+String SplitWidth(const String &s, size_t w)
 {
 	String res;
 	res.reserve(s.len());

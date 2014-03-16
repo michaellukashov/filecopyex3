@@ -39,7 +39,7 @@ int DescList::LoadFromFile(const String& lfn)
 int DescList::LoadFromList(StringVector &list)
 {
 	String fn, desc;
-	for (int i=0; i<list.Count(); i++) {
+	for (size_t i=0; i<list.Count(); i++) {
 		String s = list[i];
 		wchar_t c=s[0];
 		if (c!='\t' && c!=' ' && c!='>' && c) {

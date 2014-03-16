@@ -73,6 +73,13 @@ public:
 		str = buf;
 	}
 
+	explicit String(size_t v)
+	{
+		wchar_t buf[64];
+		_i64tow_s((int64_t)v, buf, 64, 10);
+		str = buf;
+	}
+
 	explicit String(int64_t v)
 	{
 		wchar_t buf[64];
@@ -102,7 +109,7 @@ public:
 	inline void operator+=(wchar_t c) { str += c; }
 	const String operator+(const String& v) const { return str + v.str; }
 
-	inline int len() const { return (int)str.length(); }
+	inline size_t len() const { return str.length(); }
 	inline bool empty() const { return str.empty(); }
 
 	inline wchar_t operator[] (size_t i) const

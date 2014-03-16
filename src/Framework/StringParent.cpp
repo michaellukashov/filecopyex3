@@ -98,7 +98,7 @@ int StringParent::saveToFile(FILE* f, TextFormat tf)
 		unsigned __int16 sign=0xFFFE;
 		fwrite(&sign, sizeof(sign), 1, f);
 	}
-	for (int i=0; i < Count(); i++) {
+	for (size_t i=0; i < Count(); i++) {
 		const wchar_t* s = (*this)[i].c_str();
 		const int ssize=4096;
 		if (tf != tfANSI) {

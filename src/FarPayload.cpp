@@ -223,7 +223,7 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem& item)
 	if (items.Count()) {
 		list.ItemsNumber = items.Count();
 		list.Items = new FarListItem[items.Count()];
-		for (int i=0; i<items.Count(); i++) {
+		for (size_t i=0; i<items.Count(); i++) {
 			if (getProp("Text") == items[i]) {
 				list.Items[i].Flags |= LIF_SELECTED;
 			}

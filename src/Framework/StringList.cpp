@@ -61,14 +61,14 @@ void StringList::Exchange(int i, int j)
 
 void StringList::AddList(StringList &src)
 {
-	for (int i=0; i<src.Count(); i++) {
+	for (size_t i=0; i<src.Count(); i++) {
 		Add(src[i]);
 	}
 }
 
 int StringList::Find(const String& v, int start) const
 {
-	for(int i = start; i < Count(); ++i)
+	for(size_t i = start; i < Count(); ++i)
 	{
 		if(items[i].str.cmp(v) == 0)
 			return i;

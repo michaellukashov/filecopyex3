@@ -118,7 +118,7 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
 	std::vector<_group> Groups;
 	_group group;
 	group.start=group.w=group.h=group.nfit=0;
-	for (int i=0; i<childs.size(); i++)
+	for (size_t i=0; i<childs.size(); i++)
 	{
 		FarDlgNode &obj=child(i);
 		if (obj("Visible"))
@@ -145,7 +145,7 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
 		}
 	}
 	int x=curX, y=curY;
-	for (int j=0; j<Groups.size(); j++)
+	for (size_t j=0; j<Groups.size(); j++)
 	{
 		for (int i=Groups[j].start; i<=Groups[j].end; i++)
 		{
@@ -168,7 +168,7 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
 
 void FarDlgContainer::LoadState(PropertyMap& state)
 {
-	for (int i=0; i<childs.size(); i++) {
+	for (size_t i=0; i<childs.size(); i++) {
 		if (child(i).IsContainer() || (bool)child(i)("Persistent")) {
 			child(i).LoadState(state);
 		}
@@ -177,7 +177,7 @@ void FarDlgContainer::LoadState(PropertyMap& state)
 
 void FarDlgContainer::SaveState(PropertyMap& state)
 {
-	for (int i=0; i<childs.size(); i++)
+	for (size_t i=0; i<childs.size(); i++)
 		if (child(i).IsContainer() || (bool)child(i)("Persistent"))
 			child(i).SaveState(state);
 }
@@ -197,7 +197,7 @@ void FarDlgContainer::ClearDialogItems(std::vector<FarDialogItem>& Items)
 	for (size_t i = 0; i < Items.size(); i++)	{
 		DestroyItemText(Items[i]);
 	}
-	for (int i=0; i<childs.size(); i++) {
+	for (size_t i=0; i<childs.size(); i++) {
 		child(i).ClearDialogItem();
 	}
 }
@@ -205,7 +205,7 @@ void FarDlgContainer::ClearDialogItems(std::vector<FarDialogItem>& Items)
 FarDlgNode* FarDlgContainer::FindChild(const String& name)
 {
 	if (getName() == name) return this;
-	for (int i=0; i<childs.size(); i++)
+	for (size_t i=0; i<childs.size(); i++)
 	{
 		FarDlgNode* obj=child(i).FindChild(name);
 		if (obj) return obj;
@@ -259,7 +259,7 @@ int FarDialog::Execute()
 	int ret=-1;
 	if (hnd!=INVALID_HANDLE_VALUE) {
 		int res = Info.DialogRun(hnd);
-		for (int i=0; i<RetCodes.size(); i++) {
+		for (size_t i=0; i<RetCodes.size(); i++) {
 			if (RetCodes[i].itemNo == res) {
 				if (RetCodes[i].retCode!=-1) {
 					RetrieveProperties(hnd);

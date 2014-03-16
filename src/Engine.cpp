@@ -976,7 +976,7 @@ void Engine::FarToWin32FindData(const TPanelItem &tpi, WIN32_FIND_DATA &wfd)
 
 String Engine::FindDescFile(const String& dir, int *idx)
 {
-	for (int i=0; i < plugin->Descs().Count(); i++) {
+	for (size_t i=0; i < plugin->Descs().Count(); i++) {
 		if (FileExists(AddEndSlash(dir)+plugin->Descs()[i]))
 		{
 			if (idx) *idx = i;
@@ -992,7 +992,7 @@ String Engine::FindDescFile(const String& dir, int *idx)
 String Engine::FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx)
 {
 	HANDLE hf;
-	for (int i=0; i < plugin->Descs().Count(); i++)
+	for (size_t i=0; i < plugin->Descs().Count(); i++)
 		if((hf=FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
 		{
 			FindClose(hf);
@@ -2133,7 +2133,7 @@ int Engine::EngineError(const String& s, const String& fn, int code, int& flg, c
         dlg["Label2"]("Visible") = 1;
         StringVector list;
         list.loadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
-        for (int i=0; i<list.Count(); i++) {
+        for (size_t i=0; i<list.Count(); i++) {
             if (i<=7) {
                 String name = String("Label")+String(i+3);
                 dlg[name]("Visible") = 1;
