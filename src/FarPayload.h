@@ -48,7 +48,7 @@ String FormatWidth(const String& v, int len);
 void SetItemText(FarDialogItem& item, const String& text);
 void DestroyItemText(FarDialogItem& item);
 
-// ===== FarDlgPayload ===== 
+// ===== FarDlgPayload =====
 class FarDlgPayload: public Payload
 {
 public:
@@ -56,13 +56,13 @@ public:
 	~FarDlgPayload();
 
 	virtual void init(const String &_name);
-	
+
 	virtual void InitItem(FarDialogItem& item );
 	virtual void RetrieveProperties(HANDLE) { ; }
 	virtual void BeforeAdd(FarDialogItem&) { ; }
 	virtual void LoadState(PropertyMap &state) { ; }
 	virtual void SaveState(PropertyMap &state) { ; }
-	
+
 	virtual void DefSize(int&, int&, int&);
 	virtual void ClearDialogItem() { dialogItem = -1; }
 

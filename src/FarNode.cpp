@@ -40,28 +40,28 @@ FarDlgNode::~FarDlgNode(void)
 }
 
 void FarDlgNode::InitItem(FarDialogItem& item)
-{ 
-	getPayload().InitItem(item); 
+{
+	getPayload().InitItem(item);
 }
 
 void FarDlgNode::RetrieveProperties(HANDLE dlg)
-{ 
-	getPayload().RetrieveProperties(dlg); 
+{
+	getPayload().RetrieveProperties(dlg);
 }
 
 void FarDlgNode::BeforeAdd(FarDialogItem& item)
-{ 
-	getPayload().BeforeAdd(item); 
+{
+	getPayload().BeforeAdd(item);
 }
 
 void FarDlgNode::LoadState(PropertyMap &state)
-{ 
-	getPayload().LoadState(state); 
+{
+	getPayload().LoadState(state);
 }
 
 void FarDlgNode::SaveState(PropertyMap &state)
-{ 
-	getPayload().SaveState(state); 
+{
+	getPayload().SaveState(state);
 }
 
 void FarDlgNode::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW)
@@ -74,9 +74,9 @@ void FarDlgNode::DefSize(int& w, int& h, int& fit)
 	getPayload().DefSize(w, h, fit);
 }
 
-void FarDlgNode::ClearDialogItem() 
-{ 
-	getPayload().ClearDialogItem(); 
+void FarDlgNode::ClearDialogItem()
+{
+	getPayload().ClearDialogItem();
 }
 
 FarDlgNode* FarDlgNode::FindChild(const String& name)
@@ -121,15 +121,15 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
 	for (int i=0; i<childs.size(); i++)
 	{
 		FarDlgNode &obj=child(i);
-		if (obj("Visible")) 
+		if (obj("Visible"))
 		{
 			int w, h, f;
 			obj.DefSize(w, h, f);
-			if (f) 
+			if (f)
 			{
 				group.nfit++;
 				w=0;
-			} 
+			}
 			group.w+=w+2;
 			if (h>group.h) group.h=h;
 			if (!obj("NoBreak"))
@@ -154,7 +154,7 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
 			{
 				int w, h, f;
 				obj.DefSize(w, h, f);
-				if (f) { 
+				if (f) {
 					w=(curW-Groups[j].w)/Groups[j].nfit;
 				}
 				obj.AddToItems(Items, RetCodes, x, y, w);
@@ -245,13 +245,13 @@ int FarDialog::Execute()
 	DefSize(w, h, f);
 	AddToItems(Items, RetCodes, 5, 2, w);
 
-	Items[0].X1=3; 
-	Items[0].Y1=1; 
-	Items[0].X2=w+6; 
+	Items[0].X1=3;
+	Items[0].Y1=1;
+	Items[0].X2=w+6;
 	Items[0].Y2=h+2;
 
-	HANDLE hnd = Info.DialogInit(&MainGuid, &MainDialog, -1, -1, w+10, h+4, 
-		String((*this)("HelpTopic")).c_str(), 
+	HANDLE hnd = Info.DialogInit(&MainGuid, &MainDialog, -1, -1, w+10, h+4,
+		String(Property("HelpTopic").operator const String()).ptr(),
 		Items.data(), Items.size(),
 		0, bool((*this)("Warning")) ? FDLG_WARNING : 0,
 		Info.DefDlgProc, 0
@@ -280,7 +280,7 @@ void FarDialog::BeforeLoad()
 
 void FarDialog::ResetControls()
 {
-  ReloadPropertiesRecursive();
+	ReloadPropertiesRecursive();
 }
 
 FarDlgNode& FarDialog::operator[](const String& n)

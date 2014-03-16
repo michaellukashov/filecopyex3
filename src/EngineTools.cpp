@@ -82,7 +82,7 @@ void Encrypt(HANDLE handle, int f)
   if (!Win2K || f==ATTR_INHERIT) return;
   DWORD cb;
   ENCRYPTION_BUFFER enc;
-  enc.EncryptionOperation=f? 
+  enc.EncryptionOperation=f?
     FILE_SET_ENCRYPTION:
     FILE_CLEAR_ENCRYPTION;
   enc.Private[0]=0;
@@ -117,7 +117,7 @@ void CopyACL(const String& src, const String& dst)
 		HANDLE hToken;
 		LUID luid;
 		TOKEN_PRIVILEGES tkp;
-		OpenProcessToken(GetCurrentProcess(), 
+		OpenProcessToken(GetCurrentProcess(),
 			TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
 			LookupPrivilegeValue(NULL, SE_SECURITY_NAME, &luid
 		);
@@ -139,12 +139,12 @@ HANDLE Open(const String& fn, int mode, int attr)
 
   if ((mode & OPEN_READ) && (BOOL)(plugin->Options()["ReadFilesOpenedForWriting"]))
     dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
-  
+
   int f;
   if (mode & OPEN_READ) f = OPEN_EXISTING;
-  else 
+  else
     if (mode & OPEN_CREATE) f = CREATE_ALWAYS;
-    else 
+    else
       f = OPEN_ALWAYS;
   if (!(mode & OPEN_READ))
     SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
@@ -155,16 +155,16 @@ HANDLE Open(const String& fn, int mode, int attr)
     // fixed by slst: bug #17
     // mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
     // fixed by slst: bug #48
-    // fix #17 is partially rolled back: 
+    // fix #17 is partially rolled back:
     // Setting "compressed" attribute requires GENERIC_READ | GENERIC_WRITE
     // access mode during file write.
     mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
     // fixed by slst: bug #12
     // FILE_SHARE_READ | FILE_SHARE_WRITE | (WinNT ? FILE_SHARE_DELETE : 0),
     dwShareMode,
-    NULL, 
-    f, 
-    (mode & OPEN_BUF ? 0: FILE_FLAG_NO_BUFFERING) | attr, 
+    NULL,
+    f,
+    (mode & OPEN_BUF ? 0: FILE_FLAG_NO_BUFFERING) | attr,
     NULL);
   if (res==INVALID_HANDLE_VALUE) res=NULL;
   if (res && (mode & OPEN_APPEND))
@@ -205,9 +205,9 @@ void setFileSizeAndTime2(const String& fn, __int64 size, FILETIME *creationTime,
 
 void setFileSizeAndTime2(HANDLE h, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
 {
-	  FSeek(h, size, FILE_BEGIN);
-	  SetEndOfFile(h);
-	  setFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
+		FSeek(h, size, FILE_BEGIN);
+		SetEndOfFile(h);
+		setFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
 }
 
 void setFileTime2(const String& fn, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime)
@@ -246,7 +246,7 @@ int GetSectorSize(const String& path)
   if (GetDiskFreeSpace(
     AddEndSlash(GetFileRoot(path)).ptr(), &x1, &bps, &x2, &x3))
     return bps;
-  else 
+  else
   {
     //FWError("Warning: GetSectorSize failed");
     return 4096;

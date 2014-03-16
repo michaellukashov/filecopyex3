@@ -53,17 +53,17 @@ void TaskBarIcon::SetState(State state, float param)
 		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NORMAL, NULL);
 		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSVALUE, 0, &pv);
 		break;
-	
-	case S_NO_PROGRESS:		
-		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NOPROGRESS, NULL);	
+
+	case S_NO_PROGRESS:
+		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NOPROGRESS, NULL);
 		break;
-	case S_WORKING:			
-		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_INDETERMINATE, NULL);	
+	case S_WORKING:
+		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_INDETERMINATE, NULL);
 		break;
-	case S_ERROR:			
+	case S_ERROR:
 		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_ERROR, NULL);
 		break;
-	case S_PAUSED:			
+	case S_PAUSED:
 		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_PAUSED, NULL);
 		break;
 	}

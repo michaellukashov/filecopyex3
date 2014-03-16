@@ -40,31 +40,31 @@ int ShowMessageHelp(const String& title, const String& msg, int Flags, const Str
 {
 	String msgbuf=title+"\n"+msg+"\n\x01";
 	int res= Info.Message(&MainGuid, &UnkGuid,
-		Flags | FMSG_ALLINONE, 
-		help.ptr(), 
+		Flags | FMSG_ALLINONE,
+		help.ptr(),
 		(const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, 0
-	); 
+	);
 	return res;
 }
 
-int ShowMessageEx(const String& title, const String& msg, 
-                  const String& buttons, int flags)
+int ShowMessageEx(const String& title, const String& msg,
+									const String& buttons, int flags)
 {
 	return ShowMessageExHelp(title, msg, buttons, flags, "");
 }
 
-int ShowMessageExHelp(const String& title, const String& msg, 
-                  const String& buttons, int flags, const String& help)
+int ShowMessageExHelp(const String& title, const String& msg,
+									const String& buttons, int flags, const String& help)
 {
 	int nb=0;
 	for (const wchar_t *p=buttons.ptr(); *p; p++) {
 		if (*p=='\n') nb++;
 	}
 	String msgbuf=title+"\n"+msg+"\n\x01\n"+buttons;
-	int res = Info.Message(&MainGuid, &UnkGuid, flags | FMSG_ALLINONE, 
+	int res = Info.Message(&MainGuid, &UnkGuid, flags | FMSG_ALLINONE,
 		help.ptr(), (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, nb+1
-	); 
-  return res;
+	);
+	return res;
 }
 
 int msgw()
@@ -74,27 +74,27 @@ int msgw()
 
 void Error(const String& s, int code)
 {
-	ShowMessageEx(LOC("Framework.Error"), 
-		s+"\n"+SplitWidth(GetErrText(code), msgw()), 
-		LOC("Framework.OK"), 
+	ShowMessageEx(LOC("Framework.Error"),
+		s+"\n"+SplitWidth(GetErrText(code), msgw()),
+		LOC("Framework.OK"),
 		FMSG_WARNING
 	);
 }
 
 void Error2(const String& s, const String& fn, int code)
 {
-	ShowMessageEx(LOC("Framework.Error"), 
-		s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()), 
-		LOC("Framework.OK"), 
+	ShowMessageEx(LOC("Framework.Error"),
+		s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()),
+		LOC("Framework.OK"),
 		FMSG_WARNING
 	);
 }
 
 int Error2RS(const String& s, const String& fn, int code)
 {
-	int res=ShowMessageEx(LOC("Framework.Error"), 
-		s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()), 
-		LOC("Framework.Retry")+"\n"+LOC("Framework.Skip"), 
+	int res=ShowMessageEx(LOC("Framework.Error"),
+		s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()),
+		LOC("Framework.Retry")+"\n"+LOC("Framework.Skip"),
 		FMSG_WARNING
 	);
 	if (res==0) {
@@ -106,7 +106,7 @@ int Error2RS(const String& s, const String& fn, int code)
 String GetErrText(int code)
 {
   wchar_t buf[1024];
-  FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM, NULL, code, 0, buf, 1024, NULL);
+  FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, NULL, code, 0, buf, 1024, NULL);
   return buf;
 }
 

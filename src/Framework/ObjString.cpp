@@ -25,9 +25,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "stdhdr.h"
 #include "objstring.h"
 
-const bool isbadchar(wchar_t c) 
-{ 
-	return c >= '\0' && c <= ' '; 
+const bool isbadchar(wchar_t c)
+{
+	return c >= '\0' && c <= ' ';
 }
 
 String String::substr(size_t s, size_t l) const

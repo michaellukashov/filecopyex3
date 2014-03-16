@@ -102,25 +102,25 @@ void CallCopy(int move, int curOnly)
 	if(res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
 	{
 		/* svs 09.02.2011 18:51:58 +0300 - build 1844                                                                                                                                                     ░
-                                                                                                                                                                                               ░
+																																																																																															 ░
 2. Удален ACTL_POSTKEYSEQUENCE (есть аналог в лице ACTL_KEYMACRO).                                                                                                                             ░
    FARKEYSEQUENCEFLAGS переименован в FARKEYMACROFLAGS (и KSFLAGS_* -> KMFLAGS_* ).                                                                                                            ░
    Удалена структура KeySequence.                                                                                                                                                              ░
    */
-		/* XXX KeySequence seq;
-		DWORD keys[8];
-		seq.Flags=KSFLAGS_DISABLEOUTPUT;
-		seq.Sequence=keys;
-		seq.Count=1;
-		keys[0]=move ? KEY_F6 : KEY_F5;
-		if(res == Engine::MRES_STDCOPY_RET)
-		{
-			seq.Count=2;
-			keys[1]=KEY_ENTER;
-		}
-		Info.AdvControl(Info.ModuleNumber, ACTL_POSTKEYSEQUENCE, (void*)&seq);
-		*/
-	}
+    /* XXX KeySequence seq;
+    DWORD keys[8];
+    seq.Flags=KSFLAGS_DISABLEOUTPUT;
+    seq.Sequence=keys;
+    seq.Count=1;
+    keys[0]=move ? KEY_F6 : KEY_F5;
+    if(res == Engine::MRES_STDCOPY_RET)
+    {
+      seq.Count=2;
+      keys[1]=KEY_ENTER;
+    }
+    Info.AdvControl(Info.ModuleNumber, ACTL_POSTKEYSEQUENCE, (void*)&seq);
+    */
+  }
 }
 
 void FarPlugin::OpenPlugin(const struct OpenInfo *OInfo)
@@ -135,7 +135,7 @@ void FarPlugin::OpenPlugin(const struct OpenInfo *OInfo)
 				command = v.Double;
 			};
 		};
-	} 
+	}
 	if (command == -1) {
 		FarMenu menu;
 		menu.SetFlags(FMENU_WRAPMODE);
@@ -157,7 +157,7 @@ void FarPlugin::OpenPlugin(const struct OpenInfo *OInfo)
 		case 1: move = 1; curOnly = 0; break;
 		case 2: move = 0; curOnly = 1; break;
 		case 3: move = 1; curOnly = 1; break;
-		case 5: Config(); return; 
+		case 5: Config(); return;
 		default: return;
 	}
 	CallCopy(move, curOnly);
@@ -264,9 +264,9 @@ void FarPlugin::KeyConfig()
 
 #define VersionStr0(a,b,c,d, bit) "version " #a "." #b "." #c "." #d " beta (" #bit " Unicode), " __DATE__
 #ifdef _WIN64
-#define VersionStr(a,b,c,d) VersionStr0(a,b,c,d, x64) 
+#define VersionStr(a,b,c,d) VersionStr0(a,b,c,d, x64)
 #else
-#define VersionStr(a,b,c,d) VersionStr0(a,b,c,d, x32) 
+#define VersionStr(a,b,c,d) VersionStr0(a,b,c,d, x32)
 #endif
 
 void FarPlugin::About()
@@ -281,16 +281,16 @@ void beep(int b)
 {
 	switch(b)
 	{
-		case 0:		
-			MessageBeep(MB_ICONWARNING);	
+		case 0:
+			MessageBeep(MB_ICONWARNING);
 			break;
 
-		case 1:		
-			MessageBeep(MB_ICONASTERISK);	
+		case 1:
+			MessageBeep(MB_ICONASTERISK);
 			break;
 
-		case 2:		
-			MessageBeep(MB_OK);				
+		case 2:
+			MessageBeep(MB_OK);
 			break;
 	}
 }

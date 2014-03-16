@@ -150,11 +150,11 @@ private:
 
 	void setFileTime(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
 	void setFileSizeAndTime(const String& fn, __int64 size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
-	
+
 	void FarToWin32FindData(
-		const TPanelItem &tpi, 
+		const TPanelItem &tpi,
 		WIN32_FIND_DATA &wfd
-	); 
+	);
 	String CurPathDesc;
 	int CurPathFlags, CurPathAddFlags;
 	WIN32_FIND_DATA DescFindData;

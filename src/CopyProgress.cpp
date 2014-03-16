@@ -86,7 +86,7 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
   const __int64 MinRWValue = 0x10000;
   
   // bugfixed by slst: bug #18
-  if (((ReadBytes > MinRWValue)  && (WriteBytes > MinRWValue)) || 
+  if (((ReadBytes > MinRWValue)  && (WriteBytes > MinRWValue)) ||
       ((TotalBytes < BufferSize) && (ReadBytes > MinRWValue))) // if selected files size < buffer size
   {
     double ReadSpeed  = (ReadTime>0)  ? (double)ReadBytes  / (double)ReadTime  : 0; // bytes per tick
@@ -104,7 +104,7 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
       if (ReadBytes == TotalBytes)
         BufferWriteTime = WriteTimeRemain;
       else
-        BufferWriteTime = (WriteSpeed > 0.001) ? ((double)BufferSize / WriteSpeed) : 0;   
+        BufferWriteTime = (WriteSpeed > 0.001) ? ((double)BufferSize / WriteSpeed) : 0;
       //DebugLog(_T("BufferWriteTime: %3.2f\n"), BufferWriteTime / TicksPerSec());
 
       if (WriteSpeed > 0) // writing is started
@@ -126,11 +126,11 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
 
     TotalTime = ElapsedTime + RemainingTime;
   }
-  
+
   if (TotalTime     < 0) TotalTime     = 0;
   if (ElapsedTime   < 0) ElapsedTime   = 0;
   if (RemainingTime < 0) RemainingTime = 0;
-    
+
   TotalTime     /= TicksPerSec();
   ElapsedTime   /= TicksPerSec();
   RemainingTime /= TicksPerSec();
@@ -168,9 +168,9 @@ void CopyProgress::DrawTime(__int64 ReadBytes, __int64 WriteBytes, __int64 Total
     int pc=TotalBytes?(int)((float)(ReadBytes+WriteBytes)/(TotalBytes*2)*100):0;
     if (pc<0) pc=0;
     if (pc>100) pc=100;
-    buf = Format(L"{%d%% %2.2d:%2.2d} %s", pc, (int)RemainingTime/60, (int)RemainingTime%60, 
+    buf = Format(L"{%d%% %2.2d:%2.2d} %s", pc, (int)RemainingTime/60, (int)RemainingTime%60,
                 Move? LOC("Engine.Moving").ptr():LOC("Engine.Copying").ptr());
-	SetTitle2(buf);
+  SetTitle2(buf);
   }
 }
 

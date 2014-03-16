@@ -32,30 +32,30 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 static const Attribute _Attrib[] =
 {
 //	{ "SetColor", DIF_SETCOLOR },
-	{ "BoxColor", DIF_BOXCOLOR }, 
-	{ "Group", DIF_GROUP }, 
-	{ "LeftText", DIF_LEFTTEXT }, 
-	{ "MoveSelect", DIF_MOVESELECT }, 
-	{ "ShowAmpersand", DIF_SHOWAMPERSAND }, 
-	{ "CenterGroup", DIF_CENTERGROUP }, 
-	{ "NoBrackets", DIF_NOBRACKETS }, 
-	{ "Separator", DIF_SEPARATOR }, 
-	{ "Editor", DIF_EDITOR }, 
-	{ "History", DIF_HISTORY }, 
-	{ "EditExpand", DIF_EDITEXPAND }, 
-	{ "DropdownList", DIF_DROPDOWNLIST }, 
-	{ "UseLastHistory", DIF_USELASTHISTORY }, 
-	{ "BtnNoClose", DIF_BTNNOCLOSE }, 
-	{ "SelectOnEntry", DIF_SELECTONENTRY }, 
-	{ "NoFocus", DIF_NOFOCUS }, 
-	{ "MaskEdit", DIF_MASKEDIT }, 
-	{ "Disable", DIF_DISABLE }, 
-	{ "ListNoAmpersand", DIF_LISTNOAMPERSAND }, 
-	{ "ReadOnly", DIF_READONLY }, 
-	{ "3State", DIF_3STATE }, 
-//	{ "VarEdit", DIF_VAREDIT }, 
-	{ "Hidden", DIF_HIDDEN }, 
-	{ "ManualAddHistory", DIF_MANUALADDHISTORY }, 
+	{ "BoxColor", DIF_BOXCOLOR },
+	{ "Group", DIF_GROUP },
+	{ "LeftText", DIF_LEFTTEXT },
+	{ "MoveSelect", DIF_MOVESELECT },
+	{ "ShowAmpersand", DIF_SHOWAMPERSAND },
+	{ "CenterGroup", DIF_CENTERGROUP },
+	{ "NoBrackets", DIF_NOBRACKETS },
+	{ "Separator", DIF_SEPARATOR },
+	{ "Editor", DIF_EDITOR },
+	{ "History", DIF_HISTORY },
+	{ "EditExpand", DIF_EDITEXPAND },
+	{ "DropdownList", DIF_DROPDOWNLIST },
+	{ "UseLastHistory", DIF_USELASTHISTORY },
+	{ "BtnNoClose", DIF_BTNNOCLOSE },
+	{ "SelectOnEntry", DIF_SELECTONENTRY },
+	{ "NoFocus", DIF_NOFOCUS },
+	{ "MaskEdit", DIF_MASKEDIT },
+	{ "Disable", DIF_DISABLE },
+	{ "ListNoAmpersand", DIF_LISTNOAMPERSAND },
+	{ "ReadOnly", DIF_READONLY },
+	{ "3State", DIF_3STATE },
+//	{ "VarEdit", DIF_VAREDIT },
+	{ "Hidden", DIF_HIDDEN },
+	{ "ManualAddHistory", DIF_MANUALADDHISTORY },
 };
 const Attribute& Attrib(int i) { return _Attrib[i]; }
 int AttribCount() { return sizeof(_Attrib)/sizeof(Attribute); }
@@ -76,7 +76,7 @@ void SetItemText(FarDialogItem& item, const String& text)
 	item.MaxLength = 0;
 }
 
-// ===== FarDlgPayload ===== 
+// ===== FarDlgPayload =====
 FarDlgPayload::FarDlgPayload()
 {
 	dialog = NULL;
@@ -124,13 +124,13 @@ void FarDlgPayload::preInitItem(FarDialogItem& item)
 	}
 }
 
-void FarDlgPayload::realInitItem(FarDialogItem& item ) 
-{ 
+void FarDlgPayload::realInitItem(FarDialogItem& item )
+{
 }
 
-void FarDlgPayload::InitItem(FarDialogItem& item ) 
-{ 
-	preInitItem(item); 
+void FarDlgPayload::InitItem(FarDialogItem& item )
+{
+	preInitItem(item);
 	realInitItem(item);
 }
 
@@ -196,7 +196,7 @@ static String GetDlgText(HANDLE dlg, int id)
 	item.PtrData = new wchar_t[item.PtrLength+1];
 	Info.SendDlgMessage(dlg, DM_GETTEXT, id, &item);
 	String t(item.PtrData);
-	delete(item.PtrData); 
+	delete(item.PtrData);
 	return t;
 }
 
@@ -241,9 +241,9 @@ size_t lablen(FarDialogItem& item)
 	if (item.Flags & DIF_SHOWAMPERSAND) {
 		return wcslen(item.Data);
 	} else {
-	    int res=0;
-	    for (const wchar_t *p=item.Data; *p; p++) {
-			if (*p!='&') res++; 
+			int res=0;
+			for (const wchar_t *p=item.Data; *p; p++) {
+			if (*p!='&') res++;
 		}
 		return res;
 	}

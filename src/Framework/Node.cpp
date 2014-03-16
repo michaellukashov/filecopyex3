@@ -34,38 +34,38 @@ Node::Node() {
 	payload = new Payload();
 }
 
-void Node::init(Payload* _payload, Node *_parent) { 
+void Node::init(Payload* _payload, Node *_parent) {
 	if (payload) {
 		delete(payload);
 	}
-	payload = _payload; 
-	parent = _parent; 
+	payload = _payload;
+	parent = _parent;
 	if (parent) {
 		parent->childs.push_back(this);
 	}
 };
 
-Node::~Node() { 
-	ClearChilds(); 
+Node::~Node() {
+	ClearChilds();
 	if (payload) {
 		delete(payload);
 	}
 }
 
-Property& Node::operator()(const String& v) 
-{ 
-	return getPayload()(v); 
+Property& Node::operator()(const String& v)
+{
+	return getPayload()(v);
 }
 
-const String Node::getName() const 
-{ 
-	return getPayload().getName(); 
+const String Node::getName() const
+{
+	return getPayload().getName();
 }
 
 /*
-const String Node::getType() const 
-{ 
-	return getPayload().getType(); 
+const String Node::getType() const
+{
+	return getPayload().getType();
 }
 */
 

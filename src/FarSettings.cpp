@@ -9,7 +9,7 @@ FarSettings::FarSettings(): handle(INVALID_HANDLE_VALUE), dirId(0) {
 }
 
 FarSettings::~FarSettings() {
-  clean();
+	clean();
 }
 
 intptr_t FarSettings::control(FAR_SETTINGS_CONTROL_COMMANDS cmd, void* param)
@@ -17,7 +17,7 @@ intptr_t FarSettings::control(FAR_SETTINGS_CONTROL_COMMANDS cmd, void* param)
 	return Info.SettingsControl(handle, cmd, 0, param);
 }
 
-void FarSettings::clean() 
+void FarSettings::clean()
 {
 	if (handle != INVALID_HANDLE_VALUE) {
 		control(SCTL_FREE);
@@ -26,7 +26,7 @@ void FarSettings::clean()
 	}
 }
 
-bool FarSettings::create() 
+bool FarSettings::create()
 {
 	clean();
 	FarSettingsCreate fsc = { sizeof(FarSettingsCreate) };
@@ -74,8 +74,8 @@ bool FarSettings::list(ParamInfoVector& res)
 		if (fse.Items[i].Type == FST_STRING) {
 			res.push_back(ParamInfo(fse.Items[i].Name, fse.Items[i].Type));
 		}
-  }
-  return true;
+	}
+	return true;
 }
 
 
@@ -84,7 +84,7 @@ bool saveOptions(const PropertyMap &options, FarSettings &settings)
 {
 	bool ok = true;
 	for (PropertyMap::const_iterator it = options.begin(); it != options.end(); ++it) {
-		if (!settings.set(it->first, (String)it->second)) {
+		if (!settings.set(it->first, it->second.operator const String())) {
 			ok = false;
 		};
 	}
@@ -123,7 +123,7 @@ bool loadOptions(PropertyMap &options, FarSettings &settings)
     if (fse.Items[i].Type == FST_SUBKEY)
       result.push_back(fse.Items[i].Name);
 
-	options.Add("BufPercent", 1);
+  options.Add("BufPercent", 1);
   }
   result.shrink_to_fit();
   return true;

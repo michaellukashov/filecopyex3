@@ -89,7 +89,7 @@ void FarProgress::ShowMessage(const String& msg)
   int sw, sh;
   GetConSize(sw, sh);
   int W=msg.len()+12, H=5;
-  int X1=(sw-W + 1)/2; 
+  int X1=(sw-W + 1)/2;
   int Y1=(sh-H - 1)/2;
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
@@ -108,13 +108,13 @@ void FarProgress::ShowProgress(const String& msg)
   int sw, sh;
   GetConSize(sw, sh);
   int W=sw/2, H=6;
-  int X1=(sw-W + 1)/2; 
+  int X1=(sw-W + 1)/2;
   int Y1=(sh-H - 1)/2;
   int X2=X1+W-1, Y2=Y1+H-1;
   hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
   DrawWindow(X1, Y1, X2, Y2, "");
   Info.Text(X1+5, Y1+2, &clrText, FormatWidth(msg, X2-X1-9).ptr());
-  ProgX1=X1+5; 
+  ProgX1=X1+5;
   ProgX2=X2-5;
   ProgY=Y1+3;
   WinType=WIN_PROGRESS;
@@ -162,7 +162,7 @@ void FarProgress::SetPercent(float pc)
 
 void FarProgress::Hide()
 {
-  if (WinType!=WIN_NONE) 
+  if (WinType!=WIN_NONE)
   {
     Info.RestoreScreen(NULL);
     Info.RestoreScreen(hScreen);
@@ -218,12 +218,12 @@ void FarProgress::ShowScanProgress(const String& msg)
   int WindowCoordY1 = (ConsoleHeight - WindowHeight - 1)/2;
   int WindowCoordX2 = WindowCoordX1 + WindowWidth - 1;
   int WindowCoordY2 = WindowCoordY1 + WindowHeight - 1;
-  hScreen = Info.SaveScreen(WindowCoordX1, WindowCoordY1, 
+  hScreen = Info.SaveScreen(WindowCoordX1, WindowCoordY1,
                             WindowCoordX2 + 2, WindowCoordY2 + 2);
   DrawWindow(WindowCoordX1, WindowCoordY1, WindowCoordX2, WindowCoordY2, "");
-  Info.Text(WindowCoordX1 + 5, WindowCoordY1 + 2, &clrText, 
+  Info.Text(WindowCoordX1 + 5, WindowCoordY1 + 2, &clrText,
             FormatWidth(msg, WindowCoordX2 - WindowCoordX1 - 9).ptr());
-  ProgX1  = WindowCoordX1 + 5; 
+  ProgX1  = WindowCoordX1 + 5;
   ProgX2  = WindowCoordX2 - 5;
   ProgY   = WindowCoordY1 + 3;
   WinType = WIN_SCAN_PROGRESS;
@@ -267,7 +267,7 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, __int64 NumberOfFiles,
   int s = x2 - x1 - (int)wcslen(SizeStr) - (int)wcslen(FilesStr);
   String spacer;
   if(s > 0)
-	  spacer = String(' ', s);
+    spacer = String(' ', s);
 
   wchar_t buf[256];
   _snwprintf_s(buf, 256, sizeof(buf)/sizeof(wchar_t), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);

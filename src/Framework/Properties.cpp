@@ -48,11 +48,11 @@ void Property::operator=(const Property& p)
 {
 	type = p.type;
 	switch (p.type) {
-		case vtInt:		
+		case vtInt:
 			vInt = (int)p;
 			break;
 
-		case vtFloat:	
+		case vtFloat:
 			vFloat = (float)p;
 			break;
 
@@ -60,19 +60,20 @@ void Property::operator=(const Property& p)
 			vStr = p.operator const String();
 			break;
 	}
+	return *this;
 }
 
 Property::operator int() const
 {
 	switch(type)
 	{
-		case vtInt: 
+		case vtInt:
 			return vInt;
 
-		case vtFloat: 
+		case vtFloat:
 			return (int)vFloat;
 
-		case vtString: 
+		case vtString:
 			return vStr.AsInt();
 	}
 	return 0;
@@ -82,13 +83,13 @@ Property::operator bool() const
 {
 	switch(type)
 	{
-		case vtInt: 
+		case vtInt:
 			return vInt != 0;
 
-		case vtFloat: 
+		case vtFloat:
 			return vFloat != 0;
 
-		case vtString: 
+		case vtString:
 			return vStr == L"1";
 	}
 	return false;
@@ -98,13 +99,13 @@ Property::operator float() const
 {
 	switch(type)
 	{
-		case vtInt: 
+		case vtInt:
 			return (float)vInt;
 
-		case vtFloat: 
+		case vtFloat:
 			return vFloat;
 
-		case vtString: 
+		case vtString:
 			return vStr.AsFloat();
 	}
 	return 0;
@@ -114,13 +115,13 @@ Property::operator const String() const
 {
 	switch(type)
 	{
-		case vtInt: 
+		case vtInt:
 			return String(vInt);
 
-		case vtFloat: 
+		case vtFloat:
 			return String(vFloat);
 
-		case vtString: 
+		case vtString:
 			return vStr;
 	}
 	return L"";
@@ -130,10 +131,10 @@ bool Property::operator==(const Property& v) const
 {
 	switch(type)
 	{
-		case vtInt: 
+		case vtInt:
 			return operator==((int)v);
 
-		case vtFloat: 
+		case vtFloat:
 			return operator==((float)v);
 
 		case vtString:

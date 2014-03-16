@@ -100,7 +100,7 @@ public:
 	inline void operator+=(const String& v) { str += v.str; }
 	inline void operator+=(wchar_t c) { str += c; }
 	const String operator+(const String& v) const { return str + v.str; }
-	
+
 	inline int len() const { return (int)str.length(); }
 	inline bool empty() const { return str.empty(); }
 
@@ -111,7 +111,7 @@ public:
 
 	int AsInt() const { return _wtoi(ptr()); }
 	float AsFloat() const { return (float)_wtof(ptr()); }
-	bool AsBool() const { return (*this) == L"1"; } 
+	bool AsBool() const { return (*this) == L"1"; }
 	void copyTo(wchar_t* buf, size_t sz) const { wcscpy_s(buf, sz, ptr()); }
 
 	int cmp(const String& v) const { return ncmp(v, 0x7FFFFFFF); }

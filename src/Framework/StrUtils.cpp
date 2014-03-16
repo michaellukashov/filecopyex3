@@ -68,14 +68,14 @@ String FormatNum(__int64 n)
 		fmt.NumDigits = 0;
 		first = false;
 	}
-	
+
 	String strSrc(n);
 	int size = GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, nullptr, 0);
 	wchar_t *lpwszDest = new wchar_t[size];
 	GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, lpwszDest, size);
 	String strDest(lpwszDest);
 	delete(lpwszDest);
-	
+
 	return strDest;
 }
 
@@ -86,7 +86,7 @@ String FormatTime(const FILETIME& ft)
   FileTimeToLocalFileTime(&ft, &ft1);
   FileTimeToSystemTime(&ft1, &st);
   return Format(L"%02d.%02d.%04d %02d:%02d:%02d",
-                (int)st.wDay, (int)st.wMonth, (int)st.wYear, 
+                (int)st.wDay, (int)st.wMonth, (int)st.wYear,
                 (int)st.wHour, (int)st.wMinute, (int)st.wSecond);
 }
 
@@ -97,7 +97,7 @@ String FormatProgress(__int64 cb, __int64 total)
   __int64 div=1;
   while (n > 999999) { div*=1024; n/=1024; pw++; }
   String un;
-  switch (pw) 
+  switch (pw)
   {
     case 0: un=LOC("Engine.Bytes"); break;
     case 1: un=LOC("Engine.Kb"); break;
@@ -106,7 +106,7 @@ String FormatProgress(__int64 cb, __int64 total)
     case 4: un=LOC("Engine.Tb"); break;
     case 5: un=LOC("Engine.Pb"); break;
   }
-  return Format(L"%s %s %s %s [%d%%]", FormatNum(cb/div).ptr(), LOC("Engine.Of").ptr(), 
+  return Format(L"%s %s %s %s [%d%%]", FormatNum(cb/div).ptr(), LOC("Engine.Of").ptr(),
                 FormatNum(total/div).ptr(), un.ptr(), (int)(total?(float)cb/total*100:0));
 }
 
@@ -117,7 +117,7 @@ String FormatSpeed(__int64 cb)
   __int64 div=1;
   while (n>=100000) { div*=1024; n/=1024; pw++; }
   String un;
-  switch (pw) 
+  switch (pw)
   {
     case 0: un=LOC("Engine.Bytes"); break;
     case 1: un=LOC("Engine.Kb"); break;
@@ -136,7 +136,7 @@ String FormatValue(__int64 Value)
   __int64 div = 1;
   while (Value >= 100000) { div *= 1024; Value /= 1024; pw++; }
   String UnitStr;
-  switch (pw) 
+  switch (pw)
   {
     case 0: UnitStr = LOC("Engine.Bytes"); break;
     case 1: UnitStr = LOC("Engine.Kb"); break;

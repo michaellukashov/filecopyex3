@@ -49,17 +49,17 @@ int DescList::LoadFromList(StringVector &list)
 				desc = "";
 			}
 			if (c == '"') {
-				int lf=s.substr(1).find('"'); 
+				int lf=s.substr(1).find('"');
 				if (lf != -1) {
 					fn = s.substr(1, lf).trim();
-					desc = s.substr(lf+2).trim(); 
-					
+					desc = s.substr(lf+2).trim();
+
 				}
 			} else {
 				int lf = s.find_first_of(" \t");
 				if (lf != -1) {
 					fn = s.substr(0, lf).trim();
-					desc = s.substr(lf+1).trim();	
+					desc = s.substr(lf+1).trim();
 				} else {
 					fn = s;
 					desc = "";
@@ -68,11 +68,11 @@ int DescList::LoadFromList(StringVector &list)
 		} else {
 			desc+=String("\n")+s;
 		}
-  }
-  if (!fn.empty()) {
-	  names[fn] = Data(desc, 0);
-  }
-  return true;
+	}
+	if (!fn.empty()) {
+		names[fn] = Data(desc, 0);
+	}
+	return true;
 }
 
 #define dlNoMerge 1
@@ -109,7 +109,7 @@ void DescList::Merge(DescList &add)
 			String name = it->first;
 			names[name] = it->second;
 		}
-    }
+		}
 }
 
 void DescList::setFlag(const String& fn, int flag, int v)
@@ -164,7 +164,7 @@ void DescList::Rename(int i, const String& dst, int changeName)
     str=str.substr(str.substr(1).find("\"")+2);
   else
     str=str.substr(str.cfind(" \t\n"));
-  Values.Set(Names.Values(i), 
+  Values.Set(Names.Values(i),
     ((dst.cfind(" ")!=-1)?(String("\"")+dst+"\""):(dst))+str);
   if (changeName) Names.Set(i, dst);
 }

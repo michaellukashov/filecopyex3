@@ -4,7 +4,7 @@
 int StringParent::loadFromFile(FILE* f)
 {
 	Clear();
-	union 
+	union
 	{
 		char c[2];
 		wchar_t uc;
@@ -28,7 +28,7 @@ int StringParent::loadFromFile(FILE* f)
 					string[spos]=0;
 					AddString(string);
 					spos=0;
-				} else { 
+				} else {
 					if (buffer[i]!=CR && buffer[i]!=LF && spos<ssize) {
 						string[spos++]=buffer[i];
 					}
@@ -55,7 +55,7 @@ int StringParent::loadFromFile(FILE* f)
 			for (int i=0; i<read+bpos; i++)	{
 				if (buffer[i]==CR || buffer[i]==LF && oldc!=CR) {
 					string[spos]=0;
-					AddString(string); 
+					AddString(string);
 					spos=0;
 				}
 				else {
