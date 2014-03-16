@@ -73,6 +73,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VF_UNICODE 32
 #define VF_CDROM 64
 
+template <class T>
+inline const T & Min(const T & a, const T & b) { return a < b ? a : b; }
+
+template <class T>
+inline const T & Max(const T & a, const T & b) { return a > b ? a : b; }
+
 int ExistsN(const String& fn, int n);
 String DupName(const String& src, int n);
 int RmDir(const String& fn);

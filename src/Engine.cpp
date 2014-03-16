@@ -513,10 +513,10 @@ open_retry:
 					goto skip;
 				}
 
-				int wsz = (int)std::min(bi->BuffInf[PosInStr].WritePos - Pos, WriteBlock),
+				int wsz = (int)Min(bi->BuffInf[PosInStr].WritePos - Pos, WriteBlock),
 						wsz1 = wsz;
 				if (info.Flags & FLG_BUFFERED)
-					wsz = (int)std::min((long long)wsz, info.Size-info.Written);
+					wsz = (int)Min((long long)wsz, info.Size-info.Written);
 retry:
 				int64_t st = GetTime();
 				int k = Write(bi->OutFile, bi->Buffer+Pos, wsz);
@@ -766,7 +766,7 @@ open_retry:
 			while (BuffPos < bi->BuffSize)
 			{
 				if (info.Flags & FLG_SKIPPED) break;
-				int j, cb = std::min(ReadBlock, bi->BuffSize-BuffPos);
+				int j, cb = Min(ReadBlock, bi->BuffSize-BuffPos);
 retry:
 				int64_t st = GetTime();
 				j = Read(InputFile, bi->Buffer+BuffPos, cb);
