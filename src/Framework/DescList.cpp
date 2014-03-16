@@ -81,7 +81,7 @@ int DescList::LoadFromList(StringVector &list)
 int DescList::SaveToFile(const String& fn)
 {
 	StringVector temp;
-	for (DescListMap::iterator it = names.begin(); it != names.end(); it++ ) {
+	for (DescListMap::iterator it = names.begin(); it != names.end(); ++it ) {
 		if (!(it->second.flags & dlNoSave))	{
 			String s;
 			if (it->first.find(' ')) {
@@ -104,7 +104,7 @@ int DescList::SaveToFile(const String& fn)
 
 void DescList::Merge(DescList &add)
 {
-	for (DescListMap::iterator it = add.names.begin(); it != add.names.end(); it++ ) {
+	for (DescListMap::iterator it = add.names.begin(); it != add.names.end(); ++it ) {
 		if (!(it->second.flags & dlNoMerge))	{
 			String name = it->first;
 			names[name] = it->second;
@@ -137,7 +137,7 @@ void DescList::SetSaveFlag(const String& fn, int v)
 
 void DescList::setAllFlags(int flag, int v)
 {
-	for (DescListMap::iterator it = names.begin(); it != names.end(); it++ ) {
+	for (DescListMap::iterator it = names.begin(); it != names.end(); ++it ) {
 		if (v) {
 			it->second.flags &= ~flag;
 		} else {
