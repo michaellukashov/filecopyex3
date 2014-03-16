@@ -7,7 +7,7 @@ class Payload
 {
 public:
 	Payload() {};
-	~Payload() {};
+	virtual ~Payload() {};
 
 	virtual void init(const String &_name);
 
