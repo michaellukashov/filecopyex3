@@ -51,7 +51,7 @@ along with this program.	If not, see <http://www.gnu.org/licenses/>.
 PluginPanelItem* GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1)
 {
 	size_t Size = Info.PanelControl(hPlugin, Command, Param1, 0);
-	PluginPanelItem* item = (PluginPanelItem*)new char[Size];
+	PluginPanelItem* item = reinterpret_cast<PluginPanelItem*>(new char[Size]);
 
 	if (item)
 	{
@@ -144,13 +144,13 @@ int Engine::InitBuf(BuffInfo *bi)
 	if (Parallel) bi->BuffSize/=2;
 	bi->BuffSize=(bi->BuffSize/AllocAlign+1)*AllocAlign;
 
-	bi->Buffer = (UCHAR*)Alloc(bi->BuffSize);
+	bi->Buffer = static_cast<UCHAR*>(Alloc(bi->BuffSize));
 	if (!bi->Buffer)
 	{
 		Error(LOC("Error.MemAlloc"), GetLastError());
 		return FALSE;
 	}
-	bi->BuffInf = (BuffStruct*)Alloc(SrcNames.Count()*sizeof(BuffStruct));
+	bi->BuffInf = static_cast<BuffStruct*>(Alloc(SrcNames.Count()*sizeof(BuffStruct)));
 	if (!bi->BuffInf)
 	{
 		Free(bi->Buffer);
@@ -632,7 +632,7 @@ skip: ;
 
 unsigned int __stdcall FlushThread(void* p)
 {
-	Engine* eng = (Engine*)p;
+	Engine* eng = static_cast<Engine*>(p);
 	return eng->FlushBuff(eng->wbi);
 }
 

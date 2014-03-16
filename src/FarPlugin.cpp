@@ -128,7 +128,7 @@ void FarPlugin::OpenPlugin(const struct OpenInfo *OInfo)
 	int command = -1;
 
 	if (OInfo->OpenFrom == OPEN_FROMMACRO) {
-		OpenMacroInfo *macroInfo = (OpenMacroInfo*)OInfo->Data;
+		OpenMacroInfo *macroInfo = reinterpret_cast<OpenMacroInfo*>(OInfo->Data);
 		if (macroInfo->Count >= 1) {
 			FarMacroValue &v = macroInfo->Values[0];
 			if (v.Type == FMVT_DOUBLE) {
