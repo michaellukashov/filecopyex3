@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="FileCopyEx"
+	Name="FileCopyEx3"
 	ProjectGUID="{497E8E61-0A70-4F9D-86A2-890A1A3CB98A}"
-	RootNamespace="FileCopyEx"
+	RootNamespace="FileCopyEx3"
 	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
@@ -78,7 +78,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="mpr.lib"
-				OutputFile="$(OutDir)\$(ProjectName)32.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="2"
 				SuppressStartupBanner="true"
 				LinkDLL="true"
@@ -268,7 +268,7 @@
 				RegisterOutput="false"
 				AdditionalOptions="/MACHINE:I386"
 				AdditionalDependencies="mpr.lib"
-				OutputFile="$(OutDir)\$(ProjectName)32.dll"
+				OutputFile="$(OutDir)\$(ProjectName).dll"
 				LinkIncremental="1"
 				SuppressStartupBanner="true"
 				LinkDLL="true"
