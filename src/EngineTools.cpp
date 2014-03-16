@@ -99,14 +99,14 @@ void _CopyACL(const String& src, const String& dst, SECURITY_INFORMATION si)
 	PSECURITY_DESCRIPTOR secbuf = (PSECURITY_DESCRIPTOR)new char[bufSize];
 	int res = GetFileSecurity(src.ptr(), si, secbuf, bufSize, &cb);
 	if (res && cb) {
-		delete(secbuf);
+		delete[] (char *)secbuf;
 		secbuf = (PSECURITY_DESCRIPTOR)new char[cb];
 		res=GetFileSecurity(src.ptr(), si, secbuf, cb, &cb);
 	}
 	if (res) {
 		SetFileSecurity(dst.ptr(), si, secbuf);
 	}
-	delete(secbuf);
+	delete[] (char *)secbuf;
 }
 
 int SACLPriv = 0;
