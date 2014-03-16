@@ -1,9 +1,7 @@
-LIBRARY        
-	FileCopyEx
 EXPORTS
-	SetStartupInfoW
-	GetPluginInfoW
-	OpenW
-	ConfigureW
-	ExitFARW
-	GetGlobalInfoW
+  SetStartupInfoW
+  GetPluginInfoW
+  OpenW
+  ConfigureW
+  ExitFARW
+  GetGlobalInfoW

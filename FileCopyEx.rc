@@ -1,3 +1,3 @@
-#include "Framework/FAR/version.hpp"
+#include "version.hpp"
 
 genericpluginrc(PLUGIN_BUILD, PLUGIN_DESC, PLUGIN_NAME, PLUGIN_FILENAME)
