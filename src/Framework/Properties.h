@@ -41,7 +41,7 @@ public:
 	Property(float);
 	Property(const String&);
 
-	void operator = (const Property& p);
+	Property& operator = (const Property& p);
 
 	operator int() const;
 	operator bool() const;

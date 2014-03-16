@@ -44,7 +44,7 @@ Property::Property(const String& v) : vInt(0), vFloat(0.0)
 	vStr = v;
 }
 
-void Property::operator=(const Property& p)
+Property& Property::operator=(const Property& p)
 {
 	type = p.type;
 	switch (p.type) {
