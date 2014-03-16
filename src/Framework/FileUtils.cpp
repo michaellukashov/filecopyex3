@@ -429,7 +429,7 @@ static int __MoveFileEx(const wchar_t* src, const wchar_t *dst, int flg)
 {
   int attr=GetFileAttributes(dst);
   // bug #41 fixed by axxie
-  if (_wcsicmp(src, dst)) SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
+  if (_wcsicmp(src, dst) != 0) SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFileEx(src, dst, flg)) return TRUE;
   else
   {
