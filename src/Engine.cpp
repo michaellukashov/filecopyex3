@@ -2114,7 +2114,7 @@ void Engine::setFileSizeAndTime(const String& fn, int64_t size, FILETIME *creati
 
 int Engine::EngineError(const String& s, const String& fn, int code, int& flg, const String& title, const String& type_id)
 {
-		int *ix;
+	int *ix = NULL;
 	if (flg & eeAutoSkipAll) {
 		ix = &errTypes[type_id];
 		if (*ix & errfSkipAll) {
