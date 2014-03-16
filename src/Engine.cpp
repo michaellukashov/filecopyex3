@@ -733,7 +733,7 @@ void Engine::Copy()
 
 			CurDirInfo cdi;
 			int dattr=GetFileAttributes(DstName.ptr());
-			if (!CurDirStack.size() || dattr != 0xFFFFFFFF && dattr & FILE_ATTRIBUTE_REPARSE_POINT) {
+			if (!CurDirStack.size() || (dattr != 0xFFFFFFFF && dattr & FILE_ATTRIBUTE_REPARSE_POINT)) {
 				cdi.SectorSize = GetSectorSize(DstName);
 			} else {
 				cdi.SectorSize = CurDirStack.back().SectorSize;
