@@ -4,3 +4,10 @@ ipch/
 *.suo
 /Debug Unicode/
 /Release Unicode/
+
+*.orig
+
+CMakeLists.txt.user
+build/
+*.vcxproj.user
+*.vcproj.user
