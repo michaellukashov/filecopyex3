@@ -89,7 +89,7 @@
     <ClCompile Include="src\Framework\StringList.cpp">
       <Filter>Source\Framework</Filter>
     </ClCompile>
-    <ClCompile Include="src\Framework\Locale.cpp">
+    <ClCompile Include="src\Framework\LocaleUtils.cpp">
       <Filter>Source\Framework</Filter>
     </ClCompile>
     <ClCompile Include="src\Framework\StringParent.cpp">
@@ -193,7 +193,7 @@
     <ClInclude Include="src\Framework\StringList.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
-    <ClInclude Include="src\framework\Locale.h">
+    <ClInclude Include="src\framework\LocaleUtils.h">
       <Filter>Source\Framework</Filter>
     </ClInclude>
     <ClInclude Include="src\Framework\StringVector.h">

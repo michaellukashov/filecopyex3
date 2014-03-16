@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Framework/ObjString.h"
-#include "Framework/Locale.h"
+#include "Framework/LocaleUtils.h"
 #include "Framework/Properties.h"
 #include "Framework/StringList.h"
 #include "FarNode.h"
