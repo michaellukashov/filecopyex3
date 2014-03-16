@@ -62,7 +62,7 @@ int AttribCount() { return sizeof(_Attrib)/sizeof(Attribute); }
 
 void DestroyItemText(FarDialogItem& item)
 {
-	delete(item.Data);
+	delete[] item.Data;
 	item.Data = NULL;
 }
 
@@ -196,7 +196,7 @@ static String GetDlgText(HANDLE dlg, int id)
 	item.PtrData = new wchar_t[item.PtrLength+1];
 	Info.SendDlgMessage(dlg, DM_GETTEXT, id, &item);
 	String t(item.PtrData);
-	delete(item.PtrData);
+	delete[] item.PtrData;
 	return t;
 }
 
