@@ -103,7 +103,7 @@ HANDLE WINAPI OpenW(const struct OpenInfo *OInfo)
 	return INVALID_HANDLE_VALUE; // ok
 }
 
-void WINAPI ExitFARW()
+void WINAPI ExitFARW(const struct ExitInfo *Info)
 {
 	delete plugin;
 	DoneObjMgr();
