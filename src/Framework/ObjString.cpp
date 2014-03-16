@@ -119,7 +119,7 @@ String String::toLower() const
 	return res;
 }
 
-const static String emptyString;
+const String emptyString;
 
 int npos_minus1(size_t pos)
 {

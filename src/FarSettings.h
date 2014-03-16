@@ -1,6 +1,7 @@
 #ifndef __SETTINGS_H__
 #define __SETTINGS_H__
 
+#include <stddef.h>
 #include "Framework/Properties.h"
 
 class FarSettings {
@@ -26,7 +27,7 @@ private:
 	HANDLE handle;
 	size_t dirId;
 
-	intptr_t control(FAR_SETTINGS_CONTROL_COMMANDS cmd, void* param = nullptr);
+	intptr_t control(FAR_SETTINGS_CONTROL_COMMANDS cmd, void* param = NULL);
 	void clean();
 };
 

@@ -23,7 +23,9 @@ along with this program.	If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <process.h>
-
+#if !defined(_MSC_VER)
+#include <c++/bits/unique_ptr.h>
+#endif
 #include "Framework/DescList.h"
 #include "Framework/ObjString.h"
 #include "Framework/FileUtils.h"
@@ -511,10 +513,10 @@ open_retry:
 					goto skip;
 				}
 
-				int wsz = (int)min(bi->BuffInf[PosInStr].WritePos - Pos, WriteBlock),
+				int wsz = (int)std::min(bi->BuffInf[PosInStr].WritePos - Pos, WriteBlock),
 						wsz1 = wsz;
 				if (info.Flags & FLG_BUFFERED)
-					wsz = (int)min(wsz, info.Size-info.Written);
+					wsz = (int)std::min((long long)wsz, info.Size-info.Written);
 retry:
 				__int64 st = GetTime();
 				int k = Write(bi->OutFile, bi->Buffer+Pos, wsz);
@@ -764,7 +766,7 @@ open_retry:
 			while (BuffPos < bi->BuffSize)
 			{
 				if (info.Flags & FLG_SKIPPED) break;
-				int j, cb = min(ReadBlock, bi->BuffSize-BuffPos);
+				int j, cb = std::min(ReadBlock, bi->BuffSize-BuffPos);
 retry:
 				__int64 st = GetTime();
 				j = Read(InputFile, bi->Buffer+BuffPos, cb);

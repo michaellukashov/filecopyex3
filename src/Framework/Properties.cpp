@@ -56,8 +56,8 @@ void Property::operator=(const Property& p)
 			vFloat = (float)p;
 			break;
 
-		case vtString:	
-			vStr = (const String)p;
+		case vtString:
+			vStr = p.operator const String();
 			break;
 	}
 }
@@ -136,8 +136,8 @@ bool Property::operator==(const Property& v) const
 		case vtFloat: 
 			return operator==((float)v);
 
-		case vtString: 
-			return operator==((const String)v);
+		case vtString:
+			return operator==(v.operator const String());
 	}
 	return false;
 }

@@ -1,3 +1,6 @@
+#if !defined(_MSC_VER)
+#include <sec_api/wchar_s.h>
+#endif
 #include "FarMacro.h"
 
 #include "Framework/StringVector.h"

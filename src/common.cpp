@@ -22,6 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include <crtdbg.h>
+#include <stdexcept>
 #include "Framework/stdhdr.h"
 #include "Framework/objstring.h"
 #include "common.h"
@@ -68,6 +70,6 @@ const String& LOC(const String& l)
 	try {
 		return plugin->getLocale().at(l);
 	} catch (const std::out_of_range&) {
-		return l; 
+		return l;
 	}
 }

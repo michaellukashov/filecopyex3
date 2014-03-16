@@ -48,7 +48,7 @@ void TaskBarIcon::SetState(State state, float param)
 			param = 0.0f;
 		}
 		ProgressValue pv;
-		pv.Completed = __int64(param*100.0f);
+		pv.Completed = (__int64)(param*100.0f);
 		pv.Total = 100;
 		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NORMAL, NULL);
 		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSVALUE, 0, &pv);

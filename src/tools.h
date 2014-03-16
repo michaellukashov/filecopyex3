@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include "SDK/plugin.hpp"
 #include "framework/objstring.h"
 
 #define ATTR_OFF 0
