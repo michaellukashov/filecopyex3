@@ -200,6 +200,7 @@ void setFileSizeAndTime2(const String& fn, int64_t size, FILETIME *creationTime,
 		Error2(LOC("Error.FileOpen"), fn, GetLastError());
 	} else {
 		setFileSizeAndTime2(h, size, creationTime, lastAccessTime, lastWriteTime);
+    Close(h);
 	}
 }
 
