@@ -242,7 +242,7 @@ String convertPath(enum CONVERTPATHMODES mode, String src)
 		wchar_t *fullNameBuf = new wchar_t[size];
 		FSF.ConvertPath(mode, src.c_str(), fullNameBuf, size);
 		String res(fullNameBuf);
-		delete fullNameBuf;
+		delete[] fullNameBuf;
 		return res;
 	}
 }

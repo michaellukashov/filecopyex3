@@ -74,7 +74,7 @@ String FormatNum(int64_t n)
 	wchar_t *lpwszDest = new wchar_t[size];
 	GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, lpwszDest, size);
 	String strDest(lpwszDest);
-	delete(lpwszDest);
+	delete[] lpwszDest;
 
 	return strDest;
 }
