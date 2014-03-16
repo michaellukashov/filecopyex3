@@ -42,6 +42,7 @@ CopyProgress::CopyProgress(void)
   X1=(w-W + 1)/2;
   Y1=(h-H - 1)/2;
   X2=X1+W-1, Y2=Y1+H-1;
+  Move = 0;
 }
 
 CopyProgress::~CopyProgress(void)

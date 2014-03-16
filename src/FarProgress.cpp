@@ -49,6 +49,9 @@ FarProgress::FarProgress(void)
   */
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrLabel); // !!! not sure
 
+  ProgX1 = 0;
+  ProgX2 = 0;
+  ProgY = 0;
   WinType=WIN_NONE;
   hScreen=0;
   InverseBars=0;

@@ -100,6 +100,26 @@ int64_t GetPhysMemorySize()
 
 Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), FlushEnd(NULL), UiFree(NULL)
 {
+	_CopyDescs= 0;
+	_ClearROFromCD = 0;
+	_DescsInDirs = 0;
+	_ConfirmBreak = 0;
+	_HideDescs = 0;
+	_UpdateRODescs = 0;
+	_InverseBars = 0;
+	_PreallocMin = 0;
+	_UnbuffMin = 0;
+	copyCreationTime = false;
+	copyLastAccessTime = false;
+	copyLastWriteTime = false;
+	Aborted = 0;
+	LastFile = 0;
+	KeepFiles = 0;
+	FileCount = 0; 
+	CopyCount = 0;
+	wbi = NULL;
+	bi = NULL;
+
 	Parallel=Streams=Rights=Move=SkipNewer=SkippedToTemp=0;
 	CompressMode=EncryptMode=ATTR_INHERIT;
 	OverwriteMode=OM_PROMPT;
@@ -110,6 +130,9 @@ Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), Flus
 	ReadAlign=si.dwPageSize;
 
 //	errTypes.SetOptions(slSorted | slIgnoreCase);
+	SectorSize = 0;
+	CurPathFlags = 0;
+	CurPathAddFlags = 0;
 }
 
 int Engine::InitBuf(BuffInfo *bi)

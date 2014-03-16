@@ -21,7 +21,7 @@ private:
 		createPayloadFunc *pf;
 		createNodeFunc *nf;
 
-		createFuncs() {};
+		createFuncs() : pf(NULL), nf(NULL) {};
 		createFuncs(createPayloadFunc *_pf, createNodeFunc *_nf): pf(_pf), nf(_nf) {};
 	};
 

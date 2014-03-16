@@ -36,7 +36,7 @@ class Property
 {
 	enum Type { vtUnknown, vtInt, vtFloat, vtString };
 public:
-	Property() : type(vtUnknown) {}
+	Property() : type(vtUnknown), vInt(0), vFloat(0.0) {}
 	Property(int);
 	Property(float);
 	Property(const String&);
