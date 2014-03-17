@@ -630,7 +630,7 @@ skip: ;
 	return !Aborted;
 }
 
-unsigned int __stdcall FlushThread(void* p)
+uint32_t __stdcall FlushThread(void* p)
 {
 	Engine* eng = static_cast<Engine*>(p);
 	return eng->FlushBuff(eng->wbi);

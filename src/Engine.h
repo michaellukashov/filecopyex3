@@ -120,7 +120,7 @@ private:
 	int FlushBuff(BuffInfo *bi);
 	void BGFlush();
 	int WaitForFlushEnd();
-	friend unsigned int __stdcall FlushThread(void* p);
+	friend uint32_t __stdcall FlushThread(void* p);
 	void FinalizeBuf(BuffInfo *bi);
 	void ProcessDesc(int fnum);
 	void ShowReadName(const String&);
