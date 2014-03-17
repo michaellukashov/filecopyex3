@@ -160,7 +160,7 @@ bool Settings::list_dir(vector<wstring>& result) {
   return true;
 }
 
-bool Settings::set(const wchar_t* name, unsigned int64_t value) {
+bool Settings::set(const wchar_t* name, uint64_t value) {
   FarSettingsItem fsi = { sizeof(FarSettingsItem) };
   fsi.Root = dir_id;
   fsi.Name = name;
@@ -188,7 +188,7 @@ bool Settings::set(const wchar_t* name, const void* value, size_t value_size) {
   return control(SCTL_SET, &fsi) != 0;
 }
 
-bool Settings::get(const wchar_t* name, unsigned int64_t& value) {
+bool Settings::get(const wchar_t* name, uint64_t& value) {
   return get(dir_id, name, value);
 }
 
@@ -200,7 +200,7 @@ bool Settings::get(const wchar_t* name, ByteVector& value) {
   return get(dir_id, name, value);
 }
 
-bool Settings::get(size_t root, const wchar_t* name, unsigned int64_t& value) {
+bool Settings::get(size_t root, const wchar_t* name, uint64_t& value) {
   FarSettingsItem fsi = { sizeof(FarSettingsItem) };
   fsi.Root = root;
   fsi.Name = name;
