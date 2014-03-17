@@ -115,7 +115,7 @@ Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), Flus
 	Aborted = 0;
 	LastFile = 0;
 	KeepFiles = 0;
-	FileCount = 0; 
+	FileCount = 0;
 	CopyCount = 0;
 	wbi = NULL;
 	bi = NULL;

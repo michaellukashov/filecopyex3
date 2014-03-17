@@ -64,7 +64,7 @@ inline String CutEndSlash(const String& v)
 	if (v[v.len()-1]=='\\' || v[v.len()-1]=='/') {
 		return v.left(v.len()-1);
 	} else {
-	    return v;
+			return v;
 	}
 }
 
@@ -84,7 +84,7 @@ String GetFileNameRoot(const String& v)
 	// Bug #12 fixed by axxie
 	if (v.left(3) == L"\\\\.")  {
 		if (l==L"\\\\" || l==L"//") {
-			l=v.substr(2); 
+			l=v.substr(2);
 			int p=l.find_first_of("\\/");
 			if (p!=-1) {
 				l = l.substr(p+1);
@@ -95,7 +95,7 @@ String GetFileNameRoot(const String& v)
 			}
 		}
 	} else if (l=="\\\\") {
-		l = v.substr(2); 
+		l = v.substr(2);
 		int p=l.find_first_of("\\/");
 		if (p!=-1) {
 			l = l.substr(p+1);
@@ -130,12 +130,12 @@ String GetFileNameRoot(const String& v)
 //static HINSTANCE hKernel=GetModuleHandle(_T("kernel32.dll"));
 //
 //#ifdef UNICODE
-//  static _GetVolumeNameForVolumeMountPoint pGetVolumeNameForVolumeMountPoint = 
+//  static _GetVolumeNameForVolumeMountPoint pGetVolumeNameForVolumeMountPoint =
 //    (_GetVolumeNameForVolumeMountPoint)GetProcAddress(hKernel, "GetVolumeNameForVolumeMountPointW");
 //  static _GetVolumePathName pGetVolumePathName =
 //    (_GetVolumePathName)GetProcAddress(hKernel, "GetVolumePathNameW");
 //#else
-//  static _GetVolumeNameForVolumeMountPoint pGetVolumeNameForVolumeMountPoint = 
+//  static _GetVolumeNameForVolumeMountPoint pGetVolumeNameForVolumeMountPoint =
 //    (_GetVolumeNameForVolumeMountPoint)GetProcAddress(hKernel, "GetVolumeNameForVolumeMountPointA");
 //  static _GetVolumePathName pGetVolumePathName =
 //    (_GetVolumePathName)GetProcAddress(hKernel, "GetVolumePathNameA");
@@ -145,8 +145,8 @@ String GetFileNameRoot(const String& v)
 // bugfixed by slst: bug #34
 // Added new function
 // Returns primary volume mount point for other volume mount points
-// E.g.: E:\ is mounted D:\mnt\drive_e\ and 
-// function returns "E:\" for "D:\mnt\drive_e\" 
+// E.g.: E:\ is mounted D:\mnt\drive_e\ and
+// function returns "E:\" for "D:\mnt\drive_e\"
 BOOL GetPrimaryVolumeMountPoint(const String& VolumeMountPointForPath,
                                 String& PrimaryVolumeMountPoint)
 {
@@ -198,21 +198,21 @@ int GetSymLink(const String &_dir, String &res, int flg)
   DWORD sz=MAX_FILENAME;
   res=dir;
 
-  if (flg & gslExpandSubst && (dir.len()==2) && (dir[1]==':') && 
+  if (flg & gslExpandSubst && (dir.len()==2) && (dir[1]==':') &&
       QueryDosDevice(dir.ptr(), buf, MAX_FILENAME)>0)
   {
     String r=buf;
-    if (r.left(8)=="\\??\\UNC\\") 
+    if (r.left(8)=="\\??\\UNC\\")
     {
       res=CutEndSlash(String("\\\\")+r.substr(8));
       return TRUE;
     }
-    if (r.left(4)=="\\??\\") 
+    if (r.left(4)=="\\??\\")
     {
       res=CutEndSlash(r.substr(4));
       return TRUE;
     }
-  }  
+  }
 
   // bugfixed by slst:
   // GetFileAttributes returns FILE_ATTRIBUTE_REPARSE_POINT
@@ -224,27 +224,27 @@ int GetSymLink(const String &_dir, String &res, int flg)
     if (attr!=0xFFFFFFFF && attr & FILE_ATTRIBUTE_DIRECTORY
       && attr & FILE_ATTRIBUTE_REPARSE_POINT)
     {
-      HANDLE hf=CreateFile(dir.ptr(), 
+      HANDLE hf=CreateFile(dir.ptr(),
                             GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
-                            NULL, 
-                            OPEN_EXISTING, 
-                            FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT, 
+                            NULL,
+                            OPEN_EXISTING,
+                            FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT,
                             NULL);
-      if (hf!=INVALID_HANDLE_VALUE) 
+      if (hf!=INVALID_HANDLE_VALUE)
       {
-        unsigned char Data[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
+        uint8_t Data[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
         memset(Data, 0, sizeof(Data));
         DWORD returnedLength = 0;
-        if (DeviceIoControl(hf, FSCTL_GET_REPARSE_POINT, NULL, 0, 
-                            Data, sizeof(Data), &returnedLength, NULL)) 
+        if (DeviceIoControl(hf, FSCTL_GET_REPARSE_POINT, NULL, 0,
+                            Data, sizeof(Data), &returnedLength, NULL))
         {
           REPARSE_GUID_DATA_BUFFER *rd = (REPARSE_GUID_DATA_BUFFER*)Data;
           if ((IsReparseTagMicrosoft(rd->ReparseTag)) &&
-               (rd->ReparseTag==IO_REPARSE_TAG_MOUNT_POINT) && 
+               (rd->ReparseTag==IO_REPARSE_TAG_MOUNT_POINT) &&
                (!memcmp(rd->ReparseGuid.Data4, L"\\??\\", 8)))
           {
             String r=(wchar_t*)&rd->GenericReparseBuffer;
-            if (r.left(7)!="Volume{") 
+            if (r.left(7)!="Volume{")
             {
               CloseHandle(hf);
               res=CutEndSlash(buf);
@@ -260,7 +260,7 @@ int GetSymLink(const String &_dir, String &res, int flg)
   if (Win2K && (flg & gslExpandMountPoints))
   {
     // bugfixed by slst: bug #34
-    // 
+    //
     //if (pGetVolumeNameForVolumeMountPoint(AddEndSlash(dir).ptr(), buf, MAX_FILENAME))
     if (GetPrimaryVolumeMountPoint(dir, res))
     {
@@ -268,7 +268,7 @@ int GetSymLink(const String &_dir, String &res, int flg)
     }
   }
 
-  if (flg & gslExpandNetMappings && (dir.len()==2) && (dir[1]==':') && 
+  if (flg & gslExpandNetMappings && (dir.len()==2) && (dir[1]==':') &&
       WNetGetConnection(dir.ptr(), buf, &sz)==0)
   {
     res=CutEndSlash(buf);
@@ -288,9 +288,9 @@ rep:
     if (path[i]=='\\')
     {
       String res;
-      if (GetSymLink(path.substr(0, i), res, 
+      if (GetSymLink(path.substr(0, i), res,
                       gslExpandSubst | gslExpandReparsePoints | gslExpandMountPoints |
-                      ((flg&rfnNoNetExpand)?0:gslExpandNetMappings))) 
+                      ((flg&rfnNoNetExpand)?0:gslExpandNetMappings)))
       {
         path=AddEndSlash(res+path.substr(i));
         goto rep;
@@ -324,34 +324,34 @@ String ExpandEnv(const String& v)
 
 String ApplyFileMask(const String& _name, const String& _mask)
 {
-  wchar_t *name = (wchar_t*)_name.ptr(), *mask = (wchar_t*)_mask.ptr(),
-	  res[MAX_FILENAME]=L"";
-  int sz=MAX_FILENAME;
-  wchar_t *next = (wchar_t*)_tcsend(name)-1, *mext = (wchar_t*)_tcsend(mask)-1;
-  while (next >= name && *next != '.') next--;
-  if (next < name) next = name+wcslen(name);
-  else *next++ = 0;
-  while (mext >= mask && *mext != '.') mext--;
-  if (mext < mask) mext = mask+wcslen(mask);
-  else *mext++ = 0;
-  wchar_t sym[2] = { 0, 0 };
-  for (wchar_t *m = mask; *m; m++)
-  {
-    if (*m == '*') wcscat_s(res, sz, name);
-    else if (*m == '?') wcscat_s(res, sz, (*sym = m-mask < (int)wcslen(name) ? name[m-mask] : 0, sym));
-    else wcscat_s(res, sz, (*sym=*m, sym));
-  }
-  if (mext[0])
-  {
-    wcscat_s(res, sz, L".");
-    for (wchar_t *m = mext; *m; m++)
-    {
-      if (*m == '*') wcscat_s(res, sz, next);
-      else if (*m == '?') wcscat_s(res, sz, (*sym = m-mext < (int)wcslen(next) ? next[m-mext] : 0, sym));
-      else wcscat_s(res, sz, (*sym=*m, sym));
-    }
-  }
-  return res;
+	wchar_t *name = (wchar_t*)_name.ptr(), *mask = (wchar_t*)_mask.ptr(),
+		res[MAX_FILENAME]=L"";
+	int sz=MAX_FILENAME;
+	wchar_t *next = (wchar_t*)_tcsend(name)-1, *mext = (wchar_t*)_tcsend(mask)-1;
+	while (next >= name && *next != '.') next--;
+	if (next < name) next = name+wcslen(name);
+	else *next++ = 0;
+	while (mext >= mask && *mext != '.') mext--;
+	if (mext < mask) mext = mask+wcslen(mask);
+	else *mext++ = 0;
+	wchar_t sym[2] = { 0, 0 };
+	for (wchar_t *m = mask; *m; m++)
+	{
+		if (*m == '*') wcscat_s(res, sz, name);
+		else if (*m == '?') wcscat_s(res, sz, (*sym = m-mask < (int)wcslen(name) ? name[m-mask] : 0, sym));
+		else wcscat_s(res, sz, (*sym=*m, sym));
+	}
+	if (mext[0])
+	{
+		wcscat_s(res, sz, L".");
+		for (wchar_t *m = mext; *m; m++)
+		{
+			if (*m == '*') wcscat_s(res, sz, next);
+			else if (*m == '?') wcscat_s(res, sz, (*sym = m-mext < (int)wcslen(next) ? next[m-mext] : 0, sym));
+			else wcscat_s(res, sz, (*sym=*m, sym));
+		}
+	}
+	return res;
 }
 
 String ApplyFileMaskPath(const String& name, const String& mask)
@@ -389,13 +389,13 @@ int64_t FileSize(const String& fn)
     FindClose(h);
     return MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh);
   }
-  else 
+  else
     return 0;
 }
 
 inline String TempName()
 {
-  srand((unsigned)time(NULL));
+  srand((uint32_t)time(NULL));
   return Format(L"%8.8x", rand()*rand()*rand())+"."+Format(L"%3.3x", rand());
 }
 
@@ -464,7 +464,7 @@ int MoveFile(const String& _src, const String& _dst, int replace)
       return FALSE; // cannot get info by handle
     }
   }
-  
+
   ForceDirectories(_dst);
   if (WinNT)
   {
@@ -545,6 +545,6 @@ void ForceDirectories(const String& s)
 void Out(const String &s)
 {
   DWORD cb;
-  WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), (const void*)s.ptr(), 
+  WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), (const void*)s.ptr(),
     s.len(), &cb, NULL);
 }

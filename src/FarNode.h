@@ -75,7 +75,7 @@ public:
 	DEFINE_NODE_CLASS(FarDlgContainer);
 
 	virtual int IsContainer() { return 1; }
-	
+
 	virtual void LoadState(PropertyMap &state);
 	virtual void SaveState(PropertyMap &state);
 protected:
@@ -84,7 +84,7 @@ protected:
 	virtual void DefSize(int&, int&, int&);
 	virtual void ClearDialogItems(std::vector<FarDialogItem>&);
 	virtual FarDlgNode* FindChild(const String&);
-	
+
 	virtual void RetrieveProperties(HANDLE dlg);
 };
 

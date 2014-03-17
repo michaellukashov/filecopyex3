@@ -32,7 +32,7 @@ private:
 	};
 	typedef std::map<String, Data> DescListMap;
 	DescListMap names;
-	
+
 	int LoadFromString(wchar_t *ptr);
 	int LoadFromList(StringVector& list);
 };

@@ -31,7 +31,7 @@ protected:
 
 #define DEFINE_CLASS(name, type) \
 	static Payload* create() { return new type; };
-	
+
 //virtual const String getType() { return ; }
 
 #endif // __OBJECTCLASS_H__

@@ -14,7 +14,7 @@ public:
 
 	void regClass(const String& type, createPayloadFunc pf, createNodeFunc nf);
 	Node* create(const String& type, const String& name, Node* parent);
-	
+
 private:
 	class createFuncs {
 	public:
