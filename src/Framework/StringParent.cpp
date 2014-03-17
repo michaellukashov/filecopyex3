@@ -92,10 +92,10 @@ int StringParent::loadFromFile(const String& fn)
 int StringParent::saveToFile(FILE* f, TextFormat tf)
 {
 	if (tf == tfUnicode) {
-		unsigned __int16 sign=0xFEFF;
+		uint16_t sign=0xFEFF;
 		fwrite(&sign, sizeof(sign), 1, f);
 	} else if (tf==tfUnicodeBE) {
-		unsigned __int16 sign=0xFFFE;
+		uint16_t sign=0xFFFE;
 		fwrite(&sign, sizeof(sign), 1, f);
 	}
 	for (size_t i=0; i < Count(); i++) {
