@@ -229,7 +229,7 @@ bool Settings::get(size_t root, const wchar_t* name, ByteVector& value) {
   fsi.Type = FST_DATA;
   if (!control(SCTL_GET, &fsi))
     return false;
-  const unsigned char* data = static_cast<const unsigned char*>(fsi.Data.Data);
+  const uint8_t* data = static_cast<const uint8_t*>(fsi.Data.Data);
   value.assign(data, data + fsi.Data.Size);
   return true;
 }

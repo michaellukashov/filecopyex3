@@ -1080,12 +1080,12 @@ int Engine::DirEnd(const String& dir, const String& dstMask)
 String getPanelDir(HANDLE h_panel) {
   size_t bufSize = 512; // initial size
 
-  std::unique_ptr<unsigned char[]> buf(new unsigned char[bufSize]);
+  std::unique_ptr<uint8_t[]> buf(new uint8_t[bufSize]);
   reinterpret_cast<FarPanelDirectory*>(buf.get())->StructSize = sizeof(FarPanelDirectory);
   size_t size = Info.PanelControl(h_panel, FCTL_GETPANELDIRECTORY, bufSize, buf.get());
   if (size > bufSize) {
     bufSize = size;
-    buf.reset(new unsigned char[bufSize]);
+    buf.reset(new uint8_t[bufSize]);
     reinterpret_cast<FarPanelDirectory*>(buf.get())->StructSize = sizeof(FarPanelDirectory);
     size = Info.PanelControl(h_panel, FCTL_GETPANELDIRECTORY, bufSize, buf.get());
   }

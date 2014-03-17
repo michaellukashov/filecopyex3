@@ -47,7 +47,7 @@ struct BuffStruct
 
 struct BuffInfo
 {
-	unsigned char *Buffer;
+	uint8_t *Buffer;
 	int BuffSize;
 	int64_t OrgSize;
 	HANDLE OutFile;
