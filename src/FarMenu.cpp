@@ -26,9 +26,10 @@ void FarMenu::AddLine(const String& line)
 {
   FarMenuItem item;
   item.Flags = 0;
-  if (Selection == items.size()) {
-  item.Flags = MIF_SELECTED;
-  };
+  if (Selection == items.size())
+  {
+      item.Flags = MIF_SELECTED;
+  }
   SetItemText(&item, line);
   items.push_back(item);
 }

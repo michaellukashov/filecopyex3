@@ -157,7 +157,8 @@ public:
 	void reserve(size_t n=0) { str.reserve(n); }
 
 private:
-	std::wstring str;};
+	std::wstring str;
+};
 
 extern const String emptyString;
 
