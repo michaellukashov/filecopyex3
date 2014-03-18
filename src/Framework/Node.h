@@ -41,8 +41,8 @@ public:
 
 	virtual void init(Payload* _payload, Node *_parent);
 
-	Node& operator[](size_t i) { return child(i); };
-	Node& operator[](const String& v) { return child(v); };
+	Node& operator[](size_t i) { return child(i); }
+	Node& operator[](const String& v) { return child(v); }
 	Property& operator()(const String& name);
 
 	Payload& getPayload() const { return *payload; }
@@ -81,6 +81,6 @@ private:
 };
 
 #define DEFINE_NODE_CLASS(type) \
-	static Node* create() { return new type(); };
+	static Node* create() { return new type(); }
 
 #endif //__OBJECT_H__

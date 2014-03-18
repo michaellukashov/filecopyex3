@@ -38,10 +38,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class StringList: public StringParent
 {
 public:
-	virtual void Clear() { items.clear(); };
-	virtual const String& operator[](size_t i) const { return items[i].str; };
-	virtual void AddString(const String& v) { Add(v); };
-	virtual size_t Count() const { return items.size(); };
+	virtual void Clear() { items.clear(); }
+	virtual const String& operator[](size_t i) const { return items[i].str; }
+	virtual void AddString(const String& v) { Add(v); }
+	virtual size_t Count() const { return items.size(); }
 
 	int& Values(int);
 	void Set(int, const String&);

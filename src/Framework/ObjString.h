@@ -154,7 +154,7 @@ public:
 	const wchar_t* ptr() const { return c_str(); }
 	const wchar_t* c_str() const { return str.c_str(); }
 
-	void reserve(size_t n=0) { str.reserve(n); };
+	void reserve(size_t n=0) { str.reserve(n); }
 
 private:
 	std::wstring str;};

@@ -60,7 +60,7 @@ public:
 
 	virtual void DefSize(int&, int&, int&);
 
-	virtual int IsContainer() { return 0; };
+	virtual int IsContainer() { return 0; }
 	virtual void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW);
 	virtual void ClearDialogItem();
 	virtual FarDlgNode* FindChild(const String&);

@@ -44,8 +44,8 @@ public:
 	FileName(const Direction _d, const String& _name): d(_d), Name(_name) {};
 	~FileName() {};
 
-	Direction getDirection() const {return d;};
-	String getName() const {return Name;};
+	Direction getDirection() const { return d; }
+	String getName() const { return Name; }
 
 private:
 	Direction d;
@@ -58,11 +58,11 @@ public:
 	FileNameStore() { }
 	~FileNameStore() { }
 
-	size_t AddRel(FileName::Direction _d, const String& _name) { items.push_back(FileName(_d, _name)); return items.size()-1; };
-	size_t Count() const { return items.size(); };
-	const String GetNameByNum(size_t n) const { return items[n].getName(); };
-	const FileName& operator[](size_t n) const { return items[n]; };
-	FileName& operator[](size_t n) { return items[n]; };
+	size_t AddRel(FileName::Direction _d, const String& _name) { items.push_back(FileName(_d, _name)); return items.size()-1; }
+	size_t Count() const { return items.size(); }
+	const String GetNameByNum(size_t n) const { return items[n].getName(); }
+	const FileName& operator[](size_t n) const { return items[n]; }
+	FileName& operator[](size_t n) { return items[n]; }
 
 private:
 	std::vector<FileName> items;

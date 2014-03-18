@@ -66,9 +66,9 @@ public:
 	virtual void DefSize(int&, int&, int&);
 	virtual void ClearDialogItem() { dialogItem = -1; }
 
-	FarDialog* getDialog() { return dialog; };
-	void setDialog(FarDialog *_dialog) { dialog = _dialog; };
-	int getDialogItem() { return dialogItem; };
+	FarDialog* getDialog() { return dialog; }
+	void setDialog(FarDialog *_dialog) { dialog = _dialog; }
+	int getDialogItem() { return dialogItem; }
 
 	void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW);
 

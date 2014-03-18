@@ -16,10 +16,10 @@ public:
 	void addProperty(const String& name, const String& def);
 	Property& operator()(const String& name) { return getProp(name); }
 
-	const String getName() const {return name; };
+	const String getName() const {return name; }
 
-	void propSave() { propSaved = prop; };
-	void propLoad() { prop = propSaved; };
+	void propSave() { propSaved = prop; }
+	void propLoad() { prop = propSaved; }
 
 protected:
 	Property& getProp(const String& name) { return prop[name]; }
@@ -30,7 +30,7 @@ protected:
 };
 
 #define DEFINE_CLASS(name, type) \
-	static Payload* create() { return new type; };
+	static Payload* create() { return new type; }
 
 //virtual const String getType() { return ; }
 
