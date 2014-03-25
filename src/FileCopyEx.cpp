@@ -14,8 +14,8 @@ FarStandardFunctions FSF;
 FarPlugin* plugin = NULL;
 
 /*
- Функция GetMsg возвращает строку сообщения из языкового файла.
- А это надстройка над Info.GetMsg для сокращения кода :-)
+ Р¤СѓРЅРєС†РёСЏ GetMsg РІРѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕРєСѓ СЃРѕРѕР±С‰РµРЅРёСЏ РёР· СЏР·С‹РєРѕРІРѕРіРѕ С„Р°Р№Р»Р°.
+ Рђ СЌС‚Рѕ РЅР°РґСЃС‚СЂРѕР№РєР° РЅР°Рґ Info.GetMsg РґР»СЏ СЃРѕРєСЂР°С‰РµРЅРёСЏ РєРѕРґР° :-)
 */
 const wchar_t* GetMsg(int MsgId)
 {
@@ -31,8 +31,8 @@ static void FarErrorHandler(const wchar_t* s)
 }
 
 /*
-Far Manager вызывает функцию GetGlobalInfoW в первую очередь, для получения основной информации о плагине. 
-Функция вызывается один раз.
+Far Manager РІС‹Р·С‹РІР°РµС‚ С„СѓРЅРєС†РёСЋ GetGlobalInfoW РІ РїРµСЂРІСѓСЋ РѕС‡РµСЂРµРґСЊ, РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РѕСЃРЅРѕРІРЅРѕР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїР»Р°РіРёРЅРµ. 
+Р¤СѓРЅРєС†РёСЏ РІС‹Р·С‹РІР°РµС‚СЃСЏ РѕРґРёРЅ СЂР°Р·.
 */
 void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
 {
@@ -46,8 +46,8 @@ void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
 }
 
 /*
-Функция SetStartupInfoW вызывается один раз, после загрузки DLL-модуля в память. 
-Far Manager передаёт плагину информацию, необходимую для дальнейшей работы.
+Р¤СѓРЅРєС†РёСЏ SetStartupInfoW РІС‹Р·С‹РІР°РµС‚СЃСЏ РѕРґРёРЅ СЂР°Р·, РїРѕСЃР»Рµ Р·Р°РіСЂСѓР·РєРё DLL-РјРѕРґСѓР»СЏ РІ РїР°РјСЏС‚СЊ. 
+Far Manager РїРµСЂРµРґР°С‘С‚ РїР»Р°РіРёРЅСѓ РёРЅС„РѕСЂРјР°С†РёСЋ, РЅРµРѕР±С…РѕРґРёРјСѓСЋ РґР»СЏ РґР°Р»СЊРЅРµР№С€РµР№ СЂР°Р±РѕС‚С‹.
 */
 void WINAPI SetStartupInfoW(const struct PluginStartupInfo *psi)
 {
@@ -64,7 +64,7 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo *psi)
 };
 
 /*
-Функция GetPluginInfoW вызывается Far Manager для получения дополнительной информации о плагине.
+Р¤СѓРЅРєС†РёСЏ GetPluginInfoW РІС‹Р·С‹РІР°РµС‚СЃСЏ Far Manager РґР»СЏ РїРѕР»СѓС‡РµРЅРёСЏ РґРѕРїРѕР»РЅРёС‚РµР»СЊРЅРѕР№ РёРЅС„РѕСЂРјР°С†РёРё Рѕ РїР»Р°РіРёРЅРµ.
 */
 static const wchar_t *pluginMenuStrings[1] = { L"Extended copy" };
 static const wchar_t *configMenuStrings[1] = { L"Extended copy" };
@@ -85,7 +85,7 @@ void WINAPI GetPluginInfoW(struct PluginInfo *Info)
 }
 
 /*
-Функция ConfigureW вызывается Far Manager, когда пользователь выбрал в меню "Параметры внешних модулей" пункт, добавленный туда данным плагином.
+Р¤СѓРЅРєС†РёСЏ ConfigureW РІС‹Р·С‹РІР°РµС‚СЃСЏ Far Manager, РєРѕРіРґР° РїРѕР»СЊР·РѕРІР°С‚РµР»СЊ РІС‹Р±СЂР°Р» РІ РјРµРЅСЋ "РџР°СЂР°РјРµС‚СЂС‹ РІРЅРµС€РЅРёС… РјРѕРґСѓР»РµР№" РїСѓРЅРєС‚, РґРѕР±Р°РІР»РµРЅРЅС‹Р№ С‚СѓРґР° РґР°РЅРЅС‹Рј РїР»Р°РіРёРЅРѕРј.
 */
 intptr_t WINAPI ConfigureW(const struct ConfigureInfo *Info)
 {
@@ -93,7 +93,7 @@ intptr_t WINAPI ConfigureW(const struct ConfigureInfo *Info)
 }
 
 /*
-  Функция OpenW вызывается при создании новой копии плагина.
+  Р¤СѓРЅРєС†РёСЏ OpenW РІС‹Р·С‹РІР°РµС‚СЃСЏ РїСЂРё СЃРѕР·РґР°РЅРёРё РЅРѕРІРѕР№ РєРѕРїРёРё РїР»Р°РіРёРЅР°.
 */
 HANDLE WINAPI OpenW(const struct OpenInfo *OInfo)
 {
