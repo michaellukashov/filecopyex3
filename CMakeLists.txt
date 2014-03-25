@@ -25,7 +25,7 @@ else()
 set(PLATFORM "x64")
 endif()
 
-set(OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/${FAR_VERSION}_${CONF}/Plugins/FileCopyEx3)
+set(OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${FAR_VERSION}_${CONF}/Plugins/FileCopyEx3)
 
 set(LIBS_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/libs)
 set(SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/src)
@@ -221,7 +221,7 @@ add_custom_command(TARGET FileCopyEx3
   COMMAND copy /Y ${DATA_DIR}\\*.hlf ${OUTPUT_DIR}
   COMMAND copy /Y ${DATA_DIR}\\*.lng ${OUTPUT_DIR}
   COMMAND copy /Y ${DATA_DIR}\\*.diz ${OUTPUT_DIR}
-  COMMAND copy /Y ${DATA_DIR}\\doc\\*.* ${OUTPUT_DIR}\\doc
+#  COMMAND copy /Y ${DATA_DIR}\\doc\\*.* ${OUTPUT_DIR}\\doc
   COMMAND copy /Y ${DATA_DIR}\\resource\\*.* ${OUTPUT_DIR}\\resource
   WORKING_DIRECTORY ${BUILD_DIR}
   VERBATIM
