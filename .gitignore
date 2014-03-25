@@ -1,13 +1,15 @@
-ipch/
+/ipch/
+/Debug Unicode/
+/Release Unicode/
+/Far3_x86/
+/Far3_x64/
+/build/
 *.opensdf
 *.sdf
 *.suo
-/Debug Unicode/
-/Release Unicode/
 
 *.orig
 
 CMakeLists.txt.user
-build/
 *.vcxproj.user
 *.vcproj.user
