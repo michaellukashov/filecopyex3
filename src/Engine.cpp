@@ -2181,7 +2181,7 @@ int Engine::EngineError(const String& s, const String& fn, int code, int& flg, c
         if (res == 0) return RES_RETRY;
         if (res == 1) return RES_SKIP;
         if (res == -1) return RES_ABORT;
-        if (res == 2)  {
+        if (res == 2 && ix)  {
             *ix |= errfSkipAll;
             if (flg & eerKeepFiles) {
         *ix |= errfKeepFiles;
