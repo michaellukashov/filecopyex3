@@ -19,7 +19,7 @@ int StringParent::loadFromFile(FILE * f)
     wchar_t buffer[bsize], string[ssize];
     buffer[0]=sign.uc;
     int bpos=1, spos=0;
-    while(1)
+    while (1)
     {
       wchar_t oldc=0;
       read = (int)fread(buffer+bpos, sizeof(wchar_t), bsize-bpos, f);
@@ -58,7 +58,7 @@ int StringParent::loadFromFile(FILE * f)
     if (read>=1) buffer[0]=sign.c[0];
     if (read>=2) buffer[1]=sign.c[1];
     bpos=read;
-    while(1)
+    while (1)
     {
       char oldc=0;
       read=(int)fread(buffer+bpos, sizeof(char), bsize-bpos, f);
@@ -189,7 +189,7 @@ void StringParent::loadFromString(const wchar_t * s, wchar_t delim)
       AddString(buf);
     }
   }
-  while(*p++);
+  while (*p++);
 }
 
 void StringParent::loadFromString(const String & s, wchar_t delim)
