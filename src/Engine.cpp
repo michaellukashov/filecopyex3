@@ -209,7 +209,7 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
 
   int escape = FALSE;
   HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
-  while(1)
+  while (1)
   {
     INPUT_RECORD rec;
     DWORD rc;
@@ -305,7 +305,7 @@ del_retry:
     WriteN++;
 
     size_t dnum=fnum+1;
-    while(dnum < SrcNames.Count() && Files[dnum].Flags & (FLG_DIR_POST | FLG_DIR_PRE | FLG_DESCFILE))
+    while (dnum < SrcNames.Count() && Files[dnum].Flags & (FLG_DIR_POST | FLG_DIR_PRE | FLG_DESCFILE))
     {
       if (!(Files[dnum].Flags & FLG_COPIED))
       {
@@ -395,7 +395,7 @@ void Engine::ProcessDesc(int fnum)
     SrcList.SetAllMergeFlags(0);
 
   int j=fnum-1;
-  while(j>=0 && Files[j].Level>=Files[fnum].Level)
+  while (j>=0 && Files[j].Level>=Files[fnum].Level)
   {
     if (Files[j].Level==Files[fnum].Level)
     {
@@ -455,7 +455,7 @@ int Engine::FlushBuff(BuffInfo * bi)
   int Pos = 0;
   int PosInStr = 0;
 
-  while(Pos < bi->BuffSize && bi->BuffInf[PosInStr].FileNumber >= 0)
+  while (Pos < bi->BuffSize && bi->BuffInf[PosInStr].FileNumber >= 0)
   {
     int fnum=bi->BuffInf[PosInStr].FileNumber;
     String
@@ -562,7 +562,7 @@ open_retry:
 
     if (!(info.Flags & FLG_SKIPPED))
     {
-      while(Pos < bi->BuffInf[PosInStr].WritePos)
+      while (Pos < bi->BuffInf[PosInStr].WritePos)
       {
         if (!Parallel && CheckEscape() || Aborted)
         {
@@ -677,7 +677,7 @@ void Engine::BGFlush()
 
 int Engine::WaitForFlushEnd()
 {
-  while(WaitForSingleObject(FlushEnd, 200) == WAIT_TIMEOUT)
+  while (WaitForSingleObject(FlushEnd, 200) == WAIT_TIMEOUT)
   {
     if (CheckEscape()) return FALSE;
   }
@@ -726,7 +726,7 @@ void Engine::Copy()
   FileNameStoreEnum Dst(&DstNames);
   std::vector<CurDirInfo> CurDirStack;
 
-  for(size_t i=0; i<Src.Count(); i++)
+  for (size_t i=0; i<Src.Count(); i++)
   {
     String SrcName = Src.GetNext();
     String DstName = Dst.GetNext();
@@ -822,14 +822,14 @@ open_retry:
                        (int)GetLastError()));
     }
 
-    while(1)
+    while (1)
     {
       if (info.Flags & FLG_SKIPPED) break;
       info.SectorSize=SectorSize;
       if (info.Size < _UnbuffMin*1024)
         info.Flags |= FLG_BUFFERED;
 
-      while(BuffPos < bi->BuffSize)
+      while (BuffPos < bi->BuffSize)
       {
         if (info.Flags & FLG_SKIPPED) break;
         int j, cb = Min(ReadBlock, bi->BuffSize-BuffPos);
@@ -943,7 +943,7 @@ abort:
 
   if (Parallel)
   {
-    while(!WaitForFlushEnd());
+    while (!WaitForFlushEnd());
     bi->OutFile=wbi->OutFile;
     bi->OutNum=wbi->OutNum;
     bi->SrcName=wbi->SrcName;
@@ -964,7 +964,7 @@ abort:
   else
   {
     FileNameStoreEnum Src(&SrcNames);
-    for(size_t i=0; i<Src.Count(); i++)
+    for (size_t i=0; i<Src.Count(); i++)
     {
       if (!(Files[i].Flags & FLG_COPIED))
       {
@@ -1042,7 +1042,7 @@ void Engine::FarToWin32FindData(const TPanelItem & tpi, WIN32_FIND_DATA & wfd)
 
 String Engine::FindDescFile(const String & dir, int * idx)
 {
-  for(size_t i=0; i < plugin->Descs().Count(); i++)
+  for (size_t i=0; i < plugin->Descs().Count(); i++)
   {
     if (FileExists(AddEndSlash(dir)+plugin->Descs()[i]))
     {
@@ -1059,7 +1059,7 @@ String Engine::FindDescFile(const String & dir, int * idx)
 
 String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, int * idx)
 {
-  for(size_t i=0; i < plugin->Descs().Count(); i++)
+  for (size_t i=0; i < plugin->Descs().Count(); i++)
   {
     HANDLE hf;
     if ((hf=FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
@@ -1545,7 +1545,7 @@ rep:
   }
   else
   {
-    for(size_t i = 0; i < pi.ItemsNumber; i++)
+    for (size_t i = 0; i < pi.ItemsNumber; i++)
     {
       if (TPanelItem(i)->Flags & PPIF_SELECTED)
       {
@@ -1558,7 +1558,7 @@ rep:
   int haveCurPath=0;
 
   // bugfixed by slst: bug #23
-  for(size_t ii=0; ii < sortIndex.size(); ii++)
+  for (size_t ii=0; ii < sortIndex.size(); ii++)
   {
     size_t i = sortIndex[ii];
     TPanelItem pit(i);
@@ -1615,7 +1615,7 @@ rep:
     // bugfixed by slst: bug #24
     //progress.ShowMessage(LOC("Status.ScanningDest"));
     ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
-    for(size_t i=0; i<Enum.Count(); i++)
+    for (size_t i=0; i<Enum.Count(); i++)
     {
       if (!(Files[i].Flags & FLG_SKIPPED) & !(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY))
       {
@@ -1676,7 +1676,7 @@ fin:
   if (!Move)
   {
     Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, NULL);
-    for(size_t i = 0; i < Files.size(); i++)
+    for (size_t i = 0; i < Files.size(); i++)
     {
       if (Files[i].PanelIndex!=-1)
       {
@@ -1684,7 +1684,7 @@ fin:
         {
           int ok=1;
           size_t j=i+1;
-          while(Files[j].Level>Files[i].Level)
+          while (Files[j].Level>Files[i].Level)
           {
             if (!(Files[j].Flags & (FLG_DIR_PRE | FLG_DIR_POST | FLG_COPIED)))
             {
@@ -1721,7 +1721,7 @@ fin:
     rpi.TopPanelItem = pi.TopPanelItem;
 
     String NewFileName;
-    for(size_t idx=0; idx<Files.size(); idx++)
+    for (size_t idx=0; idx<Files.size(); idx++)
     {
       if (Files[idx].PanelIndex == pi.CurrentItem)
       {
@@ -1731,7 +1731,7 @@ fin:
     }
     NewFileName = NewFileName.toLower();
 
-    for(size_t i=0; i<pi.ItemsNumber; i++)
+    for (size_t i=0; i<pi.ItemsNumber; i++)
     {
       TPanelItem pit(i);
       String NewPanelFilename = pit->FileName;
@@ -1913,7 +1913,7 @@ retry:
               }
               else
               {
-                while(ExistsN(dst, j)) j++;
+                while (ExistsN(dst, j)) j++;
                 dst=DupName(dst, j);
               }
               goto retry;
@@ -1956,7 +1956,7 @@ retry:
       {
         int descidx=-1;
         RememberStruct Remember;
-        while(1)
+        while (1)
         {
           if (wcscmp(fd.cFileName, L"..") && wcscmp(fd.cFileName, L"."))
           {
@@ -2019,7 +2019,7 @@ retry:
       {
         DWORD hsz=(DWORD)((LPBYTE)&sid.cStreamName-(LPBYTE)&sid);
         LPVOID ctx=NULL;
-        while(1)
+        while (1)
         {
           wchar_t strn[1024];
           DWORD cb1, cb2;
@@ -2072,7 +2072,7 @@ fin:
 void Engine::SetOverwriteMode(int Start)
 {
   FileNameStoreEnum Enum(&DstNames);
-  for(size_t i=Start; i<Enum.Count(); i++)
+  for (size_t i=Start; i<Enum.Count(); i++)
   {
     String fn=Enum.GetByNum(i);
     FileStruct & info=Files[i];
@@ -2105,7 +2105,7 @@ void Engine::SetOverwriteMode(int Start)
           case OM_RENAME:
           {
             int j=0;
-            while(ExistsN(fn, j)) j++;
+            while (ExistsN(fn, j)) j++;
             info.RenameNum = j;
             break;
           }
@@ -2199,7 +2199,7 @@ rep1:
       if (res == OM_RENAME)
       {
         int j = 0;
-        while(ExistsN(Dst, j)) j++;
+        while (ExistsN(Dst, j)) j++;
         ren=DupName(Dst, j);
       }
     }
@@ -2357,7 +2357,7 @@ int Engine::EngineError(const String & s, const String & fn, int code, int & flg
     dlg["Label2"]("Visible") = 1;
     StringVector list;
     list.loadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
-    for(size_t i=0; i<list.Count(); i++)
+    for (size_t i=0; i<list.Count(); i++)
     {
       if (i<=7)
       {

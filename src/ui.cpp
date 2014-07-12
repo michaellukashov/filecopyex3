@@ -57,7 +57,7 @@ int ShowMessageExHelp(const String & title, const String & msg,
                       const String & buttons, int flags, const String & help)
 {
   int nb=0;
-  for(const wchar_t * p=buttons.ptr(); *p; p++)
+  for (const wchar_t * p=buttons.ptr(); *p; p++)
   {
     if (*p=='\n') nb++;
   }
@@ -143,7 +143,7 @@ String SplitWidth(const String & s, size_t w)
   String res;
   res.reserve(s.len());
   size_t curW = 0;
-  for(size_t i = 0; i < s.len(); i++)
+  for (size_t i = 0; i < s.len(); i++)
   {
     wchar_t c = s[i];
 

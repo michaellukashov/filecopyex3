@@ -91,7 +91,7 @@ void FarDlgPayload::init(const String & _name)
 {
   Payload::init(_name);
 
-  for(int i=0; i<AttribCount(); i++)
+  for (int i=0; i<AttribCount(); i++)
   {
     addProperty(Attrib(i).Name, 0);
   }
@@ -116,7 +116,7 @@ void FarDlgPayload::preInitItem(FarDialogItem & item)
   }
   SetItemText(item, p);
 
-  for(int i=0; i<AttribCount(); i++)
+  for (int i=0; i<AttribCount(); i++)
   {
     if (getProp(Attrib(i).Name))
     {
@@ -234,7 +234,7 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
   {
     list.ItemsNumber = items.Count();
     list.Items = new FarListItem[items.Count()];
-    for(size_t i=0; i<items.Count(); i++)
+    for (size_t i=0; i<items.Count(); i++)
     {
       if (getProp("Text") == items[i])
       {
@@ -258,7 +258,7 @@ size_t lablen(FarDialogItem & item)
   else
   {
     int res=0;
-    for(const wchar_t * p=item.Data; *p; p++)
+    for (const wchar_t * p=item.Data; *p; p++)
     {
       if (*p!='&') res++;
     }

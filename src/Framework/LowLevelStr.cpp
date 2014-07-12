@@ -44,7 +44,7 @@ const wchar_t * _tcsrpbrk(const wchar_t * string, const wchar_t * control)
   /* 1st char in control string stops search */
   while (str >= string)
   {
-    for(wcset = control; *wcset; wcset++)
+    for (wcset = control; *wcset; wcset++)
       if (*wcset == *str)
         return str;
     str--;

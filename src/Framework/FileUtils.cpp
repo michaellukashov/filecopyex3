@@ -189,7 +189,7 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
     wchar_t VolumeMountPoint[] = L"?:\\";
     wchar_t VolumeName[MAX_FILENAME];
 
-    for(char drive = 'A'; drive < 'Z'; drive++)
+    for (char drive = 'A'; drive < 'Z'; drive++)
     {
       VolumeMountPoint[0] = drive;
       if (GetVolumeNameForVolumeMountPoint(VolumeMountPoint,
@@ -307,7 +307,7 @@ String GetRealFileName(const String & _path, int flg)
 {
   String path=AddEndSlash(_path);
 rep:
-  for(int i=path.len()-1; i>=0; i--)
+  for (int i=path.len()-1; i>=0; i--)
   {
     if (path[i]=='\\')
     {
@@ -352,14 +352,14 @@ String ApplyFileMask(const String & _name, const String & _mask)
             res[MAX_FILENAME]=L"";
   int sz=MAX_FILENAME;
   wchar_t * next = (wchar_t *)_tcsend(name)-1, *mext = (wchar_t *)_tcsend(mask)-1;
-  while(next >= name && *next != '.') next--;
+  while (next >= name && *next != '.') next--;
   if (next < name) next = name+wcslen(name);
   else *next++ = 0;
-  while(mext >= mask && *mext != '.') mext--;
+  while (mext >= mask && *mext != '.') mext--;
   if (mext < mask) mext = mask+wcslen(mask);
   else *mext++ = 0;
   wchar_t sym[2] = { 0, 0 };
-  for(wchar_t * m = mask; *m; m++)
+  for (wchar_t * m = mask; *m; m++)
   {
     if (*m == '*') wcscat_s(res, sz, name);
     else if (*m == '?') wcscat_s(res, sz, (*sym = m-mask < (int)wcslen(name) ? name[m-mask] : 0, sym));
@@ -368,7 +368,7 @@ String ApplyFileMask(const String & _name, const String & _mask)
   if (mext[0])
   {
     wcscat_s(res, sz, L".");
-    for(wchar_t * m = mext; *m; m++)
+    for (wchar_t * m = mext; *m; m++)
     {
       if (*m == '*') wcscat_s(res, sz, next);
       else if (*m == '?') wcscat_s(res, sz, (*sym = m-mext < (int)wcslen(next) ? next[m-mext] : 0, sym));
@@ -553,7 +553,7 @@ int MoveFile(const String & _src, const String & _dst, int replace)
 void ForceDirectories(const String & s)
 {
   wchar_t * ptr = (wchar_t *)s.ptr(), *sptr = ptr;
-  while(*ptr)
+  while (*ptr)
   {
     if (*ptr == '\\' || *ptr == '/')
     {

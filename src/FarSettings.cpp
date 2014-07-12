@@ -76,7 +76,7 @@ bool FarSettings::list(ParamInfoVector & res)
     return false;
   }
   res.clear();
-  for(size_t i = 0; i < fse.Count; i++)
+  for (size_t i = 0; i < fse.Count; i++)
   {
     if (fse.Items[i].Type == FST_STRING)
     {
@@ -91,7 +91,7 @@ bool FarSettings::list(ParamInfoVector & res)
 bool saveOptions(const PropertyMap & options, FarSettings & settings)
 {
   bool ok = true;
-  for(PropertyMap::const_iterator it = options.begin(); it != options.end(); ++it)
+  for (PropertyMap::const_iterator it = options.begin(); it != options.end(); ++it)
   {
     if (!settings.set(it->first, it->second.operator const String()))
     {
@@ -111,7 +111,7 @@ bool loadOptions(PropertyMap & options, FarSettings & settings)
     return false;
   }
 
-  for(FarSettings::ParamInfoVector::iterator it = v.begin(); it != v.end(); ++it)
+  for (FarSettings::ParamInfoVector::iterator it = v.begin(); it != v.end(); ++it)
   {
     String & name = it->name;
     String v;
@@ -147,7 +147,7 @@ bool Settings::set_dir(const wstring& path) {
   FarSettingsValue fsv = { sizeof(FarSettingsValue) };
   size_t dir_id = 0;
   list<wstring> dir_list = split(path, L'\\');
-  for(list<wstring>::const_iterator dir = dir_list.cbegin(); dir != dir_list.cend(); dir++) {
+  for (list<wstring>::const_iterator dir = dir_list.cbegin(); dir != dir_list.cend(); dir++) {
     fsv.Root = dir_id;
     fsv.Value = dir->c_str();
     dir_id = control(SCTL_CREATESUBKEY, &fsv);

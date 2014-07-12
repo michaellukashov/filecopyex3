@@ -40,7 +40,7 @@ int DescList::LoadFromFile(const String & lfn)
 int DescList::LoadFromList(StringVector & list)
 {
   String fn, desc;
-  for(size_t i=0; i<list.Count(); i++)
+  for (size_t i=0; i<list.Count(); i++)
   {
     String s = list[i];
     wchar_t c=s[0];
@@ -95,7 +95,7 @@ int DescList::LoadFromList(StringVector & list)
 int DescList::SaveToFile(const String & fn)
 {
   StringVector temp;
-  for(DescListMap::iterator it = names.begin(); it != names.end(); ++it)
+  for (DescListMap::iterator it = names.begin(); it != names.end(); ++it)
   {
     if (!(it->second.flags & dlNoSave))
     {
@@ -125,7 +125,7 @@ int DescList::SaveToFile(const String & fn)
 
 void DescList::Merge(DescList & add)
 {
-  for(DescListMap::iterator it = add.names.begin(); it != add.names.end(); ++it)
+  for (DescListMap::iterator it = add.names.begin(); it != add.names.end(); ++it)
   {
     if (!(it->second.flags & dlNoMerge))
     {
@@ -164,7 +164,7 @@ void DescList::SetSaveFlag(const String & fn, int v)
 
 void DescList::setAllFlags(int flag, int v)
 {
-  for(DescListMap::iterator it = names.begin(); it != names.end(); ++it)
+  for (DescListMap::iterator it = names.begin(); it != names.end(); ++it)
   {
     if (v)
     {

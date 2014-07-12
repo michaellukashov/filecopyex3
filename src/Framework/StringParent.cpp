@@ -24,7 +24,7 @@ int StringParent::loadFromFile(FILE * f)
       wchar_t oldc=0;
       read = (int)fread(buffer+bpos, sizeof(wchar_t), bsize-bpos, f);
       if (read<1) break;
-      for(int i=bpos; i<read; i++)
+      for (int i=bpos; i<read; i++)
       {
         if (inv) buffer[i]=((buffer[i]&0x00FF)<<8) | ((buffer[i]&0xFF00) >> 8);
         if (buffer[i]==CR || (buffer[i]==LF && oldc!=CR))
@@ -63,7 +63,7 @@ int StringParent::loadFromFile(FILE * f)
       char oldc=0;
       read=(int)fread(buffer+bpos, sizeof(char), bsize-bpos, f);
       if (read<1) break;
-      for(int i=0; i<read+bpos; i++)
+      for (int i=0; i<read+bpos; i++)
       {
         if (buffer[i]==CR || (buffer[i]==LF && oldc!=CR))
         {
@@ -118,7 +118,7 @@ int StringParent::saveToFile(FILE * f, TextFormat tf)
     unsigned __int16 sign=0xFFFE;
     fwrite(&sign, sizeof(sign), 1, f);
   }
-  for(size_t i=0; i < Count(); i++)
+  for (size_t i=0; i < Count(); i++)
   {
     const wchar_t * s = (*this)[i].c_str();
     const int ssize=4096;
@@ -128,7 +128,7 @@ int StringParent::saveToFile(FILE * f, TextFormat tf)
       wcscpy_s(buf, ssize, s);
       if (tf==tfUnicodeBE)
       {
-        for(size_t j=0; j < wcslen(buf); j++)
+        for (size_t j=0; j < wcslen(buf); j++)
         {
           buf[j] = ((buf[j]&0x00FF)<<8) | ((buf[j]&0xFF00) >> 8);
         }
@@ -137,7 +137,7 @@ int StringParent::saveToFile(FILE * f, TextFormat tf)
       wcscpy_s(buf, ssize, L"\r\n");
       if (tf==tfUnicodeBE)
       {
-        for(size_t j=0; j < wcslen(buf); j++)
+        for (size_t j=0; j < wcslen(buf); j++)
         {
           buf[j]=((buf[j]&0x00FF)<<8) | ((buf[j]&0xFF00) >> 8);
         }
