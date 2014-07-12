@@ -226,7 +226,7 @@ void DebugLog(const wchar_t *DebugMsg, ...)
   wchar_t MsgBuf[0x400];
   va_list ArgPtr;
   va_start(ArgPtr, DebugMsg);
-  _vsnwprintf_s(MsgBuf, 0x400, sizeof(MsgBuf), DebugMsg, ArgPtr);
+  _vsnwprintf_s(MsgBuf, sizeof(MsgBuf), sizeof(MsgBuf), DebugMsg, ArgPtr);
   va_end(ArgPtr);
   OutputDebugString(MsgBuf);
 }
@@ -234,7 +234,7 @@ void DebugLog(const wchar_t *DebugMsg, ...)
 String convertPath(enum CONVERTPATHMODES mode, String src) 
 {
 	wchar_t fullName[MAX_PATH];
-	size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, MAX_PATH);
+	size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, sizeof(fullName));
 	if (size <= MAX_PATH) {
 		String res(fullName);
 		return res;

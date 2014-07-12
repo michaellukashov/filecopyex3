@@ -31,7 +31,7 @@ String Format(const wchar_t* fmt, ...)
 	wchar_t buf[8192];
 	va_list args;
 	va_start(args, fmt);
-	_vsnwprintf_s(buf, 8192, fmt, args);
+	_vsnwprintf_s(buf, sizeof(buf), fmt, args);
 	va_end(args);
 	return buf;
 }
