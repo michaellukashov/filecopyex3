@@ -48,7 +48,7 @@ int GetDriveId(const String& path, String& res)
          return TRUE;
        }
      }
-  } 
+  }
   else if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME)>0)
   {
     String s=buf;
@@ -73,11 +73,11 @@ int GetPhysDrive(const String& _path, int& res)
     if (path.left(11)!="\\\\?\\Volume{")
     {
       wchar_t buf[MAX_FILENAME];
-      if (!GetVolumeNameForVolumeMountPoint(path.ptr(), buf, MAX_FILENAME)) 
+      if (!GetVolumeNameForVolumeMountPoint(path.ptr(), buf, MAX_FILENAME))
         return FALSE;
       path=buf;
     }
-    HANDLE hVolume=CreateFile(CutEndSlash(path).ptr(), 0, 
+    HANDLE hVolume=CreateFile(CutEndSlash(path).ptr(), 0,
       FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
       0, NULL);
     if (hVolume==INVALID_HANDLE_VALUE) return FALSE;
@@ -109,8 +109,8 @@ int VolFlags(const String& _path)
   if (ml!=-1 && ml<sl) return -1;
   if (path.find_first_of("|<>")!=-1) return -1;
   int cl=path.find(':');
-  if (cl!=-1 && (cl!=1 || cl!=path.rfind(':') || 
-	  (cl!=path.len()-1 && path.find_first_of("\\/")!=2))) return -1;
+  if (cl!=-1 && (cl!=1 || cl!=path.rfind(':') ||
+    (cl!=path.len()-1 && path.find_first_of("\\/")!=2))) return -1;
   if (ml!=-1) path=ExtractFilePath(path);
   String root=GetFileRoot(path);
 
@@ -143,9 +143,9 @@ int CheckParallel(const String& _srcpath, const String& _dstpath)
   if (srctype!=dsttype) return TRUE;
   if (!root1.icmp(root2)) return FALSE;
 
-  if (srctype == DRIVE_REMOTE) 
+  if (srctype == DRIVE_REMOTE)
     return FALSE;
-  else if (srctype == DRIVE_CDROM || srctype == DRIVE_REMOVABLE) 
+  else if (srctype == DRIVE_CDROM || srctype == DRIVE_REMOVABLE)
     return TRUE;
   else if (srctype == DRIVE_FIXED)
   {
@@ -183,7 +183,7 @@ int ExistsN(const String& fn, int n)
 
 bool Newer(const FILETIME &ft1, const FILETIME &ft2)
 {
-	return CompareFileTime(&ft1, &ft2) >= 0;
+  return CompareFileTime(&ft1, &ft2) >= 0;
 }
 
 bool Newer(const String& fn1, const FILETIME &ft2)
@@ -231,7 +231,7 @@ void DebugLog(const wchar_t *DebugMsg, ...)
   OutputDebugString(MsgBuf);
 }
 
-String convertPath(enum CONVERTPATHMODES mode, String src) 
+String convertPath(enum CONVERTPATHMODES mode, String src)
 {
 	wchar_t fullName[MAX_PATH];
 	size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, sizeof(fullName));
