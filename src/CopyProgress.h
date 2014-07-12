@@ -22,8 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__COPYPROGRESS_H__
-#define	__COPYPROGRESS_H__
+#ifndef __COPYPROGRESS_H__
+#define __COPYPROGRESS_H__
 
 #pragma once
 
@@ -34,37 +34,37 @@ int64_t GetTime();
 class CopyProgress : public  FarProgress
 {
 public:
-	CopyProgress(void);
-	virtual ~CopyProgress(void);
-	void Start(int move);
-	void Stop();
-	void ShowReadName(const String&);
-	void ShowWriteName(const String&);
+  CopyProgress(void);
+  virtual ~CopyProgress(void);
+  void Start(int move);
+  void Stop();
+  void ShowReadName(const String &);
+  void ShowWriteName(const String &);
 
-	void ShowProgress(int64_t read, int64_t write, int64_t total,
-		int64_t readTime, int64_t writeTime,
-		int64_t readN, int64_t writeN,
-		int64_t totalN, int parallel,
-		int64_t FirstWrite, int64_t StartTime, int BufferSize);
-	void SetNeedToRedraw(bool Value);
+  void ShowProgress(int64_t read, int64_t write, int64_t total,
+                    int64_t readTime, int64_t writeTime,
+                    int64_t readN, int64_t writeN,
+                    int64_t totalN, int parallel,
+                    int64_t FirstWrite, int64_t StartTime, int BufferSize);
+  void SetNeedToRedraw(bool Value);
 private:
   void RedrawWindowIfNeeded();
   void RedrawWindow();
-  void DrawProgress(const String&, int, int64_t, int64_t, int64_t, int64_t, int64_t);
+  void DrawProgress(const String &, int, int64_t, int64_t, int64_t, int64_t, int64_t);
 
-  void DrawName(const String&, int);
+  void DrawName(const String &, int);
 
-	void DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t TotalBytes,
-		int64_t ReadTime, int64_t WriteTime,
-		int64_t ReadN, int64_t WriteN, int64_t TotalN,
-		int ParallelMode, int64_t FirstWriteTime,
-		int64_t StartTime, int BufferSize);
+  void DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t TotalBytes,
+                int64_t ReadTime, int64_t WriteTime,
+                int64_t ReadN, int64_t WriteN, int64_t TotalN,
+                int ParallelMode, int64_t FirstWriteTime,
+                int64_t StartTime, int BufferSize);
 
-	// bug #22 fixed by axxie
-	int64_t lastupdate, lastupdate_read, lastupdate_write, interval, clastupdate, cinterval;
+  // bug #22 fixed by axxie
+  int64_t lastupdate, lastupdate_read, lastupdate_write, interval, clastupdate, cinterval;
 
-	int X1, Y1, X2, Y2, Move;
-	bool NeedToRedraw;
+  int X1, Y1, X2, Y2, Move;
+  bool NeedToRedraw;
 };
 
 #endif//__COPYPROGRESS_H__

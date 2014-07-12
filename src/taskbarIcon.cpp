@@ -33,39 +33,41 @@ TaskBarIcon::TaskBarIcon() : last_state(S_NO_PROGRESS)
 
 TaskBarIcon::~TaskBarIcon()
 {
-	if(last_state != S_NO_PROGRESS)
-		SetState(S_NO_PROGRESS);
+  if(last_state != S_NO_PROGRESS)
+    SetState(S_NO_PROGRESS);
 }
 void TaskBarIcon::SetState(State state, float param)
 {
-	switch(state)
-	{
-	case S_PROGRESS:
-		if (param > 1.0f) {
-			param = 1.0f;
-		}
-		if (param < 0.0f) {
-			param = 0.0f;
-		}
-		ProgressValue pv;
-		pv.Completed = (int64_t)(param*100.0f);
-		pv.Total = 100;
-		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NORMAL, NULL);
-		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSVALUE, 0, &pv);
-		break;
+  switch(state)
+  {
+    case S_PROGRESS:
+      if(param > 1.0f)
+      {
+        param = 1.0f;
+      }
+      if(param < 0.0f)
+      {
+        param = 0.0f;
+      }
+      ProgressValue pv;
+      pv.Completed = (int64_t)(param*100.0f);
+      pv.Total = 100;
+      Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NORMAL, NULL);
+      Info.AdvControl(&MainGuid, ACTL_SETPROGRESSVALUE, 0, &pv);
+      break;
 
-	case S_NO_PROGRESS:
-		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NOPROGRESS, NULL);
-		break;
-	case S_WORKING:
-		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_INDETERMINATE, NULL);
-		break;
-	case S_ERROR:
-		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_ERROR, NULL);
-		break;
-	case S_PAUSED:
-		Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_PAUSED, NULL);
-		break;
-	}
-	last_state = state;
+    case S_NO_PROGRESS:
+      Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_NOPROGRESS, NULL);
+      break;
+    case S_WORKING:
+      Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_INDETERMINATE, NULL);
+      break;
+    case S_ERROR:
+      Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_ERROR, NULL);
+      break;
+    case S_PAUSED:
+      Info.AdvControl(&MainGuid, ACTL_SETPROGRESSSTATE, TBPS_PAUSED, NULL);
+      break;
+  }
+  last_state = state;
 }

@@ -22,8 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__ENGINETOOLS_H__
-#define	__ENGINETOOLS_H__
+#ifndef __ENGINETOOLS_H__
+#define __ENGINETOOLS_H__
 
 #pragma once
 
@@ -56,24 +56,24 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define errfSkipAll 1024
 #define errfKeepFiles 2048
 
-void* Alloc(size_t size);
-void Free(void *ptr);
+void * Alloc(size_t size);
+void Free(void * ptr);
 void Compress(HANDLE handle, int f);
 int GetCompression(HANDLE handle);
-void Encrypt(const String& fn, int f);
+void Encrypt(const String & fn, int f);
 void Encrypt(HANDLE handle, int f);
-void _CopyACL(const String& src, const String& dst, SECURITY_INFORMATION si);
-void CopyACL(const String& src, const String& dst);
-HANDLE Open(const String& fn, int mode, int attr=0);
+void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si);
+void CopyACL(const String & src, const String & dst);
+HANDLE Open(const String & fn, int mode, int attr=0);
 void Close(HANDLE h);
 int64_t FSeek(HANDLE h, int64_t pos, int method);
 int64_t FTell(HANDLE h);
-void setFileSizeAndTime2(const String& fn, int64_t size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
-void setFileSizeAndTime2(HANDLE h, int64_t size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
-void setFileTime2(const String& fn, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
-void setFileTime2(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
-int Read(HANDLE h, void *buf, int size);
-int Write(HANDLE h, void *buf, int size);
-int GetSectorSize(const String& path);
+void setFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
+void setFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
+void setFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
+void setFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
+int Read(HANDLE h, void * buf, int size);
+int Write(HANDLE h, void * buf, int size);
+int GetSectorSize(const String & path);
 
 #endif//__ENGINETOOLS_H__

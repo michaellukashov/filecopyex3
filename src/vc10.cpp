@@ -32,20 +32,20 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 static PVOID WINAPI ReturnSamePointer(PVOID Ptr) {return Ptr;}
 
-static const char* ProcNames[] = {"EncodePointer", "DecodePointer"};
+static const char * ProcNames[] = {"EncodePointer", "DecodePointer"};
 static enum {EncodePointerIndex, DecodePointerIndex};
 
 template<int Index>
 static PVOID WINAPI Wrapper(PVOID Ptr)
 {
-	typedef PVOID (WINAPI *PointerFunction)(PVOID);
-	static PVOID FunctionAddress = GetProcAddress(GetModuleHandle(L"kernel32"), ProcNames[Index]);
-	static PointerFunction ProcessPointer = FunctionAddress? reinterpret_cast<PointerFunction>(FunctionAddress) : ReturnSamePointer;
-	return ProcessPointer(Ptr);
+  typedef PVOID(WINAPI *PointerFunction)(PVOID);
+  static PVOID FunctionAddress = GetProcAddress(GetModuleHandle(L"kernel32"), ProcNames[Index]);
+  static PointerFunction ProcessPointer = FunctionAddress? reinterpret_cast<PointerFunction>(FunctionAddress) : ReturnSamePointer;
+  return ProcessPointer(Ptr);
 }
 
 extern "C"
 {
-	PVOID WINAPI EncodePointerWrapper(PVOID Ptr) {return Wrapper<EncodePointerIndex>(Ptr);}
-	PVOID WINAPI DecodePointerWrapper(PVOID Ptr) {return Wrapper<DecodePointerIndex>(Ptr);}
+  PVOID WINAPI EncodePointerWrapper(PVOID Ptr) {return Wrapper<EncodePointerIndex>(Ptr);}
+  PVOID WINAPI DecodePointerWrapper(PVOID Ptr) {return Wrapper<DecodePointerIndex>(Ptr);}
 }

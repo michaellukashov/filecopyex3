@@ -11,25 +11,25 @@
 class FarMenu
 {
 public:
-	FarMenu();
-	virtual ~FarMenu();
+  FarMenu();
+  virtual ~FarMenu();
 
-	void SetTitle(const String&);
-	void SetBottom(const String&);
-	void SetHelpTopic(const String&);
-	void SetFlags(int f);
-	void AddLine(const String&);
-	void AddLineCheck(const String&, int check);
-	void AddSep();
-	void SetSelection(int n);
-	int Execute();
+  void SetTitle(const String &);
+  void SetBottom(const String &);
+  void SetHelpTopic(const String &);
+  void SetFlags(int f);
+  void AddLine(const String &);
+  void AddLineCheck(const String &, int check);
+  void AddSep();
+  void SetSelection(int n);
+  int Execute();
 
 protected:
-	String Title, Bottom, HelpTopic;
-	int Flags, Selection;
-	std::vector<FarMenuItem> items;
+  String Title, Bottom, HelpTopic;
+  int Flags, Selection;
+  std::vector<FarMenuItem> items;
 
-	static void SetItemText(FarMenuItem* item, const String& text);
+  static void SetItemText(FarMenuItem * item, const String & text);
 };
 
 #endif

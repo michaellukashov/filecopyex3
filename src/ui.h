@@ -22,26 +22,26 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__UI_H__
-#define	__UI_H__
+#ifndef __UI_H__
+#define __UI_H__
 
-int ShowMessage(const String&, const String&, int);
-int ShowMessageOK(const String&, const String&);
-int ShowMessageHelp(const String&, const String&, int, const String&);
-int ShowMessageEx(const String&, const String&, const String&, int);
-int ShowMessageExHelp(const String&, const String&, const String&, int, const String&);
+int ShowMessage(const String &, const String &, int);
+int ShowMessageOK(const String &, const String &);
+int ShowMessageHelp(const String &, const String &, int, const String &);
+int ShowMessageEx(const String &, const String &, const String &, int);
+int ShowMessageExHelp(const String &, const String &, const String &, int, const String &);
 
 #define RES_RETRY 1
 #define RES_SKIP 0
 
-void Error(const String&, int code);
-void Error2(const String&, const String&, int code);
-int Error2RS(const String&, const String&, int code);
+void Error(const String &, int code);
+void Error2(const String &, const String &, int code);
+int Error2RS(const String &, const String &, int code);
 
 String GetErrText(int code);
 
-String FormatWidth(const String&, int);
-String FormatWidthNoExt(const String&, int);
-String SplitWidth(const String&, size_t);
+String FormatWidth(const String &, int);
+String FormatWidthNoExt(const String &, int);
+String SplitWidth(const String &, size_t);
 
 #endif//__UI_H__

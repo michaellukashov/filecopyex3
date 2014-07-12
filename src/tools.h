@@ -22,8 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__COMMON_H__
-#define	__COMMON_H__
+#ifndef __COMMON_H__
+#define __COMMON_H__
 
 #pragma once
 
@@ -79,36 +79,36 @@ inline const T & Min(const T & a, const T & b) { return a < b ? a : b; }
 template <class T>
 inline const T & Max(const T & a, const T & b) { return a > b ? a : b; }
 
-int ExistsN(const String& fn, int n);
-String DupName(const String& src, int n);
-int RmDir(const String& fn);
-bool Newer(const FILETIME& ft1, const FILETIME& ft2);
-bool Newer(const String& fn1, const FILETIME& ft2);
-int Delete(const String& fn);
+int ExistsN(const String & fn, int n);
+String DupName(const String & src, int n);
+int RmDir(const String & fn);
+bool Newer(const FILETIME & ft1, const FILETIME & ft2);
+bool Newer(const String & fn1, const FILETIME & ft2);
+int Delete(const String & fn);
 
-int VolFlags(const String& path);
-int CheckParallel(const String& srcpath, const String& dstpath);
+int VolFlags(const String & path);
+int CheckParallel(const String & srcpath, const String & dstpath);
 
-String GetSymLink(const String &dir);
+String GetSymLink(const String & dir);
 
 void beep(int);
 
-void DebugLog(const wchar_t *DebugMsg, ...);
+void DebugLog(const wchar_t * DebugMsg, ...);
 
 String convertPath(enum CONVERTPATHMODES mode, String src);
 
 inline int64_t GetTime()
 {
-	LARGE_INTEGER res;
-	QueryPerformanceCounter(&res);
-	return res.QuadPart;
+  LARGE_INTEGER res;
+  QueryPerformanceCounter(&res);
+  return res.QuadPart;
 }
 
 inline int64_t TicksPerSec()
 {
-	LARGE_INTEGER res;
-	QueryPerformanceFrequency(&res);
-	return res.QuadPart;
+  LARGE_INTEGER res;
+  QueryPerformanceFrequency(&res);
+  return res.QuadPart;
 }
 
 #endif//__COMMON_H__

@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 FarProgress::FarProgress(void)
 {
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGBOX, &clrFrame);
-  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGBOXTITLE, &clrTitle );
+  Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGBOXTITLE, &clrTitle);
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrBar);
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrText);
   // XXX !!!
@@ -63,21 +63,21 @@ FarProgress::~FarProgress(void)
   Hide();
 }
 
-void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String& caption)
+void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String & caption)
 {
-	int W = X2-X1+1, H = Y2-Y1+1;
-	String tpl = caption;
-	tpl += "\n";
-	String bkg = String(' ', W - 10);
-	bkg += "\n";
-	for(int i = 0; i < H - 4; ++i)
-	{
-		tpl += bkg;
-	}
-	Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t**)tpl.ptr(), 0, 0);
+  int W = X2-X1+1, H = Y2-Y1+1;
+  String tpl = caption;
+  tpl += "\n";
+  String bkg = String(' ', W - 10);
+  bkg += "\n";
+  for(int i = 0; i < H - 4; ++i)
+  {
+    tpl += bkg;
+  }
+  Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t **)tpl.ptr(), 0, 0);
 }
 
-void FarProgress::GetConSize(int& w, int &h)
+void FarProgress::GetConSize(int & w, int & h)
 {
   HANDLE hc = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_SCREEN_BUFFER_INFO bi;
@@ -86,7 +86,7 @@ void FarProgress::GetConSize(int& w, int &h)
   h=bi.srWindow.Bottom - bi.srWindow.Top + 1;
 }
 
-void FarProgress::ShowMessage(const String& msg)
+void FarProgress::ShowMessage(const String & msg)
 {
   Hide();
   int sw, sh;
@@ -105,7 +105,7 @@ void FarProgress::ShowMessage(const String& msg)
   Info.RestoreScreen(NULL);
 }
 
-void FarProgress::ShowProgress(const String& msg)
+void FarProgress::ShowProgress(const String & msg)
 {
   Hide();
   int sw, sh;
@@ -134,15 +134,15 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
 {
   int n=x2-x1+1, fn=(int)(pc*n), en=n-fn;
   wchar_t buf[512], *bp=buf;
-  if (!InverseBars)
+  if(!InverseBars)
   {
-    for (int i=0; i<fn; i++) *bp++=0x2588;//'█'
-    for (int i=0; i<en; i++) *bp++=0x2591;//'░'
+    for(int i=0; i<fn; i++) *bp++=0x2588; //'█'
+    for(int i=0; i<en; i++) *bp++=0x2591; //'░'
   }
   else
   {
-    for (int i=0; i<en; i++) *bp++=0x2591;//'░'
-    for (int i=0; i<fn; i++) *bp++=0x2588;//'█'
+    for(int i=0; i<en; i++) *bp++=0x2591; //'░'
+    for(int i=0; i<fn; i++) *bp++=0x2588; //'█'
   }
   *bp=0;
   Info.Text(x1, y, &clrText, buf);
@@ -151,9 +151,9 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
 
 void FarProgress::SetPercent(float pc)
 {
-  if (WinType==WIN_PROGRESS)
+  if(WinType==WIN_PROGRESS)
   {
-    if (GetTime()-LastUpdate>TicksPerSec()/5)
+    if(GetTime()-LastUpdate>TicksPerSec()/5)
     {
       DrawProgress(ProgX1, ProgX2, ProgY, pc);
       Info.Text(0, 0, 0, NULL);
@@ -165,7 +165,7 @@ void FarProgress::SetPercent(float pc)
 
 void FarProgress::Hide()
 {
-  if (WinType!=WIN_NONE)
+  if(WinType!=WIN_NONE)
   {
     Info.RestoreScreen(NULL);
     Info.RestoreScreen(hScreen);
@@ -176,25 +176,25 @@ void FarProgress::Hide()
   taskbarIcon.SetState(taskbarIcon.S_NO_PROGRESS);
 }
 
-void FarProgress::DrawText(int x, int y, FarColor *c, const String& msg)
+void FarProgress::DrawText(int x, int y, FarColor * c, const String & msg)
 {
   Info.Text(x, y, c, msg.ptr());
 }
 
-void FarProgress::SetTitle(const String& v)
+void FarProgress::SetTitle(const String & v)
 {
   SetConsoleTitle(v.ptr());
 }
 
-void FarProgress::SetTitle2(const String& v) const
+void FarProgress::SetTitle2(const String & v) const
 {
-	String far_desc = TitleBuf;
-	int x = far_desc.find('-');
-	if(x != -1)
-		far_desc = far_desc.substr(x);
-	else
-		far_desc = L"- Far";
-	SetTitle(v + " " + far_desc);
+  String far_desc = TitleBuf;
+  int x = far_desc.find('-');
+  if(x != -1)
+    far_desc = far_desc.substr(x);
+  else
+    far_desc = L"- Far";
+  SetTitle(v + " " + far_desc);
 }
 
 String FarProgress::GetTitle()
@@ -207,15 +207,15 @@ String FarProgress::GetTitle()
 
 // bugfixed by slst: bug #24
 // New class member function
-void FarProgress::ShowScanProgress(const String& msg)
+void FarProgress::ShowScanProgress(const String & msg)
 {
   Hide();
   int ConsoleWidth;
   int ConsoleHeight;
   GetConSize(ConsoleWidth, ConsoleHeight);
   int WindowWidth  = ConsoleWidth / 2;
-  if (WindowWidth > 46) WindowWidth = 46;
-  if (WindowWidth < 40) WindowWidth = 40;
+  if(WindowWidth > 46) WindowWidth = 46;
+  if(WindowWidth < 40) WindowWidth = 40;
   int WindowHeight = 7;
   int WindowCoordX1 = (ConsoleWidth  - WindowWidth + 1)/2;
   int WindowCoordY1 = (ConsoleHeight - WindowHeight - 1)/2;
@@ -242,9 +242,9 @@ void FarProgress::ShowScanProgress(const String& msg)
 // New class member function
 void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
 {
-  if (WinType==WIN_SCAN_PROGRESS)
+  if(WinType==WIN_SCAN_PROGRESS)
   {
-    if (GetTime()-LastUpdate>TicksPerSec()/5)
+    if(GetTime()-LastUpdate>TicksPerSec()/5)
     {
       DrawScanProgress(ProgX1, ProgX2, ProgY, NumberOfFiles, TotalSize);
       Info.Text(0, 0, 0, NULL);
@@ -260,11 +260,11 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
 {
   String FilesFmtStr = LOC("Status.FilesString") + " %-6I64d";
   wchar_t FilesStr[256];
-  _snwprintf_s(FilesStr, 256, sizeof(FilesStr)/sizeof(wchar_t), (const wchar_t*)FilesFmtStr.ptr(), NumberOfFiles);
+  _snwprintf_s(FilesStr, 256, sizeof(FilesStr)/sizeof(wchar_t), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
 
   String SizeFmtStr = LOC("Status.SizeString") + " %s";
   wchar_t SizeStr[256];
-  _snwprintf_s(SizeStr, 256, sizeof(SizeStr)/sizeof(wchar_t), (const wchar_t*)SizeFmtStr.ptr(), (const wchar_t*)FormatValue(TotalSize).ptr());
+  _snwprintf_s(SizeStr, 256, sizeof(SizeStr)/sizeof(wchar_t), (const wchar_t *)SizeFmtStr.ptr(), (const wchar_t *)FormatValue(TotalSize).ptr());
 
 
   int s = x2 - x1 - (int)wcslen(SizeStr) - (int)wcslen(FilesStr);
