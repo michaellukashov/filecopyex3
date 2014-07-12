@@ -1014,14 +1014,16 @@ String Engine::FindDescFile(const String& dir, int *idx)
 
 String Engine::FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx)
 {
-	HANDLE hf;
 	for (size_t i=0; i < plugin->Descs().Count(); i++)
+	{
+		HANDLE hf;
 		if((hf=FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
 		{
 			FindClose(hf);
 			if (idx) *idx = i;
 			return plugin->Descs()[i];
 		}
+	}
 	if (idx) *idx = -1;
 	return "";
 }
@@ -1834,7 +1836,6 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr, int64_t si
 		{
 			WIN32_STREAM_ID sid;
 			ZeroMemory(&sid, sizeof(sid));
-			wchar_t strn[1024];
 
 			HANDLE hf = CreateFile(src.ptr(), GENERIC_READ,
 				FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
@@ -1845,6 +1846,7 @@ int Engine::AddFile(const String& _src, const String& _dst, int attr, int64_t si
 				LPVOID ctx=NULL;
 				while (1)
 				{
+					wchar_t strn[1024];
 					DWORD cb1, cb2;
 					if(!BackupRead(hf, (LPBYTE)&sid, hsz, &cb1, FALSE, FALSE, &ctx)
 						|| !cb1) break;

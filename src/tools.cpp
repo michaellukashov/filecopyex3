@@ -114,11 +114,11 @@ int VolFlags(const String& _path)
   if (ml!=-1) path=ExtractFilePath(path);
   String root=GetFileRoot(path);
 
-  int res=0;
   DWORD clen, flg;
   wchar_t sysname[32];
   if (GetVolumeInformation(root.ptr(), NULL, 0, NULL, &clen, &flg, sysname, 32))
   {
+    int res=0;
     if (flg & FILE_FILE_COMPRESSION) res|=VF_COMPRESSION;
     if (flg & FILE_SUPPORTS_ENCRYPTION) res|=VF_ENCRYPTION;
     if (flg & FILE_PERSISTENT_ACLS) res|=VF_RIGHTS;
