@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __COPYPROGRESS_H__
-#define __COPYPROGRESS_H__
-
 #pragma once
 
 #include "FarProgress.h"
@@ -66,5 +63,3 @@ private:
   int X1, Y1, X2, Y2, Move;
   bool NeedToRedraw;
 };
-
-#endif//__COPYPROGRESS_H__

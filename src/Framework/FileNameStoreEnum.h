@@ -1,5 +1,4 @@
-#ifndef __FRAMEWORKSTOREENUM_H__
-#define __FRAMEWORKSTOREENUM_H__
+#pragma once
 
 #include "FileNameStore.h"
 #include "ObjString.h"
@@ -27,4 +26,3 @@ public:
 
 };
 
-#endif

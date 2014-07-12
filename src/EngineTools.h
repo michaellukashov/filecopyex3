@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ENGINETOOLS_H__
-#define __ENGINETOOLS_H__
-
 #pragma once
 
 #define OPEN_BUF 128
@@ -75,5 +72,3 @@ void setFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, 
 int Read(HANDLE h, void * buf, int size);
 int Write(HANDLE h, void * buf, int size);
 int GetSectorSize(const String & path);
-
-#endif//__ENGINETOOLS_H__

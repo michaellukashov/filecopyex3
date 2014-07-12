@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __OBJSTRING_H__
-#define __OBJSTRING_H__
-
 #pragma once
 
 #include <string>
@@ -159,5 +156,3 @@ private:
 };
 
 extern const String emptyString;
-
-#endif//__OBJSTRING_H__

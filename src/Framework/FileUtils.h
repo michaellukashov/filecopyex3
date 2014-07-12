@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __FILEUTILS_H__
-#define __FILEUTILS_H__
-
 #pragma once
 
 #include "objstring.h"
@@ -70,4 +67,3 @@ void Out(const String & s);
 
 BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath, String & PrimaryVolumeMountPoint);
 
-#endif//__FILEUTILS_H__

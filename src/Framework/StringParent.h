@@ -1,5 +1,4 @@
-#ifndef __STRINGPARENT_H__
-#define __STRINGPARENT_H__
+#pragma once
 
 #include "ObjString.h"
 
@@ -24,5 +23,3 @@ public:
   int saveToFile(FILE * f, TextFormat tf = tfANSI);
   int saveToFile(const String & fileName, TextFormat tf = tfANSI);
 };
-
-#endif

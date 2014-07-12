@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __ENGINE_H__
-#define __ENGINE_H__
-
 #pragma once
 
 #include <vector>
@@ -171,5 +168,3 @@ private:
 void Compress(HANDLE handle, int f);
 void Encrypt(const String & fn, int f);
 void CopyACL(const String & src, const String & dst);
-
-#endif//__ENGINE_H__

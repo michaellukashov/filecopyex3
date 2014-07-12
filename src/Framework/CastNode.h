@@ -1,6 +1,3 @@
-#ifndef __CASTOBJECT_H__
-#define __CASTOBJECT_H__
-
 #include "Node.h"
 
 template <class ChildType, class ParentType, class PayloadType>
@@ -16,5 +13,3 @@ protected:
   ChildType & child(int i) { return static_cast<ChildType &>(Node::child(i)); }
   ChildType & child(const String & name) { return static_cast<ChildType &>(Node::child(name)); }
 };
-
-#endif // __CASTOBJECT_H__

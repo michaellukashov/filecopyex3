@@ -1,5 +1,4 @@
-#ifndef __STRINGVECTOR_H__
-#define __STRINGVECTOR_H__
+#pragma once
 
 #include <vector>
 
@@ -20,4 +19,3 @@ private:
   std::vector<String> data;
 };
 
-#endif

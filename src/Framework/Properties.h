@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PROPERTIES_H__
-#define __PROPERTIES_H__
-
 #pragma once
 
 #include <map>
@@ -72,4 +69,3 @@ protected:
 
 typedef std::map<String, Property> PropertyMap;
 
-#endif//__PROPERTIES_H__

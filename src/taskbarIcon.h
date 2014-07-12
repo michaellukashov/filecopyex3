@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __TASKBAR_ICON_H__
-#define __TASKBAR_ICON_H__
-
 #pragma once
 
 class TaskBarIcon
@@ -40,4 +37,3 @@ protected:
   State last_state;
 };
 
-#endif//__TASKBAR_ICON_H__

@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __DLGCLASS_H__
-#define __DLGCLASS_H__
-
 #pragma once
 
 #include "Framework/Node.h"
@@ -293,5 +290,3 @@ protected:
 
 void InitObjMgr();
 void DoneObjMgr();
-
-#endif//__DLGCLASS_H__

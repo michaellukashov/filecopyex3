@@ -1,5 +1,4 @@
-#ifndef __OBJECTMANAGER_H__
-#define __OBJECTMANAGER_H__
+#pragma once
 
 #include "Payload.h"
 #include "Node.h"
@@ -30,5 +29,3 @@ private:
 };
 
 extern ObjectManager * objectManager;
-
-#endif // __OBJECTMANAGER_H__

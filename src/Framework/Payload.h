@@ -1,5 +1,4 @@
-#ifndef __OBJECTCLASS_H__
-#define __OBJECTCLASS_H__
+#pragma once
 
 #include "Node.h"
 
@@ -34,4 +33,3 @@ protected:
 
 //virtual const String getType() { return ; }
 
-#endif // __OBJECTCLASS_H__

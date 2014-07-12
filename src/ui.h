@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __UI_H__
-#define __UI_H__
-
 int ShowMessage(const String &, const String &, int);
 int ShowMessageOK(const String &, const String &);
 int ShowMessageHelp(const String &, const String &, int, const String &);
@@ -43,5 +40,3 @@ String GetErrText(int code);
 String FormatWidth(const String &, int);
 String FormatWidthNoExt(const String &, int);
 String SplitWidth(const String &, size_t);
-
-#endif//__UI_H__

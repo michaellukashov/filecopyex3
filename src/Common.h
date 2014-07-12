@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __FWCOMMON_H__
-#define __FWCOMMON_H__
-
 #pragma once
 
 #include "Framework/ObjString.h"
@@ -51,5 +48,3 @@ const String & LOC(const String & l);
 extern PluginStartupInfo Info;
 extern FarStandardFunctions FSF;
 extern FarPlugin * plugin;
-
-#endif//__FWCOMMON_H__

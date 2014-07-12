@@ -1,5 +1,4 @@
-#ifndef __DESCLIST_H__
-#define __DESCLIST_H__
+#pragma once
 
 #include <map>
 
@@ -37,5 +36,3 @@ private:
   int LoadFromString(wchar_t * ptr);
   int LoadFromList(StringVector & list);
 };
-
-#endif

@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __OBJECT_H__
-#define __OBJECT_H__
-
 #pragma once
 
 #include "Properties.h"
@@ -82,5 +79,3 @@ private:
 
 #define DEFINE_NODE_CLASS(type) \
   static Node* create() { return new type(); };
-
-#endif //__OBJECT_H__

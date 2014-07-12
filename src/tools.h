@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __COMMON_H__
-#define __COMMON_H__
-
 #pragma once
 
 #include "SDK/plugin.hpp"
@@ -110,5 +107,3 @@ inline int64_t TicksPerSec()
   QueryPerformanceFrequency(&res);
   return res.QuadPart;
 }
-
-#endif//__COMMON_H__

@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __DLGOBJECT_H__
-#define __DLGOBJECT_H__
-
 #pragma once
 
 #include "Framework/Node.h"
@@ -108,5 +105,3 @@ protected:
 class FarDialogList : public CastNode<FarDialog,FarDialog,FarDialogClass>
 {
 };
-
-#endif//__DLGOBJECT_H__

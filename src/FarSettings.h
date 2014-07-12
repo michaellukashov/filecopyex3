@@ -1,5 +1,4 @@
-#ifndef __SETTINGS_H__
-#define __SETTINGS_H__
+#pragma once
 
 #include <stddef.h>
 #include "Framework/Properties.h"
@@ -35,5 +34,3 @@ private:
 
 bool saveOptions(const PropertyMap & options, FarSettings & settings);
 bool loadOptions(PropertyMap & options, FarSettings & settings);
-
-#endif

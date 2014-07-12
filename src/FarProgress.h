@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __PROGRESS_H__
-#define __PROGRESS_H__
-
 #pragma once
 
 #include "FarPlugin.h"
@@ -64,5 +61,3 @@ protected:
 
   TaskBarIcon taskbarIcon;
 };
-
-#endif//__PROGRESS_H__

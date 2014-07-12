@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRUTILS_H__
-#define __STRUTILS_H__
-
 #pragma once
 
 #include "objstring.h"
@@ -37,5 +34,3 @@ String FormatTime(const FILETIME &);
 String FormatProgress(int64_t cb, int64_t total);
 String FormatSpeed(int64_t cb);
 String FormatValue(int64_t Value);
-
-#endif//__STRUTILS_H__

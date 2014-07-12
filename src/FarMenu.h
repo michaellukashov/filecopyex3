@@ -1,6 +1,3 @@
-#ifndef __FARMENU_H__
-#define __FARMENU_H__
-
 #pragma once
 
 #include <vector>
@@ -31,5 +28,3 @@ protected:
 
   static void SetItemText(FarMenuItem * item, const String & text);
 };
-
-#endif

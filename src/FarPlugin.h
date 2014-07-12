@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __FARPLUGIN_H__
-#define __FARPLUGIN_H__
-
 #pragma once
 
 #include "Framework/ObjString.h"
@@ -72,5 +69,3 @@ private:
 };
 
 // FileCopyExPlugin* Plugin();
-
-#endif//__PLUGIN_H__

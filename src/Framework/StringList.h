@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __STRINGLIST_H__
-#define __STRINGLIST_H__
-
 #pragma once
 
 #include <vector>
@@ -63,4 +60,3 @@ private:
   std::vector<ListItem> items;
 };
 
-#endif//__STRINGLIST_H__
