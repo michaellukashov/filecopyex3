@@ -22,17 +22,17 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__STRUTILS_H__
-#define	__STRUTILS_H__
+#ifndef __STRUTILS_H__
+#define __STRUTILS_H__
 
 #pragma once
 
 #include "objstring.h"
 
-String Format(const wchar_t* fmt, ...);
+String Format(const wchar_t * fmt, ...);
 
 String FormatNum(int64_t);
-String FormatTime(const FILETIME&);
+String FormatTime(const FILETIME &);
 
 String FormatProgress(int64_t cb, int64_t total);
 String FormatSpeed(int64_t cb);

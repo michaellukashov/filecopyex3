@@ -22,8 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__PROPERTIES_H__
-#define	__PROPERTIES_H__
+#ifndef __PROPERTIES_H__
+#define __PROPERTIES_H__
 
 #pragma once
 
@@ -34,40 +34,40 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class Property
 {
-	enum Type { vtUnknown, vtInt, vtFloat, vtString };
+  enum Type { vtUnknown, vtInt, vtFloat, vtString };
 public:
-	Property() : type(vtUnknown), vInt(0), vFloat(0.0) {}
-	Property(const Property& other);
-	Property(int);
-	Property(float);
-	Property(const String&);
+  Property() : type(vtUnknown), vInt(0), vFloat(0.0) {}
+  Property(const Property & other);
+  Property(int);
+  Property(float);
+  Property(const String &);
 
-	Property& operator = (const Property& p);
+  Property & operator = (const Property & p);
 
-	operator int() const;
-	operator bool() const;
-	operator float() const;
-	operator const String() const;
+  operator int() const;
+  operator bool() const;
+  operator float() const;
+  operator const String() const;
 
-	bool operator==(int v) const { return v == (int)*this; }
-	bool operator==(bool v) const { return v == (bool)*this; }
-	bool operator==(float v) const { return v == (float)*this; }
-	bool operator==(const String& v) const { return v.cmp(this->operator const String()) == 0; }
-	bool operator==(const Property& v) const;
+  bool operator==(int v) const { return v == (int)*this; }
+  bool operator==(bool v) const { return v == (bool)*this; }
+  bool operator==(float v) const { return v == (float)*this; }
+  bool operator==(const String & v) const { return v.cmp(this->operator const String()) == 0; }
+  bool operator==(const Property & v) const;
 
-	bool operator!=(int v) const { return !operator==(v); }
-	bool operator!=(bool v) const { return !operator==(v); }
-	bool operator!=(float v) const { return !operator==(v); }
-	bool operator!=(const String& v) const { return !operator==(v); }
-	bool operator!=(const Property& v) const { return !operator==(v); }
+  bool operator!=(int v) const { return !operator==(v); }
+  bool operator!=(bool v) const { return !operator==(v); }
+  bool operator!=(float v) const { return !operator==(v); }
+  bool operator!=(const String & v) const { return !operator==(v); }
+  bool operator!=(const Property & v) const { return !operator==(v); }
 
-	bool operator!() const { return !(bool)*this; }
+  bool operator!() const { return !(bool)*this; }
 
 protected:
-	Type type;
-	int vInt;
-	float vFloat;
-	String vStr;
+  Type type;
+  int vInt;
+  float vFloat;
+  String vStr;
 };
 
 typedef std::map<String, Property> PropertyMap;

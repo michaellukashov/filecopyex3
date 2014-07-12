@@ -7,27 +7,28 @@
 class ObjectManager
 {
 public:
-	~ObjectManager();
+  ~ObjectManager();
 
-	typedef Payload* createPayloadFunc();
-	typedef Node* createNodeFunc();
+  typedef Payload * createPayloadFunc();
+  typedef Node * createNodeFunc();
 
-	void regClass(const String& type, createPayloadFunc pf, createNodeFunc nf);
-	Node* create(const String& type, const String& name, Node* parent);
-	
+  void regClass(const String & type, createPayloadFunc pf, createNodeFunc nf);
+  Node * create(const String & type, const String & name, Node * parent);
+
 private:
-	class createFuncs {
-	public:
-		createPayloadFunc *pf;
-		createNodeFunc *nf;
+  class createFuncs
+  {
+  public:
+    createPayloadFunc * pf;
+    createNodeFunc * nf;
 
-		createFuncs() : pf(NULL), nf(NULL) {};
-		createFuncs(createPayloadFunc *_pf, createNodeFunc *_nf): pf(_pf), nf(_nf) {};
-	};
+    createFuncs() : pf(NULL), nf(NULL) {};
+    createFuncs(createPayloadFunc * _pf, createNodeFunc * _nf): pf(_pf), nf(_nf) {};
+  };
 
-	std::map<String, createFuncs> classes;
+  std::map<String, createFuncs> classes;
 };
 
-extern ObjectManager *objectManager;
+extern ObjectManager * objectManager;
 
 #endif // __OBJECTMANAGER_H__

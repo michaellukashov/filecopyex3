@@ -22,8 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__FILEUTILS_H__
-#define	__FILEUTILS_H__
+#ifndef __FILEUTILS_H__
+#define __FILEUTILS_H__
 
 #pragma once
 
@@ -32,12 +32,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MAX_FILENAME 4096
 
-String ExtractFileName(const String&);
-String ExtractFilePath(const String&);
-String ExtractFileExt(const String&);
-String CutEndSlash(const String&);
-String AddEndSlash(const String&);
-String ChangeFileExt(const String&, const String&);
+String ExtractFileName(const String &);
+String ExtractFilePath(const String &);
+String ExtractFileExt(const String &);
+String CutEndSlash(const String &);
+String AddEndSlash(const String &);
+String ChangeFileExt(const String &, const String &);
 
 #define gslExpandSubst 1
 #define gslExpandNetMappings 2
@@ -46,28 +46,28 @@ String ChangeFileExt(const String&, const String&);
 
 #define rfnNoNetExpand 1
 
-String GetFileRoot(const String&);
-String GetRealFileName(const String&, int flg=0);
-int GetSymLink(const String &dir, String &res, int flg);
-String GetFileNameRoot(const String&);
-String ExpandEnv(const String&);
+String GetFileRoot(const String &);
+String GetRealFileName(const String &, int flg=0);
+int GetSymLink(const String & dir, String & res, int flg);
+String GetFileNameRoot(const String &);
+String ExpandEnv(const String &);
 
-String ApplyFileMask(const String& name, const String& mask);
-String ApplyFileMaskPath(const String& name, const String& mask);
+String ApplyFileMask(const String & name, const String & mask);
+String ApplyFileMaskPath(const String & name, const String & mask);
 
-int FileExists(const String& name);
-int MoveFile(const String& src, const String& dst, int replace);
-void ForceDirectories(const String& s);
+int FileExists(const String & name);
+int MoveFile(const String & src, const String & dst, int replace);
+void ForceDirectories(const String & s);
 
 int64_t FileSize(HANDLE h);
-int64_t FileSize(const String& fn);
+int64_t FileSize(const String & fn);
 
 String TempName();
 String TempPath();
 String TempPathName();
 
-void Out(const String &s);
+void Out(const String & s);
 
-BOOL GetPrimaryVolumeMountPoint(const String& VolumeMountPointForPath, String& PrimaryVolumeMountPoint);
+BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath, String & PrimaryVolumeMountPoint);
 
 #endif//__FILEUTILS_H__

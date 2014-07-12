@@ -28,123 +28,124 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Property::Property(const Property & other)
 {
-	if (this != &other)
-	{
-		(*this) = other;
-	}
+  if(this != &other)
+  {
+    (*this) = other;
+  }
 }
 
 Property::Property(int v) : vFloat(0.)
 {
-	type = vtInt;
-	vInt = v;
+  type = vtInt;
+  vInt = v;
 }
 
 Property::Property(float v) : vInt(0)
 {
-	type = vtFloat;
-	vFloat = v;
+  type = vtFloat;
+  vFloat = v;
 }
 
-Property::Property(const String& v) : type(vtString), vInt(0), vFloat(0.0), vStr(v)
+Property::Property(const String & v) : type(vtString), vInt(0), vFloat(0.0), vStr(v)
 {
 }
 
-Property& Property::operator=(const Property& p)
+Property & Property::operator=(const Property & p)
 {
-	type = p.type;
-	switch (p.type) {
-		case vtInt:
-			vInt = (int)p;
-			break;
+  type = p.type;
+  switch(p.type)
+  {
+    case vtInt:
+      vInt = (int)p;
+      break;
 
-		case vtFloat:
-			vFloat = (float)p;
-			break;
+    case vtFloat:
+      vFloat = (float)p;
+      break;
 
-		case vtString:
-			vStr = p.operator const String();
-			break;
-	}
-	return *this;
+    case vtString:
+      vStr = p.operator const String();
+      break;
+  }
+  return *this;
 }
 
 Property::operator int() const
 {
-	switch(type)
-	{
-		case vtInt:
-			return vInt;
+  switch(type)
+  {
+    case vtInt:
+      return vInt;
 
-		case vtFloat:
-			return (int)vFloat;
+    case vtFloat:
+      return (int)vFloat;
 
-		case vtString:
-			return vStr.AsInt();
-	}
-	return 0;
+    case vtString:
+      return vStr.AsInt();
+  }
+  return 0;
 }
 
 Property::operator bool() const
 {
-	switch(type)
-	{
-		case vtInt:
-			return vInt != 0;
+  switch(type)
+  {
+    case vtInt:
+      return vInt != 0;
 
-		case vtFloat:
-			return vFloat != 0;
+    case vtFloat:
+      return vFloat != 0;
 
-		case vtString:
-			return vStr == L"1";
-	}
-	return false;
+    case vtString:
+      return vStr == L"1";
+  }
+  return false;
 }
 
 Property::operator float() const
 {
-	switch(type)
-	{
-		case vtInt:
-			return (float)vInt;
+  switch(type)
+  {
+    case vtInt:
+      return (float)vInt;
 
-		case vtFloat:
-			return vFloat;
+    case vtFloat:
+      return vFloat;
 
-		case vtString:
-			return vStr.AsFloat();
-	}
-	return 0;
+    case vtString:
+      return vStr.AsFloat();
+  }
+  return 0;
 }
 
 Property::operator const String() const
 {
-	switch(type)
-	{
-		case vtInt:
-			return String(vInt);
+  switch(type)
+  {
+    case vtInt:
+      return String(vInt);
 
-		case vtFloat:
-			return String(vFloat);
+    case vtFloat:
+      return String(vFloat);
 
-		case vtString:
-			return vStr;
-	}
-	return L"";
+    case vtString:
+      return vStr;
+  }
+  return L"";
 }
 
-bool Property::operator==(const Property& v) const
+bool Property::operator==(const Property & v) const
 {
-	switch(type)
-	{
-		case vtInt:
-			return operator==((int)v);
+  switch(type)
+  {
+    case vtInt:
+      return operator==((int)v);
 
-		case vtFloat:
-			return operator==((float)v);
+    case vtFloat:
+      return operator==((float)v);
 
-		case vtString:
-			return operator==(v.operator const String());
-	}
-	return false;
+    case vtString:
+      return operator==(v.operator const String());
+  }
+  return false;
 }

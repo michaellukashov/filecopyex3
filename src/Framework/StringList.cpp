@@ -26,52 +26,53 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "LowLevelStr.h"
 #include "StringList.h"
 
-void StringList::Set(int n, const String& v)
+void StringList::Set(int n, const String & v)
 {
-	ListItem item;
-	item.str = v;
-	item.Data = 0;
-	items[n] = item;
+  ListItem item;
+  item.str = v;
+  item.Data = 0;
+  items[n] = item;
 }
 
-int& StringList::Values(int n)
+int & StringList::Values(int n)
 {
-	return items[n].Data;
+  return items[n].Data;
 }
 
-void StringList::Add(const String& v, int data)
+void StringList::Add(const String & v, int data)
 {
-	ListItem itm;
-	itm.Data=data;
-	itm.str=v;
-	items.push_back(itm);
+  ListItem itm;
+  itm.Data=data;
+  itm.str=v;
+  items.push_back(itm);
 }
 
 /*
 void StringList::Delete(int n)
 {
-	items.Delete(n, 1);
+  items.Delete(n, 1);
 }
 
 void StringList::Exchange(int i, int j)
 {
-	items.Exchange(i, j);
+  items.Exchange(i, j);
 }
 */
 
-void StringList::AddList(StringList &src)
+void StringList::AddList(StringList & src)
 {
-	for (size_t i=0; i<src.Count(); i++) {
-		Add(src[i]);
-	}
+  for(size_t i=0; i<src.Count(); i++)
+  {
+    Add(src[i]);
+  }
 }
 
-int StringList::Find(const String& v, int start) const
+int StringList::Find(const String & v, int start) const
 {
-	for(size_t i = start; i < Count(); ++i)
-	{
-		if(items[i].str.cmp(v) == 0)
-			return i;
-	}
-	return -1;
+  for(size_t i = start; i < Count(); ++i)
+  {
+    if(items[i].str.cmp(v) == 0)
+      return i;
+  }
+  return -1;
 }

@@ -6,6 +6,6 @@
 #include "ObjString.h"
 
 typedef std::map<const String,String> Locale;
-void LoadLocale(const String& fn, Locale &locale);
+void LoadLocale(const String & fn, Locale & locale);
 
 #endif
