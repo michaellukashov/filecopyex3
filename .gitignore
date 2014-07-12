@@ -4,6 +4,7 @@ ipch/
 *.suo
 /Debug Unicode/
 /Release Unicode/
+/filecopyex3-build/
 
 *.orig
 
