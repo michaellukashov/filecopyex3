@@ -9,12 +9,12 @@ public:
 	Payload() {};
 	virtual ~Payload() {};
 
-	virtual void init(const String &_name);
+	virtual void init(const String &AName);
 
-	void addProperty(const String& name, int def);
-	void addProperty(const String& name, float def);
-	void addProperty(const String& name, const String& def);
-	Property& operator()(const String& name) { return getProp(name); }
+	void addProperty(const String& AName, int def);
+	void addProperty(const String& AName, float def);
+	void addProperty(const String& AName, const String& def);
+	Property& operator()(const String& AName) { return getProp(AName); }
 
 	const String getName() const {return name; };
 
@@ -22,7 +22,7 @@ public:
 	void propLoad() { prop = propSaved; };
 
 protected:
-	Property& getProp(const String& name) { return prop[name]; }
+	Property& getProp(const String& AName) { return prop[AName]; }
 
 	PropertyMap prop;
 	PropertyMap propSaved;
@@ -31,7 +31,7 @@ protected:
 
 #define DEFINE_CLASS(name, type) \
 	static Payload* create() { return new type; };
-	
+
 //virtual const String getType() { return ; }
 
 #endif // __OBJECTCLASS_H__
