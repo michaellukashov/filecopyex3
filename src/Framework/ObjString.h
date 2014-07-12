@@ -50,14 +50,12 @@ public:
 		str.resize(len, ch);
 	}
 
-	String(const wchar_t* v)
+	String(const wchar_t* v) : str(v)
 	{
-		str = v;
 	}
 
-	String(const std::wstring& v)
+	String(const std::wstring& v) : str(v)
 	{
-		str = v;
 	}
 
 	inline wchar_t operator[] (int i) const
