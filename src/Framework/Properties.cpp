@@ -38,7 +38,7 @@ Property::Property(float v) : vInt(0)
 	vFloat = v;
 }
 
-Property::Property(const String& v) : vInt(0), vFloat(0.0), type(vtString), vStr(v)
+Property::Property(const String& v) : type(vtString), vInt(0), vFloat(0.0), vStr(v)
 {
 }
 
