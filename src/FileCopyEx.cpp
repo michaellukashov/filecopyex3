@@ -19,7 +19,7 @@ FarPlugin* plugin = NULL;
 */
 const wchar_t* GetMsg(int MsgId)
 {
-	return Info.GetMsg(&MainGuid,MsgId);
+  return Info.GetMsg(&MainGuid,MsgId);
 }
 
 static void FarErrorHandler(const wchar_t* s)
@@ -31,7 +31,7 @@ static void FarErrorHandler(const wchar_t* s)
 }
 
 /*
-Far Manager вызывает функцию GetGlobalInfoW в первую очередь, для получения основной информации о плагине. 
+Far Manager вызывает функцию GetGlobalInfoW в первую очередь, для получения основной информации о плагине.
 Функция вызывается один раз.
 */
 void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
@@ -46,7 +46,7 @@ void WINAPI GetGlobalInfoW(struct GlobalInfo *Info)
 }
 
 /*
-Функция SetStartupInfoW вызывается один раз, после загрузки DLL-модуля в память. 
+Функция SetStartupInfoW вызывается один раз, после загрузки DLL-модуля в память.
 Far Manager передаёт плагину информацию, необходимую для дальнейшей работы.
 */
 void WINAPI SetStartupInfoW(const struct PluginStartupInfo *psi)
@@ -89,7 +89,7 @@ void WINAPI GetPluginInfoW(struct PluginInfo *Info)
 */
 intptr_t WINAPI ConfigureW(const struct ConfigureInfo *Info)
 {
-	return plugin->Configure(Info);
+  return plugin->Configure(Info);
 }
 
 /*
