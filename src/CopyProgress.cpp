@@ -171,7 +171,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
     if (pc>100) pc=100;
     buf = Format(L"{%d%% %2.2d:%2.2d} %s", pc, (int)RemainingTime/60, (int)RemainingTime%60,
                 Move? LOC("Engine.Moving").ptr():LOC("Engine.Copying").ptr());
-  SetTitle2(buf);
+    SetTitle2(buf);
   }
 }
 
