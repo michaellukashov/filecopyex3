@@ -180,7 +180,7 @@ void Node::SaveToList(StringVector &list, int clear, int level)
 }
 */
 
-void Node::ReloadProperties()
+void Node::ReloadProperties() const
 {
 	getPayload().propLoad();
 }

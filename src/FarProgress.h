@@ -57,7 +57,7 @@ protected:
 	void DrawText(int, int, FarColor*, const String&);
 	void SetTitle(const String&);
 	void SetTitle2(const String&);
-	String GetTitle();
+	String GetTitle() const;
 	String TitleBuf, ProgTitle;
 	void DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize);
 	int64_t LastUpdate;

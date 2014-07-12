@@ -56,7 +56,7 @@ public:
 	// void	MacroCommand(const FARMACROCOMMAND& cmd); // XXX???
 
 private:
-	String GetDLLPath();
+	String GetDLLPath() const;
 
 	FarDialogList dialogs;
 	PropertyMap options;
@@ -68,7 +68,7 @@ private:
 	int flags;
 
 	void	About();
-	void	KeyConfig();
+	void	KeyConfig() const;
 };
 
 // FileCopyExPlugin* Plugin();

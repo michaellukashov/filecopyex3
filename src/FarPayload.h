@@ -68,7 +68,7 @@ public:
 
 	FarDialog* getDialog() { return dialog; };
 	void setDialog(FarDialog *_dialog) { dialog = _dialog; };
-	int getDialogItem() { return dialogItem; };
+	int getDialogItem() const { return dialogItem; };
 
 	void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW);
 

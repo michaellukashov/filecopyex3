@@ -54,7 +54,7 @@ public:
 	//int SaveTo(FILE*);
 	int Load(const String&);
 	//int Save(const String&);
-	void ReloadProperties();
+	void ReloadProperties() const;
 	void ReloadPropertiesRecursive();
 
 	//void init(const String &name, const String &type, ObjectClass* cl, Object* parent);
