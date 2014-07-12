@@ -112,7 +112,7 @@ protected:
 		item.X2 = getProp("Shorten") ? (item.X1-1) : (item.X1+lablen(item)-1);
 	}
 
-	void BeforeAdd(FarDialogItem& item, FarDlgNode& obj)
+	static void BeforeAdd(FarDialogItem& item, FarDlgNode& obj)
 	{
 //		if (obj("Shorten"))
 //			FormatWidth(item.PtrData, __min(item.X2-item.X1+1, 500))
@@ -267,7 +267,7 @@ protected:
 	{
 		state[getName()] = getProp("Text");
 	}
-	void BeforeAdd(FarDialogItem& item, FarDlgNode& obj)
+	static void BeforeAdd(FarDialogItem& item, FarDlgNode& obj)
 	{
 		item.X2--;
 	}

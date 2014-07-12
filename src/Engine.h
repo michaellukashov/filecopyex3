@@ -132,7 +132,7 @@ private:
 	FarProgress ScanFoldersProgressBox;
 	int64_t ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
 		ReadN, WriteN, TotalN, FirstWrite, StartTime;
-	void Delay(int64_t, int64_t, int64_t&, int64_t);
+	static void Delay(int64_t, int64_t, int64_t&, int64_t);
 	int SectorSize;
 
 	int CheckOverwrite(int, const String&, const String&, String&);
@@ -141,17 +141,17 @@ private:
 	int AddFile(const String& _src, const String& _dst, int Attr, int64_t Size, const FILETIME& creationTime, const FILETIME& lastAccessTime, const FILETIME& lastWriteTime, int Flags, int Level, int PanelIndex=-1);
 	int AddFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, int PanelIndex=-1);
 	void AddTopLevelDir(const String &dir, const String &dstmask, int Flags, FileName::Direction d);
-	void RememberFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, RememberStruct&);
+	static void RememberFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, RememberStruct&);
 	int AddRemembered(RememberStruct&);
 	int DirStart(const String& dir, const String& dst);
 	int DirEnd(const String& dir, const String& dst);
-	String FindDescFile(const String& dir, int *idx=NULL);
-	String FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx=NULL);
+	static String FindDescFile(const String& dir, int *idx=NULL);
+	static String FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx=NULL);
 
 	void setFileTime(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
 	void setFileSizeAndTime(const String& fn, int64_t size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
 
-	void FarToWin32FindData(
+	static void FarToWin32FindData(
 		const TPanelItem &tpi,
 		WIN32_FIND_DATA &wfd
 	);

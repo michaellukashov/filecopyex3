@@ -163,7 +163,7 @@ void FarPlugin::OpenPlugin(const struct OpenInfo *OInfo)
 	CallCopy(move, curOnly);
 }
 
-String FarPlugin::GetDLLPath() const
+String FarPlugin::GetDLLPath()
 {
 	wchar_t buf[MAX_FILENAME];
 	GetModuleFileName((HMODULE)hInstance, buf, MAX_FILENAME);
@@ -202,7 +202,7 @@ void FarPlugin::InitOptions()
 	options["writeSpeedLimitLimitDef"] = String("");
 };
 
-void FarPlugin::KeyConfig() const
+void FarPlugin::KeyConfig()
 {
 	//int res = Info.MacroControl(&MainGuid, MCTL_SAVEALL, 0, NULL);
 	//

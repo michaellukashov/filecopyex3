@@ -186,7 +186,7 @@ void FarProgress::SetTitle(const String& v)
   SetConsoleTitle(v.ptr());
 }
 
-void FarProgress::SetTitle2(const String& v)
+void FarProgress::SetTitle2(const String& v) const
 {
 	String far_desc = TitleBuf;
 	int x = far_desc.find('-');
@@ -197,7 +197,7 @@ void FarProgress::SetTitle2(const String& v)
 	SetTitle(v + " " + far_desc);
 }
 
-String FarProgress::GetTitle() const
+String FarProgress::GetTitle()
 {
   wchar_t buf[512];
   GetConsoleTitle(buf, 512);

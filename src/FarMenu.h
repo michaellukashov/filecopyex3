@@ -29,7 +29,7 @@ protected:
 	int Flags, Selection;
 	std::vector<FarMenuItem> items;
 
-	void SetItemText(FarMenuItem* item, const String& text);
+	static void SetItemText(FarMenuItem* item, const String& text);
 };
 
 #endif
