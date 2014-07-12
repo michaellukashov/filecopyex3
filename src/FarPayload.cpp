@@ -108,9 +108,9 @@ void FarDlgPayload::preInitItem(FarDialogItem& item)
 
 	String p = getProp("Text");
 	if (p.empty()) {
-		String name = getDialog()->getName() + "." + getName();
-		String loc = LOC(name);
-		p = (name == loc) ? "": loc;
+		String n = getDialog()->getName() + "." + getName();
+		String loc = LOC(n);
+		p = (n == loc) ? "": loc;
 	}
 	SetItemText(item, p);
 
