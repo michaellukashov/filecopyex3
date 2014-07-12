@@ -1949,12 +1949,12 @@ int Engine::CheckOverwrite(int fnum, const String& Src, const String& Dst, Strin
 	FindClose(FindFirstFile(Dst.ptr(), &fd));
 	dsz=FormatNum(MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh));
 	dtime=FormatTime(fd.ftLastWriteTime);
-	dlg["Label4"]("Text")=Format(L"%14s %s	%s", dsz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), dtime.ptr());
+	dlg["Label4"]("Text")=Format(L"%14s %s %s", dsz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), dtime.ptr());
 
 	FindClose(FindFirstFile(Src.ptr(), &fs));
 	ssz=FormatNum(MAKEINT64(fs.nFileSizeLow, fs.nFileSizeHigh));
 	stime=FormatTime(fs.ftLastWriteTime);
-	dlg["Label3"]("Text")=Format(L"%14s %s	%s", ssz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), stime.ptr());
+	dlg["Label3"]("Text")=Format(L"%14s %s %s", ssz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), stime.ptr());
 
 	dlg["Source"]("Text")			 = Format(L"%-16s", LOC("OverwriteDialog.Source").ptr());
 	dlg["Destination"]("Text")	= Format(L"%-16s", LOC("OverwriteDialog.Destination").ptr());
