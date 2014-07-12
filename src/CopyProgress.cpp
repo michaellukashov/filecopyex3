@@ -43,6 +43,7 @@ CopyProgress::CopyProgress(void)
   Y1=(h-H - 1)/2;
   X2=X1+W-1, Y2=Y1+H-1;
   Move = 0;
+  NeedToRedraw = false;
 }
 
 CopyProgress::~CopyProgress(void)
@@ -51,17 +52,8 @@ CopyProgress::~CopyProgress(void)
 
 void CopyProgress::Start(int move)
 {
-  hScreen=Info.SaveScreen(0, 0, -1, -1);
-  DrawWindow(X1, Y1, X2, Y2, move? LOC("Engine.Moving"):LOC("Engine.Copying"));
-  wchar_t buf[512], *p=buf;
-  for (int i=0; i<W-MG*2+2; i++) *p++=0x2500;//'─'
-  *p=0;
-  Info.Text(X1+MG-1, Y1+5, &clrFrame, buf);
-  Info.Text(X1+MG-1, Y1+9, &clrFrame, buf);
   Move=move;
-  Info.Text(0, 0, 0, NULL);
-  Info.RestoreScreen(NULL);
-  TitleBuf=GetTitle();
+  RedrawWindowIfNeeded();
 }
 
 void CopyProgress::Stop()
@@ -77,6 +69,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
                             int ParallelMode, int64_t FirstWriteTime,
                             int64_t StartTime, int BufferSize)
 {
+  RedrawWindowIfNeeded();
   double TotalTime     = 0;
   double ElapsedTime   = (double)(GetTime()-StartTime);
   double RemainingTime = 0;
@@ -179,6 +172,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
 void CopyProgress::DrawProgress(const String& pfx, int y, int64_t cb, int64_t total,
                                 int64_t time, int64_t n, int64_t totaln)
 {
+  RedrawWindowIfNeeded();
   if (cb>total) cb=total;
   DrawText(X1+MG, Y1+y, &clrLabel, pfx);
   String buf;
@@ -199,6 +193,7 @@ void CopyProgress::DrawName(const String& fn, int y)
 
 void CopyProgress::ShowReadName(const String& fn)
 {
+  RedrawWindowIfNeeded();
   // bug #22 fixed by axxie
   if (GetTime()-lastupdate_read > interval)
   {
@@ -210,6 +205,7 @@ void CopyProgress::ShowReadName(const String& fn)
 
 void CopyProgress::ShowWriteName(const String& fn)
 {
+  RedrawWindowIfNeeded();
   // bug #22 fixed by axxie
   if (GetTime()-lastupdate_write > interval)
   {
@@ -225,6 +221,7 @@ void CopyProgress::ShowProgress(int64_t read, int64_t write, int64_t total,
                                 int64_t totalN, int parallel,
                                 int64_t FirstWrite, int64_t StartTime, int BufferSize)
 {
+  RedrawWindowIfNeeded();
   if (GetTime()-lastupdate > interval)
   {
     lastupdate = GetTime();
@@ -234,4 +231,32 @@ void CopyProgress::ShowProgress(int64_t read, int64_t write, int64_t total,
               parallel, FirstWrite, StartTime, BufferSize);
     Info.Text(0, 0, 0, NULL);
   }
+}
+
+void CopyProgress::SetNeedToRedraw(bool Value)
+{
+  NeedToRedraw = Value;
+}
+
+void CopyProgress::RedrawWindowIfNeeded()
+{
+  if (NeedToRedraw)
+  {
+    RedrawWindow();
+    NeedToRedraw = false;
+  }
+}
+
+void CopyProgress::RedrawWindow()
+{
+  hScreen=Info.SaveScreen(0, 0, -1, -1);
+  DrawWindow(X1, Y1, X2, Y2, Move? LOC("Engine.Moving"):LOC("Engine.Copying"));
+  wchar_t buf[512], *p=buf;
+  for (int i=0; i<W-MG*2+2; i++) *p++=0x2500;//'─'
+  *p=0;
+  Info.Text(X1+MG-1, Y1+5, &clrFrame, buf);
+  Info.Text(X1+MG-1, Y1+9, &clrFrame, buf);
+  Info.Text(0, 0, 0, NULL);
+  Info.RestoreScreen(NULL);
+  TitleBuf=GetTitle();
 }

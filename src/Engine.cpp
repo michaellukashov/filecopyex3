@@ -1116,6 +1116,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
 	dlg.ResetControls();
 	FarDialog& advdlg = plugin->Dialogs()["AdvCopyDialog"];
 	advdlg.ResetControls();
+	CopyProgressBox.SetNeedToRedraw(true);
 
 	String prompt, srcPath, dstPath;
 	Move = move;
@@ -1939,6 +1940,7 @@ int Engine::CheckOverwrite(int fnum, const String& Src, const String& Dst, Strin
 {
 	FarDialog& dlg = plugin->Dialogs()["OverwriteDialog"];
 	dlg.ResetControls();
+	CopyProgressBox.SetNeedToRedraw(true);
 
 	dlg["Label2"]("Text")=Dst;
 	String ssz, dsz, stime, dtime, buf;
@@ -1992,6 +1994,7 @@ rep:
 	{
 		FarDialog& dlg = plugin->Dialogs()["RenameDialog"];
 		dlg.ResetControls();
+		CopyProgressBox.SetNeedToRedraw(true);
 
 		dlg["Edit"]("Text")=ExtractFileName(Dst);
 rep1:
@@ -2073,6 +2076,7 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
 
 			FarDialog& dlg = plugin->Dialogs()["FreeSpaceErrorDialog"];
 			dlg.ResetControls();
+			CopyProgressBox.SetNeedToRedraw(true);
 
 			dlg("Title") = LOC("FreeSpaceErrorDialog.Title");
 			String disk_str = dstroot;
@@ -2132,6 +2136,7 @@ int Engine::EngineError(const String& s, const String& fn, int code, int& flg, c
 
     FarDialog& dlg = plugin->Dialogs()["CopyError"];
     dlg.ResetControls();
+    CopyProgressBox.SetNeedToRedraw(true);
 
     if (!title.empty()) {
         dlg("Title") = title;

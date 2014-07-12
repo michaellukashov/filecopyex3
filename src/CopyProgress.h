@@ -46,10 +46,13 @@ public:
 		int64_t readN, int64_t writeN,
 		int64_t totalN, int parallel,
 		int64_t FirstWrite, int64_t StartTime, int BufferSize);
+	void SetNeedToRedraw(bool Value);
 private:
-	void DrawProgress(const String&, int, int64_t, int64_t, int64_t, int64_t, int64_t);
+  void RedrawWindowIfNeeded();
+  void RedrawWindow();
+  void DrawProgress(const String&, int, int64_t, int64_t, int64_t, int64_t, int64_t);
 
-	void DrawName(const String&, int);
+  void DrawName(const String&, int);
 
 	void DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t TotalBytes,
 		int64_t ReadTime, int64_t WriteTime,
@@ -61,6 +64,7 @@ private:
 	int64_t lastupdate, lastupdate_read, lastupdate_write, interval, clastupdate, cinterval;
 
 	int X1, Y1, X2, Y2, Move;
+	bool NeedToRedraw;
 };
 
 #endif//__COPYPROGRESS_H__
