@@ -25,7 +25,7 @@ const wchar_t * GetMsg(int MsgId)
 static void FarErrorHandler(const wchar_t * s)
 {
   const wchar_t * items[]= { L"Framework Error", s, L"OK", L"Debug" };
-  if(Info.Message(&MainGuid, &MainGuid, FMSG_WARNING, NULL, items, 4, 2) == 1)
+  if (Info.Message(&MainGuid, &MainGuid, FMSG_WARNING, NULL, items, 4, 2) == 1)
   {
     DebugBreak();
   }
@@ -52,11 +52,11 @@ Far Manager передаёт плагину информацию, необход
 */
 void WINAPI SetStartupInfoW(const struct PluginStartupInfo * psi)
 {
-  if(psi->StructSize >= sizeof(PluginStartupInfo))
+  if (psi->StructSize >= sizeof(PluginStartupInfo))
   {
     Info = *psi;
     FSF = *Info.FSF;
-    if(!plugin)
+    if (!plugin)
     {
       errorHandler = FarErrorHandler;
       InitObjMgr();

@@ -45,12 +45,12 @@ void Free(void * ptr)
 
 void Compress(HANDLE handle, int f)
 {
-  if(f==ATTR_INHERIT) return;
+  if (f==ATTR_INHERIT) return;
   USHORT b = f?
              COMPRESSION_FORMAT_DEFAULT:
              COMPRESSION_FORMAT_NONE;
   DWORD cb;
-  if(!DeviceIoControl(handle, FSCTL_SET_COMPRESSION,
+  if (!DeviceIoControl(handle, FSCTL_SET_COMPRESSION,
                       (LPVOID)&b, sizeof(b), NULL, 0, &cb, NULL))
     Error(LOC("Error.Compress"), GetLastError());
 }
@@ -59,7 +59,7 @@ int GetCompression(HANDLE handle)
 {
   USHORT res;
   DWORD cb;
-  if(!DeviceIoControl(handle, FSCTL_GET_COMPRESSION,
+  if (!DeviceIoControl(handle, FSCTL_GET_COMPRESSION,
                       NULL, 0, &res, sizeof(res), &cb, NULL))
     return -1;
   else
@@ -68,25 +68,25 @@ int GetCompression(HANDLE handle)
 
 void Encrypt(const String & fn, int f)
 {
-  if(!Win2K || f==ATTR_INHERIT) return;
+  if (!Win2K || f==ATTR_INHERIT) return;
   int res;
   SetFileAttributes(fn.ptr(), 0);
-  if(f) res = EncryptFile(fn.ptr());
+  if (f) res = EncryptFile(fn.ptr());
   else res = DecryptFile(fn.ptr(), 0);
-  if(!res)
+  if (!res)
     Error2(LOC("Error.Encrypt"), fn, GetLastError());
 }
 
 void Encrypt(HANDLE handle, int f)
 {
-  if(!Win2K || f==ATTR_INHERIT) return;
+  if (!Win2K || f==ATTR_INHERIT) return;
   DWORD cb;
   ENCRYPTION_BUFFER enc;
   enc.EncryptionOperation=f?
                           FILE_SET_ENCRYPTION:
                           FILE_CLEAR_ENCRYPTION;
   enc.Private[0]=0;
-  if(!DeviceIoControl(handle, FSCTL_SET_ENCRYPTION,
+  if (!DeviceIoControl(handle, FSCTL_SET_ENCRYPTION,
                       (LPVOID)&enc, sizeof(enc), NULL, 0, &cb, NULL))
     Error(LOC("Error.Encrypt"), GetLastError());
 }
@@ -98,13 +98,13 @@ void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si)
   DWORD cb;
   PSECURITY_DESCRIPTOR secbuf = (PSECURITY_DESCRIPTOR)new char[bufSize];
   int res = GetFileSecurity(src.ptr(), si, secbuf, bufSize, &cb);
-  if(res && cb)
+  if (res && cb)
   {
     delete[](char *)secbuf;
     secbuf = (PSECURITY_DESCRIPTOR)new char[cb];
     res=GetFileSecurity(src.ptr(), si, secbuf, cb, &cb);
   }
-  if(res)
+  if (res)
   {
     SetFileSecurity(dst.ptr(), si, secbuf);
   }
@@ -115,7 +115,7 @@ int SACLPriv = 0;
 
 void CopyACL(const String & src, const String & dst)
 {
-  if(!SACLPriv)
+  if (!SACLPriv)
   {
     HANDLE hToken;
     LUID luid;
@@ -140,15 +140,15 @@ HANDLE Open(const String & fn, int mode, int attr)
   // new feature by slst: ReadFilesOpenedForWriting checking (bug #17)
   DWORD dwShareMode = FILE_SHARE_READ;
 
-  if((mode & OPEN_READ) && (BOOL)(plugin->Options()["ReadFilesOpenedForWriting"]))
+  if ((mode & OPEN_READ) && (BOOL)(plugin->Options()["ReadFilesOpenedForWriting"]))
     dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
 
   int f;
-  if(mode & OPEN_READ) f = OPEN_EXISTING;
-  else if(mode & OPEN_CREATE) f = CREATE_ALWAYS;
+  if (mode & OPEN_READ) f = OPEN_EXISTING;
+  else if (mode & OPEN_CREATE) f = CREATE_ALWAYS;
   else
     f = OPEN_ALWAYS;
-  if(!(mode & OPEN_READ))
+  if (!(mode & OPEN_READ))
     SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
 
   HANDLE res = CreateFile(
@@ -168,8 +168,8 @@ HANDLE Open(const String & fn, int mode, int attr)
                  f,
                  (mode & OPEN_BUF ? 0: FILE_FLAG_NO_BUFFERING) | attr,
                  NULL);
-  if(res==INVALID_HANDLE_VALUE) res=NULL;
-  if(res && (mode & OPEN_APPEND))
+  if (res==INVALID_HANDLE_VALUE) res=NULL;
+  if (res && (mode & OPEN_APPEND))
     SetFilePointer(res, 0, NULL, FILE_END);
   return res;
 }
@@ -184,7 +184,7 @@ void Close(HANDLE h)
 int64_t FSeek(HANDLE h, int64_t pos, int method)
 {
   LONG hi32=HI32(pos), lo32=SetFilePointer(h, LO32(pos), &hi32, method);
-  if(lo32==INVALID_SET_FILE_POINTER && GetLastError())
+  if (lo32==INVALID_SET_FILE_POINTER && GetLastError())
     return -1;
   else
     return MAKEINT64(lo32, hi32);
@@ -198,7 +198,7 @@ int64_t FTell(HANDLE h)
 void setFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
   HANDLE h = Open(fn, OPEN_WRITE_BUF);
-  if(!h)
+  if (!h)
   {
     Error2(LOC("Error.FileOpen"), fn, GetLastError());
   }
@@ -219,7 +219,7 @@ void setFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETI
 void setFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
   HANDLE h = Open(fn, OPEN_WRITE_BUF);
-  if(!h)
+  if (!h)
   {
     Error2(LOC("Error.FileOpen"), fn, GetLastError());
   }
@@ -238,21 +238,21 @@ void setFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, 
 int Read(HANDLE h, void * buf, int size)
 {
   ULONG res;
-  if(!ReadFile(h, buf, size, &res, NULL)) return -1;
+  if (!ReadFile(h, buf, size, &res, NULL)) return -1;
   return res;
 }
 
 int Write(HANDLE h, void * buf, int size)
 {
   ULONG res;
-  if(!WriteFile(h, buf, size, &res, NULL)) return -1;
+  if (!WriteFile(h, buf, size, &res, NULL)) return -1;
   return res;
 }
 
 int GetSectorSize(const String & path)
 {
   DWORD x1, x2, x3, bps;
-  if(GetDiskFreeSpace(
+  if (GetDiskFreeSpace(
         AddEndSlash(GetFileRoot(path)).ptr(), &x1, &bps, &x2, &x3))
     return bps;
   else

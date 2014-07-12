@@ -45,7 +45,7 @@ const wchar_t * _tcsrpbrk(const wchar_t * string, const wchar_t * control)
   while(str >= string)
   {
     for(wcset = control; *wcset; wcset++)
-      if(*wcset == *str)
+      if (*wcset == *str)
         return str;
     str--;
   }

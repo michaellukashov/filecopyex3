@@ -81,7 +81,7 @@ void FarDlgNode::ClearDialogItem()
 
 FarDlgNode * FarDlgNode::FindChild(const String & name)
 {
-  if(getName() == name) return this;
+  if (getName() == name) return this;
   else return NULL;
 }
 
@@ -98,15 +98,15 @@ void FarDlgContainer::DefSize(int & sumw, int & sumh, int & fit)
   for(size_t i=0; i<childs.size(); i++)
   {
     FarDlgNode & obj = child(i);
-    if(obj("Visible"))
+    if (obj("Visible"))
     {
       int w, h, f;
       obj.DefSize(w, h, f);
       groupw += w+2;
-      if(h>grouph) grouph=h;
-      if(!obj("NoBreak"))
+      if (h>grouph) grouph=h;
+      if (!obj("NoBreak"))
       {
-        if(groupw-2>sumw) sumw=groupw-2;
+        if (groupw-2>sumw) sumw=groupw-2;
         sumh+=grouph;
         groupw=grouph=0;
       }
@@ -123,21 +123,21 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
   for(size_t i=0; i<childs.size(); i++)
   {
     FarDlgNode & obj=child(i);
-    if(obj("Visible"))
+    if (obj("Visible"))
     {
       int w, h, f;
       obj.DefSize(w, h, f);
-      if(f)
+      if (f)
       {
         group.nfit++;
         w=0;
       }
       group.w+=w+2;
-      if(h>group.h) group.h=h;
-      if(!obj("NoBreak"))
+      if (h>group.h) group.h=h;
+      if (!obj("NoBreak"))
       {
         group.w-=2;
-        if(group.w>sumw) sumw=group.w;
+        if (group.w>sumw) sumw=group.w;
         sumh+=group.h;
         group.end=i;
         Groups.push_back(group);
@@ -152,11 +152,11 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
     for(int i=Groups[j].start; i<=Groups[j].end; i++)
     {
       FarDlgNode & obj = child(i);
-      if(obj("Visible"))
+      if (obj("Visible"))
       {
         int w, h, f;
         obj.DefSize(w, h, f);
-        if(f)
+        if (f)
         {
           w=(curW-Groups[j].w)/Groups[j].nfit;
         }
@@ -173,7 +173,7 @@ void FarDlgContainer::LoadState(PropertyMap & state)
 {
   for(size_t i=0; i<childs.size(); i++)
   {
-    if(child(i).IsContainer() || (bool)child(i)("Persistent"))
+    if (child(i).IsContainer() || (bool)child(i)("Persistent"))
     {
       child(i).LoadState(state);
     }
@@ -183,7 +183,7 @@ void FarDlgContainer::LoadState(PropertyMap & state)
 void FarDlgContainer::SaveState(PropertyMap & state)
 {
   for(size_t i=0; i<childs.size(); i++)
-    if(child(i).IsContainer() || (bool)child(i)("Persistent"))
+    if (child(i).IsContainer() || (bool)child(i)("Persistent"))
       child(i).SaveState(state);
 }
 
@@ -193,7 +193,7 @@ void FarDlgContainer::RetrieveProperties(HANDLE dlg)
   for(int i=0; i<cnt; i++)
   {
     FarDlgNode & fdo = child(i);
-    if(fdo.getPayload().getDialogItem()!=-1 || fdo.IsContainer())
+    if (fdo.getPayload().getDialogItem()!=-1 || fdo.IsContainer())
       fdo.RetrieveProperties(dlg);
   }
 }
@@ -212,11 +212,11 @@ void FarDlgContainer::ClearDialogItems(std::vector<FarDialogItem>& Items)
 
 FarDlgNode * FarDlgContainer::FindChild(const String & name)
 {
-  if(getName() == name) return this;
+  if (getName() == name) return this;
   for(size_t i=0; i<childs.size(); i++)
   {
     FarDlgNode * obj=child(i).FindChild(name);
-    if(obj) return obj;
+    if (obj) return obj;
   }
   return NULL;
 }
@@ -243,7 +243,7 @@ int FarDialog::Execute()
   memset(&frame, 0, sizeof(frame));
   frame.Type=DI_DOUBLEBOX;
   String p=(*this)("Title");
-  if(p.empty())
+  if (p.empty())
   {
     p=LOC(getName());
   }
@@ -266,14 +266,14 @@ int FarDialog::Execute()
                                Info.DefDlgProc, 0
                               );  // !!! Need real Dialog GUID, instead of MainDialog
   int ret=-1;
-  if(hnd!=INVALID_HANDLE_VALUE)
+  if (hnd!=INVALID_HANDLE_VALUE)
   {
     int res = Info.DialogRun(hnd);
     for(size_t i=0; i<RetCodes.size(); i++)
     {
-      if(RetCodes[i].itemNo == res)
+      if (RetCodes[i].itemNo == res)
       {
-        if(RetCodes[i].retCode!=-1)
+        if (RetCodes[i].retCode!=-1)
         {
           RetrieveProperties(hnd);
         }
@@ -299,7 +299,7 @@ void FarDialog::ResetControls()
 FarDlgNode & FarDialog::operator[](const String & n)
 {
   FarDlgNode * obj=FindChild(n);
-  if(!obj)
+  if (!obj)
     FWError(Format(L"Request to undefined object %s", n.ptr()));
   return *obj;
 }

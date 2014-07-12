@@ -43,7 +43,7 @@ String FormatNum(int64_t n)
   static wchar_t DecimalSep[4];
   static wchar_t ThousandSep[4];
 
-  if(first)
+  if (first)
   {
     GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_STHOUSAND,ThousandSep,ARRAYSIZE(ThousandSep));
     GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_SDECIMAL,DecimalSep,ARRAYSIZE(DecimalSep));

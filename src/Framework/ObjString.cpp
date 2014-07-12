@@ -32,7 +32,7 @@ const bool isbadchar(wchar_t c)
 
 String String::substr(size_t s, size_t l) const
 {
-  if(s >= len())
+  if (s >= len())
   {
     return String();
   }
@@ -97,7 +97,7 @@ String String::rev() const
 
 String String::replace(const String & what, const String & with) const
 {
-  if(what.empty())
+  if (what.empty())
   {
     return *this;
   }

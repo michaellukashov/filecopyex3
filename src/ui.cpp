@@ -59,7 +59,7 @@ int ShowMessageExHelp(const String & title, const String & msg,
   int nb=0;
   for(const wchar_t * p=buttons.ptr(); *p; p++)
   {
-    if(*p=='\n') nb++;
+    if (*p=='\n') nb++;
   }
   String msgbuf=title+"\n"+msg+"\n\x01\n"+buttons;
   int res = Info.Message(&MainGuid, &UnkGuid, flags | FMSG_ALLINONE,
@@ -98,7 +98,7 @@ int Error2RS(const String & s, const String & fn, int code)
                         LOC("Framework.Retry")+"\n"+LOC("Framework.Skip"),
                         FMSG_WARNING
                        );
-  if(res==0)
+  if (res==0)
   {
     return RES_RETRY;
   }
@@ -115,7 +115,7 @@ String GetErrText(int code)
 String FormatWidth(const String & s, int len)
 {
   int dif = s.len()-len;
-  if(dif > 0)
+  if (dif > 0)
   {
     return String("...") + s.right(len-3);
   }
@@ -128,7 +128,7 @@ String FormatWidth(const String & s, int len)
 String FormatWidthNoExt(const String & s, int len)
 {
   int dif = s.len()-len;
-  if(dif > 0)
+  if (dif > 0)
   {
     return String("...") + s.right(len-3);
   }
@@ -147,11 +147,11 @@ String SplitWidth(const String & s, size_t w)
   {
     wchar_t c = s[i];
 
-    if(c == '\n' || c == '\r')
+    if (c == '\n' || c == '\r')
     {
       continue;
     }
-    if(c == ' ' && (curW > w))
+    if (c == ' ' && (curW > w))
     {
       res += '\n';
       curW = 0;

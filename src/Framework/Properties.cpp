@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 Property::Property(const Property & other)
 {
-  if(this != &other)
+  if (this != &other)
   {
     (*this) = other;
   }

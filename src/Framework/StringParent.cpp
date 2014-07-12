@@ -13,7 +13,7 @@ int StringParent::loadFromFile(FILE * f)
   int unicode=(read==2) && (sign.uc==0xFEFF || sign.uc==0xFFFE);
   int inv=(unicode) && (sign.uc==0xFFFE);
   const int bsize=4096, ssize=4096;
-  if(unicode)
+  if (unicode)
   {
     const wchar_t CR='\r', LF='\n';
     wchar_t buffer[bsize], string[ssize];
@@ -23,11 +23,11 @@ int StringParent::loadFromFile(FILE * f)
     {
       wchar_t oldc=0;
       read = (int)fread(buffer+bpos, sizeof(wchar_t), bsize-bpos, f);
-      if(read<1) break;
+      if (read<1) break;
       for(int i=bpos; i<read; i++)
       {
-        if(inv) buffer[i]=((buffer[i]&0x00FF)<<8) | ((buffer[i]&0xFF00) >> 8);
-        if(buffer[i]==CR || (buffer[i]==LF && oldc!=CR))
+        if (inv) buffer[i]=((buffer[i]&0x00FF)<<8) | ((buffer[i]&0xFF00) >> 8);
+        if (buffer[i]==CR || (buffer[i]==LF && oldc!=CR))
         {
           string[spos]=0;
           AddString(string);
@@ -35,7 +35,7 @@ int StringParent::loadFromFile(FILE * f)
         }
         else
         {
-          if(buffer[i]!=CR && buffer[i]!=LF && spos<ssize)
+          if (buffer[i]!=CR && buffer[i]!=LF && spos<ssize)
           {
             string[spos++]=buffer[i];
           }
@@ -44,7 +44,7 @@ int StringParent::loadFromFile(FILE * f)
       }
       bpos=0;
     }
-    if(spos)
+    if (spos)
     {
       string[spos]=0;
       AddString(string);
@@ -55,17 +55,17 @@ int StringParent::loadFromFile(FILE * f)
     const char CR='\r', LF='\n';
     char buffer[bsize], string[ssize];
     int bpos=0, spos=0;
-    if(read>=1) buffer[0]=sign.c[0];
-    if(read>=2) buffer[1]=sign.c[1];
+    if (read>=1) buffer[0]=sign.c[0];
+    if (read>=2) buffer[1]=sign.c[1];
     bpos=read;
     while(1)
     {
       char oldc=0;
       read=(int)fread(buffer+bpos, sizeof(char), bsize-bpos, f);
-      if(read<1) break;
+      if (read<1) break;
       for(int i=0; i<read+bpos; i++)
       {
-        if(buffer[i]==CR || (buffer[i]==LF && oldc!=CR))
+        if (buffer[i]==CR || (buffer[i]==LF && oldc!=CR))
         {
           string[spos]=0;
           AddString(string);
@@ -73,7 +73,7 @@ int StringParent::loadFromFile(FILE * f)
         }
         else
         {
-          if(buffer[i]!=CR && buffer[i]!=LF && spos<ssize)
+          if (buffer[i]!=CR && buffer[i]!=LF && spos<ssize)
           {
             string[spos++]=buffer[i];
           }
@@ -82,7 +82,7 @@ int StringParent::loadFromFile(FILE * f)
       }
       bpos=0;
     }
-    if(spos)
+    if (spos)
     {
       string[spos]=0;
       AddString(string);
@@ -96,7 +96,7 @@ int StringParent::loadFromFile(const String & fn)
 {
   FILE * f = NULL;
   _wfopen_s(&f, fn.ptr(), L"rb");
-  if(!f)
+  if (!f)
   {
     return 0;
   }
@@ -108,12 +108,12 @@ int StringParent::loadFromFile(const String & fn)
 
 int StringParent::saveToFile(FILE * f, TextFormat tf)
 {
-  if(tf == tfUnicode)
+  if (tf == tfUnicode)
   {
     unsigned __int16 sign=0xFEFF;
     fwrite(&sign, sizeof(sign), 1, f);
   }
-  else if(tf==tfUnicodeBE)
+  else if (tf==tfUnicodeBE)
   {
     unsigned __int16 sign=0xFFFE;
     fwrite(&sign, sizeof(sign), 1, f);
@@ -122,11 +122,11 @@ int StringParent::saveToFile(FILE * f, TextFormat tf)
   {
     const wchar_t * s = (*this)[i].c_str();
     const int ssize=4096;
-    if(tf != tfANSI)
+    if (tf != tfANSI)
     {
       wchar_t buf[ssize];
       wcscpy_s(buf, ssize, s);
-      if(tf==tfUnicodeBE)
+      if (tf==tfUnicodeBE)
       {
         for(size_t j=0; j < wcslen(buf); j++)
         {
@@ -135,7 +135,7 @@ int StringParent::saveToFile(FILE * f, TextFormat tf)
       }
       fwrite(buf, sizeof(wchar_t), wcslen(buf), f);
       wcscpy_s(buf, ssize, L"\r\n");
-      if(tf==tfUnicodeBE)
+      if (tf==tfUnicodeBE)
       {
         for(size_t j=0; j < wcslen(buf); j++)
         {
@@ -162,12 +162,12 @@ int StringParent::saveToFile(const String & fn, TextFormat tf)
   FILE * f = NULL;
   _wfopen_s(&f, fn.ptr(), L"wb");
   int res = 0;
-  if(f)
+  if (f)
   {
     res = saveToFile(f, tf);
     fclose(f);
   }
-  if(attr != 0xFFFFFFFF)
+  if (attr != 0xFFFFFFFF)
   {
     SetFileAttributes(fn.ptr(), attr);
   }
@@ -180,7 +180,7 @@ void StringParent::loadFromString(const wchar_t * s, wchar_t delim)
   wchar_t * p=(wchar_t *)s, *pp=p, buf[4096];
   do
   {
-    if(!*p || *p==delim)
+    if (!*p || *p==delim)
     {
       int len=__min((int)(p-pp), 4095);
       wcsncpy_s(buf, 4096, pp, len);

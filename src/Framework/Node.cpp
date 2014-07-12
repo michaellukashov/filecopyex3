@@ -37,13 +37,13 @@ Node::Node()
 
 void Node::init(Payload * _payload, Node * _parent)
 {
-  if(payload)
+  if (payload)
   {
     delete(payload);
   }
   payload = _payload;
   parent = _parent;
-  if(parent)
+  if (parent)
   {
     parent->childs.push_back(this);
   }
@@ -52,7 +52,7 @@ void Node::init(Payload * _payload, Node * _parent)
 Node::~Node()
 {
   ClearChilds();
-  if(payload)
+  if (payload)
   {
     delete(payload);
   }
@@ -109,7 +109,7 @@ Node & Node::child(const String & v)
 {
   for(size_t i = 0; i < childs.size(); ++i)
   {
-    if(childs[i]->getName() == v)
+    if (childs[i]->getName() == v)
     {
       return child(i);
     }
@@ -137,21 +137,21 @@ size_t Node::LoadFromList(StringParent & list, size_t start)
   for(size_t i = start; i < list.Count(); i++)
   {
     String line = list[i].trim();
-    if(line == "end")
+    if (line == "end")
     {
       res=i;
       break;
     }
-    else if(!line.ncmp("object", 6))
+    else if (!line.ncmp("object", 6))
     {
       int p = line.find(' ');
       int p1 = line.find(':');
-      if(p!=-1 && p1!=-1 && p<p1)
+      if (p!=-1 && p1!=-1 && p<p1)
       {
         String pname = line.substr(p+1, p1-p-1).trim();
         String ptype = line.substr(p1+1).trim();
         Node * obj = objectManager->create(ptype, pname, this);
-        if(obj)
+        if (obj)
         {
           i = obj->LoadFromList(list, i+1);
         }
@@ -164,7 +164,7 @@ size_t Node::LoadFromList(StringParent & list, size_t start)
     else
     {
       int p=line.find('=');
-      if(p!=-1)
+      if (p!=-1)
       {
         String pline=line.substr(0, p).trim();
         String pval=line.substr(p+1).trim().trimquotes();

@@ -33,7 +33,7 @@ TaskBarIcon::TaskBarIcon() : last_state(S_NO_PROGRESS)
 
 TaskBarIcon::~TaskBarIcon()
 {
-  if(last_state != S_NO_PROGRESS)
+  if (last_state != S_NO_PROGRESS)
     SetState(S_NO_PROGRESS);
 }
 void TaskBarIcon::SetState(State state, float param)
@@ -41,11 +41,11 @@ void TaskBarIcon::SetState(State state, float param)
   switch(state)
   {
     case S_PROGRESS:
-      if(param > 1.0f)
+      if (param > 1.0f)
       {
         param = 1.0f;
       }
-      if(param < 0.0f)
+      if (param < 0.0f)
       {
         param = 0.0f;
       }

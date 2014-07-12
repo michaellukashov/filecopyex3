@@ -21,7 +21,7 @@ intptr_t FarSettings::control(FAR_SETTINGS_CONTROL_COMMANDS cmd, void * param)
 
 void FarSettings::clean()
 {
-  if(handle != INVALID_HANDLE_VALUE)
+  if (handle != INVALID_HANDLE_VALUE)
   {
     control(SCTL_FREE);
     handle = INVALID_HANDLE_VALUE;
@@ -34,7 +34,7 @@ bool FarSettings::create()
   clean();
   FarSettingsCreate fsc = { sizeof(FarSettingsCreate) };
   fsc.Guid = MainGuid;
-  if(!control(SCTL_CREATE, &fsc))
+  if (!control(SCTL_CREATE, &fsc))
   {
     return false;
   }
@@ -49,7 +49,7 @@ bool FarSettings::get(const String & name, String & value)
   fsi.Root = dirId;
   fsi.Name = name.c_str();
   fsi.Type = FST_STRING;
-  if(!control(SCTL_GET, &fsi))
+  if (!control(SCTL_GET, &fsi))
   {
     return false;
   }
@@ -71,14 +71,14 @@ bool FarSettings::list(ParamInfoVector & res)
 {
   FarSettingsEnum fse = { sizeof(FarSettingsEnum) };
   fse.Root = dirId;
-  if(!control(SCTL_ENUM, &fse))
+  if (!control(SCTL_ENUM, &fse))
   {
     return false;
   }
   res.clear();
   for(size_t i = 0; i < fse.Count; i++)
   {
-    if(fse.Items[i].Type == FST_STRING)
+    if (fse.Items[i].Type == FST_STRING)
     {
       res.push_back(ParamInfo(fse.Items[i].Name, fse.Items[i].Type));
     }
@@ -93,7 +93,7 @@ bool saveOptions(const PropertyMap & options, FarSettings & settings)
   bool ok = true;
   for(PropertyMap::const_iterator it = options.begin(); it != options.end(); ++it)
   {
-    if(!settings.set(it->first, it->second.operator const String()))
+    if (!settings.set(it->first, it->second.operator const String()))
     {
       ok = false;
     };
@@ -106,7 +106,7 @@ bool loadOptions(PropertyMap & options, FarSettings & settings)
 {
   FarSettings::ParamInfoVector v;
 
-  if(!settings.list(v))
+  if (!settings.list(v))
   {
     return false;
   }
@@ -115,7 +115,7 @@ bool loadOptions(PropertyMap & options, FarSettings & settings)
   {
     String & name = it->name;
     String v;
-    if(settings.get(name, v))
+    if (settings.get(name, v))
     {
       options[name] = v;
     }

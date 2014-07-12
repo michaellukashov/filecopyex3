@@ -108,7 +108,7 @@ void FarDlgPayload::preInitItem(FarDialogItem & item)
   //  SetItemText(&item, Name());
 
   String p = getProp("Text");
-  if(p.empty())
+  if (p.empty())
   {
     String n = getDialog()->getName() + "." + getName();
     String loc = LOC(n);
@@ -118,12 +118,12 @@ void FarDlgPayload::preInitItem(FarDialogItem & item)
 
   for(int i=0; i<AttribCount(); i++)
   {
-    if(getProp(Attrib(i).Name))
+    if (getProp(Attrib(i).Name))
     {
       item.Flags |= Attrib(i).Flag;
     }
   }
-  if(getProp("Focus"))
+  if (getProp("Focus"))
   {
     item.Flags |= DIF_FOCUS;
   }
@@ -162,10 +162,10 @@ void FarDlgPayload::AddToItems(std::vector<FarDialogItem>& Items, std::vector<Re
   BeforeAdd(item);
   Items.push_back(item);
   dialogItem = Items.size()-1;
-  if(item.Type == DI_BUTTON && !(item.Flags & DIF_BTNNOCLOSE))
+  if (item.Type == DI_BUTTON && !(item.Flags & DIF_BTNNOCLOSE))
   {
     int res = getProp("Result");
-    if(res != -1)
+    if (res != -1)
     {
       RetCode rc;
       rc.itemNo = Items.size()-1;
@@ -187,10 +187,10 @@ void FarDlgEditPayload::realInitItem(FarDialogItem & item)
   item.Type=DI_EDIT;
   int w = getProp("Width");
   item.X2 = item.X1 + w - 1;
-  if(item.Flags & DIF_HISTORY)
+  if (item.Flags & DIF_HISTORY)
   {
     String p = getProp("HistoryId");
-    if(!p.empty())
+    if (!p.empty())
     {
       (String("FarFramework\\") + getDialog()->getName() + "\\" + getName()).copyTo(HistoryId, sizeof(HistoryId)/sizeof(wchar_t));
       item.History = HistoryId;
@@ -222,7 +222,7 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
   item.X2=item.X1+w-1;
 
   item.ListItems = &list;
-  if(list.Items)
+  if (list.Items)
   {
     delete(list.Items);
     list.Items = NULL;
@@ -230,13 +230,13 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
   }
   StringVector items;
   items.loadFromString(getProp("Items"), '\n');
-  if(items.Count())
+  if (items.Count())
   {
     list.ItemsNumber = items.Count();
     list.Items = new FarListItem[items.Count()];
     for(size_t i=0; i<items.Count(); i++)
     {
-      if(getProp("Text") == items[i])
+      if (getProp("Text") == items[i])
       {
         list.Items[i].Flags |= LIF_SELECTED;
       }
@@ -251,7 +251,7 @@ void FarDlgComboboxPayload::RetrieveProperties(HANDLE dlg)
 
 size_t lablen(FarDialogItem & item)
 {
-  if(item.Flags & DIF_SHOWAMPERSAND)
+  if (item.Flags & DIF_SHOWAMPERSAND)
   {
     return wcslen(item.Data);
   }
@@ -260,7 +260,7 @@ size_t lablen(FarDialogItem & item)
     int res=0;
     for(const wchar_t * p=item.Data; *p; p++)
     {
-      if(*p!='&') res++;
+      if (*p!='&') res++;
     }
     return res;
   }

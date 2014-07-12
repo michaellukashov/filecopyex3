@@ -134,7 +134,7 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
 {
   int n=x2-x1+1, fn=(int)(pc*n), en=n-fn;
   wchar_t buf[512], *bp=buf;
-  if(!InverseBars)
+  if (!InverseBars)
   {
     for(int i=0; i<fn; i++) *bp++=0x2588; //'█'
     for(int i=0; i<en; i++) *bp++=0x2591; //'░'
@@ -151,9 +151,9 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
 
 void FarProgress::SetPercent(float pc)
 {
-  if(WinType==WIN_PROGRESS)
+  if (WinType==WIN_PROGRESS)
   {
-    if(GetTime()-LastUpdate>TicksPerSec()/5)
+    if (GetTime()-LastUpdate>TicksPerSec()/5)
     {
       DrawProgress(ProgX1, ProgX2, ProgY, pc);
       Info.Text(0, 0, 0, NULL);
@@ -165,7 +165,7 @@ void FarProgress::SetPercent(float pc)
 
 void FarProgress::Hide()
 {
-  if(WinType!=WIN_NONE)
+  if (WinType!=WIN_NONE)
   {
     Info.RestoreScreen(NULL);
     Info.RestoreScreen(hScreen);
@@ -190,7 +190,7 @@ void FarProgress::SetTitle2(const String & v) const
 {
   String far_desc = TitleBuf;
   int x = far_desc.find('-');
-  if(x != -1)
+  if (x != -1)
     far_desc = far_desc.substr(x);
   else
     far_desc = L"- Far";
@@ -214,8 +214,8 @@ void FarProgress::ShowScanProgress(const String & msg)
   int ConsoleHeight;
   GetConSize(ConsoleWidth, ConsoleHeight);
   int WindowWidth  = ConsoleWidth / 2;
-  if(WindowWidth > 46) WindowWidth = 46;
-  if(WindowWidth < 40) WindowWidth = 40;
+  if (WindowWidth > 46) WindowWidth = 46;
+  if (WindowWidth < 40) WindowWidth = 40;
   int WindowHeight = 7;
   int WindowCoordX1 = (ConsoleWidth  - WindowWidth + 1)/2;
   int WindowCoordY1 = (ConsoleHeight - WindowHeight - 1)/2;
@@ -242,9 +242,9 @@ void FarProgress::ShowScanProgress(const String & msg)
 // New class member function
 void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
 {
-  if(WinType==WIN_SCAN_PROGRESS)
+  if (WinType==WIN_SCAN_PROGRESS)
   {
-    if(GetTime()-LastUpdate>TicksPerSec()/5)
+    if (GetTime()-LastUpdate>TicksPerSec()/5)
     {
       DrawScanProgress(ProgX1, ProgX2, ProgY, NumberOfFiles, TotalSize);
       Info.Text(0, 0, 0, NULL);
@@ -269,7 +269,7 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
 
   int s = x2 - x1 - (int)wcslen(SizeStr) - (int)wcslen(FilesStr);
   String spacer;
-  if(s > 0)
+  if (s > 0)
     spacer = String(' ', s);
 
   wchar_t buf[256];

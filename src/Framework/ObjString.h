@@ -57,7 +57,7 @@ public:
 
   inline wchar_t operator[](int i) const
   {
-    if(i>=0 && i<(int)str.length()) return str[i];
+    if (i>=0 && i<(int)str.length()) return str[i];
     else return 0;
   }
 

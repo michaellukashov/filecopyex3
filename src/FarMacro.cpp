@@ -13,7 +13,7 @@ String getEnv(const String & name)
 {
   wchar_t * buf;
   size_t len;
-  if(_wdupenv_s(&buf, &len, name.c_str()) == 0)
+  if (_wdupenv_s(&buf, &len, name.c_str()) == 0)
   {
     String v(buf);
     free(buf);
@@ -40,19 +40,19 @@ void Bind(const String & key, const String & code, const String & desc)
   ShowMessage("Bind", key + L": " + String(res), FMSG_MB_OK);
   */
 
-  if(base.empty())
+  if (base.empty())
   {
     base = getEnv("FARPROFILE");
   }
-  if(base.empty())
+  if (base.empty())
   {
     base = getEnv("APPDATA");
-    if(!base.empty())
+    if (!base.empty())
     {
       base += "\\Far Manager\\Profile";
     }
   }
-  if(base.empty())
+  if (base.empty())
   {
     return; // Cannot find correct path
   }

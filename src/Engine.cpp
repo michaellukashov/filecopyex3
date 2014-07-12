@@ -53,7 +53,7 @@ PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, in
   size_t Size = Info.PanelControl(hPlugin, Command, Param1, 0);
   PluginPanelItem * item = reinterpret_cast<PluginPanelItem *>(new char[Size]);
 
-  if(item)
+  if (item)
   {
     FarGetPluginPanelItem gpi = {sizeof(FarGetPluginPanelItem), Size, item};
     Info.PanelControl(hPlugin, Command, Param1, &gpi);
@@ -141,17 +141,17 @@ int Engine::InitBuf(BuffInfo * bi)
   bi->OutNum=-1;
 
   bi->BuffSize=BufSize;
-  if(Parallel) bi->BuffSize/=2;
+  if (Parallel) bi->BuffSize/=2;
   bi->BuffSize=(bi->BuffSize/AllocAlign+1)*AllocAlign;
 
   bi->Buffer = static_cast<UCHAR *>(Alloc(bi->BuffSize));
-  if(!bi->Buffer)
+  if (!bi->Buffer)
   {
     Error(LOC("Error.MemAlloc"), GetLastError());
     return FALSE;
   }
   bi->BuffInf = static_cast<BuffStruct *>(Alloc(SrcNames.Count()*sizeof(BuffStruct)));
-  if(!bi->BuffInf)
+  if (!bi->BuffInf)
   {
     Free(bi->Buffer);
     Error(LOC("Error.MemAlloc"), GetLastError());
@@ -177,12 +177,12 @@ void Engine::SwapBufs(BuffInfo * src, BuffInfo * dst)
 // Added parameter with default TRUE value
 int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 {
-  if(_ConfirmBreak)
+  if (_ConfirmBreak)
   {
     WaitForSingleObject(UiFree, INFINITE);
 
     int flg = eeYesNo | eeOneLine;
-    if(ShowKeepFilesCheckBox) flg |= eeShowKeepFiles;
+    if (ShowKeepFilesCheckBox) flg |= eeShowKeepFiles;
 
     int res=EngineError(LOC("CopyError.StopPrompt"), "", 0, flg, LOC("CopyError.StopTitle"));
 
@@ -191,7 +191,7 @@ int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
     SetEvent(UiFree);
 
     Aborted = (res==0);
-    if(Aborted) KeepFiles=flg & eerKeepFiles;
+    if (Aborted) KeepFiles=flg & eerKeepFiles;
     return Aborted;
   }
   else
@@ -205,7 +205,7 @@ int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 // Added parameter with default TRUE value
 int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
 {
-  if(WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return FALSE;
+  if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return FALSE;
 
   int escape = FALSE;
   HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
@@ -214,10 +214,10 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
     INPUT_RECORD rec;
     DWORD rc;
     PeekConsoleInput(h, &rec, 1, &rc);
-    if(!rc) break;
+    if (!rc) break;
     ReadConsoleInput(h, &rec, 1, &rc);
-    if(rec.EventType==KEY_EVENT)
-      if(rec.Event.KeyEvent.wVirtualKeyCode==VK_ESCAPE
+    if (rec.EventType==KEY_EVENT)
+      if (rec.Event.KeyEvent.wVirtualKeyCode==VK_ESCAPE
           && !(rec.Event.KeyEvent.dwControlKeyState &
                (LEFT_CTRL_PRESSED|RIGHT_CTRL_PRESSED|LEFT_ALT_PRESSED|
                 RIGHT_ALT_PRESSED|SHIFT_PRESSED))
@@ -230,7 +230,7 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
 
   SetEvent(UiFree);
 
-  if(escape && !AskAbort(ShowKeepFilesCheckBox)) escape=0;
+  if (escape && !AskAbort(ShowKeepFilesCheckBox)) escape=0;
 
   return escape;
 }
@@ -243,9 +243,9 @@ void Engine::FinalizeBuf(BuffInfo * bi)
   String & SrcName=bi->SrcName;
   FileStruct & info=Files[fnum];
 
-  if(!(info.Flags & FLG_SKIPPED))
+  if (!(info.Flags & FLG_SKIPPED))
   {
-    if(info.Flags & FLG_BUFFERED)
+    if (info.Flags & FLG_BUFFERED)
     {
       setFileTime(Handle, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
     }
@@ -253,14 +253,14 @@ void Engine::FinalizeBuf(BuffInfo * bi)
 
   Close(Handle);
 
-  if(!(info.Flags & FLG_SKIPPED))
+  if (!(info.Flags & FLG_SKIPPED))
   {
     info.Flags|=FLG_COPIED;
     LastFile=fnum;
 
-    if(!(info.Flags & FLG_BUFFERED))
+    if (!(info.Flags & FLG_BUFFERED))
     {
-      if(info.OverMode == OM_APPEND)
+      if (info.OverMode == OM_APPEND)
       {
         setFileSizeAndTime(DstName, bi->OrgSize+info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
       }
@@ -270,27 +270,27 @@ void Engine::FinalizeBuf(BuffInfo * bi)
       }
     }
 
-    if(Rights) CopyACL(SrcName, DstName);
+    if (Rights) CopyACL(SrcName, DstName);
     Encrypt(DstName, EncryptMode);
     SetFileAttributes(DstName.ptr(), info.Attr);
 
-    if(Move)
+    if (Move)
     {
 del_retry:
       // Bug #6 fixed by CDK
-      if(FileExists(SrcName) && !Delete(SrcName))
+      if (FileExists(SrcName) && !Delete(SrcName))
       {
         WaitForSingleObject(UiFree, INFINITE);
         int flg=eeRetrySkipAbort | eeAutoSkipAll;
         int res=EngineError(LOC("Error.FileDelete"), SrcName, GetLastError(), flg, "", "Error.FileDelete");
         SetEvent(UiFree);
-        if(res==RES_RETRY)
+        if (res==RES_RETRY)
         {
           goto del_retry;
         }
         else
         {
-          if(res==RES_ABORT)
+          if (res==RES_ABORT)
           {
             Aborted=1;
           }
@@ -307,15 +307,15 @@ del_retry:
     size_t dnum=fnum+1;
     while(dnum < SrcNames.Count() && Files[dnum].Flags & (FLG_DIR_POST | FLG_DIR_PRE | FLG_DESCFILE))
     {
-      if(!(Files[dnum].Flags & FLG_COPIED))
+      if (!(Files[dnum].Flags & FLG_COPIED))
       {
-        if(Files[dnum].Flags & FLG_DESCFILE)
+        if (Files[dnum].Flags & FLG_DESCFILE)
         {
           ProcessDesc(dnum);
         }
-        else if(Files[dnum].Flags & FLG_DIR_POST && !(Files[dnum].Flags & FLG_DIR_NOREMOVE) && Move)
+        else if (Files[dnum].Flags & FLG_DIR_POST && !(Files[dnum].Flags & FLG_DIR_NOREMOVE) && Move)
         {
-          if(RmDir(FlushSrc.GetByNum(dnum)))
+          if (RmDir(FlushSrc.GetByNum(dnum)))
           {
             Files[dnum].Flags |= FLG_COPIED | FLG_DELETED;
           }
@@ -326,7 +326,7 @@ del_retry:
   }
   else
   {
-    if(!(info.Flags & FLG_DECSIZE))
+    if (!(info.Flags & FLG_DECSIZE))
     {
       WriteCb -= info.Written;
       ReadCb -= info.Read;
@@ -335,11 +335,11 @@ del_retry:
       info.Flags |= FLG_DECSIZE;
     }
 
-    if(Handle)
+    if (Handle)
     {
-      if(info.OverMode == OM_APPEND || info.OverMode == OM_RESUME)
+      if (info.OverMode == OM_APPEND || info.OverMode == OM_RESUME)
       {
-        if(KeepFiles || (info.Flags & FLG_KEEPFILE))
+        if (KeepFiles || (info.Flags & FLG_KEEPFILE))
         {
           setFileSizeAndTime(DstName, bi->OrgSize+info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
@@ -350,7 +350,7 @@ del_retry:
       }
       else
       {
-        if(KeepFiles || (info.Flags & FLG_KEEPFILE))
+        if (KeepFiles || (info.Flags & FLG_KEEPFILE))
         {
           setFileSizeAndTime(DstName, info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
@@ -373,7 +373,7 @@ void Engine::ProcessDesc(int fnum)
 
   String DstPath=AddEndSlash(ExtractFilePath(DstName));
   String df=FindDescFile(DstPath);
-  if(!df.empty())
+  if (!df.empty())
   {
     DstName=DstPath+df;
   }
@@ -381,14 +381,14 @@ void Engine::ProcessDesc(int fnum)
   DescList SrcList, DstList;
   SrcList.LoadFromFile(SrcName);
   int attr=GetFileAttributes(DstName.ptr());
-  if(!_UpdateRODescs && attr!=0xFFFFFFFF
+  if (!_UpdateRODescs && attr!=0xFFFFFFFF
       && (attr & FILE_ATTRIBUTE_READONLY)) return;
   DstList.LoadFromFile(DstName);
 
   bool inverse=(info.Flags & FLG_DESC_INVERSE)!=0;
-  if(!inverse)
+  if (!inverse)
   {
-    if(Move)
+    if (Move)
       SrcList.SetAllSaveFlags(0);
   }
   else
@@ -397,30 +397,30 @@ void Engine::ProcessDesc(int fnum)
   int j=fnum-1;
   while(j>=0 && Files[j].Level>=Files[fnum].Level)
   {
-    if(Files[j].Level==Files[fnum].Level)
+    if (Files[j].Level==Files[fnum].Level)
     {
       String sn=SrcNames.GetNameByNum(j);
       String dn=DstNames.GetNameByNum(j);
       int Same=0;
 
       // bug #43 fixed by axxie
-      if(sn.cmp(dn))
+      if (sn.cmp(dn))
       {
         SrcList.Rename(sn, dn, 1);
         sn=dn;
-        if(!SrcName.icmp(DstName)) Same=1;
+        if (!SrcName.icmp(DstName)) Same=1;
       }
 
-      if(!(Files[j].Flags & FLG_DIR_POST)
+      if (!(Files[j].Flags & FLG_DIR_POST)
           && ((Files[j].Flags & FLG_COPIED)!=0)==inverse)
       {
         SrcList.SetMergeFlag(sn, inverse);
       }
-      if(Move && !(Files[j].Flags & FLG_DIR_PRE))
+      if (Move && !(Files[j].Flags & FLG_DIR_PRE))
       {
-        if(Same)
+        if (Same)
           SrcList.SetSaveFlag(sn, 1);
-        else if(((Files[j].Flags & FLG_DELETED)!=0)==inverse)
+        else if (((Files[j].Flags & FLG_DELETED)!=0)==inverse)
           SrcList.SetSaveFlag(sn, !inverse);
       }
     }
@@ -428,18 +428,18 @@ void Engine::ProcessDesc(int fnum)
   }
 
   DstList.Merge(SrcList);
-  if(DstList.SaveToFile(DstName))
+  if (DstList.SaveToFile(DstName))
   {
     info.Flags |= FLG_COPIED;
-    if(_HideDescs)
+    if (_HideDescs)
       SetFileAttributes(DstName.ptr(),
                         GetFileAttributes(DstName.ptr()) | FILE_ATTRIBUTE_HIDDEN);
-    if(Move)
+    if (Move)
     {
       int attr=GetFileAttributes(SrcName.ptr());
-      if(!_UpdateRODescs && attr!=0xFFFFFFFF
+      if (!_UpdateRODescs && attr!=0xFFFFFFFF
           && (attr & FILE_ATTRIBUTE_READONLY)) return;
-      if(!SrcList.SaveToFile(SrcName))
+      if (!SrcList.SaveToFile(SrcName))
         Error2(LOC("Error.WriteDesc"), SrcName, GetLastError());
     }
   }
@@ -464,28 +464,28 @@ int Engine::FlushBuff(BuffInfo * bi)
     FileStruct & info=Files[fnum];
     bi->OutNum=fnum;
 
-    if(Aborted) info.Flags|=FLG_SKIPPED;
+    if (Aborted) info.Flags|=FLG_SKIPPED;
 
-    if(!bi->OutFile && !(info.Flags & FLG_SKIPPED))
+    if (!bi->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      if(FileExists(DstName))
+      if (FileExists(DstName))
       {
-        if(info.OverMode == OM_PROMPT)
+        if (info.OverMode == OM_PROMPT)
           info.OverMode = OverwriteMode;
-        if(info.OverMode == OM_RENAME && info.RenameNum)
+        if (info.OverMode == OM_RENAME && info.RenameNum)
           DstName = DupName(DstName, info.RenameNum);
-        if(info.OverMode == OM_PROMPT)
+        if (info.OverMode == OM_PROMPT)
         {
 rep:
           String renn;
           info.OverMode = CheckOverwrite2(fnum, SrcName, DstName, renn);
-          if(info.OverMode == OM_RENAME)
+          if (info.OverMode == OM_RENAME)
             DstName = renn;
         }
       }
       else info.OverMode=OM_OVERWRITE;
 
-      if(EncryptMode==ATTR_ON) info.Attr |= FILE_ATTRIBUTE_ENCRYPTED;
+      if (EncryptMode==ATTR_ON) info.Attr |= FILE_ATTRIBUTE_ENCRYPTED;
       else info.Attr &= ~FILE_ATTRIBUTE_ENCRYPTED;
 
       bi->SrcName=SrcName;
@@ -504,7 +504,7 @@ open_retry:
           bi->OutFile = Open(DstName, OPEN_APPEND | oflg); break;
         case OM_RESUME:
           bi->OutFile = Open(DstName, OPEN_WRITE | oflg);
-          if(FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN)==-1)
+          if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN)==-1)
             FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
                            (int)GetLastError()));
           break;
@@ -512,30 +512,30 @@ open_retry:
           info.Flags |= FLG_SKIPPED; break;
         case OM_PROMPT:
         case OM_CANCEL:
-          if(AskAbort()) info.Flags |= FLG_SKIPPED;
+          if (AskAbort()) info.Flags |= FLG_SKIPPED;
           else goto rep;
           break;
       }
 
       ShowWriteName(DstName);
 
-      if(!(info.Flags & FLG_SKIPPED))
+      if (!(info.Flags & FLG_SKIPPED))
       {
-        if(bi->OutFile)
+        if (bi->OutFile)
         {
           Compress(bi->OutFile, CompressMode);
           //Encrypt(bi->OutFile, EncryptMode);
           bi->OrgSize = FileSize(bi->OutFile);
 
           int64_t size=info.OverMode==OM_APPEND?bi->OrgSize+info.Size:info.Size;
-          if(size>=_PreallocMin*1024
+          if (size>=_PreallocMin*1024
               && GetCompression(bi->OutFile)==0)
           {
             int64_t sp;
-            if(!(info.Flags & FLG_BUFFERED))
+            if (!(info.Flags & FLG_BUFFERED))
             {
               sp=size/info.SectorSize;
-              if(size%info.SectorSize) sp++;
+              if (size%info.SectorSize) sp++;
               sp*=info.SectorSize;
             }
             else sp=size;
@@ -552,19 +552,19 @@ open_retry:
               res=EngineError(LOC("Error.OutputFileCreate"), DstName, GetLastError(),
                               flg, "", "Error.OutputFileCreate");
           SetEvent(UiFree);
-          if(res==RES_RETRY) goto open_retry;
-          else if(res==RES_ABORT) Aborted=1;
+          if (res==RES_RETRY) goto open_retry;
+          else if (res==RES_ABORT) Aborted=1;
         }
       }
     }
-    if(!(info.Flags & FLG_SKIPPED) && !bi->OutFile)
+    if (!(info.Flags & FLG_SKIPPED) && !bi->OutFile)
       info.Flags |= FLG_SKIPPED | FLG_ERROR;
 
-    if(!(info.Flags & FLG_SKIPPED))
+    if (!(info.Flags & FLG_SKIPPED))
     {
       while(Pos < bi->BuffInf[PosInStr].WritePos)
       {
-        if(!Parallel && CheckEscape() || Aborted)
+        if (!Parallel && CheckEscape() || Aborted)
         {
           info.Flags |= FLG_SKIPPED;
           goto skip;
@@ -572,47 +572,47 @@ open_retry:
 
         int wsz = (int)Min(bi->BuffInf[PosInStr].WritePos - Pos, WriteBlock),
             wsz1 = wsz;
-        if(info.Flags & FLG_BUFFERED)
+        if (info.Flags & FLG_BUFFERED)
           wsz = (int)Min((long long)wsz, info.Size-info.Written);
 retry:
         int64_t st = GetTime();
         int k = Write(bi->OutFile, bi->Buffer+Pos, wsz);
 
-        if(k < wsz)
+        if (k < wsz)
         {
           WaitForSingleObject(UiFree, INFINITE);
           int flg=eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
               res=EngineError(LOC("Error.Write"), DstName, GetLastError(), flg,
                               "", "Error.Write");
           SetEvent(UiFree);
-          if(res==RES_RETRY)
+          if (res==RES_RETRY)
           {
-            if(flg & eerReopen)
+            if (flg & eerReopen)
             {
               int64_t Pos=info.Written;
-              if(info.OverMode==OM_RESUME) Pos+=info.ResumePos;
+              if (info.OverMode==OM_RESUME) Pos+=info.ResumePos;
               Close(bi->OutFile);
 reopen_retry:
               int oflg=info.Flags & FLG_BUFFERED? OPEN_BUF: 0;
               bi->OutFile=Open(DstName, OPEN_WRITE | oflg);
-              if(!bi->OutFile)
+              if (!bi->OutFile)
               {
                 WaitForSingleObject(UiFree, INFINITE);
                 int flg=eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
                     res=EngineError(LOC("Error.OutputFileCreate"),
                                     DstName, GetLastError(), flg, "", "Error.OutputFileCreate");
                 SetEvent(UiFree);
-                if(res==RES_RETRY) goto reopen_retry;
+                if (res==RES_RETRY) goto reopen_retry;
                 else
                 {
                   info.Flags |= FLG_SKIPPED | FLG_ERROR;
-                  if(flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
+                  if (flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
                   bi->OutFile = INVALID_HANDLE_VALUE;
-                  if(res==RES_ABORT) Aborted=1;
+                  if (res==RES_ABORT) Aborted=1;
                   goto skip;
                 }
               }
-              if(FSeek(bi->OutFile, Pos, FILE_BEGIN)==-1)
+              if (FSeek(bi->OutFile, Pos, FILE_BEGIN)==-1)
                 FWError(Format(L"FSeek to %d failed, code %d", Pos,
                                (int)GetLastError()));
             }
@@ -621,8 +621,8 @@ reopen_retry:
           else
           {
             info.Flags |= FLG_SKIPPED | FLG_ERROR;
-            if(flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
-            if(res==RES_ABORT) Aborted=1;
+            if (flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
+            if (res==RES_ABORT) Aborted=1;
             goto skip;
           }
         }
@@ -632,14 +632,14 @@ reopen_retry:
         info.Written += k;
         WriteCb += k;
         Pos += k;
-        if(!FirstWrite) FirstWrite=GetTime()-StartTime;
+        if (!FirstWrite) FirstWrite=GetTime()-StartTime;
 
         Delay(wt, k, WriteTime, WriteSpeedLimit);
         // bug #22 fixed by Axxie
         ShowWriteName(DstName);
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
 
-        if(wsz < wsz1)
+        if (wsz < wsz1)
           Pos = bi->BuffInf[PosInStr].WritePos;
       }
 
@@ -647,7 +647,7 @@ skip: ;
     }
     Pos = bi->BuffInf[PosInStr].NextPos;
 
-    if(bi->BuffInf[PosInStr].EndFlag || info.Flags & FLG_SKIPPED)
+    if (bi->BuffInf[PosInStr].EndFlag || info.Flags & FLG_SKIPPED)
     {
       FinalizeBuf(bi);
       bi->OutFile=NULL;
@@ -656,11 +656,11 @@ skip: ;
       bi->DstName="";
     }
 
-    if(Aborted) break;
+    if (Aborted) break;
     PosInStr++;
   }
 
-  if(Parallel) SetEvent(FlushEnd);
+  if (Parallel) SetEvent(FlushEnd);
   return !Aborted;
 }
 
@@ -679,7 +679,7 @@ int Engine::WaitForFlushEnd()
 {
   while(WaitForSingleObject(FlushEnd, 200) == WAIT_TIMEOUT)
   {
-    if(CheckEscape()) return FALSE;
+    if (CheckEscape()) return FALSE;
   }
   WaitForSingleObject(BGThread, INFINITE);
   CloseHandle(BGThread);
@@ -703,10 +703,10 @@ void Engine::Copy()
   BuffInfo _bi, _wbi;
   bi = &_bi;
   wbi = &_wbi;
-  if(!InitBuf(bi)) return;
-  if(Parallel)
+  if (!InitBuf(bi)) return;
+  if (Parallel)
   {
-    if(!InitBuf(wbi))
+    if (!InitBuf(wbi))
     {
       UninitBuf(bi);
       return;
@@ -720,7 +720,7 @@ void Engine::Copy()
   UiFree = CreateEvent(NULL, FALSE, TRUE, NULL);
 
   CopyProgressBox.InverseBars=_InverseBars;
-  if(FileCount) CopyProgressBox.Start(Move);
+  if (FileCount) CopyProgressBox.Start(Move);
 
   FileNameStoreEnum Src(&SrcNames);
   FileNameStoreEnum Dst(&DstNames);
@@ -732,43 +732,43 @@ void Engine::Copy()
     String DstName = Dst.GetNext();
 
     FileStruct & info=Files[i];
-    if(info.Flags & FLG_SKIPPED ||
+    if (info.Flags & FLG_SKIPPED ||
         info.Flags & FLG_COPIED ||
         info.Flags & FLG_DESCFILE) continue;
 
-    if(info.Flags & FLG_DIR_PRE)
+    if (info.Flags & FLG_DIR_PRE)
     {
-      if(info.Flags & FLG_DIR_FORCE)
+      if (info.Flags & FLG_DIR_FORCE)
         ForceDirectories(AddEndSlash(DstName));
       else
       {
         CreateDirectory(DstName.ptr(), NULL);
         SetFileAttributes(DstName.ptr(), info.Attr);
       }
-      if(!(info.Flags & FLG_TOP_DIR))
+      if (!(info.Flags & FLG_TOP_DIR))
       {
         HANDLE hd = CreateFile(DstName.ptr(), GENERIC_READ | GENERIC_WRITE,
                                FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                                OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
-        if(hd != INVALID_HANDLE_VALUE)
+        if (hd != INVALID_HANDLE_VALUE)
         {
           Compress(hd, CompressMode);
-          if(!(info.Flags & FLG_DIR_FORCE))
+          if (!(info.Flags & FLG_DIR_FORCE))
           {
             setFileTime(hd, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
           }
           CloseHandle(hd);
         }
-        if(EncryptMode != ATTR_INHERIT)
+        if (EncryptMode != ATTR_INHERIT)
           Encrypt(DstName, EncryptMode);
-        if(Rights && !(info.Flags & FLG_DIR_FORCE))
+        if (Rights && !(info.Flags & FLG_DIR_FORCE))
           CopyACL(SrcName, DstName);
       }
       info.Flags |= FLG_COPIED;
 
       CurDirInfo cdi;
       int dattr=GetFileAttributes(DstName.ptr());
-      if(!CurDirStack.size() || (dattr != 0xFFFFFFFF && dattr & FILE_ATTRIBUTE_REPARSE_POINT))
+      if (!CurDirStack.size() || (dattr != 0xFFFFFFFF && dattr & FILE_ATTRIBUTE_REPARSE_POINT))
       {
         cdi.SectorSize = GetSectorSize(DstName);
       }
@@ -782,13 +782,13 @@ void Engine::Copy()
       continue;
     } // if (info.Flags & FLG_DIR_PRE)
 
-    if(info.Flags & FLG_DIR_POST)
+    if (info.Flags & FLG_DIR_POST)
     {
-      if(CurDirStack.size())
+      if (CurDirStack.size())
       {
         CurDirStack.pop_back();
       }
-      if(CurDirStack.size())
+      if (CurDirStack.size())
       {
         SectorSize=CurDirStack[CurDirStack.size()-1].SectorSize;
       }
@@ -799,77 +799,77 @@ open_retry:
     HANDLE InputFile = Open(SrcName, OPEN_READ);
     ShowReadName(SrcName);
 
-    if(!InputFile)
+    if (!InputFile)
     {
       WaitForSingleObject(UiFree, INFINITE);
       int flg=eeRetrySkipAbort | eeAutoSkipAll,
           res=EngineError(LOC("Error.InputFileOpen"), SrcName, GetLastError(),
                           flg, "", "Error.InputFileOpen");
       SetEvent(UiFree);
-      if(res==RES_RETRY) goto open_retry;
+      if (res==RES_RETRY) goto open_retry;
       else
       {
         info.Flags |= FLG_SKIPPED | FLG_ERROR;
-        if(res==RES_ABORT) goto abort;
+        if (res==RES_ABORT) goto abort;
         else continue;
       }
     }
 
-    if(OverwriteMode == OM_RESUME)
+    if (OverwriteMode == OM_RESUME)
     {
-      if(FSeek(InputFile, info.ResumePos, FILE_BEGIN)==-1)
+      if (FSeek(InputFile, info.ResumePos, FILE_BEGIN)==-1)
         FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
                        (int)GetLastError()));
     }
 
     while(1)
     {
-      if(info.Flags & FLG_SKIPPED) break;
+      if (info.Flags & FLG_SKIPPED) break;
       info.SectorSize=SectorSize;
-      if(info.Size < _UnbuffMin*1024)
+      if (info.Size < _UnbuffMin*1024)
         info.Flags |= FLG_BUFFERED;
 
       while(BuffPos < bi->BuffSize)
       {
-        if(info.Flags & FLG_SKIPPED) break;
+        if (info.Flags & FLG_SKIPPED) break;
         int j, cb = Min(ReadBlock, bi->BuffSize-BuffPos);
 retry:
         int64_t st = GetTime();
         j = Read(InputFile, bi->Buffer+BuffPos, cb);
 
-        if(j==-1)
+        if (j==-1)
         {
           WaitForSingleObject(UiFree, INFINITE);
           int flg=eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
               res=EngineError(LOC("Error.Read"), SrcName, GetLastError(), flg,
                               "", "Error.Read");
           SetEvent(UiFree);
-          if(res==RES_RETRY)
+          if (res==RES_RETRY)
           {
-            if(flg & eerReopen)
+            if (flg & eerReopen)
             {
               int64_t Pos=info.Read;
-              if(info.OverMode==OM_RESUME) Pos+=info.ResumePos;
+              if (info.OverMode==OM_RESUME) Pos+=info.ResumePos;
               Close(InputFile);
 reopen_retry:
               InputFile=Open(SrcName, OPEN_READ);
-              if(!InputFile)
+              if (!InputFile)
               {
                 WaitForSingleObject(UiFree, INFINITE);
                 int flg=eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
                     res=EngineError(LOC("Error.InputFileOpen"), SrcName,
                                     GetLastError(), flg, "", "Error.InputFileOpen");
                 SetEvent(UiFree);
-                if(res==RES_RETRY) goto reopen_retry;
+                if (res==RES_RETRY) goto reopen_retry;
                 else
                 {
                   info.Flags |= FLG_SKIPPED | FLG_ERROR;
-                  if(flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
-                  if(res==RES_ABORT) goto abort;
+                  if (flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
+                  if (res==RES_ABORT) goto abort;
                   else goto skip;
                 }
               }
-              if(FSeek(InputFile, Pos, FILE_BEGIN)==-1)
+              if (FSeek(InputFile, Pos, FILE_BEGIN)==-1)
                 FWError(Format(L"FSeek to %d failed, code %d", Pos,
                                (int)GetLastError()));
             }
@@ -878,8 +878,8 @@ reopen_retry:
           else
           {
             info.Flags |= FLG_SKIPPED | FLG_ERROR;
-            if(flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
-            if(res==RES_ABORT) goto abort;
+            if (flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
+            if (res==RES_ABORT) goto abort;
             else goto skip;
           }
         } // if (j==-1)
@@ -895,27 +895,27 @@ reopen_retry:
         // bug #22 fixed by Axxie
         ShowReadName(SrcName);
 
-        if(CheckEscape()) goto abort;
-        if(j<cb) break;
+        if (CheckEscape()) goto abort;
+        if (j<cb) break;
       } // while (BuffPos < bi->BuffSize)
 
 skip:
       int abp=BuffPos;
-      if(abp%SectorSize) abp=(abp/SectorSize+1)*SectorSize;
+      if (abp%SectorSize) abp=(abp/SectorSize+1)*SectorSize;
       bi->BuffInf[FilesInBuff].WritePos = abp;
-      if(BuffPos%ReadAlign) BuffPos=(BuffPos/ReadAlign+1)*ReadAlign;
+      if (BuffPos%ReadAlign) BuffPos=(BuffPos/ReadAlign+1)*ReadAlign;
       bi->BuffInf[FilesInBuff].NextPos = BuffPos;
       bi->BuffInf[FilesInBuff].FileNumber = i;
-      if(BuffPos == bi->BuffSize)
+      if (BuffPos == bi->BuffSize)
       {
         bi->BuffInf[FilesInBuff].EndFlag = 0;
-        if(!Parallel)
+        if (!Parallel)
         {
-          if(!FlushBuff(bi)) goto abort;
+          if (!FlushBuff(bi)) goto abort;
         }
         else
         {
-          if(!WaitForFlushEnd()) goto abort;
+          if (!WaitForFlushEnd()) goto abort;
           SwapBufs(bi, wbi);
           BGFlush();
         }
@@ -941,7 +941,7 @@ abort:
     break;
   } // for (int i=0; i<Src.Count(); i++)
 
-  if(Parallel)
+  if (Parallel)
   {
     while(!WaitForFlushEnd());
     bi->OutFile=wbi->OutFile;
@@ -950,30 +950,30 @@ abort:
     bi->DstName=wbi->DstName;
   }
   bi->BuffInf[FilesInBuff].FileNumber = -1;
-  if(!Aborted) FlushBuff(bi);
-  else if(bi->OutNum!=-1) FinalizeBuf(bi);
+  if (!Aborted) FlushBuff(bi);
+  else if (bi->OutNum!=-1) FinalizeBuf(bi);
 
-  if(Parallel)
+  if (Parallel)
   {
     UninitBuf(wbi);
     CloseHandle(FlushEnd);
   }
   UninitBuf(bi);
 
-  if(FileCount) CopyProgressBox.Stop();
+  if (FileCount) CopyProgressBox.Stop();
   else
   {
     FileNameStoreEnum Src(&SrcNames);
     for(size_t i=0; i<Src.Count(); i++)
     {
-      if(!(Files[i].Flags & FLG_COPIED))
+      if (!(Files[i].Flags & FLG_COPIED))
       {
-        if(Files[i].Flags & FLG_DESCFILE)
+        if (Files[i].Flags & FLG_DESCFILE)
           ProcessDesc(i);
-        else if(Move && Files[i].Flags & FLG_DIR_POST
+        else if (Move && Files[i].Flags & FLG_DIR_POST
                 && !(Files[i].Flags & FLG_DIR_NOREMOVE))
         {
-          if(RmDir(Src.GetByNum(i)))
+          if (RmDir(Src.GetByNum(i)))
             Files[i].Flags |= FLG_DELETED;
         }
       }
@@ -985,14 +985,14 @@ abort:
 
 void Engine::ShowReadName(const String & fn)
 {
-  if(WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
+  if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
   CopyProgressBox.ShowReadName(fn);
   SetEvent(UiFree);
 }
 
 void Engine::ShowWriteName(const String & fn)
 {
-  if(WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
+  if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
   CopyProgressBox.ShowWriteName(fn);
   SetEvent(UiFree);
 }
@@ -1001,7 +1001,7 @@ void Engine::ShowProgress(int64_t read, int64_t write, int64_t total,
                           int64_t readTime, int64_t writeTime,
                           int64_t readN, int64_t writeN, int64_t totalN)
 {
-  if(WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
+  if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
 
   CopyProgressBox.ShowProgress(read, write, total, readTime, writeTime,
                                readN, writeN, totalN, Parallel, FirstWrite,
@@ -1019,9 +1019,9 @@ int Engine::CheckOverwrite2(int fnum, const String & src, const String & dst, St
 
 void Engine::Delay(int64_t time, int64_t cb, int64_t & counter, int64_t limit)
 {
-  if(limit<=0) return;
+  if (limit<=0) return;
   int64_t wait=(int64_t)((double)cb/limit*TicksPerSec())-time;
-  if(wait>0)
+  if (wait>0)
   {
     Sleep((int)((double)wait/TicksPerSec()*1000));
     counter+=wait;
@@ -1044,13 +1044,13 @@ String Engine::FindDescFile(const String & dir, int * idx)
 {
   for(size_t i=0; i < plugin->Descs().Count(); i++)
   {
-    if(FileExists(AddEndSlash(dir)+plugin->Descs()[i]))
+    if (FileExists(AddEndSlash(dir)+plugin->Descs()[i]))
     {
-      if(idx) *idx = i;
+      if (idx) *idx = i;
       return plugin->Descs()[i];
     }
   }
-  if(idx)
+  if (idx)
   {
     *idx = -1;
   }
@@ -1062,14 +1062,14 @@ String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, int * idx)
   for(size_t i=0; i < plugin->Descs().Count(); i++)
   {
     HANDLE hf;
-    if((hf=FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
+    if ((hf=FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
     {
       FindClose(hf);
-      if(idx) *idx = i;
+      if (idx) *idx = i;
       return plugin->Descs()[i];
     }
   }
-  if(idx) *idx = -1;
+  if (idx) *idx = -1;
   return "";
 }
 
@@ -1086,7 +1086,7 @@ void Engine::AddTopLevelDir(const String & dir, const String & dstMask, int flag
   info.Flags = flags;
   info.Level = 0;
   info.PanelIndex = -1;
-  if((hf=FindFirstFile(dir.ptr(), &fd)) !=INVALID_HANDLE_VALUE)
+  if ((hf=FindFirstFile(dir.ptr(), &fd)) !=INVALID_HANDLE_VALUE)
   {
     FindClose(hf);
     info.Attr = fd.dwFileAttributes;
@@ -1099,12 +1099,12 @@ void Engine::AddTopLevelDir(const String & dir, const String & dstMask, int flag
 
 int Engine::DirStart(const String & dir, const String & dstMask)
 {
-  if(_CopyDescs)
+  if (_CopyDescs)
   {
     CurPathDesc=FindDescFile(dir, DescFindData);
   }
   CurPathFlags=CurPathAddFlags=0;
-  if(_ClearROFromCD && VolFlags(dir) & VF_CDROM)
+  if (_ClearROFromCD && VolFlags(dir) & VF_CDROM)
   {
     CurPathAddFlags|=AF_CLEAR_RO;
   }
@@ -1114,9 +1114,9 @@ int Engine::DirStart(const String & dir, const String & dstMask)
 
 int Engine::DirEnd(const String & dir, const String & dstMask)
 {
-  if(_CopyDescs && CurPathDesc != "")
+  if (_CopyDescs && CurPathDesc != "")
   {
-    if(!AddFile(dir+"\\"+CurPathDesc,
+    if (!AddFile(dir+"\\"+CurPathDesc,
                 AddEndSlash(ExtractFilePath(ApplyFileMaskPath(dir+"\\"+CurPathDesc, dstMask)))+CurPathDesc, DescFindData, AF_DESCFILE | AF_DESC_INVERSE | CurPathAddFlags, 1)
       )
     {
@@ -1134,7 +1134,7 @@ String getPanelDir(HANDLE h_panel)
   std::unique_ptr<unsigned char[]> buf(new unsigned char[bufSize]);
   reinterpret_cast<FarPanelDirectory *>(buf.get())->StructSize = sizeof(FarPanelDirectory);
   size_t size = Info.PanelControl(h_panel, FCTL_GETPANELDIRECTORY, bufSize, buf.get());
-  if(size > bufSize)
+  if (size > bufSize)
   {
     bufSize = size;
     buf.reset(new unsigned char[bufSize]);
@@ -1177,14 +1177,14 @@ Engine::MResult Engine::Main(int move, int curOnly)
   // fixed by Nsky: bug #40
 //  _toansi(pi.CurDir);
 
-  if((pi.Flags&PFLAGS_PLUGIN) == PFLAGS_PLUGIN)
+  if ((pi.Flags&PFLAGS_PLUGIN) == PFLAGS_PLUGIN)
   {
     dstPath="plugin:";
     allowPlug=1;
   }
   else
   {
-    if(pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType==PTYPE_INFOPANEL ||  !(pi.Flags & PFLAGS_VISIBLE))
+    if (pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType==PTYPE_INFOPANEL ||  !(pi.Flags & PFLAGS_VISIBLE))
     {
       dstPath = "";
     }
@@ -1199,15 +1199,15 @@ Engine::MResult Engine::Main(int move, int curOnly)
 
   // fixed by Nsky: bug #40
 //  _toansi(pi.CurDir);
-  if(pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType== PTYPE_INFOPANEL || !pi.ItemsNumber)
+  if (pi.PanelType==PTYPE_QVIEWPANEL || pi.PanelType== PTYPE_INFOPANEL || !pi.ItemsNumber)
   {
     return MRES_NONE;
   }
   // Bug #5 fixed by CDK
-  if((pi.Flags & PFLAGS_REALNAMES) == 0) return MRES_STDCOPY;
-  if(pi.SelectedItemsNumber > 1 && !curOnly)
+  if ((pi.Flags & PFLAGS_REALNAMES) == 0) return MRES_STDCOPY;
+  if (pi.SelectedItemsNumber > 1 && !curOnly)
   {
-    if(move)
+    if (move)
     {
       prompt=LOC("CopyDialog.MoveFilesTo");
     }
@@ -1225,9 +1225,9 @@ Engine::MResult Engine::Main(int move, int curOnly)
     wcsncpy_s(buf, MAX_FILENAME, pit->FileName, MAX_FILENAME);
     // _toansi(buf);
     String fn=ExtractFileName(buf);
-    if(fn==L"..") return MRES_NONE;
+    if (fn==L"..") return MRES_NONE;
     String fmt;
-    if(!move)
+    if (!move)
     {
       fmt=LOC("CopyDialog.CopyTo");
     }
@@ -1236,8 +1236,8 @@ Engine::MResult Engine::Main(int move, int curOnly)
       fmt=LOC("CopyDialog.MoveTo");
     }
     prompt = Format(fmt.ptr(), fn.ptr());
-    if(curOnly || dstPath.empty()) dstPath=fn;
-    /*else if(!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+    if (curOnly || dstPath.empty()) dstPath=fn;
+    /*else if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
       && dstpath!="queue:" && dstpath!="plugin:")
         dstpath=AddEndSlash(dstpath)+fn;*/
 
@@ -1246,7 +1246,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
 
   _InverseBars=(bool)Options["ConnectLikeBars"] && pi.PanelRect.left>0;
 
-  if(move)
+  if (move)
   {
     dlg("Title")=LOC("CopyDialog.Move");
   }
@@ -1259,19 +1259,19 @@ Engine::MResult Engine::Main(int move, int curOnly)
 
   // axxie: Reset cp in case when user pressed Shift-F6/Shift-F5
   int cp = (!curOnly && srcPath!="") ? CheckParallel(srcPath, dstPath) : FALSE;
-  if(!Options["AllowParallel"])
+  if (!Options["AllowParallel"])
   {
     dlg["ParallelCopy"]("Selected")=FALSE;
   }
   else
   {
-    if(cp==1)
+    if (cp==1)
     {
       dlg["ParallelCopy"]("Selected")=TRUE;
     }
     else
     {
-      if(cp==0)
+      if (cp==0)
       {
         dlg["ParallelCopy"]("Selected")=FALSE;
       }
@@ -1284,7 +1284,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
   dlg["Ask"]("Selected") = !Options["OverwriteDef"];
   dlg["Overwrite"]("Selected") = Options["OverwriteDef"];
 
-  if(WinNT)
+  if (WinNT)
   {
     advdlg["Streams"]("Selected") = Options["CopyStreamsDef"];
     advdlg["Rights"]("Selected") = Options["CopyRightsDef"];
@@ -1295,7 +1295,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
     advdlg["Rights"]("Disable") = 1;
     advdlg["Compress"]("Disable") = 1;
   }
-  if(!Win2K)
+  if (!Win2K)
   {
     advdlg["Encrypt"]("Disable") = 1;
   }
@@ -1325,7 +1325,7 @@ rep:
     {
       int advRes = advdlg.Execute();
 
-      if(advRes == 1)
+      if (advRes == 1)
       {
         Options["copyCreationTime"] = advdlg["creationTime"]("Selected");
         Options["copyLastAccessTime"] = advdlg["lastAccessTime"]("Selected");
@@ -1339,7 +1339,7 @@ rep:
         plugin->SaveOptions();
       }
 
-      if(advRes == 0 || advRes == 1)
+      if (advRes == 0 || advRes == 1)
       {
         adv=1;
         bool resume=advdlg["ResumeFiles"]("Selected");
@@ -1350,7 +1350,7 @@ rep:
         dlg["Append"]("Disable")=resume;
         dlg["Rename"]("Disable")=resume;
         dlg["SkipIfNewer"]("Disable")=resume;
-        if(resume)
+        if (resume)
         {
           dlg["SkipIfNewer"]("Selected")=0;
         }
@@ -1369,15 +1369,15 @@ rep:
   String dstText = tmpDstText.trim().trimquotes();
 
   // fixed by Nsky: bug #28
-  if(!dstText.left(4).icmp("nul\\"))
+  if (!dstText.left(4).icmp("nul\\"))
     dstText = L"nul";
 
   // bugfixed by slst: bug #7
   dstText = dstText.replace("\"", "");
 
-  if(dstText == L"plugin:")
+  if (dstText == L"plugin:")
   {
-    if(allowPlug)
+    if (allowPlug)
     {
       return MRES_STDCOPY_RET;
     }
@@ -1400,7 +1400,7 @@ rep:
   // Current directory is set by Far to file path of selected file
   BOOL SCDResult = SetCurrentDirectory(srcPath.ptr());
   // fixed by Nsky: bug #28
-  if(relDstPath.icmp("nul") != 0)
+  if (relDstPath.icmp("nul") != 0)
   {
     dstPath = convertPath(CPM_REAL, relDstPath);
   }
@@ -1408,7 +1408,7 @@ rep:
   {
     dstPath = relDstPath;
   }
-  if(SCDResult)
+  if (SCDResult)
   {
     SetCurrentDirectory(CurrentDir);
   }
@@ -1416,15 +1416,15 @@ rep:
   CompressMode = EncryptMode = ATTR_INHERIT;
   Streams = Rights = FALSE;
 
-  if(WinNT)
+  if (WinNT)
   {
     Rights = advdlg["Rights"]("Selected");
     Streams = advdlg["Streams"]("Selected");
     CompressMode = advdlg["Compress"]("Selected");
-    if(Win2K)
+    if (Win2K)
     {
       EncryptMode = advdlg["Encrypt"]("Selected");
-      if(EncryptMode!=ATTR_INHERIT) CompressMode=ATTR_INHERIT;
+      if (EncryptMode!=ATTR_INHERIT) CompressMode=ATTR_INHERIT;
     }
   }
 
@@ -1436,39 +1436,39 @@ rep:
   SkipNewer = dlg["SkipIfNewer"]("Selected");
   SkippedToTemp = advdlg["SkippedToTemp"]("Selected");
   ReadSpeedLimit = WriteSpeedLimit=0;
-  if((bool)advdlg["ReadSpeedLimit"]("Selected"))
+  if ((bool)advdlg["ReadSpeedLimit"]("Selected"))
   {
     ReadSpeedLimit=(int)advdlg["ReadSpeedLimitValue"]("Text")*1024;
   }
-  if((bool)advdlg["WriteSpeedLimit"]("Selected"))
+  if ((bool)advdlg["WriteSpeedLimit"]("Selected"))
   {
     WriteSpeedLimit=(int)advdlg["WriteSpeedLimitValue"]("Text")*1024;
   }
 
   OverwriteMode=OM_PROMPT;
-  if(advdlg["ResumeFiles"]("Selected"))
+  if (advdlg["ResumeFiles"]("Selected"))
   {
     OverwriteMode=OM_RESUME;
   }
-  else if(dlg["Overwrite"]("Selected"))
+  else if (dlg["Overwrite"]("Selected"))
   {
     OverwriteMode=OM_OVERWRITE;
   }
-  else if(dlg["Skip"]("Selected"))
+  else if (dlg["Skip"]("Selected"))
   {
     OverwriteMode=OM_SKIP;
   }
-  else if(dlg["Append"]("Selected"))
+  else if (dlg["Append"]("Selected"))
   {
     OverwriteMode=OM_APPEND;
   }
-  else if(dlg["Rename"]("Selected"))
+  else if (dlg["Rename"]("Selected"))
   {
     OverwriteMode=OM_RENAME;
   };
 
   // fixed by Nsky: bug #28
-  if(!dstPath.icmp("nul"))
+  if (!dstPath.icmp("nul"))
   {
     OverwriteMode=OM_OVERWRITE;
     CompressMode=EncryptMode=ATTR_INHERIT;
@@ -1477,39 +1477,39 @@ rep:
   else
   {
     int vf=VolFlags(dstPath);
-    if(vf!=-1)
+    if (vf!=-1)
     {
-      if(!(vf & VF_STREAMS) && !adv) Streams=0;
-      if(!(vf & VF_RIGHTS) && !adv) Rights=0;
-      if(!(vf & VF_COMPRESSION) && !adv) CompressMode=ATTR_INHERIT;
-      if(!(vf & VF_ENCRYPTION) && !adv) EncryptMode=ATTR_INHERIT;
+      if (!(vf & VF_STREAMS) && !adv) Streams=0;
+      if (!(vf & VF_RIGHTS) && !adv) Rights=0;
+      if (!(vf & VF_COMPRESSION) && !adv) CompressMode=ATTR_INHERIT;
+      if (!(vf & VF_ENCRYPTION) && !adv) EncryptMode=ATTR_INHERIT;
 
-      if(vf & VF_READONLY)
-        if(!warn(LOC("CopyDialog.ReadOnlyWarn"))) goto rep;
-      if(!(vf & VF_COMPRESSION) && CompressMode==ATTR_ON)
+      if (vf & VF_READONLY)
+        if (!warn(LOC("CopyDialog.ReadOnlyWarn"))) goto rep;
+      if (!(vf & VF_COMPRESSION) && CompressMode==ATTR_ON)
       {
-        if(!warn(LOC("CopyDialog.CompressWarn"))) goto rep;
+        if (!warn(LOC("CopyDialog.CompressWarn"))) goto rep;
         CompressMode=ATTR_INHERIT;
       }
-      if(!(vf & VF_ENCRYPTION) && EncryptMode==ATTR_ON)
+      if (!(vf & VF_ENCRYPTION) && EncryptMode==ATTR_ON)
       {
-        if(!warn(LOC("CopyDialog.EncryptWarn"))) goto rep;
+        if (!warn(LOC("CopyDialog.EncryptWarn"))) goto rep;
         EncryptMode=ATTR_INHERIT;
       }
-      if(!(vf & VF_STREAMS) && Streams)
+      if (!(vf & VF_STREAMS) && Streams)
       {
-        if(!warn(LOC("CopyDialog.StreamsWarn"))) goto rep;
+        if (!warn(LOC("CopyDialog.StreamsWarn"))) goto rep;
         Streams=0;
       }
-      if(!(vf & VF_RIGHTS) && Rights==ATTR_ON)
+      if (!(vf & VF_RIGHTS) && Rights==ATTR_ON)
       {
-        if(!warn(LOC("CopyDialog.RightsWarn"))) goto rep;
+        if (!warn(LOC("CopyDialog.RightsWarn"))) goto rep;
         Rights=0;
       }
     }
     else
     {
-      //if(!warn(LOC("CopyDialog.InvalidPathWarn")))
+      //if (!warn(LOC("CopyDialog.InvalidPathWarn")))
       ShowErrorMessage(LOC("CopyDialog.InvalidPathWarn"));
       goto rep;
     }
@@ -1517,7 +1517,7 @@ rep:
 
   // bugfixed by slst: bug #14
   // Check if srcpath=dstpath
-  if(GetRealFileName(srcPath) == GetRealFileName(dstPath))
+  if (GetRealFileName(srcPath) == GetRealFileName(dstPath))
   {
     ShowErrorMessage(LOC("CopyDialog.OntoItselfError"));
     return MRES_NONE;
@@ -1533,13 +1533,13 @@ rep:
   ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
 
   size_t curItem = curOnly;
-  if(!curItem)
+  if (!curItem)
   {
     curItem = !(TPanelItem(0, true, true)->Flags & PPIF_SELECTED);
   }
 
   std::vector<size_t> sortIndex;
-  if(curItem)
+  if (curItem)
   {
     sortIndex.push_back(pi.CurrentItem);
   }
@@ -1547,7 +1547,7 @@ rep:
   {
     for(size_t i = 0; i < pi.ItemsNumber; i++)
     {
-      if(TPanelItem(i)->Flags & PPIF_SELECTED)
+      if (TPanelItem(i)->Flags & PPIF_SELECTED)
       {
         sortIndex.push_back(i);
       }
@@ -1563,28 +1563,28 @@ rep:
     size_t i = sortIndex[ii];
     TPanelItem pit(i);
     String file = pit->FileName;
-    if(file == L"..")
+    if (file == L"..")
     {
       continue;
     }
 
     String filePath=ExtractFilePath(file);
-    if(!haveCurPath || filePath.icmp(curPath))
+    if (!haveCurPath || filePath.icmp(curPath))
     {
-      if(haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
+      if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
       curPath=filePath;
       haveCurPath=1;
-      if(!DirStart(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
+      if (!DirStart(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
     }
 
-    if(file.find('\\') == -1)
+    if (file.find('\\') == -1)
     {
       file = AddEndSlash(srcPath) + file;
     }
 
-    if(_CopyDescs && !ExtractFileName(file).icmp(CurPathDesc))
+    if (_CopyDescs && !ExtractFileName(file).icmp(CurPathDesc))
     {
-      if(ShowMessageEx(LOC("CopyDialog.Warning"),
+      if (ShowMessageEx(LOC("CopyDialog.Warning"),
                        FormatWidthNoExt(file, 50)+"\n"+
                        LOC("CopyDialog.DescSelectedWarn")+"\n"+
                        LOC("CopyDialog.DescSelectedWarn1"),
@@ -1601,15 +1601,15 @@ rep:
     String dst = ApplyFileMaskPath(file, dstPath);
     WIN32_FIND_DATA wfd;
     FarToWin32FindData(pit, wfd);
-    if(!AddFile(file, dst, wfd, CurPathAddFlags, 1, (int)i))
+    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, (int)i))
     {
       goto fin;
     }
   } // for (int ii=0; ii<c; ii++)
 
-  if(haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
+  if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
 
-  if(OverwriteMode == OM_RESUME)
+  if (OverwriteMode == OM_RESUME)
   {
     FileNameStoreEnum Enum(&DstNames);
     // bugfixed by slst: bug #24
@@ -1617,10 +1617,10 @@ rep:
     ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
     for(size_t i=0; i<Enum.Count(); i++)
     {
-      if(!(Files[i].Flags & FLG_SKIPPED) & !(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY))
+      if (!(Files[i].Flags & FLG_SKIPPED) & !(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY))
       {
         int64_t sz=FileSize((String)Enum.GetByNum(i));
-        if(sz < Files[i].Size)
+        if (sz < Files[i].Size)
         {
           Files[i].ResumePos = sz/ReadAlign*ReadAlign;
           TotalBytes -= Files[i].ResumePos;
@@ -1634,7 +1634,7 @@ rep:
       }
     }
   }
-  else if(OverwriteMode == OM_SKIP || OverwriteMode == OM_RENAME || SkipNewer)
+  else if (OverwriteMode == OM_SKIP || OverwriteMode == OM_RENAME || SkipNewer)
   {
     // bugfixed by slst: bug #24
     //progress.ShowMessage(LOC("Status.ScanningDest"));
@@ -1644,7 +1644,7 @@ rep:
 
   ScanFoldersProgressBox.Hide();
 
-  if(Options["BufPercent"])
+  if (Options["BufPercent"])
   {
     BufSize=(int)(GetPhysMemorySize()/100*(int)Options["BufPercentVal"]);
   }
@@ -1655,45 +1655,45 @@ rep:
 
   // bugfixed by slst: bug #32
   // CheckFreeDiskSpace feature added
-  if(Options["CheckFreeDiskSpace"])
+  if (Options["CheckFreeDiskSpace"])
   {
-    if(!CheckFreeDiskSpace(TotalBytes, Move, srcPath, dstPath))
+    if (!CheckFreeDiskSpace(TotalBytes, Move, srcPath, dstPath))
       return MRES_NONE; // not enough space
   }
 
-  if(CopyCount) Copy();
+  if (CopyCount) Copy();
 
-  if((bool)Options["Sound"] && !Aborted)
+  if ((bool)Options["Sound"] && !Aborted)
   {
-    if(GetTime()-Start > 30*60*TicksPerSec()) beep(2);
-    else if(GetTime()-Start > 10*60*TicksPerSec()) beep(1);
-    else if(GetTime()-Start > 30*TicksPerSec()) beep(0);
+    if (GetTime()-Start > 30*60*TicksPerSec()) beep(2);
+    else if (GetTime()-Start > 10*60*TicksPerSec()) beep(1);
+    else if (GetTime()-Start > 30*TicksPerSec()) beep(0);
   }
 
 fin:
   ScanFoldersProgressBox.Hide();
 
-  if(!Move)
+  if (!Move)
   {
     Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, NULL);
     for(size_t i = 0; i < Files.size(); i++)
     {
-      if(Files[i].PanelIndex!=-1)
+      if (Files[i].PanelIndex!=-1)
       {
-        if(Files[i].Flags & FLG_DIR_PRE)
+        if (Files[i].Flags & FLG_DIR_PRE)
         {
           int ok=1;
           size_t j=i+1;
           while(Files[j].Level>Files[i].Level)
           {
-            if(!(Files[j].Flags & (FLG_DIR_PRE | FLG_DIR_POST | FLG_COPIED)))
+            if (!(Files[j].Flags & (FLG_DIR_PRE | FLG_DIR_POST | FLG_COPIED)))
             {
               ok=0;
               break;
             }
             j++;
           }
-          if(ok)
+          if (ok)
           {
             Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
           }
@@ -1701,7 +1701,7 @@ fin:
         }
         else
         {
-          if(!(Files[i].Flags & FLG_DIR_POST) && Files[i].Flags & FLG_COPIED)
+          if (!(Files[i].Flags & FLG_DIR_POST) && Files[i].Flags & FLG_COPIED)
           {
             Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
           }
@@ -1723,7 +1723,7 @@ fin:
     String NewFileName;
     for(size_t idx=0; idx<Files.size(); idx++)
     {
-      if(Files[idx].PanelIndex == pi.CurrentItem)
+      if (Files[idx].PanelIndex == pi.CurrentItem)
       {
         NewFileName = DstNames.GetNameByNum(idx);
         break;
@@ -1736,7 +1736,7 @@ fin:
       TPanelItem pit(i);
       String NewPanelFilename = pit->FileName;
       NewPanelFilename = NewPanelFilename.toLower();
-      if(NewFileName == NewPanelFilename)
+      if (NewFileName == NewPanelFilename)
       {
         rpi.CurrentItem = i;
         Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, &rpi);
@@ -1763,12 +1763,12 @@ int Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd
 int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, int flags, int Level, int PanelIndex)
 {
   // bugfixed by slst: bug #23
-  if(CheckEscape(FALSE))
+  if (CheckEscape(FALSE))
   {
     return FALSE;
   }
 
-  if(attr==0xFFFFFFFF)
+  if (attr==0xFFFFFFFF)
   {
     return TRUE;
   }
@@ -1781,7 +1781,7 @@ int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t 
   // unfold symlinks in file paths (if any)
   // src path
 //  DWORD _src_attr = GetFileAttributes(ExtractFilePath(_src).ptr());
-//  if((_src_attr != 0xFFFFFFFF) &&
+//  if ((_src_attr != 0xFFFFFFFF) &&
 //          (_src_attr & FILE_ATTRIBUTE_DIRECTORY)  &&
 //          (_src_attr & FILE_ATTRIBUTE_REPARSE_POINT))
 //      src = AddEndSlash(GetRealFileName(ExtractFilePath(_src))) + ExtractFileName(_src);
@@ -1790,7 +1790,7 @@ int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t 
 //
 //  // dst path
 //  DWORD _dst_attr = GetFileAttributes(ExtractFilePath(_dst).ptr());
-//  if((_dst_attr != 0xFFFFFFFF) &&
+//  if ((_dst_attr != 0xFFFFFFFF) &&
 //      (_dst_attr & FILE_ATTRIBUTE_DIRECTORY)  &&
 //      (_dst_attr & FILE_ATTRIBUTE_REPARSE_POINT))
 //      dst = AddEndSlash(GetRealFileName(ExtractFilePath(_dst))) + ExtractFileName(_dst);
@@ -1798,12 +1798,12 @@ int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t 
 //      dst = _dst;
   //////////////////////////////////////////////////////
 
-  if(src==dst && !(flags & AF_DESCFILE))
+  if (src==dst && !(flags & AF_DESCFILE))
   {
     return TRUE;
   }
 
-  if(flags & AF_CLEAR_RO)
+  if (flags & AF_CLEAR_RO)
   {
     attr &= ~FILE_ATTRIBUTE_READONLY;
   }
@@ -1824,7 +1824,7 @@ int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t 
   info->PanelIndex = PanelIndex;
 
   FileName::Direction d;
-  if(attr & FILE_ATTRIBUTE_DIRECTORY)
+  if (attr & FILE_ATTRIBUTE_DIRECTORY)
   {
     info->Flags |= FLG_DIR_PRE;
     d = FileName::levelPlus;
@@ -1837,10 +1837,10 @@ int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t 
   SrcNames.AddRel(d, ExtractFileName(src));
   DstNames.AddRel(d, ExtractFileName(dst));
 
-  if(flags & AF_DESCFILE)
+  if (flags & AF_DESCFILE)
   {
     info->Flags |= FLG_DESCFILE;
-    if(flags & AF_DESC_INVERSE)
+    if (flags & AF_DESC_INVERSE)
     {
       info->Flags |= FLG_DESC_INVERSE;
     }
@@ -1849,22 +1849,22 @@ int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t 
   }
 
   int owmode = OM_PROMPT;
-  if(!(flags & AF_STREAM))
+  if (!(flags & AF_STREAM))
   {
-    if(Move)
+    if (Move)
     {
 retry:
-      if(MoveFile(src, dst, FALSE))
+      if (MoveFile(src, dst, FALSE))
       {
         info->Flags |= FLG_COPIED | FLG_DELETED;
         goto fin;
       }
       int err = GetLastError();
-      if(err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
+      if (err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
       {
-        if(OverwriteMode == OM_RESUME)
+        if (OverwriteMode == OM_RESUME)
         {
-          if(FileSize(dst)>=info->Size)
+          if (FileSize(dst)>=info->Size)
           {
             info->Flags |= FLG_SKIPPED;
             goto fin;
@@ -1874,11 +1874,11 @@ retry:
         {
           String ren;
           int res, j = 0;
-          if(SkipNewer && Newer(dst, lastWriteTime))
+          if (SkipNewer && Newer(dst, lastWriteTime))
           {
             res = OM_SKIP;
           }
-          else if(OverwriteMode == OM_PROMPT)
+          else if (OverwriteMode == OM_PROMPT)
           {
             res = CheckOverwrite(-1, src, dst, ren);
           }
@@ -1895,7 +1895,7 @@ retry:
 
             case OM_OVERWRITE:
               owmode = OM_OVERWRITE;
-              if(MoveFile(src, dst, TRUE))
+              if (MoveFile(src, dst, TRUE))
               {
                 info->Flags |= FLG_COPIED | FLG_DELETED;
                 goto fin;
@@ -1907,7 +1907,7 @@ retry:
               break;
 
             case OM_RENAME:
-              if(OverwriteMode != OM_RENAME)
+              if (OverwriteMode != OM_RENAME)
               {
                 dst=ren;
               }
@@ -1924,13 +1924,13 @@ retry:
               break;
           } // switch (res)
         }
-      } // if(err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
-    } // if(Move)
-  } // if(!(flags & AF_STREAM))
+      } // if (err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
+    } // if (Move)
+  } // if (!(flags & AF_STREAM))
 
   CopyCount++;
   TotalN++;
-  if(!(attr & FILE_ATTRIBUTE_DIRECTORY))
+  if (!(attr & FILE_ATTRIBUTE_DIRECTORY))
   {
     FileCount++;
   }
@@ -1941,31 +1941,31 @@ retry:
   // Updates folder scan progress dialog
   ScanFoldersProgressBox.SetScanProgressInfo(TotalN, TotalBytes);
 
-  if(!(flags & AF_STREAM))
+  if (!(flags & AF_STREAM))
   {
-    if(attr & FILE_ATTRIBUTE_DIRECTORY)
+    if (attr & FILE_ATTRIBUTE_DIRECTORY)
     {
-      if(attr & FILE_ATTRIBUTE_REPARSE_POINT)
+      if (attr & FILE_ATTRIBUTE_REPARSE_POINT)
       {
-        if(_ClearROFromCD && VolFlags(src) & VF_CDROM)
+        if (_ClearROFromCD && VolFlags(src) & VF_CDROM)
           flags |= AF_CLEAR_RO;
       }
       WIN32_FIND_DATA fd;
       HANDLE hf;
-      if((hf = FindFirstFile((src+"\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
+      if ((hf = FindFirstFile((src+"\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
       {
         int descidx=-1;
         RememberStruct Remember;
         while(1)
         {
-          if(wcscmp(fd.cFileName, L"..") && wcscmp(fd.cFileName, L"."))
+          if (wcscmp(fd.cFileName, L"..") && wcscmp(fd.cFileName, L"."))
           {
             int idx;
-            if(_CopyDescs && _DescsInDirs
+            if (_CopyDescs && _DescsInDirs
                 && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 && (idx=plugin->Descs().Find(fd.cFileName))!=-1)
             {
-              if(descidx=-1 || idx<descidx)
+              if (descidx=-1 || idx<descidx)
               {
                 RememberFile(src+L"\\"+fd.cFileName, dst+L"\\"+fd.cFileName,
                              fd, flags | AF_DESCFILE, Level+1, Remember);
@@ -1977,13 +1977,13 @@ retry:
               // bugfixed by slst:
               // check for recursive symlinks
               // recursive symlinks results in stack overflow :(
-              if((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+              if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
                   (fd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))
               {
                 // compare current folder & unfolded symlink name in current folder
-                if(GetRealFileName(src) != GetRealFileName(src+"\\"+fd.cFileName))
+                if (GetRealFileName(src) != GetRealFileName(src+"\\"+fd.cFileName))
                 {
-                  if(!AddFile(src+"\\"+fd.cFileName, dst+"\\"+fd.cFileName, fd, flags, Level+1))
+                  if (!AddFile(src+"\\"+fd.cFileName, dst+"\\"+fd.cFileName, fd, flags, Level+1))
                   {
                     FindClose(hf);
                     return FALSE;
@@ -1992,7 +1992,7 @@ retry:
               }
               else
               {
-                if(!AddFile(src+"\\"+fd.cFileName, dst+"\\"+fd.cFileName, fd, flags, Level+1))
+                if (!AddFile(src+"\\"+fd.cFileName, dst+"\\"+fd.cFileName, fd, flags, Level+1))
                 {
                   FindClose(hf);
                   return FALSE;
@@ -2000,14 +2000,14 @@ retry:
               }
             }
           }
-          if(!FindNextFile(hf, &fd)) break;
+          if (!FindNextFile(hf, &fd)) break;
         }
         FindClose(hf);
-        if(descidx!=-1)
-          if(!AddRemembered(Remember)) return FALSE;
+        if (descidx!=-1)
+          if (!AddRemembered(Remember)) return FALSE;
       }
     }
-    else if(Streams)
+    else if (Streams)
     {
       WIN32_STREAM_ID sid;
       ZeroMemory(&sid, sizeof(sid));
@@ -2015,7 +2015,7 @@ retry:
       HANDLE hf = CreateFile(src.ptr(), GENERIC_READ,
                              FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
                              OPEN_EXISTING, 0, NULL);
-      if(hf!=INVALID_HANDLE_VALUE)
+      if (hf!=INVALID_HANDLE_VALUE)
       {
         DWORD hsz=(DWORD)((LPBYTE)&sid.cStreamName-(LPBYTE)&sid);
         LPVOID ctx=NULL;
@@ -2023,19 +2023,19 @@ retry:
         {
           wchar_t strn[1024];
           DWORD cb1, cb2;
-          if(!BackupRead(hf, (LPBYTE)&sid, hsz, &cb1, FALSE, FALSE, &ctx)
+          if (!BackupRead(hf, (LPBYTE)&sid, hsz, &cb1, FALSE, FALSE, &ctx)
               || !cb1) break;
           strn[0]=0;
-          if(sid.dwStreamNameSize)
-            if(!BackupRead(hf, (LPBYTE)strn, sid.dwStreamNameSize, &cb2, FALSE, FALSE, &ctx)
+          if (sid.dwStreamNameSize)
+            if (!BackupRead(hf, (LPBYTE)strn, sid.dwStreamNameSize, &cb2, FALSE, FALSE, &ctx)
                 || !cb2) break;
-          if((sid.dwStreamId==BACKUP_DATA ||
+          if ((sid.dwStreamId==BACKUP_DATA ||
               sid.dwStreamId==BACKUP_EA_DATA ||
               sid.dwStreamId==BACKUP_ALTERNATE_DATA)
               && sid.dwStreamNameSize)
           {
             strn[sid.dwStreamNameSize/2]=0;
-            if(!AddFile(src+strn, dst+strn, attr,
+            if (!AddFile(src+strn, dst+strn, attr,
                         sid.Size.QuadPart, creationTime, lastAccessTime, lastWriteTime, flags | AF_STREAM, Level+1))
             {
               BackupRead(NULL, NULL, 0, NULL, TRUE, FALSE, &ctx);
@@ -2053,7 +2053,7 @@ retry:
   }
 
 fin:
-  if(attr & FILE_ATTRIBUTE_DIRECTORY)
+  if (attr & FILE_ATTRIBUTE_DIRECTORY)
   {
     FileStruct info;
     memset(&info, 0, sizeof(info));
@@ -2076,16 +2076,16 @@ void Engine::SetOverwriteMode(int Start)
   {
     String fn=Enum.GetByNum(i);
     FileStruct & info=Files[i];
-    if(!SkipNewer && info.Flags & FLG_SKIPNEWER)
+    if (!SkipNewer && info.Flags & FLG_SKIPNEWER)
     {
       info.Flags &= ~(FLG_SKIPNEWER | FLG_SKIPPED);
       TotalBytes += info.Size;
       TotalN++;
     }
     // bug #47 fixed by axxie
-    if(!(info.Flags & FLG_SKIPPED) && !(info.Flags & FLG_DIR_PRE) && !(info.Flags & FLG_DIR_POST) && FileExists(fn))
+    if (!(info.Flags & FLG_SKIPPED) && !(info.Flags & FLG_DIR_PRE) && !(info.Flags & FLG_DIR_POST) && FileExists(fn))
     {
-      if(SkipNewer && Newer(fn, info.lastWriteTime))
+      if (SkipNewer && Newer(fn, info.lastWriteTime))
       {
         TotalBytes -= info.Size;
         TotalN--;
@@ -2163,13 +2163,13 @@ rep:
   SkipNewer=dlg["SkipIfNewer"]("Selected");
   SkippedToTemp=dlg["SkippedToTemp"]("Selected");
 
-  if(SkipNewer && Newer(fd.ftLastWriteTime, fs.ftLastWriteTime))
+  if (SkipNewer && Newer(fd.ftLastWriteTime, fs.ftLastWriteTime))
   {
     ores = res;
     res = OM_SKIP;
   }
 
-  if(res == OM_RENAME && !AcceptForAll)
+  if (res == OM_RENAME && !AcceptForAll)
   {
     FarDialog & dlg = plugin->Dialogs()["RenameDialog"];
     dlg.ResetControls();
@@ -2177,26 +2177,26 @@ rep:
 
     dlg["Edit"]("Text")=ExtractFileName(Dst);
 rep1:
-    if(dlg.Execute()==0)
+    if (dlg.Execute()==0)
     {
       ren=ExtractFilePath(Dst)+"\\"+dlg["Edit"]("Text");
-      if(ExistsN(ren, 0)) goto rep1;
+      if (ExistsN(ren, 0)) goto rep1;
     }
     else goto rep;
   }
 
-  if(AcceptForAll || SkipNewer != OldSkipNewer)
+  if (AcceptForAll || SkipNewer != OldSkipNewer)
   {
-    if(AcceptForAll)
-      if(ores==-1) OverwriteMode = res;
+    if (AcceptForAll)
+      if (ores==-1) OverwriteMode = res;
       else OverwriteMode = ores;
-    if(fnum != -1)
+    if (fnum != -1)
     {
       //FarProgress progress;
       //progress.ShowMessage(LOC("Status.ScanningDest"));
 
       SetOverwriteMode(fnum+1);
-      if(res == OM_RENAME)
+      if (res == OM_RENAME)
       {
         int j = 0;
         while(ExistsN(Dst, j)) j++;
@@ -2233,12 +2233,12 @@ int Engine::AddRemembered(RememberStruct & Remember)
 BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,
                                 const String & srcpathstr, const String & dstpathstr)
 {
-  //if(ReplaceMode == OM_OVERWRITE) return TRUE;
+  //if (ReplaceMode == OM_OVERWRITE) return TRUE;
 
   String srcroot = GetFileRoot(srcpathstr);
   String dstroot = GetFileRoot(dstpathstr);
 
-  if((MoveMode) && (srcroot == dstroot)) return TRUE;
+  if ((MoveMode) && (srcroot == dstroot)) return TRUE;
 
   BOOL result = FALSE;
 
@@ -2246,10 +2246,10 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
   ULARGE_INTEGER TotalNumberOfBytes;
   ULARGE_INTEGER TotalNumberOfFreeBytes;
 
-  if(GetDiskFreeSpaceEx(dstroot.ptr(), &FreeBytesAvailable,
+  if (GetDiskFreeSpaceEx(dstroot.ptr(), &FreeBytesAvailable,
                         &TotalNumberOfBytes, &TotalNumberOfFreeBytes))
   {
-    if(FreeBytesAvailable.QuadPart < (ULONGLONG)TotalBytesToProcess)
+    if (FreeBytesAvailable.QuadPart < (ULONGLONG)TotalBytesToProcess)
     {
       WaitForSingleObject(UiFree, INFINITE);
 
@@ -2259,8 +2259,8 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
 
       dlg("Title") = LOC("FreeSpaceErrorDialog.Title");
       String disk_str = dstroot;
-      if(disk_str.len() >= 2)
-        if(disk_str[1] == ':') disk_str = disk_str.left(2);
+      if (disk_str.len() >= 2)
+        if (disk_str[1] == ':') disk_str = disk_str.left(2);
       dlg["Label1"]("Text") = LOC("FreeSpaceErrorDialog.NotEnoughSpace") + " " + disk_str;
       dlg["Label2"]("Text") = Format(L"%-20s%12s", LOC("FreeSpaceErrorDialog.AvailableSpace").ptr(),
                                      FormatValue(FreeBytesAvailable.QuadPart).ptr());
@@ -2274,7 +2274,7 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
       FlushConsoleInputBuffer(h);
       SetEvent(UiFree);
 
-      if(dlgres == RES_YES)
+      if (dlgres == RES_YES)
         result = FALSE;
       else
         result = TRUE;
@@ -2303,12 +2303,12 @@ void Engine::setFileSizeAndTime(const String & fn, int64_t size, FILETIME * crea
 int Engine::EngineError(const String & s, const String & fn, int code, int & flg, const String & title, const String & type_id)
 {
   int * ix = NULL;
-  if(flg & eeAutoSkipAll)
+  if (flg & eeAutoSkipAll)
   {
     ix = &errTypes[type_id];
-    if(*ix & errfSkipAll)
+    if (*ix & errfSkipAll)
     {
-      if(flg & eeShowKeepFiles && *ix & errfKeepFiles)
+      if (flg & eeShowKeepFiles && *ix & errfKeepFiles)
       {
         flg |= eerKeepFiles;
       }
@@ -2320,34 +2320,34 @@ int Engine::EngineError(const String & s, const String & fn, int code, int & flg
   dlg.ResetControls();
   CopyProgressBox.SetNeedToRedraw(true);
 
-  if(!title.empty())
+  if (!title.empty())
   {
     dlg("Title") = title;
   }
 
-  if(flg & eeShowReopen)
+  if (flg & eeShowReopen)
   {
     dlg["Reopen"]("Visible") = 1;
   }
-  if(flg & eeShowKeepFiles)
+  if (flg & eeShowKeepFiles)
   {
     dlg["KeepFiles"]("Visible") = 1;
   }
-  if(flg & eeYesNo)
+  if (flg & eeYesNo)
   {
     dlg["YesNo"]("Visible") = 1;
   }
-  if(flg & eeRetrySkipAbort)
+  if (flg & eeRetrySkipAbort)
   {
     dlg["RetrySkipAbort"]("Visible") = 1;
-    if(flg & eeAutoSkipAll)
+    if (flg & eeAutoSkipAll)
     {
       dlg["SkipAll"]("Visible") = 1;
     }
   }
   dlg["Label1"]("Text") = s;
   dlg["Label1"]("Visible") = 1;
-  if(flg & eeOneLine)
+  if (flg & eeOneLine)
   {
     dlg["Sep1"]("Visible")=0;
   }
@@ -2359,7 +2359,7 @@ int Engine::EngineError(const String & s, const String & fn, int code, int & flg
     list.loadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
     for(size_t i=0; i<list.Count(); i++)
     {
-      if(i<=7)
+      if (i<=7)
       {
         String name = String("Label")+String(i+3);
         dlg[name]("Visible") = 1;
@@ -2368,30 +2368,30 @@ int Engine::EngineError(const String & s, const String & fn, int code, int & flg
     }
   }
 
-  if(!(flg & eeShowReopen) && !(flg & eeShowKeepFiles))
+  if (!(flg & eeShowReopen) && !(flg & eeShowKeepFiles))
   {
     dlg["Sep1"]("Visible")=0;
   }
 
   int res=dlg.Execute();
 
-  if((bool)dlg["Reopen"]("Selected")) flg |= eerReopen;
-  if((bool)dlg["KeepFiles"]("Selected")) flg |= eerKeepFiles;
+  if ((bool)dlg["Reopen"]("Selected")) flg |= eerReopen;
+  if ((bool)dlg["KeepFiles"]("Selected")) flg |= eerKeepFiles;
 
-  if(flg & eeYesNo)
+  if (flg & eeYesNo)
   {
-    if(res == 0) return RES_YES;
-    if(res == -1) return RES_NO;
+    if (res == 0) return RES_YES;
+    if (res == -1) return RES_NO;
   }
-  else if(flg & eeRetrySkipAbort)
+  else if (flg & eeRetrySkipAbort)
   {
-    if(res == 0) return RES_RETRY;
-    if(res == 1) return RES_SKIP;
-    if(res == -1) return RES_ABORT;
-    if(res == 2)
+    if (res == 0) return RES_RETRY;
+    if (res == 1) return RES_SKIP;
+    if (res == -1) return RES_ABORT;
+    if (res == 2)
     {
       *ix |= errfSkipAll;
-      if(flg & eerKeepFiles)
+      if (flg & eerKeepFiles)
       {
         *ix |= errfKeepFiles;
       }

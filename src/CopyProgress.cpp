@@ -80,7 +80,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   const int64_t MinRWValue = 0x10000;
 
   // bugfixed by slst: bug #18
-  if(((ReadBytes > MinRWValue)  && (WriteBytes > MinRWValue)) ||
+  if (((ReadBytes > MinRWValue)  && (WriteBytes > MinRWValue)) ||
       ((TotalBytes < BufferSize) && (ReadBytes > MinRWValue))) // if selected files size < buffer size
   {
     double ReadSpeed  = (ReadTime>0)  ? (double)ReadBytes  / (double)ReadTime  : 0; // bytes per tick
@@ -92,19 +92,19 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
     //DebugLog(_T("RSpeed: %4.4f  WSpeed: %4.4f  RTRemain: %4.4f  WTRemain: %4.4f\n"),
     //        ReadSpeed, WriteSpeed, ReadTimeRemain, WriteTimeRemain);
 
-    if(ParallelMode)
+    if (ParallelMode)
     {
       // parallel mode
       double BufferWriteTime = 0;
-      if(ReadBytes == TotalBytes)
+      if (ReadBytes == TotalBytes)
         BufferWriteTime = WriteTimeRemain;
       else
         BufferWriteTime = (WriteSpeed > 0.001) ? ((double)BufferSize / WriteSpeed) : 0;
       //DebugLog(_T("BufferWriteTime: %3.2f\n"), BufferWriteTime / TicksPerSec());
 
-      if(WriteSpeed > 0)  // writing is started
+      if (WriteSpeed > 0)  // writing is started
       {
-        if(ReadSpeed < WriteSpeed)
+        if (ReadSpeed < WriteSpeed)
           RemainingTime = ReadTimeRemain + BufferWriteTime;
         else
           RemainingTime = WriteTimeRemain + (double)FirstWriteTime;
@@ -123,9 +123,9 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
     TotalTime = ElapsedTime + RemainingTime;
   }
 
-  if(TotalTime     < 0) TotalTime     = 0;
-  if(ElapsedTime   < 0) ElapsedTime   = 0;
-  if(RemainingTime < 0) RemainingTime = 0;
+  if (TotalTime     < 0) TotalTime     = 0;
+  if (ElapsedTime   < 0) ElapsedTime   = 0;
+  if (RemainingTime < 0) RemainingTime = 0;
 
   TotalTime     /= TicksPerSec();
   ElapsedTime   /= TicksPerSec();
@@ -158,12 +158,12 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   DrawText(X2-MG-buf1.len()-buf.len()+1, Y1+10, &clrLabel, buf);
   DrawText(X2-MG-buf1.len()+1, Y1+10, &clrText, buf1);
 
-  if(GetTime()-clastupdate > cinterval)
+  if (GetTime()-clastupdate > cinterval)
   {
     clastupdate = GetTime();
     int pc=TotalBytes?(int)((float)(ReadBytes+WriteBytes)/(TotalBytes*2)*100):0;
-    if(pc<0) pc=0;
-    if(pc>100) pc=100;
+    if (pc<0) pc=0;
+    if (pc>100) pc=100;
     buf = Format(L"{%d%% %2.2d:%2.2d} %s", pc, (int)RemainingTime/60, (int)RemainingTime%60,
                  Move? LOC("Engine.Moving").ptr():LOC("Engine.Copying").ptr());
     SetTitle2(buf);
@@ -175,7 +175,7 @@ void CopyProgress::DrawProgress(const String & pfx, int y, int64_t cb, int64_t t
                                 int64_t time, int64_t n, int64_t totaln)
 {
   RedrawWindowIfNeeded();
-  if(cb>total) cb=total;
+  if (cb>total) cb=total;
   DrawText(X1+MG, Y1+y, &clrLabel, pfx);
   String buf;
   buf= FormatWidth(FormatProgress(cb, total), W-MG*2-pfx.len());
@@ -197,7 +197,7 @@ void CopyProgress::ShowReadName(const String & fn)
 {
   RedrawWindowIfNeeded();
   // bug #22 fixed by axxie
-  if(GetTime()-lastupdate_read > interval)
+  if (GetTime()-lastupdate_read > interval)
   {
     lastupdate_read = GetTime();
     DrawName(fn, 4);
@@ -209,7 +209,7 @@ void CopyProgress::ShowWriteName(const String & fn)
 {
   RedrawWindowIfNeeded();
   // bug #22 fixed by axxie
-  if(GetTime()-lastupdate_write > interval)
+  if (GetTime()-lastupdate_write > interval)
   {
     lastupdate_write = GetTime();
     DrawName(fn, 8);
@@ -224,7 +224,7 @@ void CopyProgress::ShowProgress(int64_t read, int64_t write, int64_t total,
                                 int64_t FirstWrite, int64_t StartTime, int BufferSize)
 {
   RedrawWindowIfNeeded();
-  if(GetTime()-lastupdate > interval)
+  if (GetTime()-lastupdate > interval)
   {
     lastupdate = GetTime();
     DrawProgress(LOC(L"Engine.Reading"), 2, read, total, readTime, readN, totalN);
@@ -242,7 +242,7 @@ void CopyProgress::SetNeedToRedraw(bool Value)
 
 void CopyProgress::RedrawWindowIfNeeded()
 {
-  if(NeedToRedraw)
+  if (NeedToRedraw)
   {
     RedrawWindow();
     NeedToRedraw = false;

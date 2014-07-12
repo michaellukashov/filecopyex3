@@ -15,7 +15,7 @@ void ObjectManager::regClass(const String & type, createPayloadFunc pf, createNo
 Node * ObjectManager::create(const String & type, const String & name, Node * parent)
 {
   createFuncs cf = classes[type];
-  if(cf.nf && cf.pf)
+  if (cf.nf && cf.pf)
   {
     Payload * payload = (*cf.pf)();
     payload->init(name);

@@ -52,7 +52,7 @@ FarPlugin::~FarPlugin()
 void FarPlugin::InitLang()
 {
   String fn = GetMsg(0);
-  if(fn != CurLocaleFile)
+  if (fn != CurLocaleFile)
   {
     CurLocaleFile = fn;
     LoadLocale(GetDLLPath() + "\\resource\\" + fn, locale);
@@ -64,7 +64,7 @@ void FarPlugin::Create()
   // bug #15 fixed by Ivanych
   InitLang();
 
-  if(!dialogs.Load(GetDLLPath() + "\\resource\\dialogs.objd"))
+  if (!dialogs.Load(GetDLLPath() + "\\resource\\dialogs.objd"))
   {
     FWError("Could not load dialogs.objd");
     exit(0);
@@ -99,7 +99,7 @@ void CallCopy(int move, int curOnly)
 {
   Engine engine;
   Engine::MResult res=engine.Main(move, curOnly);
-  if(res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
+  if (res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
   {
     /* svs 09.02.2011 18:51:58 +0300 - build 1844                                                                                                                                                     ░
                                                                                                                                                                                                ░
@@ -113,7 +113,7 @@ void CallCopy(int move, int curOnly)
     seq.Sequence=keys;
     seq.Count=1;
     keys[0]=move ? KEY_F6 : KEY_F5;
-    if(res == Engine::MRES_STDCOPY_RET)
+    if (res == Engine::MRES_STDCOPY_RET)
     {
       seq.Count=2;
       keys[1]=KEY_ENTER;
@@ -127,19 +127,19 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
 {
   int command = -1;
 
-  if(OInfo->OpenFrom == OPEN_FROMMACRO)
+  if (OInfo->OpenFrom == OPEN_FROMMACRO)
   {
     OpenMacroInfo * macroInfo = reinterpret_cast<OpenMacroInfo *>(OInfo->Data);
-    if(macroInfo->Count >= 1)
+    if (macroInfo->Count >= 1)
     {
       FarMacroValue & v = macroInfo->Values[0];
-      if(v.Type == FMVT_DOUBLE)
+      if (v.Type == FMVT_DOUBLE)
       {
         command = static_cast<int>(v.Double);
       };
     };
   }
-  if(command == -1)
+  if (command == -1)
   {
     FarMenu menu;
     menu.SetFlags(FMENU_WRAPMODE);
@@ -221,7 +221,7 @@ void FarPlugin::KeyConfig()
   bool altShift = bind && Binded("AltShiftF5") && Binded("AltShiftF6");
   bool ctrlShift = bind && Binded("CtrlShiftF5") && Binded("CtrlShiftF6");
   bool ctrlAlt = bind && Binded("CtrlAltF5") && Binded("CtrlAltF6");
-  if(!altShift && !ctrlShift && !ctrlAlt)
+  if (!altShift && !ctrlShift && !ctrlAlt)
     altShift = true;
 
   dlg["BindToF5"]("Selected") = bind;
@@ -229,10 +229,10 @@ void FarPlugin::KeyConfig()
   dlg["CtrlShiftF5"]("Selected") = ctrlShift;
   dlg["CtrlAltF5"]("Selected") = ctrlAlt;
 
-  if(dlg.Execute() == -1)
+  if (dlg.Execute() == -1)
     return;
 
-  if(dlg["BindToF5"]("Selected") == bind
+  if (dlg["BindToF5"]("Selected") == bind
       && dlg["AltShiftF5"]("Selected") == altShift
       && dlg["CtrlShiftF5"]("Selected") == ctrlShift
       && dlg["CtrlAltF5"]("Selected") == ctrlAlt)
@@ -246,7 +246,7 @@ void FarPlugin::KeyConfig()
   Unbind("CtrlShiftF5");  Unbind("CtrlShiftF6");
   Unbind("CtrlAltF5");  Unbind("CtrlAltF6");
 
-  if(dlg["BindToF5"]("Selected"))
+  if (dlg["BindToF5"]("Selected"))
   {
     Bind("F5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
     Bind("F6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
@@ -255,9 +255,9 @@ void FarPlugin::KeyConfig()
 
     /*
     String key;
-    if(dlg["AltShiftF5"]("Selected")) key = "AltShift";
-    else if(dlg["CtrlShiftF5"]("Selected")) key = "CtrlShift";
-    else if(dlg["CtrlAltF5"]("Selected")) key = "CtrlAlt";
+    if (dlg["AltShiftF5"]("Selected")) key = "AltShift";
+    else if (dlg["CtrlShiftF5"]("Selected")) key = "CtrlShift";
+    else if (dlg["CtrlAltF5"]("Selected")) key = "CtrlAlt";
     Bind(key + "F5", "F5");
     Bind(key + "F6", "F6");
     */
@@ -322,7 +322,7 @@ rep:
     case 3:
       static int bn = 0;
       beep(bn);
-      if(++bn > 2)
+      if (++bn > 2)
       {
         bn = 0;
       }

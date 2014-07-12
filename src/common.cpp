@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void FWError(const wchar_t * s)
 {
-  if(errorHandler)
+  if (errorHandler)
   {
     errorHandler(s);
   }
@@ -54,7 +54,7 @@ HANDLE hInstance;
 BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID)
 {
   hInstance = hInst;
-  if(reason == DLL_PROCESS_ATTACH)
+  if (reason == DLL_PROCESS_ATTACH)
   {
     _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG)|_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
     OSVERSIONINFO osv;

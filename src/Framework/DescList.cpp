@@ -30,7 +30,7 @@ DescList::DescList()
 int DescList::LoadFromFile(const String & lfn)
 {
   StringVector temp;
-  if(!temp.loadFromFile(lfn))
+  if (!temp.loadFromFile(lfn))
   {
     return false;
   }
@@ -44,18 +44,18 @@ int DescList::LoadFromList(StringVector & list)
   {
     String s = list[i];
     wchar_t c=s[0];
-    if(c!='\t' && c!=' ' && c!='>' && c)
+    if (c!='\t' && c!=' ' && c!='>' && c)
     {
-      if(!fn.empty())
+      if (!fn.empty())
       {
         names[fn] = Data(desc, 0);
         fn = "";
         desc = "";
       }
-      if(c == '"')
+      if (c == '"')
       {
         int lf=s.substr(1).find('"');
-        if(lf != -1)
+        if (lf != -1)
         {
           fn = s.substr(1, lf).trim();
           desc = s.substr(lf+2).trim();
@@ -65,7 +65,7 @@ int DescList::LoadFromList(StringVector & list)
       else
       {
         int lf = s.find_first_of(" \t");
-        if(lf != -1)
+        if (lf != -1)
         {
           fn = s.substr(0, lf).trim();
           desc = s.substr(lf+1).trim();
@@ -82,7 +82,7 @@ int DescList::LoadFromList(StringVector & list)
       desc+=String("\n")+s;
     }
   }
-  if(!fn.empty())
+  if (!fn.empty())
   {
     names[fn] = Data(desc, 0);
   }
@@ -97,10 +97,10 @@ int DescList::SaveToFile(const String & fn)
   StringVector temp;
   for(DescListMap::iterator it = names.begin(); it != names.end(); ++it)
   {
-    if(!(it->second.flags & dlNoSave))
+    if (!(it->second.flags & dlNoSave))
     {
       String s;
-      if(it->first.find(' '))
+      if (it->first.find(' '))
       {
         s = String("\"") + it->first + "\"";
       }
@@ -112,11 +112,11 @@ int DescList::SaveToFile(const String & fn)
       temp.AddString(s);
     }
   }
-  if(temp.Count() > 0)
+  if (temp.Count() > 0)
   {
     return temp.saveToFile(fn);
   }
-  if(Delete(fn) || GetLastError() == ERROR_FILE_NOT_FOUND)
+  if (Delete(fn) || GetLastError() == ERROR_FILE_NOT_FOUND)
   {
     return true;
   }
@@ -127,7 +127,7 @@ void DescList::Merge(DescList & add)
 {
   for(DescListMap::iterator it = add.names.begin(); it != add.names.end(); ++it)
   {
-    if(!(it->second.flags & dlNoMerge))
+    if (!(it->second.flags & dlNoMerge))
     {
       String name = it->first;
       names[name] = it->second;
@@ -138,9 +138,9 @@ void DescList::Merge(DescList & add)
 void DescList::setFlag(const String & fn, int flag, int v)
 {
   DescListMap::iterator it = names.find(fn);
-  if(it != names.end())
+  if (it != names.end())
   {
-    if(v)
+    if (v)
     {
       it->second.flags &= ~flag;
     }
@@ -166,7 +166,7 @@ void DescList::setAllFlags(int flag, int v)
 {
   for(DescListMap::iterator it = names.begin(); it != names.end(); ++it)
   {
-    if(v)
+    if (v)
     {
       it->second.flags &= ~flag;
     }
@@ -203,7 +203,7 @@ void DescList::Rename(int i, const String& dst, int changeName)
 
 void DescList::Rename(const String & src, const String & dst, int changeName)
 {
-  if(src != dst)
+  if (src != dst)
   {
     names[dst] = names[src];
     names.erase(src);

@@ -71,7 +71,7 @@ int StringList::Find(const String & v, int start) const
 {
   for(size_t i = start; i < Count(); ++i)
   {
-    if(items[i].str.cmp(v) == 0)
+    if (items[i].str.cmp(v) == 0)
       return i;
   }
   return -1;

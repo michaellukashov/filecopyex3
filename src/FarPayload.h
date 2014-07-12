@@ -134,7 +134,7 @@ protected:
   {
     item.Type = DI_BUTTON;
     item.X2 = item.X1 + lablen(item) + 4 - 1;
-    if(getProp("Default"))
+    if (getProp("Default"))
     {
       item.Flags |= DIF_DEFAULTBUTTON;
     }
@@ -230,7 +230,7 @@ protected:
 
   void BeforeAdd(FarDialogItem & item)
   {
-    if(getProp("History"))
+    if (getProp("History"))
     {
       item.X2--;
     }
@@ -244,7 +244,7 @@ public:
   DEFINE_CLASS("FarDlgCombobox", FarDlgComboboxPayload)
 
   FarDlgComboboxPayload() { list.ItemsNumber=0; list.Items=NULL; }
-  virtual ~FarDlgComboboxPayload() { if(list.Items) delete(list.Items); }
+  virtual ~FarDlgComboboxPayload() { if (list.Items) delete(list.Items); }
 
 protected:
   FarList list;
