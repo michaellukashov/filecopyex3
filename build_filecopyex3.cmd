@@ -12,7 +12,9 @@ if "%PROJECT_CONF%" == "" ( set "PROJECT_CONF=x86" )
 if "%PROJECT_VARS%" == "" ( set "PROJECT_VARS=" )
 
 set PROJECT_ROOT=%~dp0
+if exist "%PROJECT_ROOT%/build" ( rm -rf "%PROJECT_ROOT%/build" > NUL )
 set PROJECT_BUIILDDIR=%PROJECT_ROOT%\..\filecopyex3-build
+if exist "%PROJECT_BUIILDDIR%" ( rm -rf "%PROJECT_BUIILDDIR%" > NUL )
 if not exist "%PROJECT_BUIILDDIR%" ( mkdir "%PROJECT_BUIILDDIR%" > NUL )
 cd %PROJECT_BUIILDDIR%
 
