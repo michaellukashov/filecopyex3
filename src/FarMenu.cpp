@@ -67,25 +67,25 @@ intptr_t FarMenu::Execute()
 
 void FarMenu::SetBottom(const String & v)
 {
-  Bottom=v;
+  Bottom = v;
 }
 
 void FarMenu::SetFlags(int f)
 {
-  Flags=f;
+  Flags = f;
 }
 
 void FarMenu::SetHelpTopic(const String & v)
 {
-  HelpTopic=v;
+  HelpTopic = v;
 }
 
 void FarMenu::SetSelection(int n)
 {
-  Selection=n;
+  Selection = n;
 }
 
 void FarMenu::SetTitle(const String & v)
 {
-  Title=v;
+  Title = v;
 }

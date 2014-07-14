@@ -11,8 +11,8 @@ public:
   virtual ~StringVector() {};
 
   virtual void Clear() { data.clear(); }
-  virtual const String& operator[](size_t i) const { return data[i]; }
-  virtual void AddString(const String& v) { data.push_back(v); }
+  virtual const String & operator[](size_t i) const { return data[i]; }
+  virtual void AddString(const String & v) { data.push_back(v); }
   virtual size_t Count() const { return data.size(); }
 
 private:

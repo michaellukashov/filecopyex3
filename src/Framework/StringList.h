@@ -36,17 +36,17 @@ class StringList: public StringParent
 {
 public:
   virtual void Clear() { items.clear(); }
-  virtual const String& operator[](size_t i) const { return items[i].str; }
-  virtual void AddString(const String& v) { Add(v); }
+  virtual const String & operator[](size_t i) const { return items[i].str; }
+  virtual void AddString(const String & v) { Add(v); }
   virtual size_t Count() const { return items.size(); }
 
   int & Values(int);
   void Set(int, const String &);
-  void Add(const String &, int=0);
+  void Add(const String &, int = 0);
   //void Delete(int);
   //void Exchange(int, int);
 
-  intptr_t Find(const String &, intptr_t=0) const;
+  intptr_t Find(const String &, intptr_t = 0) const;
 
   void AddList(StringList &);
 

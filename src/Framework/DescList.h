@@ -15,7 +15,7 @@ public:
   void SetAllSaveFlags(int v);
   void SetMergeFlag(const String &, int v);
   void SetSaveFlag(const String &, int v);
-  void Rename(const String & src, const String & dst, int changeName=0);
+  void Rename(const String & src, const String & dst, int changeName = 0);
 
 private:
   void setFlag(const String &, int flag, int v);
@@ -28,7 +28,7 @@ private:
     int flags;
 
     Data() : flags(0) {};
-    Data(const String & _desc, int _flags=0): desc(_desc), flags(_flags) {};
+    Data(const String & _desc, int _flags = 0): desc(_desc), flags(_flags) {};
   };
   typedef std::map<String, Data> DescListMap;
   DescListMap names;

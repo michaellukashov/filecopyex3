@@ -41,7 +41,7 @@ String String::substr(size_t s, size_t l) const
 
 String String::trim() const
 {
-  intptr_t start = 0, end = len()-1;
+  intptr_t start = 0, end = len() - 1;
   while (start <= end && isbadchar((*this)[start]))
   {
     start++;
@@ -50,33 +50,33 @@ String String::trim() const
   {
     end--;
   };
-  return substr(start, end-start+1);
+  return substr(start, end - start + 1);
 }
 
 String String::ltrim() const
 {
-  intptr_t start = 0, end = len()-1;
+  intptr_t start = 0, end = len() - 1;
   while (start <= end && isbadchar((*this)[start]))
   {
     start++;
   };
-  return substr(start, end-start+1);
+  return substr(start, end - start + 1);
 }
 
 String String::rtrim() const
 {
-  intptr_t start = 0, end = len()-1;
+  intptr_t start = 0, end = len() - 1;
   while (end >= start && isbadchar((*this)[end]))
   {
     end--;
   };
-  return substr(start, end-start+1);
+  return substr(start, end - start + 1);
 
 }
 
 String String::trimquotes() const
 {
-  intptr_t start = 0, end = len()-1;
+  intptr_t start = 0, end = len() - 1;
   while (start <= end && ((*this)[start]) == '"')
   {
     start++;
@@ -85,7 +85,7 @@ String String::trimquotes() const
   {
     end--;
   };
-  return substr(start, end-start+1);
+  return substr(start, end - start + 1);
 }
 
 String String::rev() const
@@ -102,11 +102,11 @@ String String::replace(const String & what, const String & with) const
     return *this;
   }
   String res;
-  intptr_t start=0;
+  intptr_t start = 0;
   intptr_t p;
   while ((p = find(what, start)) != -1)
   {
-    res += substr(start, p-start);
+    res += substr(start, p - start);
     res += with;
     start = p + what.len();
   }

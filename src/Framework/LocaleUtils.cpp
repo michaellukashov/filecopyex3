@@ -13,7 +13,7 @@ void LoadLocale(const String & fn, Locale & locale)
       int p = it.find("=");
       if (p != -1)
       {
-        locale[it.substr(0, p).trim().trimquotes()] = it.substr(p+1).trim().trimquotes();
+        locale[it.substr(0, p).trim().trimquotes()] = it.substr(p + 1).trim().trimquotes();
       }
     }
   }

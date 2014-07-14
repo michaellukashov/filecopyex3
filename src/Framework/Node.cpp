@@ -139,21 +139,21 @@ size_t Node::LoadFromList(StringParent & list, size_t start)
     String line = list[i].trim();
     if (line == L"end")
     {
-      res=i;
+      res = i;
       break;
     }
     else if (!line.ncmp(L"object", 6))
     {
       int p = line.find(' ');
       int p1 = line.find(':');
-      if (p!=-1 && p1!=-1 && p<p1)
+      if (p != -1 && p1 != -1 && p < p1)
       {
-        String pname = line.substr(p+1, p1-p-1).trim();
-        String ptype = line.substr(p1+1).trim();
+        String pname = line.substr(p + 1, p1 - p - 1).trim();
+        String ptype = line.substr(p1 + 1).trim();
         Node * obj = objectManager->create(ptype, pname, this);
         if (obj)
         {
-          i = obj->LoadFromList(list, i+1);
+          i = obj->LoadFromList(list, i + 1);
         }
         else
         {
@@ -163,12 +163,12 @@ size_t Node::LoadFromList(StringParent & list, size_t start)
     }
     else
     {
-      int p=line.find('=');
-      if (p!=-1)
+      int p = line.find('=');
+      if (p != -1)
       {
-        String pline=line.substr(0, p).trim();
-        String pval=line.substr(p+1).trim().trimquotes();
-        (*this)(pline)=pval;
+        String pline = line.substr(0, p).trim();
+        String pval = line.substr(p + 1).trim().trimquotes();
+        (*this)(pline) = pval;
       }
     }
   }
@@ -206,7 +206,7 @@ void Node::ReloadProperties() const
 void Node::ReloadPropertiesRecursive()
 {
   ReloadProperties();
-  for (size_t i=0; i < childs.size(); i++)
+  for (size_t i = 0; i < childs.size(); i++)
   {
     childs[i]->ReloadPropertiesRecursive();
   }

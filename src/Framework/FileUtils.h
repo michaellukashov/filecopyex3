@@ -44,7 +44,7 @@ String ChangeFileExt(const String &, const String &);
 #define rfnNoNetExpand 1
 
 String GetFileRoot(const String &);
-String GetRealFileName(const String &, int flg=0);
+String GetRealFileName(const String &, int flg = 0);
 int GetSymLink(const String & dir, String & res, int flg);
 String GetFileNameRoot(const String &);
 String ExpandEnv(const String &);

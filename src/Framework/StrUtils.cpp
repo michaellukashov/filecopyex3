@@ -45,10 +45,10 @@ String FormatNum(int64_t n)
 
   if (first)
   {
-    GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_STHOUSAND,ThousandSep,ARRAYSIZE(ThousandSep));
-    GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_SDECIMAL,DecimalSep,ARRAYSIZE(DecimalSep));
-    DecimalSep[1]=0;  //Â âèíäå ñåïàðàòîðû öèôð ìîãóò áûòü áîëüøå îäíîãî ñèìâîëà
-    ThousandSep[1]=0; //íî äëÿ íàñ ýòî áóäåò íå î÷åíü õîðîøî
+    GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, ThousandSep, ARRAYSIZE(ThousandSep));
+    GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, DecimalSep, ARRAYSIZE(DecimalSep));
+    DecimalSep[1] = 0; //Â âèíäå ñåïàðàòîðû öèôð ìîãóò áûòü áîëüøå îäíîãî ñèìâîëà
+    ThousandSep[1] = 0; //íî äëÿ íàñ ýòî áóäåò íå î÷åíü õîðîøî
 
     /*
     if (LOWORD(Global->Opt->FormatNumberSeparators)) {
@@ -92,10 +92,10 @@ String FormatTime(const FILETIME & ft)
 
 String FormatProgress(int64_t cb, int64_t total)
 {
-  int64_t n=total;
-  int pw=0;
-  int64_t div=1;
-  while (n > 999999) { div*=1024; n/=1024; pw++; }
+  int64_t n = total;
+  int pw = 0;
+  int64_t div = 1;
+  while (n > 999999) { div *= 1024; n /= 1024; pw++; }
   String un;
   switch (pw)
   {
@@ -106,16 +106,16 @@ String FormatProgress(int64_t cb, int64_t total)
     case 4: un=LOC("Engine.Tb"); break;
     case 5: un=LOC("Engine.Pb"); break;
   }
-  return Format(L"%s %s %s %s [%d%%]", FormatNum(cb/div).ptr(), LOC("Engine.Of").ptr(),
-                FormatNum(total/div).ptr(), un.ptr(), (int)(total?(float)cb/total*100:0));
+  return Format(L"%s %s %s %s [%d%%]", FormatNum(cb / div).ptr(), LOC("Engine.Of").ptr(),
+                FormatNum(total / div).ptr(), un.ptr(), (int)(total ? (float)cb / total * 100 : 0));
 }
 
 String FormatSpeed(int64_t cb)
 {
-  int64_t n=cb;
-  int pw=0;
-  int64_t div=1;
-  while (n>=100000) { div*=1024; n/=1024; pw++; }
+  int64_t n = cb;
+  int pw = 0;
+  int64_t div = 1;
+  while (n >= 100000) { div *= 1024; n /= 1024; pw++; }
   String un;
   switch (pw)
   {
@@ -127,7 +127,7 @@ String FormatSpeed(int64_t cb)
     case 5: un=LOC("Engine.Pb"); break;
   }
 
-  return Format(L"%s %s/%s", FormatNum(cb/div).ptr(), un.ptr(), LOC("Engine.Sec").ptr());
+  return Format(L"%s %s/%s", FormatNum(cb / div).ptr(), un.ptr(), LOC("Engine.Sec").ptr());
 }
 
 String FormatValue(int64_t Value)

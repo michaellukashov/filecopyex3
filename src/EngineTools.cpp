@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void * Alloc(size_t size)
 {
-  size = (size/4096+1)*4096;
+  size = (size / 4096 + 1) * 4096;
   return VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE);
 }
 
@@ -45,13 +45,13 @@ void Free(void * ptr)
 
 void Compress(HANDLE handle, int f)
 {
-  if (f==ATTR_INHERIT) return;
-  USHORT b = f?
-             COMPRESSION_FORMAT_DEFAULT:
+  if (f == ATTR_INHERIT) return;
+  USHORT b = f ?
+             COMPRESSION_FORMAT_DEFAULT :
              COMPRESSION_FORMAT_NONE;
   DWORD cb;
   if (!DeviceIoControl(handle, FSCTL_SET_COMPRESSION,
-                      (LPVOID)&b, sizeof(b), NULL, 0, &cb, NULL))
+                       (LPVOID)&b, sizeof(b), NULL, 0, &cb, NULL))
     Error(LOC("Error.Compress"), GetLastError());
 }
 
@@ -60,15 +60,15 @@ int GetCompression(HANDLE handle)
   USHORT res;
   DWORD cb;
   if (!DeviceIoControl(handle, FSCTL_GET_COMPRESSION,
-                      NULL, 0, &res, sizeof(res), &cb, NULL))
+                       NULL, 0, &res, sizeof(res), &cb, NULL))
     return -1;
   else
-    return res!=COMPRESSION_FORMAT_NONE;
+    return res != COMPRESSION_FORMAT_NONE;
 }
 
 void Encrypt(const String & fn, int f)
 {
-  if (!Win2K || f==ATTR_INHERIT) return;
+  if (!Win2K || f == ATTR_INHERIT) return;
   int res;
   SetFileAttributes(fn.ptr(), 0);
   if (f) res = EncryptFile(fn.ptr());
@@ -79,15 +79,15 @@ void Encrypt(const String & fn, int f)
 
 void Encrypt(HANDLE handle, int f)
 {
-  if (!Win2K || f==ATTR_INHERIT) return;
+  if (!Win2K || f == ATTR_INHERIT) return;
   DWORD cb;
   ENCRYPTION_BUFFER enc;
-  enc.EncryptionOperation=f?
-                          FILE_SET_ENCRYPTION:
-                          FILE_CLEAR_ENCRYPTION;
-  enc.Private[0]=0;
+  enc.EncryptionOperation = f ?
+                            FILE_SET_ENCRYPTION :
+                            FILE_CLEAR_ENCRYPTION;
+  enc.Private[0] = 0;
   if (!DeviceIoControl(handle, FSCTL_SET_ENCRYPTION,
-                      (LPVOID)&enc, sizeof(enc), NULL, 0, &cb, NULL))
+                       (LPVOID)&enc, sizeof(enc), NULL, 0, &cb, NULL))
     Error(LOC("Error.Encrypt"), GetLastError());
 }
 
@@ -102,7 +102,7 @@ void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si)
   {
     delete[](char *)secbuf;
     secbuf = (PSECURITY_DESCRIPTOR)new char[cb];
-    res=GetFileSecurity(src.ptr(), si, secbuf, cb, &cb);
+    res = GetFileSecurity(src.ptr(), si, secbuf, cb, &cb);
   }
   if (res)
   {
@@ -166,9 +166,9 @@ HANDLE Open(const String & fn, int mode, int attr)
                  dwShareMode,
                  NULL,
                  f,
-                 (mode & OPEN_BUF ? 0: FILE_FLAG_NO_BUFFERING) | attr,
+                 (mode & OPEN_BUF ? 0 : FILE_FLAG_NO_BUFFERING) | attr,
                  NULL);
-  if (res==INVALID_HANDLE_VALUE) res=NULL;
+  if (res == INVALID_HANDLE_VALUE) res = NULL;
   if (res && (mode & OPEN_APPEND))
     SetFilePointer(res, 0, NULL, FILE_END);
   return res;
@@ -183,8 +183,8 @@ void Close(HANDLE h)
 
 int64_t FSeek(HANDLE h, int64_t pos, int method)
 {
-  LONG hi32=HI32(pos), lo32=SetFilePointer(h, LO32(pos), &hi32, method);
-  if (lo32==INVALID_SET_FILE_POINTER && GetLastError())
+  LONG hi32 = HI32(pos), lo32 = SetFilePointer(h, LO32(pos), &hi32, method);
+  if (lo32 == INVALID_SET_FILE_POINTER && GetLastError())
     return -1;
   else
     return MAKEINT64(lo32, hi32);
@@ -205,7 +205,7 @@ void setFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTim
   else
   {
     setFileSizeAndTime2(h, size, creationTime, lastAccessTime, lastWriteTime);
-		Close(h);
+    Close(h);
   }
 }
 

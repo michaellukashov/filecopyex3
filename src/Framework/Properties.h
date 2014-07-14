@@ -46,9 +46,9 @@ public:
   operator float() const;
   operator const String() const;
 
-  bool operator==(int v) const { return v == (int)*this; }
-  bool operator==(bool v) const { return v == (bool)*this; }
-  bool operator==(float v) const { return v == (float)*this; }
+  bool operator==(int v) const { return v == (int) * this; }
+  bool operator==(bool v) const { return v == (bool) * this; }
+  bool operator==(float v) const { return v == (float) * this; }
   bool operator==(const String & v) const { return v.cmp(this->operator const String()) == 0; }
   bool operator==(const Property & v) const;
 
@@ -58,7 +58,7 @@ public:
   bool operator!=(const String & v) const { return !operator==(v); }
   bool operator!=(const Property & v) const { return !operator==(v); }
 
-  bool operator!() const { return !(bool)*this; }
+  bool operator!() const { return !(bool) * this; }
 
 protected:
   Type type;

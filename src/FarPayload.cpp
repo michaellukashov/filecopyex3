@@ -58,7 +58,7 @@ static const Attribute _Attrib[] =
   { "ManualAddHistory", DIF_MANUALADDHISTORY },
 };
 const Attribute & Attrib(int i) { return _Attrib[i]; }
-int AttribCount() { return sizeof(_Attrib)/sizeof(Attribute); }
+int AttribCount() { return sizeof(_Attrib) / sizeof(Attribute); }
 
 void DestroyItemText(FarDialogItem & item)
 {
@@ -91,7 +91,7 @@ void FarDlgPayload::init(const String & _name)
 {
   Payload::init(_name);
 
-  for (int i=0; i<AttribCount(); i++)
+  for (int i = 0; i < AttribCount(); i++)
   {
     addProperty(Attrib(i).Name, 0);
   }
@@ -112,11 +112,11 @@ void FarDlgPayload::preInitItem(FarDialogItem & item)
   {
     String n = getDialog()->getName() + "." + getName();
     String loc = LOC(n);
-    p = (n == loc) ? "": loc;
+    p = (n == loc) ? "" : loc;
   }
   SetItemText(item, p);
 
-  for (int i=0; i<AttribCount(); i++)
+  for (int i = 0; i < AttribCount(); i++)
   {
     if (getProp(Attrib(i).Name))
     {
@@ -144,9 +144,9 @@ void FarDlgPayload::DefSize(intptr_t & w, intptr_t & h, intptr_t & fit)
   FarDialogItem item;
   memset(&item, 0, sizeof(item));
   InitItem(item);
-  fit=getProp(L"FitWidth").operator int();
-  w=item.X2-item.X1+1;
-  h=item.Y2-item.Y1+1;
+  fit = getProp(L"FitWidth").operator int();
+  w = item.X2 - item.X1 + 1;
+  h = item.Y2 - item.Y1 + 1;
   DestroyItemText(item);
 }
 
@@ -161,14 +161,14 @@ void FarDlgPayload::AddToItems(std::vector<FarDialogItem>& Items, std::vector<Re
   item.X2 = item.X1 + curW - 1;
   BeforeAdd(item);
   Items.push_back(item);
-  dialogItem = Items.size()-1;
+  dialogItem = Items.size() - 1;
   if (item.Type == DI_BUTTON && !(item.Flags & DIF_BTNNOCLOSE))
   {
     int res = getProp("Result");
     if (res != -1)
     {
       RetCode rc;
-      rc.itemNo = Items.size()-1;
+      rc.itemNo = Items.size() - 1;
       rc.retCode = res;
       RetCodes.push_back(rc);
     }
@@ -184,7 +184,7 @@ void FarDlgCheckboxPayload::RetrieveProperties(HANDLE dlg)
 // FarDlgEditPayload
 void FarDlgEditPayload::realInitItem(FarDialogItem & item)
 {
-  item.Type=DI_EDIT;
+  item.Type = DI_EDIT;
   int w = getProp("Width");
   item.X2 = item.X1 + w - 1;
   if (item.Flags & DIF_HISTORY)
@@ -192,7 +192,7 @@ void FarDlgEditPayload::realInitItem(FarDialogItem & item)
     String p = getProp("HistoryId");
     if (!p.empty())
     {
-      (String("FarFramework\\") + getDialog()->getName() + "\\" + getName()).copyTo(HistoryId, sizeof(HistoryId)/sizeof(wchar_t));
+      (String("FarFramework\\") + getDialog()->getName() + "\\" + getName()).copyTo(HistoryId, sizeof(HistoryId) / sizeof(wchar_t));
       item.History = HistoryId;
     }
   }
@@ -202,7 +202,7 @@ static String GetDlgText(HANDLE dlg, intptr_t id)
 {
   FarDialogItemData item = { sizeof(FarDialogItemData) };
   item.PtrLength = Info.SendDlgMessage(dlg, DM_GETTEXT, id, NULL);
-  item.PtrData = new wchar_t[item.PtrLength+1];
+  item.PtrData = new wchar_t[item.PtrLength + 1];
   Info.SendDlgMessage(dlg, DM_GETTEXT, id, &item);
   String t(item.PtrData);
   delete[] item.PtrData;
@@ -217,9 +217,9 @@ void FarDlgEditPayload::RetrieveProperties(HANDLE dlg)
 // FarDlgComboboxPayload
 void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
 {
-  item.Type=DI_COMBOBOX;
+  item.Type = DI_COMBOBOX;
   int w = getProp("Width");
-  item.X2=item.X1+w-1;
+  item.X2 = item.X1 + w - 1;
 
   item.ListItems = &list;
   if (list.Items)
@@ -234,7 +234,7 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
   {
     list.ItemsNumber = items.Count();
     list.Items = new FarListItem[items.Count()];
-    for (size_t i=0; i<items.Count(); i++)
+    for (size_t i = 0; i < items.Count(); i++)
     {
       if (getProp("Text") == items[i])
       {
@@ -257,10 +257,10 @@ size_t lablen(FarDialogItem & item)
   }
   else
   {
-    int res=0;
-    for (const wchar_t * p=item.Data; *p; p++)
+    int res = 0;
+    for (const wchar_t * p = item.Data; *p; p++)
     {
-      if (*p!='&') res++;
+      if (*p != '&') res++;
     }
     return res;
   }

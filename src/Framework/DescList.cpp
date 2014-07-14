@@ -40,11 +40,11 @@ int DescList::LoadFromFile(const String & lfn)
 int DescList::LoadFromList(StringVector & list)
 {
   String fn, desc;
-  for (size_t i=0; i<list.Count(); i++)
+  for (size_t i = 0; i < list.Count(); i++)
   {
     String s = list[i];
-    wchar_t c=s[0];
-    if (c!='\t' && c!=' ' && c!='>' && c)
+    wchar_t c = s[0];
+    if (c != '\t' && c != ' ' && c != '>' && c)
     {
       if (!fn.empty())
       {
@@ -54,11 +54,11 @@ int DescList::LoadFromList(StringVector & list)
       }
       if (c == '"')
       {
-        int lf=s.substr(1).find('"');
+        int lf = s.substr(1).find('"');
         if (lf != -1)
         {
           fn = s.substr(1, lf).trim();
-          desc = s.substr(lf+2).trim();
+          desc = s.substr(lf + 2).trim();
 
         }
       }
@@ -68,7 +68,7 @@ int DescList::LoadFromList(StringVector & list)
         if (lf != -1)
         {
           fn = s.substr(0, lf).trim();
-          desc = s.substr(lf+1).trim();
+          desc = s.substr(lf + 1).trim();
         }
         else
         {
@@ -79,7 +79,7 @@ int DescList::LoadFromList(StringVector & list)
     }
     else
     {
-      desc+=String("\n")+s;
+      desc += String("\n") + s;
     }
   }
   if (!fn.empty())

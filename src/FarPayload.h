@@ -60,7 +60,7 @@ public:
   virtual void LoadState(PropertyMap & state) { ; }
   virtual void SaveState(PropertyMap & state) { ; }
 
-  virtual void DefSize(intptr_t&, intptr_t&, intptr_t&);
+  virtual void DefSize(intptr_t &, intptr_t &, intptr_t &);
   virtual void ClearDialogItem() { dialogItem = -1; }
 
   FarDialog * getDialog() { return dialog; }
@@ -86,8 +86,8 @@ public:
 
   void realInitItem(FarDialogItem & item)
   {
-    item.Type=DI_TEXT;
-    item.Flags|=DIF_SEPARATOR | DIF_BOXCOLOR;
+    item.Type = DI_TEXT;
+    item.Flags |= DIF_SEPARATOR | DIF_BOXCOLOR;
   }
 };
 
@@ -106,8 +106,8 @@ protected:
 
   void realInitItem(FarDialogItem & item)
   {
-    item.Type=DI_TEXT;
-    item.X2 = getProp("Shorten") ? (item.X1-1) : (item.X1+lablen(item)-1);
+    item.Type = DI_TEXT;
+    item.X2 = getProp("Shorten") ? (item.X1 - 1) : (item.X1 + lablen(item) - 1);
   }
 
   static void BeforeAdd(FarDialogItem & item, FarDlgNode & obj)
@@ -167,9 +167,9 @@ protected:
 
   void realInitItem(FarDialogItem & item)
   {
-    item.Type=DI_CHECKBOX;
-    item.X2=item.X1+lablen(item)+4-1;
-    item.Selected=int(getProp("Selected"));
+    item.Type = DI_CHECKBOX;
+    item.X2 = item.X1 + lablen(item) + 4 - 1;
+    item.Selected = int(getProp("Selected"));
   }
 
   void RetrieveProperties(HANDLE dlg);
@@ -197,7 +197,7 @@ protected:
   {
     FarDlgCheckboxPayload::realInitItem(item);
 
-    item.Type=DI_RADIOBUTTON;
+    item.Type = DI_RADIOBUTTON;
   }
 };
 
@@ -244,7 +244,7 @@ class FarDlgComboboxPayload: public FarDlgPayload
 public:
   DEFINE_CLASS("FarDlgCombobox", FarDlgComboboxPayload)
 
-  FarDlgComboboxPayload() { list.ItemsNumber=0; list.Items=NULL; }
+  FarDlgComboboxPayload() { list.ItemsNumber = 0; list.Items = NULL; }
   virtual ~FarDlgComboboxPayload() { if (list.Items) delete list.Items; }
 
 protected:

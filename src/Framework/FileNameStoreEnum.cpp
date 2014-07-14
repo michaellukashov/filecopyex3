@@ -96,13 +96,13 @@ void FileNameStoreEnum::ToFirst()
 
 String FileNameStoreEnum::GetByNum(size_t n)
 {
-  if (cur > n+1)
+  if (cur > n + 1)
   {
     FWError(L"FileNameStoreEnum::GetByNum - assertion failure");
     return "";
   }
 
-  if (cur == n+1)
+  if (cur == n + 1)
   {
     return buffer;
   }

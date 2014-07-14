@@ -19,12 +19,12 @@ FarPlugin * plugin = NULL;
 */
 const wchar_t * GetMsg(int MsgId)
 {
-  return Info.GetMsg(&MainGuid,MsgId);
+  return Info.GetMsg(&MainGuid, MsgId);
 }
 
 static void FarErrorHandler(const wchar_t * s)
 {
-  const wchar_t * items[]= { L"Framework Error", s, L"OK", L"Debug" };
+  const wchar_t * items[] = { L"Framework Error", s, L"OK", L"Debug" };
   if (Info.Message(&MainGuid, &MainGuid, FMSG_WARNING, NULL, items, 4, 2) == 1)
   {
     DebugBreak();

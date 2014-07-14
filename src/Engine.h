@@ -44,7 +44,7 @@ struct BuffStruct
 
 struct BuffInfo
 {
-  uint8_t *Buffer;
+  uint8_t * Buffer;
   int BuffSize;
   int64_t OrgSize;
   HANDLE OutFile;
@@ -135,15 +135,15 @@ private:
   int CheckOverwrite(int, const String &, const String &, String &);
   int CheckOverwrite2(int, const String &, const String &, String &);
   void SetOverwriteMode(int);
-  int AddFile(const String & _src, const String & _dst, int Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, int Flags, int Level, int PanelIndex=-1);
-  int AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, int Flags, int Level, int PanelIndex=-1);
+  int AddFile(const String & _src, const String & _dst, int Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, int Flags, int Level, int PanelIndex = -1);
+  int AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, int Flags, int Level, int PanelIndex = -1);
   void AddTopLevelDir(const String & dir, const String & dstmask, int Flags, FileName::Direction d);
   static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, int Flags, int Level, RememberStruct &);
   int AddRemembered(RememberStruct &);
   int DirStart(const String & dir, const String & dst);
   int DirEnd(const String & dir, const String & dst);
-  static String FindDescFile(const String & dir, intptr_t* idx=NULL);
-  static String FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t* idx=NULL);
+  static String FindDescFile(const String & dir, intptr_t * idx = NULL);
+  static String FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t * idx = NULL);
 
   void setFileTime(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
   void setFileSizeAndTime(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
@@ -156,9 +156,9 @@ private:
   int CurPathFlags, CurPathAddFlags;
   WIN32_FIND_DATA DescFindData;
 
-  std::map<String,int> errTypes;
+  std::map<String, int> errTypes;
   int EngineError(const String & s, const String & fn, int code, int & flg,
-                  const String & title="", const String & type_id="");
+                  const String & title = "", const String & type_id = "");
 
 
   BOOL CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,

@@ -74,14 +74,14 @@ Property::operator int() const
 {
   switch (type)
   {
-  case vtInt:
-    return vInt;
+    case vtInt:
+      return vInt;
 
-  case vtFloat:
-    return (int)vFloat;
+    case vtFloat:
+      return (int)vFloat;
 
-  case vtString:
-    return vStr.AsInt();
+    case vtString:
+      return vStr.AsInt();
   }
   return 0;
 }

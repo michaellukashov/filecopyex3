@@ -38,9 +38,9 @@ static enum {EncodePointerIndex, DecodePointerIndex};
 template<int Index>
 static PVOID WINAPI Wrapper(PVOID Ptr)
 {
-  typedef PVOID(WINAPI *PointerFunction)(PVOID);
+  typedef PVOID(WINAPI * PointerFunction)(PVOID);
   static PVOID FunctionAddress = GetProcAddress(GetModuleHandle(L"kernel32"), ProcNames[Index]);
-  static PointerFunction ProcessPointer = FunctionAddress? reinterpret_cast<PointerFunction>(FunctionAddress) : ReturnSamePointer;
+  static PointerFunction ProcessPointer = FunctionAddress ? reinterpret_cast<PointerFunction>(FunctionAddress) : ReturnSamePointer;
   return ProcessPointer(Ptr);
 }
 

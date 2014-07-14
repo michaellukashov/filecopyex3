@@ -33,15 +33,15 @@ const int W = 64, H = 13, MG = 5;
 CopyProgress::CopyProgress(void)
 {
   // bug #22 fixed by axxie
-  lastupdate=lastupdate_read=lastupdate_write=0;
-  interval=TicksPerSec()/10;
-  clastupdate=0;
-  cinterval=TicksPerSec();
+  lastupdate = lastupdate_read = lastupdate_write = 0;
+  interval = TicksPerSec() / 10;
+  clastupdate = 0;
+  cinterval = TicksPerSec();
   int w, h;
   GetConSize(w, h);
-  X1=(w-W + 1)/2;
-  Y1=(h-H - 1)/2;
-  X2=X1+W-1, Y2=Y1+H-1;
+  X1 = (w - W + 1) / 2;
+  Y1 = (h - H - 1) / 2;
+  X2 = X1 + W - 1, Y2 = Y1 + H - 1;
   Move = 0;
   NeedToRedraw = false;
 }
@@ -52,8 +52,8 @@ CopyProgress::~CopyProgress(void)
 
 void CopyProgress::Start(int move)
 {
-  Move=move;
-  hScreen=Info.SaveScreen(0, 0, -1, -1);
+  Move = move;
+  hScreen = Info.SaveScreen(0, 0, -1, -1);
   RedrawWindowIfNeeded();
 }
 
@@ -72,7 +72,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
 {
   RedrawWindowIfNeeded();
   double TotalTime     = 0;
-  double ElapsedTime   = (double)(GetTime()-StartTime);
+  double ElapsedTime   = (double)(GetTime() - StartTime);
   double RemainingTime = 0;
 
   //DebugLog(_T("RBytes: %I64d  WBytes: %I64d  RdTime: %I64d  WrTime: %I64d  StTime: %I64d\n"),
@@ -84,8 +84,8 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   if (((ReadBytes > MinRWValue)  && (WriteBytes > MinRWValue)) ||
       ((TotalBytes < BufferSize) && (ReadBytes > MinRWValue))) // if selected files size < buffer size
   {
-    double ReadSpeed  = (ReadTime>0)  ? (double)ReadBytes  / (double)ReadTime  : 0; // bytes per tick
-    double WriteSpeed = (WriteTime>0) ? (double)WriteBytes / (double)WriteTime : 0; // bytes per tick
+    double ReadSpeed  = (ReadTime > 0)  ? (double)ReadBytes  / (double)ReadTime  : 0; // bytes per tick
+    double WriteSpeed = (WriteTime > 0) ? (double)WriteBytes / (double)WriteTime : 0; // bytes per tick
 
     double ReadTimeRemain   = (ReadSpeed  > 0.001) ? ((double)TotalBytes - (double)ReadBytes)  / ReadSpeed  : 0;
     double WriteTimeRemain  = (WriteSpeed > 0.001) ? ((double)TotalBytes - (double)WriteBytes) / WriteSpeed : 0;
@@ -136,37 +136,37 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   //DebugLog(_T("Total: %4.1f  Elapsed: %4.1f  Remain: %4.1f\n"), TotalTime, ElapsedTime, RemainingTime);
   //DebugLog(_T("---------------------------------------------------------------------------\n"));
 
-  intptr_t l = X1+MG;
+  intptr_t l = X1 + MG;
 
   String buf;
   buf = LOC("Engine.Total");
-  DrawText(l, Y1+10, &clrLabel, buf);
+  DrawText(l, Y1 + 10, &clrLabel, buf);
   l += buf.len();
-  buf = Format(L" %2.2d:%2.2d  ", (int)TotalTime/60, (int)TotalTime%60);
-  DrawText(l, Y1+10, &clrText, buf);
+  buf = Format(L" %2.2d:%2.2d  ", (int)TotalTime / 60, (int)TotalTime % 60);
+  DrawText(l, Y1 + 10, &clrText, buf);
   l += buf.len();
 
   buf = LOC("Engine.Elapsed");
-  DrawText(l, Y1+10, &clrLabel, buf);
+  DrawText(l, Y1 + 10, &clrLabel, buf);
   l += buf.len();
-  buf = Format(L" %2.2d:%2.2d  ", (int)ElapsedTime/60, (int)ElapsedTime%60);
-  DrawText(l, Y1+10, &clrText, buf);
+  buf = Format(L" %2.2d:%2.2d  ", (int)ElapsedTime / 60, (int)ElapsedTime % 60);
+  DrawText(l, Y1 + 10, &clrText, buf);
   // l += buf.len();
 
   String buf1;
-  buf = String("        ")+LOC("Engine.Remaining");
-  buf1 = Format(L" %2.2d:%2.2d", (int)RemainingTime/60, (int)RemainingTime%60);
-  DrawText(X2-MG-buf1.len()-buf.len()+1, Y1+10, &clrLabel, buf);
-  DrawText(X2-MG-buf1.len()+1, Y1+10, &clrText, buf1);
+  buf = String("        ") + LOC("Engine.Remaining");
+  buf1 = Format(L" %2.2d:%2.2d", (int)RemainingTime / 60, (int)RemainingTime % 60);
+  DrawText(X2 - MG - buf1.len() - buf.len() + 1, Y1 + 10, &clrLabel, buf);
+  DrawText(X2 - MG - buf1.len() + 1, Y1 + 10, &clrText, buf1);
 
-  if (GetTime()-clastupdate > cinterval)
+  if (GetTime() - clastupdate > cinterval)
   {
     clastupdate = GetTime();
-    int pc=TotalBytes?(int)((float)(ReadBytes+WriteBytes)/(TotalBytes*2)*100):0;
-    if (pc<0) pc=0;
-    if (pc>100) pc=100;
-    buf = Format(L"{%d%% %2.2d:%2.2d} %s", pc, (int)RemainingTime/60, (int)RemainingTime%60,
-                 Move? LOC("Engine.Moving").ptr():LOC("Engine.Copying").ptr());
+    int pc = TotalBytes ? (int)((float)(ReadBytes + WriteBytes) / (TotalBytes * 2) * 100) : 0;
+    if (pc < 0) pc = 0;
+    if (pc > 100) pc = 100;
+    buf = Format(L"{%d%% %2.2d:%2.2d} %s", pc, (int)RemainingTime / 60, (int)RemainingTime % 60,
+                 Move ? LOC("Engine.Moving").ptr() : LOC("Engine.Copying").ptr());
     SetTitle2(buf);
   }
 }
@@ -176,29 +176,29 @@ void CopyProgress::DrawProgress(const String & pfx, int y, int64_t cb, int64_t t
                                 int64_t time, int64_t n, int64_t totaln)
 {
   RedrawWindowIfNeeded();
-  if (cb>total) cb=total;
-  DrawText(X1+MG, Y1+y, &clrLabel, pfx);
+  if (cb > total) cb = total;
+  DrawText(X1 + MG, Y1 + y, &clrLabel, pfx);
   String buf;
-  buf= FormatWidth(FormatProgress(cb, total), W-MG*2-pfx.len());
-  DrawText(X1+MG+pfx.len()+1, Y1+y, &clrText, buf);
+  buf = FormatWidth(FormatProgress(cb, total), W - MG * 2 - pfx.len());
+  DrawText(X1 + MG + pfx.len() + 1, Y1 + y, &clrText, buf);
 
-  FarProgress::DrawProgress(X1+MG, X2-MG, Y1+y+1, total?((float)cb/total):0);
+  FarProgress::DrawProgress(X1 + MG, X2 - MG, Y1 + y + 1, total ? ((float)cb / total) : 0);
 
   int64_t rate = (int64_t)(time ? (float)cb / time * TicksPerSec() : 0);
-  buf= FormatSpeed(rate);
-  DrawText(X2-MG-buf.len()+1, Y1+y, &clrText, buf);
+  buf = FormatSpeed(rate);
+  DrawText(X2 - MG - buf.len() + 1, Y1 + y, &clrText, buf);
 }
 
 void CopyProgress::DrawName(const String & fn, int y)
 {
-  DrawText(X1+MG, Y1+y, &clrText, FormatWidth(fn, W-MG*2));
+  DrawText(X1 + MG, Y1 + y, &clrText, FormatWidth(fn, W - MG * 2));
 }
 
 void CopyProgress::ShowReadName(const String & fn)
 {
   RedrawWindowIfNeeded();
   // bug #22 fixed by axxie
-  if (GetTime()-lastupdate_read > interval)
+  if (GetTime() - lastupdate_read > interval)
   {
     lastupdate_read = GetTime();
     DrawName(fn, 4);
@@ -210,7 +210,7 @@ void CopyProgress::ShowWriteName(const String & fn)
 {
   RedrawWindowIfNeeded();
   // bug #22 fixed by axxie
-  if (GetTime()-lastupdate_write > interval)
+  if (GetTime() - lastupdate_write > interval)
   {
     lastupdate_write = GetTime();
     DrawName(fn, 8);
@@ -225,7 +225,7 @@ void CopyProgress::ShowProgress(int64_t read, int64_t write, int64_t total,
                                 int64_t FirstWrite, int64_t StartTime, int BufferSize)
 {
   RedrawWindowIfNeeded();
-  if (GetTime()-lastupdate > interval)
+  if (GetTime() - lastupdate > interval)
   {
     lastupdate = GetTime();
     DrawProgress(LOC(L"Engine.Reading"), 2, read, total, readTime, readN, totalN);
@@ -252,13 +252,13 @@ void CopyProgress::RedrawWindowIfNeeded()
 
 void CopyProgress::RedrawWindow()
 {
-  DrawWindow(X1, Y1, X2, Y2, Move? LOC("Engine.Moving"):LOC("Engine.Copying"));
-  wchar_t buf[512], *p=buf;
-  for (int i=0; i<W-MG*2+2; i++) *p++=0x2500; //'─'
-  *p=0;
-  Info.Text(X1+MG-1, Y1+5, &clrFrame, buf);
-  Info.Text(X1+MG-1, Y1+9, &clrFrame, buf);
+  DrawWindow(X1, Y1, X2, Y2, Move ? LOC("Engine.Moving") : LOC("Engine.Copying"));
+  wchar_t buf[512], *p = buf;
+  for (int i = 0; i < W - MG * 2 + 2; i++) *p++ = 0x2500; //'─'
+  *p = 0;
+  Info.Text(X1 + MG - 1, Y1 + 5, &clrFrame, buf);
+  Info.Text(X1 + MG - 1, Y1 + 9, &clrFrame, buf);
   Info.Text(0, 0, 0, NULL);
   Info.RestoreScreen(NULL);
-  TitleBuf=GetTitle();
+  TitleBuf = GetTitle();
 }

@@ -38,25 +38,25 @@ int GetDriveId(const String & path, String & res)
   if (WinNT4)
   {
     // axxie: special HDD ID inmplementation for NT4
-    if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME)>0)
+    if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME) > 0)
     {
       String s = buf;
       String tmp = "\\Device\\Harddisk";
       if (!s.nicmp(tmp, tmp.len()))
       {
-        res=s.substr(tmp.len(), 1);
+        res = s.substr(tmp.len(), 1);
         return TRUE;
       }
     }
   }
-  else if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME)>0)
+  else if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME) > 0)
   {
-    String s=buf;
-    String tmp="\\Device\\HarddiskDmVolumes\\";
+    String s = buf;
+    String tmp = "\\Device\\HarddiskDmVolumes\\";
     if (!s.nicmp(tmp, tmp.len()))
     {
-      s=s.substr(tmp.len());
-      res=s.left(s.find('\\'));
+      s = s.substr(tmp.len());
+      res = s.left(s.find('\\'));
       return TRUE;
     }
   }
@@ -65,30 +65,30 @@ int GetDriveId(const String & path, String & res)
 
 int GetPhysDrive(const String & _path, int & res)
 {
-  String path=_path;
+  String path = _path;
   // bugfixed by slst:
   // if (WinXP)
   if (Win2K || WinXP)  // this also works OK under w2k/sp4
   {
-    if (path.left(11)!="\\\\?\\Volume{")
+    if (path.left(11) != "\\\\?\\Volume{")
     {
       wchar_t buf[MAX_FILENAME];
       if (!GetVolumeNameForVolumeMountPoint(path.ptr(), buf, MAX_FILENAME))
         return FALSE;
-      path=buf;
+      path = buf;
     }
-    HANDLE hVolume=CreateFile(CutEndSlash(path).ptr(), 0,
-                              FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
-                              0, NULL);
-    if (hVolume==INVALID_HANDLE_VALUE) return FALSE;
+    HANDLE hVolume = CreateFile(CutEndSlash(path).ptr(), 0,
+                                FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+                                0, NULL);
+    if (hVolume == INVALID_HANDLE_VALUE) return FALSE;
 
     char outbuf[1024];
     DWORD ret;
     if (DeviceIoControl(hVolume, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, NULL, 0,
-                       outbuf, 1024, &ret, NULL))
+                        outbuf, 1024, &ret, NULL))
     {
-      VOLUME_DISK_EXTENTS * ext=(VOLUME_DISK_EXTENTS *)outbuf;
-      res=ext->Extents[0].DiskNumber;
+      VOLUME_DISK_EXTENTS * ext = (VOLUME_DISK_EXTENTS *)outbuf;
+      res = ext->Extents[0].DiskNumber;
       CloseHandle(hVolume);
       return TRUE;
     }
@@ -103,32 +103,32 @@ int GetPhysDrive(const String & _path, int & res)
 
 int VolFlags(const String & _path)
 {
-  String path=_path;
-  int sl=path.find_last_of("\\/"),
-      ml=path.find_first_of("*?");
-  if (ml!=-1 && ml<sl) return -1;
-  if (path.find_first_of("|<>")!=-1) return -1;
-  int cl=path.find(':');
-  if (cl!=-1 && (cl!=1 || cl!=path.rfind(':') ||
-                (cl!=path.len()-1 && path.find_first_of("\\/")!=2))) return -1;
-  if (ml!=-1) path=ExtractFilePath(path);
-  String root=GetFileRoot(path);
+  String path = _path;
+  int sl = path.find_last_of("\\/"),
+      ml = path.find_first_of("*?");
+  if (ml != -1 && ml < sl) return -1;
+  if (path.find_first_of("|<>") != -1) return -1;
+  int cl = path.find(':');
+  if (cl != -1 && (cl != 1 || cl != path.rfind(':') ||
+                   (cl != path.len() - 1 && path.find_first_of("\\/") != 2))) return -1;
+  if (ml != -1) path = ExtractFilePath(path);
+  String root = GetFileRoot(path);
 
   DWORD clen, flg;
   wchar_t sysname[32];
   if (GetVolumeInformation(root.ptr(), NULL, 0, NULL, &clen, &flg, sysname, 32))
   {
-    int res=0;
-    if (flg & FILE_FILE_COMPRESSION) res|=VF_COMPRESSION;
-    if (flg & FILE_SUPPORTS_ENCRYPTION) res|=VF_ENCRYPTION;
-    if (flg & FILE_PERSISTENT_ACLS) res|=VF_RIGHTS;
-    if (flg & FILE_NAMED_STREAMS) res|=VF_STREAMS;
+    int res = 0;
+    if (flg & FILE_FILE_COMPRESSION) res |= VF_COMPRESSION;
+    if (flg & FILE_SUPPORTS_ENCRYPTION) res |= VF_ENCRYPTION;
+    if (flg & FILE_PERSISTENT_ACLS) res |= VF_RIGHTS;
+    if (flg & FILE_NAMED_STREAMS) res |= VF_STREAMS;
     // NT4 supports streams, but has no special flag for this fact
     // bug #13 fixed by Alter
-    if (!_wcsicmp(sysname, TEXT("NTFS"))) res|=VF_STREAMS;
-    if (flg & FILE_READ_ONLY_VOLUME) res|=VF_READONLY;
-    if (flg & FILE_UNICODE_ON_DISK) res|=VF_UNICODE;
-    if (GetDriveType(root.ptr())==DRIVE_CDROM) res|=VF_CDROM;
+    if (!_wcsicmp(sysname, TEXT("NTFS"))) res |= VF_STREAMS;
+    if (flg & FILE_READ_ONLY_VOLUME) res |= VF_READONLY;
+    if (flg & FILE_UNICODE_ON_DISK) res |= VF_UNICODE;
+    if (GetDriveType(root.ptr()) == DRIVE_CDROM) res |= VF_CDROM;
     return res;
   }
   return -1;
@@ -136,11 +136,11 @@ int VolFlags(const String & _path)
 
 int CheckParallel(const String & _srcpath, const String & _dstpath)
 {
-  String root1=GetFileRoot(_srcpath),
-         root2=GetFileRoot(_dstpath);
-  int srctype=GetDriveType(root1.ptr()),
-      dsttype=GetDriveType(root2.ptr());
-  if (srctype!=dsttype) return TRUE;
+  String root1 = GetFileRoot(_srcpath),
+         root2 = GetFileRoot(_dstpath);
+  int srctype = GetDriveType(root1.ptr()),
+      dsttype = GetDriveType(root2.ptr());
+  if (srctype != dsttype) return TRUE;
   if (!root1.icmp(root2)) return FALSE;
 
   if (srctype == DRIVE_REMOTE)
@@ -170,7 +170,7 @@ int CheckParallel(const String & _srcpath, const String & _dstpath)
 
 String DupName(const String & src, int n)
 {
-  return ChangeFileExt(src, "")+"_"+String(n)+ExtractFileExt(src);
+  return ChangeFileExt(src, "") + "_" + String(n) + ExtractFileExt(src);
 }
 
 int ExistsN(const String & fn, int n)
@@ -200,7 +200,7 @@ bool Newer(const String & fn1, const FILETIME & ft2)
 
 int RmDir(const String & fn)
 {
-  int attr=GetFileAttributes(fn.ptr());
+  int attr = GetFileAttributes(fn.ptr());
   SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
   if (!RemoveDirectory(fn.ptr()))
   {
@@ -212,7 +212,7 @@ int RmDir(const String & fn)
 
 int Delete(const String & fn)
 {
-  int attr=GetFileAttributes(fn.ptr());
+  int attr = GetFileAttributes(fn.ptr());
   SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
   if (!DeleteFile(fn.ptr()))
   {
@@ -232,7 +232,7 @@ void DebugLog(const wchar_t * DebugMsg, ...)
   OutputDebugString(MsgBuf);
 }
 
-String convertPath(enum CONVERTPATHMODES mode, const String& src)
+String convertPath(enum CONVERTPATHMODES mode, const String & src)
 {
   wchar_t fullName[MAX_PATH];
   size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, sizeof(fullName));

@@ -52,9 +52,9 @@ FarProgress::FarProgress(void)
   ProgX1 = 0;
   ProgX2 = 0;
   ProgY = 0;
-  WinType=WIN_NONE;
-  hScreen=0;
-  InverseBars=0;
+  WinType = WIN_NONE;
+  hScreen = 0;
+  InverseBars = 0;
   LastUpdate = 0;
 }
 
@@ -65,7 +65,7 @@ FarProgress::~FarProgress(void)
 
 void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String & caption)
 {
-  int W = X2-X1+1, H = Y2-Y1+1;
+  int W = X2 - X1 + 1, H = Y2 - Y1 + 1;
   String tpl = caption;
   tpl += "\n";
   String bkg = String(' ', W - 10);
@@ -74,7 +74,7 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String & capt
   {
     tpl += bkg;
   }
-  Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN|FMSG_ALLINONE, NULL, (const wchar_t **)tpl.ptr(), 0, 0);
+  Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN | FMSG_ALLINONE, NULL, (const wchar_t **)tpl.ptr(), 0, 0);
 }
 
 void FarProgress::GetConSize(int & w, int & h)
@@ -82,8 +82,8 @@ void FarProgress::GetConSize(int & w, int & h)
   HANDLE hc = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_SCREEN_BUFFER_INFO bi;
   GetConsoleScreenBufferInfo(hc, &bi);
-  w=bi.srWindow.Right - bi.srWindow.Left + 1;
-  h=bi.srWindow.Bottom - bi.srWindow.Top + 1;
+  w = bi.srWindow.Right - bi.srWindow.Left + 1;
+  h = bi.srWindow.Bottom - bi.srWindow.Top + 1;
 }
 
 void FarProgress::ShowMessage(const String & msg)
@@ -91,16 +91,16 @@ void FarProgress::ShowMessage(const String & msg)
   Hide();
   int sw, sh;
   GetConSize(sw, sh);
-  int W=(int)msg.len()+12, H=5;
-  int X1=(sw-W + 1)/2;
-  int Y1=(sh-H - 1)/2;
-  int X2=X1+W-1, Y2=Y1+H-1;
-  hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
+  int W = (int)msg.len() + 12, H = 5;
+  int X1 = (sw - W + 1) / 2;
+  int Y1 = (sh - H - 1) / 2;
+  int X2 = X1 + W - 1, Y2 = Y1 + H - 1;
+  hScreen = Info.SaveScreen(X1, Y1, X2 + 2, Y2 + 2);
   DrawWindow(X1, Y1, X2, Y2, "");
-  Info.Text(X1+6, Y1+2, &clrText, FormatWidth(msg, X2-X1-11).ptr());
+  Info.Text(X1 + 6, Y1 + 2, &clrText, FormatWidth(msg, X2 - X1 - 11).ptr());
   Info.Text(0, 0, 0, NULL);
-  WinType=WIN_MESSAGE;
-  TitleBuf=GetTitle();
+  WinType = WIN_MESSAGE;
+  TitleBuf = GetTitle();
   SetTitle2(msg);
   Info.RestoreScreen(NULL);
 }
@@ -110,69 +110,69 @@ void FarProgress::ShowProgress(const String & msg)
   Hide();
   int sw, sh;
   GetConSize(sw, sh);
-  int W=sw/2, H=6;
-  int X1=(sw-W + 1)/2;
-  int Y1=(sh-H - 1)/2;
-  int X2=X1+W-1, Y2=Y1+H-1;
-  hScreen=Info.SaveScreen(X1, Y1, X2+2, Y2+2);
+  int W = sw / 2, H = 6;
+  int X1 = (sw - W + 1) / 2;
+  int Y1 = (sh - H - 1) / 2;
+  int X2 = X1 + W - 1, Y2 = Y1 + H - 1;
+  hScreen = Info.SaveScreen(X1, Y1, X2 + 2, Y2 + 2);
   DrawWindow(X1, Y1, X2, Y2, "");
-  Info.Text(X1+5, Y1+2, &clrText, FormatWidth(msg, X2-X1-9).ptr());
-  ProgX1=X1+5;
-  ProgX2=X2-5;
-  ProgY=Y1+3;
-  WinType=WIN_PROGRESS;
+  Info.Text(X1 + 5, Y1 + 2, &clrText, FormatWidth(msg, X2 - X1 - 9).ptr());
+  ProgX1 = X1 + 5;
+  ProgX2 = X2 - 5;
+  ProgY = Y1 + 3;
+  WinType = WIN_PROGRESS;
   SetPercent(0);
   DrawProgress(ProgX1, ProgX2, ProgY, 0);
   Info.Text(0, 0, 0, NULL);
-  TitleBuf=GetTitle();
-  ProgTitle=msg;
+  TitleBuf = GetTitle();
+  ProgTitle = msg;
   SetTitle2(msg);
   Info.RestoreScreen(NULL);
 }
 
 void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
 {
-  int n=x2-x1+1, fn=(int)(pc*n), en=n-fn;
-  wchar_t buf[512], *bp=buf;
+  int n = x2 - x1 + 1, fn = (int)(pc * n), en = n - fn;
+  wchar_t buf[512], *bp = buf;
   if (!InverseBars)
   {
-    for (int i=0; i<fn; i++) *bp++=0x2588; //'█'
-    for (int i=0; i<en; i++) *bp++=0x2591; //'░'
+    for (int i = 0; i < fn; i++) *bp++ = 0x2588; //'█'
+    for (int i = 0; i < en; i++) *bp++ = 0x2591; //'░'
   }
   else
   {
-    for (int i=0; i<en; i++) *bp++=0x2591; //'░'
-    for (int i=0; i<fn; i++) *bp++=0x2588; //'█'
+    for (int i = 0; i < en; i++) *bp++ = 0x2591; //'░'
+    for (int i = 0; i < fn; i++) *bp++ = 0x2588; //'█'
   }
-  *bp=0;
+  *bp = 0;
   Info.Text(x1, y, &clrText, buf);
   taskbarIcon.SetState(taskbarIcon.S_PROGRESS, pc);
 }
 
 void FarProgress::SetPercent(float pc)
 {
-  if (WinType==WIN_PROGRESS)
+  if (WinType == WIN_PROGRESS)
   {
-    if (GetTime()-LastUpdate>TicksPerSec()/5)
+    if (GetTime() - LastUpdate > TicksPerSec() / 5)
     {
       DrawProgress(ProgX1, ProgX2, ProgY, pc);
       Info.Text(0, 0, 0, NULL);
-      SetTitle2(ProgTitle+" {"+String((int)(pc*100))+"%}");
-      LastUpdate=GetTime();
+      SetTitle2(ProgTitle + " {" + String((int)(pc * 100)) + "%}");
+      LastUpdate = GetTime();
     }
   }
 }
 
 void FarProgress::Hide()
 {
-  if (WinType!=WIN_NONE)
+  if (WinType != WIN_NONE)
   {
     Info.RestoreScreen(NULL);
     Info.RestoreScreen(hScreen);
     SetTitle(TitleBuf);
-    hScreen=0;
+    hScreen = 0;
   }
-  WinType=WIN_NONE;
+  WinType = WIN_NONE;
   taskbarIcon.SetState(taskbarIcon.S_NO_PROGRESS);
 }
 
@@ -217,8 +217,8 @@ void FarProgress::ShowScanProgress(const String & msg)
   if (WindowWidth > 46) WindowWidth = 46;
   if (WindowWidth < 40) WindowWidth = 40;
   int WindowHeight = 7;
-  int WindowCoordX1 = (ConsoleWidth  - WindowWidth + 1)/2;
-  int WindowCoordY1 = (ConsoleHeight - WindowHeight - 1)/2;
+  int WindowCoordX1 = (ConsoleWidth  - WindowWidth + 1) / 2;
+  int WindowCoordY1 = (ConsoleHeight - WindowHeight - 1) / 2;
   int WindowCoordX2 = WindowCoordX1 + WindowWidth - 1;
   int WindowCoordY2 = WindowCoordY1 + WindowHeight - 1;
   hScreen = Info.SaveScreen(WindowCoordX1, WindowCoordY1,
@@ -232,8 +232,8 @@ void FarProgress::ShowScanProgress(const String & msg)
   WinType = WIN_SCAN_PROGRESS;
   DrawScanProgress(ProgX1, ProgX2, ProgY, 0, 0);
   Info.Text(0, 0, 0, NULL);
-  TitleBuf=GetTitle();
-  ProgTitle=msg;
+  TitleBuf = GetTitle();
+  ProgTitle = msg;
   SetTitle2(msg);
   Info.RestoreScreen(NULL);
 }
@@ -242,14 +242,14 @@ void FarProgress::ShowScanProgress(const String & msg)
 // New class member function
 void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
 {
-  if (WinType==WIN_SCAN_PROGRESS)
+  if (WinType == WIN_SCAN_PROGRESS)
   {
-    if (GetTime()-LastUpdate>TicksPerSec()/5)
+    if (GetTime() - LastUpdate > TicksPerSec() / 5)
     {
       DrawScanProgress(ProgX1, ProgX2, ProgY, NumberOfFiles, TotalSize);
       Info.Text(0, 0, 0, NULL);
       //SetTitle2(ProgTitle+" {"+String((int)(pc*100))+"%}");
-      LastUpdate=GetTime();
+      LastUpdate = GetTime();
     }
   }
 }
@@ -260,11 +260,11 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
 {
   String FilesFmtStr = LOC("Status.FilesString") + " %-6I64d";
   wchar_t FilesStr[256];
-  _snwprintf_s(FilesStr, 256, sizeof(FilesStr)/sizeof(wchar_t), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
+  _snwprintf_s(FilesStr, 256, sizeof(FilesStr) / sizeof(wchar_t), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
 
   String SizeFmtStr = LOC("Status.SizeString") + " %s";
   wchar_t SizeStr[256];
-  _snwprintf_s(SizeStr, 256, sizeof(SizeStr)/sizeof(wchar_t), (const wchar_t *)SizeFmtStr.ptr(), (const wchar_t *)FormatValue(TotalSize).ptr());
+  _snwprintf_s(SizeStr, 256, sizeof(SizeStr) / sizeof(wchar_t), (const wchar_t *)SizeFmtStr.ptr(), (const wchar_t *)FormatValue(TotalSize).ptr());
 
 
   int s = x2 - x1 - (int)wcslen(SizeStr) - (int)wcslen(FilesStr);
@@ -273,7 +273,7 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
     spacer = String(' ', s);
 
   wchar_t buf[256];
-  _snwprintf_s(buf, 256, sizeof(buf)/sizeof(wchar_t), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
+  _snwprintf_s(buf, 256, sizeof(buf) / sizeof(wchar_t), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
 
   Info.Text(x1, y + 1, &clrText, buf);
   taskbarIcon.SetState(taskbarIcon.S_WORKING);

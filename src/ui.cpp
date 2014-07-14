@@ -38,33 +38,33 @@ intptr_t ShowMessageOK(const String & title, const String & msg)
 
 intptr_t ShowMessageHelp(const String & title, const String & msg, int Flags, const String & help)
 {
-  String msgbuf=title+"\n"+msg+"\n\x01";
-  intptr_t res= Info.Message(&MainGuid, &UnkGuid,
-                        Flags | FMSG_ALLINONE,
-                        help.ptr(),
-                        (const wchar_t **)(const wchar_t *)msgbuf.ptr(), 0, 0
-                       );
+  String msgbuf = title + "\n" + msg + "\n\x01";
+  intptr_t res = Info.Message(&MainGuid, &UnkGuid,
+                              Flags | FMSG_ALLINONE,
+                              help.ptr(),
+                              (const wchar_t **)(const wchar_t *)msgbuf.ptr(), 0, 0
+                             );
   return res;
 }
 
 intptr_t ShowMessageEx(const String & title, const String & msg,
-                  const String & buttons, int flags)
+                       const String & buttons, int flags)
 {
   return ShowMessageExHelp(title, msg, buttons, flags, "");
 }
 
 intptr_t ShowMessageExHelp(const String & title, const String & msg,
-                      const String & buttons, int flags, const String & help)
+                           const String & buttons, int flags, const String & help)
 {
-  int nb=0;
-  for (const wchar_t * p=buttons.ptr(); *p; p++)
+  int nb = 0;
+  for (const wchar_t * p = buttons.ptr(); *p; p++)
   {
-    if (*p=='\n') nb++;
+    if (*p == '\n') nb++;
   }
-  String msgbuf=title+"\n"+msg+"\n\x01\n"+buttons;
+  String msgbuf = title + "\n" + msg + "\n\x01\n" + buttons;
   intptr_t res = Info.Message(&MainGuid, &UnkGuid, flags | FMSG_ALLINONE,
-                         help.ptr(), (const wchar_t **)(const wchar_t *)msgbuf.ptr(), 0, nb+1
-                        );
+                              help.ptr(), (const wchar_t **)(const wchar_t *)msgbuf.ptr(), 0, nb + 1
+                             );
   return res;
 }
 
@@ -76,7 +76,7 @@ int msgw()
 void Error(const String & s, int code)
 {
   ShowMessageEx(LOC("Framework.Error"),
-                s+"\n"+SplitWidth(GetErrText(code), msgw()),
+                s + "\n" + SplitWidth(GetErrText(code), msgw()),
                 LOC("Framework.OK"),
                 FMSG_WARNING
                );
@@ -85,7 +85,7 @@ void Error(const String & s, int code)
 void Error2(const String & s, const String & fn, int code)
 {
   ShowMessageEx(LOC("Framework.Error"),
-                s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()),
+                s + "\n" + FormatWidthNoExt(fn, msgw()) + "\n" + SplitWidth(GetErrText(code), msgw()),
                 LOC("Framework.OK"),
                 FMSG_WARNING
                );
@@ -93,12 +93,12 @@ void Error2(const String & s, const String & fn, int code)
 
 intptr_t Error2RS(const String & s, const String & fn, int code)
 {
-  intptr_t res=ShowMessageEx(LOC("Framework.Error"),
-                        s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()),
-                        LOC("Framework.Retry")+"\n"+LOC("Framework.Skip"),
-                        FMSG_WARNING
-                       );
-  if (res==0)
+  intptr_t res = ShowMessageEx(LOC("Framework.Error"),
+                               s + "\n" + FormatWidthNoExt(fn, msgw()) + "\n" + SplitWidth(GetErrText(code), msgw()),
+                               LOC("Framework.Retry") + "\n" + LOC("Framework.Skip"),
+                               FMSG_WARNING
+                              );
+  if (res == 0)
   {
     return RES_RETRY;
   }
@@ -114,10 +114,10 @@ String GetErrText(int code)
 
 String FormatWidth(const String & s, intptr_t len)
 {
-  intptr_t dif = (int)s.len()-len;
+  intptr_t dif = (int)s.len() - len;
   if (dif > 0)
   {
-    return String("...") + s.right(len-3);
+    return String("...") + s.right(len - 3);
   }
   else
   {
@@ -127,10 +127,10 @@ String FormatWidth(const String & s, intptr_t len)
 
 String FormatWidthNoExt(const String & s, intptr_t len)
 {
-  intptr_t dif = s.len()-len;
+  intptr_t dif = s.len() - len;
   if (dif > 0)
   {
-    return String("...") + s.right(len-3);
+    return String("...") + s.right(len - 3);
   }
   else
   {

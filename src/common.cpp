@@ -46,7 +46,7 @@ void FWError(const String & s)
   FWError(s.ptr());
 }
 
-ErrorHandler errorHandler=NULL;
+ErrorHandler errorHandler = NULL;
 
 int WinNT, WinNT4, Win2K, WinXP;
 HANDLE hInstance;
@@ -56,14 +56,14 @@ BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID)
   hInstance = hInst;
   if (reason == DLL_PROCESS_ATTACH)
   {
-    _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG)|_CRTDBG_ALLOC_MEM_DF|_CRTDBG_LEAK_CHECK_DF);
+    _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     OSVERSIONINFO osv;
-    osv.dwOSVersionInfoSize=sizeof(osv);
+    osv.dwOSVersionInfoSize = sizeof(osv);
     GetVersionEx(&osv);
-    WinNT=osv.dwPlatformId==VER_PLATFORM_WIN32_NT;
-    WinNT4=WinNT && osv.dwMajorVersion==4;
-    Win2K=WinNT && osv.dwMajorVersion>=5;
-    WinXP=Win2K && (osv.dwMajorVersion>5 || osv.dwMinorVersion>=1);
+    WinNT = osv.dwPlatformId == VER_PLATFORM_WIN32_NT;
+    WinNT4 = WinNT && osv.dwMajorVersion == 4;
+    Win2K = WinNT && osv.dwMajorVersion >= 5;
+    WinXP = Win2K && (osv.dwMajorVersion > 5 || osv.dwMinorVersion >= 1);
   }
   return TRUE;
 }

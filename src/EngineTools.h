@@ -61,7 +61,7 @@ void Encrypt(const String & fn, int f);
 void Encrypt(HANDLE handle, int f);
 void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si);
 void CopyACL(const String & src, const String & dst);
-HANDLE Open(const String & fn, int mode, int attr=0);
+HANDLE Open(const String & fn, int mode, int attr = 0);
 void Close(HANDLE h);
 int64_t FSeek(HANDLE h, int64_t pos, int method);
 int64_t FTell(HANDLE h);

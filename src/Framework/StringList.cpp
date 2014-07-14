@@ -42,8 +42,8 @@ int & StringList::Values(int n)
 void StringList::Add(const String & v, int data)
 {
   ListItem itm;
-  itm.Data=data;
-  itm.str=v;
+  itm.Data = data;
+  itm.str = v;
   items.push_back(itm);
 }
 
@@ -61,7 +61,7 @@ void StringList::Exchange(int i, int j)
 
 void StringList::AddList(StringList & src)
 {
-  for (size_t i=0; i<src.Count(); i++)
+  for (size_t i = 0; i < src.Count(); i++)
   {
     Add(src[i]);
   }

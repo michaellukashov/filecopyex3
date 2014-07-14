@@ -57,7 +57,7 @@ public:
 
   inline wchar_t operator[](intptr_t i) const
   {
-    if (i>=0 && i<(int)str.length()) return str[i];
+    if (i >= 0 && i < (int)str.length()) return str[i];
     else return 0;
   }
 
@@ -94,12 +94,12 @@ public:
     str = v ? L"1" : L"0";
   }
 
-  inline bool operator==(const String & v) const { return cmp(v)==0; }
-  inline bool operator!=(const String & v) const { return cmp(v)!=0; }
-  inline bool operator<(const String & v) const { return cmp(v)<0; }
-  inline bool operator>(const String & v) const { return cmp(v)>0; }
-  inline bool operator<=(const String & v) const { return cmp(v)<=0; }
-  inline bool operator>=(const String & v) const { return cmp(v)>=0; }
+  inline bool operator==(const String & v) const { return cmp(v) == 0; }
+  inline bool operator!=(const String & v) const { return cmp(v) != 0; }
+  inline bool operator<(const String & v) const { return cmp(v) < 0; }
+  inline bool operator>(const String & v) const { return cmp(v) > 0; }
+  inline bool operator<=(const String & v) const { return cmp(v) <= 0; }
+  inline bool operator>=(const String & v) const { return cmp(v) >= 0; }
   inline void operator+=(const String & v) { str += v.str; }
   inline void operator+=(wchar_t c) { str += c; }
   const String operator+(const String & v) const { return str + v.str; }
@@ -144,7 +144,7 @@ public:
   const wchar_t * ptr() const { return c_str(); }
   const wchar_t * c_str() const { return str.c_str(); }
 
-  void reserve(size_t n=0) { str.reserve(n); }
+  void reserve(size_t n = 0) { str.reserve(n); }
 
 private:
   std::wstring str;

@@ -98,7 +98,7 @@ int FarPlugin::Configure(const struct ConfigureInfo * Info)
 void CallCopy(int move, int curOnly)
 {
   Engine engine;
-  Engine::MResult res=engine.Main(move, curOnly);
+  Engine::MResult res = engine.Main(move, curOnly);
   if (res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
   {
     /* svs 09.02.2011 18:51:58 +0300 - build 1844                                                                                                                                                     ░
@@ -154,7 +154,7 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
     command = menu.Execute();
   }
 
-  int move=0, curOnly=0;
+  int move = 0, curOnly = 0;
   switch (command)
   {
     case 0: move = 0; curOnly = 0; break;
