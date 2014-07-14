@@ -144,7 +144,7 @@ void FarDlgPayload::DefSize(intptr_t & w, intptr_t & h, intptr_t & fit)
   FarDialogItem item;
   memset(&item, 0, sizeof(item));
   InitItem(item);
-  fit=getProp("FitWidth");
+  fit=getProp("FitWidth").operator int();
   w=item.X2-item.X1+1;
   h=item.Y2-item.Y1+1;
   DestroyItemText(item);

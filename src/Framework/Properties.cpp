@@ -70,7 +70,7 @@ Property & Property::operator=(const Property & p)
   return *this;
 }
 
-Property::operator intptr_t() const
+Property::operator int() const
 {
   switch (type)
   {
@@ -78,7 +78,7 @@ Property::operator intptr_t() const
     return vInt;
 
   case vtFloat:
-    return (intptr_t)vFloat;
+    return (int)vFloat;
 
   case vtString:
     return vStr.AsInt();

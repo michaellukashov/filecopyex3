@@ -94,7 +94,7 @@ void FarDlgContainer::DefSize(intptr_t & sumw, intptr_t & sumh, intptr_t & fit)
 {
   sumw = sumh = 0;
   intptr_t groupw = 0, grouph = 0;
-  fit = getPayload()("FitWidth");
+  fit = getPayload()("FitWidth").operator int();
   for (size_t i=0; i<childs.size(); i++)
   {
     FarDlgNode & obj = child(i);
