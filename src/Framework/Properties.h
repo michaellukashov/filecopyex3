@@ -41,7 +41,6 @@ public:
 
   Property & operator = (const Property & p);
 
-  operator int() const;
   operator intptr_t() const;
   operator bool() const;
   operator float() const;
@@ -63,7 +62,7 @@ public:
 
 protected:
   Type type;
-  int vInt;
+  intptr_t vInt;
   float vFloat;
   String vStr;
 };
