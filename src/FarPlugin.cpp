@@ -125,7 +125,7 @@ void CallCopy(int move, int curOnly)
 
 void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
 {
-  int command = -1;
+  intptr_t command = -1;
 
   if (OInfo->OpenFrom == OPEN_FROMMACRO)
   {
@@ -306,7 +306,7 @@ void FarPlugin::Config()
   dlg.LoadState(options);
 
 rep:
-  int res = dlg.Execute();
+  intptr_t res = dlg.Execute();
   switch(res)
   {
     case 0:

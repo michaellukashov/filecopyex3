@@ -112,9 +112,9 @@ String GetErrText(int code)
   return buf;
 }
 
-String FormatWidth(const String & s, int len)
+String FormatWidth(const String & s, intptr_t len)
 {
-  int dif = (int)s.len()-len;
+  intptr_t dif = (int)s.len()-len;
   if (dif > 0)
   {
     return String("...") + s.right(len-3);
@@ -125,9 +125,9 @@ String FormatWidth(const String & s, int len)
   }
 }
 
-String FormatWidthNoExt(const String & s, int len)
+String FormatWidthNoExt(const String & s, intptr_t len)
 {
-  int dif = (int)s.len()-len;
+  intptr_t dif = s.len()-len;
   if (dif > 0)
   {
     return String("...") + s.right(len-3);
@@ -138,11 +138,11 @@ String FormatWidthNoExt(const String & s, int len)
   }
 }
 
-String SplitWidth(const String & s, size_t w)
+String SplitWidth(const String & s, intptr_t w)
 {
   String res;
   res.reserve(s.len());
-  size_t curW = 0;
+  intptr_t curW = 0;
   for (size_t i = 0; i < s.len(); i++)
   {
     wchar_t c = s[i];

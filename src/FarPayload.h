@@ -60,22 +60,22 @@ public:
   virtual void LoadState(PropertyMap & state) { ; }
   virtual void SaveState(PropertyMap & state) { ; }
 
-  virtual void DefSize(int &, int &, int &);
+  virtual void DefSize(intptr_t&, intptr_t&, intptr_t&);
   virtual void ClearDialogItem() { dialogItem = -1; }
 
   FarDialog * getDialog() { return dialog; }
   void setDialog(FarDialog * _dialog) { dialog = _dialog; }
 
-  int getDialogItem() const { return dialogItem; };
+  intptr_t getDialogItem() const { return dialogItem; };
 
-  void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW);
+  void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, intptr_t curX, intptr_t curY, intptr_t curW);
 
 protected:
   virtual void preInitItem(FarDialogItem & item);
   virtual void realInitItem(FarDialogItem & item);
 
   FarDialog * dialog;
-  int dialogItem; // should be int, we are using -1
+  intptr_t dialogItem; // should be int, we are using -1
 };
 
 // ===== FarDlgLinePayload =====

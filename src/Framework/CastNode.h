@@ -10,6 +10,6 @@ public:
   PayloadType & getPayload() const { return static_cast<PayloadType &>(Node::getPayload()); }
 
 protected:
-  ChildType & child(int i) { return static_cast<ChildType &>(Node::child(i)); }
+  ChildType & child(size_t i) { return static_cast<ChildType &>(Node::child(i)); }
   ChildType & child(const String & name) { return static_cast<ChildType &>(Node::child(name)); }
 };

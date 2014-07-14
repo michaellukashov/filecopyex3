@@ -42,7 +42,7 @@ public:
     str.assign(s.begin(), s.end());
   }
 
-  String(wchar_t ch, int len)
+  String(wchar_t ch, intptr_t len)
   {
     str.resize(len, ch);
   }
@@ -55,7 +55,7 @@ public:
   {
   }
 
-  inline wchar_t operator[](int i) const
+  inline wchar_t operator[](intptr_t i) const
   {
     if (i>=0 && i<(int)str.length()) return str[i];
     else return 0;
@@ -107,11 +107,6 @@ public:
   inline size_t len() const { return str.length(); }
   inline bool empty() const { return str.empty(); }
 
-  inline wchar_t operator[](size_t i) const
-  {
-    return (i < str.length()) ? str[i] : 0;
-  };
-
   int AsInt() const { return _wtoi(ptr()); }
   float AsFloat() const { return (float)_wtof(ptr()); }
   bool AsBool() const { return (*this) == L"1"; }
@@ -119,8 +114,8 @@ public:
 
   int cmp(const String & v) const { return ncmp(v, 0x7FFFFFFF); }
   int icmp(const String & v) const { return nicmp(v, 0x7FFFFFFF); }
-  int ncmp(const String & v, int sz) const { return wcsncmp(ptr(), v.ptr(), sz); }
-  int nicmp(const String & v, int sz) const { return _wcsnicmp(ptr(), v.ptr(), sz); }
+  int ncmp(const String & v, size_t sz) const { return wcsncmp(ptr(), v.ptr(), sz); }
+  int nicmp(const String & v, size_t sz) const { return _wcsnicmp(ptr(), v.ptr(), sz); }
   // bug #46 fixed by axxie
 
   String substr(size_t pos = 0, size_t len = std::string::npos) const;

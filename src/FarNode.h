@@ -35,7 +35,7 @@ class FarDialogClass;
 
 struct RetCode
 {
-  int itemNo, retCode;
+  intptr_t itemNo, retCode;
 };
 
 class FarDialog;
@@ -55,10 +55,10 @@ public:
   virtual void LoadState(PropertyMap & state);
   virtual void SaveState(PropertyMap & state);
 
-  virtual void DefSize(int &, int &, int &);
+  virtual void DefSize(intptr_t&, intptr_t&, intptr_t&);
 
   virtual int IsContainer() { return 0; }
-  virtual void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW);
+  virtual void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, intptr_t curX, intptr_t curY, intptr_t curW);
   virtual void ClearDialogItem();
   virtual FarDlgNode * FindChild(const String &);
 
@@ -76,9 +76,9 @@ public:
   virtual void LoadState(PropertyMap & state);
   virtual void SaveState(PropertyMap & state);
 protected:
-  virtual void AddToItems(std::vector<FarDialogItem>&, std::vector<RetCode>&, int, int, int);
+  virtual void AddToItems(std::vector<FarDialogItem>&, std::vector<RetCode>&, intptr_t, intptr_t, intptr_t);
 
-  virtual void DefSize(int &, int &, int &);
+  virtual void DefSize(intptr_t&, intptr_t&, intptr_t&);
   virtual void ClearDialogItems(std::vector<FarDialogItem>&);
   virtual FarDlgNode * FindChild(const String &);
 
@@ -93,7 +93,7 @@ public:
 
   DEFINE_NODE_CLASS(FarDialog);
 
-  int Execute();
+  intptr_t Execute();
   void ResetControls();
 
   FarDlgNode & operator[](const String &);

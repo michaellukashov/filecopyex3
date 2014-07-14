@@ -86,6 +86,22 @@ Property::operator int() const
   return 0;
 }
 
+Property::operator intptr_t() const
+{
+  switch(type)
+  {
+  case vtInt:
+    return vInt;
+
+  case vtFloat:
+    return (intptr_t)vFloat;
+
+  case vtString:
+    return vStr.AsInt();
+  }
+  return 0;
+}
+
 Property::operator bool() const
 {
   switch(type)

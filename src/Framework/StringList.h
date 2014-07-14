@@ -46,7 +46,7 @@ public:
   //void Delete(int);
   //void Exchange(int, int);
 
-  int Find(const String &, int=0) const;
+  intptr_t Find(const String &, intptr_t=0) const;
 
   void AddList(StringList &);
 

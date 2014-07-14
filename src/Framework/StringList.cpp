@@ -67,7 +67,7 @@ void StringList::AddList(StringList & src)
   }
 }
 
-int StringList::Find(const String & v, int start) const
+intptr_t StringList::Find(const String & v, intptr_t start) const
 {
   for (size_t i = start; i < Count(); ++i)
   {

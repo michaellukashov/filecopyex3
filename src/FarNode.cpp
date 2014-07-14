@@ -64,12 +64,12 @@ void FarDlgNode::SaveState(PropertyMap & state)
   getPayload().SaveState(state);
 }
 
-void FarDlgNode::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW)
+void FarDlgNode::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, intptr_t curX, intptr_t curY, intptr_t curW)
 {
   getPayload().AddToItems(Items, RetCodes, curX, curY, curW);
 }
 
-void FarDlgNode::DefSize(int & w, int & h, int & fit)
+void FarDlgNode::DefSize(intptr_t & w, intptr_t & h, intptr_t & fit)
 {
   getPayload().DefSize(w, h, fit);
 }
@@ -87,20 +87,20 @@ FarDlgNode * FarDlgNode::FindChild(const String & name)
 
 struct _group
 {
-  int start, end, w, h, nfit;
+  intptr_t start, end, w, h, nfit;
 };
 
-void FarDlgContainer::DefSize(int & sumw, int & sumh, int & fit)
+void FarDlgContainer::DefSize(intptr_t & sumw, intptr_t & sumh, intptr_t & fit)
 {
   sumw = sumh = 0;
-  int groupw = 0, grouph = 0;
+  intptr_t groupw = 0, grouph = 0;
   fit = getPayload()("FitWidth");
   for (size_t i=0; i<childs.size(); i++)
   {
     FarDlgNode & obj = child(i);
     if (obj("Visible"))
     {
-      int w, h, f;
+      intptr_t w, h, f;
       obj.DefSize(w, h, f);
       groupw += w+2;
       if (h>grouph) grouph=h;
@@ -114,9 +114,9 @@ void FarDlgContainer::DefSize(int & sumw, int & sumh, int & fit)
   }
 }
 
-void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW)
+void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, intptr_t curX, intptr_t curY, intptr_t curW)
 {
-  int sumw=0, sumh=0;
+  intptr_t sumw=0, sumh=0;
   std::vector<_group> Groups;
   _group group;
   group.start=group.w=group.h=group.nfit=0;
@@ -125,7 +125,7 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
     FarDlgNode & obj=child(i);
     if (obj("Visible"))
     {
-      int w, h, f;
+      intptr_t w, h, f;
       obj.DefSize(w, h, f);
       if (f)
       {
@@ -146,15 +146,15 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
       }
     }
   }
-  int x=curX, y=curY;
+  intptr_t x=curX, y=curY;
   for (size_t j=0; j<Groups.size(); j++)
   {
-    for (int i=Groups[j].start; i<=Groups[j].end; i++)
+    for (intptr_t i=Groups[j].start; i<=Groups[j].end; i++)
     {
       FarDlgNode & obj = child(i);
       if (obj("Visible"))
       {
-        int w, h, f;
+        intptr_t w, h, f;
         obj.DefSize(w, h, f);
         if (f)
         {
@@ -189,7 +189,7 @@ void FarDlgContainer::SaveState(PropertyMap & state)
 
 void FarDlgContainer::RetrieveProperties(HANDLE dlg)
 {
-  int cnt = childs.size();
+  intptr_t cnt = childs.size();
   for (int i=0; i<cnt; i++)
   {
     FarDlgNode & fdo = child(i);
@@ -235,7 +235,7 @@ FarDialog::~FarDialog()
 {
 }
 
-int FarDialog::Execute()
+intptr_t FarDialog::Execute()
 {
   std::vector<FarDialogItem> Items;
   std::vector<RetCode> RetCodes;
@@ -250,7 +250,7 @@ int FarDialog::Execute()
   SetItemText(frame, p);
   Items.push_back(frame);
 
-  int w, h, f;
+  intptr_t w, h, f;
   DefSize(w, h, f);
   AddToItems(Items, RetCodes, 5, 2, w);
 
@@ -265,10 +265,10 @@ int FarDialog::Execute()
                                0, bool((*this)("Warning")) ? FDLG_WARNING : 0,
                                Info.DefDlgProc, 0
                               );  // !!! Need real Dialog GUID, instead of MainDialog
-  int ret=-1;
+  intptr_t ret=-1;
   if (hnd!=INVALID_HANDLE_VALUE)
   {
-    int res = Info.DialogRun(hnd);
+    intptr_t res = Info.DialogRun(hnd);
     for (size_t i=0; i<RetCodes.size(); i++)
     {
       if (RetCodes[i].itemNo == res)

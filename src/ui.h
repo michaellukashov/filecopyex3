@@ -37,6 +37,6 @@ intptr_t Error2RS(const String &, const String &, int code);
 
 String GetErrText(int code);
 
-String FormatWidth(const String &, int);
-String FormatWidthNoExt(const String &, int);
-String SplitWidth(const String &, size_t);
+String FormatWidth(const String &, intptr_t);
+String FormatWidthNoExt(const String &, intptr_t);
+String SplitWidth(const String &, intptr_t);

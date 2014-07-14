@@ -139,7 +139,7 @@ void FarDlgPayload::InitItem(FarDialogItem & item)
   realInitItem(item);
 }
 
-void FarDlgPayload::DefSize(int & w, int & h, int & fit)
+void FarDlgPayload::DefSize(intptr_t & w, intptr_t & h, intptr_t & fit)
 {
   FarDialogItem item;
   memset(&item, 0, sizeof(item));
@@ -150,7 +150,7 @@ void FarDlgPayload::DefSize(int & w, int & h, int & fit)
   DestroyItemText(item);
 }
 
-void FarDlgPayload::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW)
+void FarDlgPayload::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, intptr_t curX, intptr_t curY, intptr_t curW)
 {
   FarDialogItem item;
   memset(&item, 0, sizeof(item));
@@ -198,7 +198,7 @@ void FarDlgEditPayload::realInitItem(FarDialogItem & item)
   }
 }
 
-static String GetDlgText(HANDLE dlg, int id)
+static String GetDlgText(HANDLE dlg, intptr_t id)
 {
   FarDialogItemData item = { sizeof(FarDialogItemData) };
   item.PtrLength = Info.SendDlgMessage(dlg, DM_GETTEXT, id, NULL);

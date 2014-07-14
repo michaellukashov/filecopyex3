@@ -1311,7 +1311,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
 
 rep:
 
-  int dres = dlg.Execute();
+  intptr_t dres = dlg.Execute();
 
   switch(dres)
   {
@@ -1323,7 +1323,7 @@ rep:
 
     case 1:
     {
-      int advRes = advdlg.Execute();
+      intptr_t advRes = advdlg.Execute();
 
       if (advRes == 1)
       {
@@ -1954,13 +1954,13 @@ retry:
       HANDLE hf;
       if ((hf = FindFirstFile((src+"\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
       {
-        int descidx=-1;
+        intptr_t descidx=-1;
         RememberStruct Remember;
         while (1)
         {
           if (wcscmp(fd.cFileName, L"..") && wcscmp(fd.cFileName, L"."))
           {
-            int idx;
+            intptr_t idx;
             if (_CopyDescs && _DescsInDirs
                 && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 && (idx=plugin->Descs().Find(fd.cFileName))!=-1)
@@ -2268,7 +2268,7 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
                                      FormatValue(TotalBytesToProcess).ptr());
       dlg["Label4"]("Text") = LOC("FreeSpaceErrorDialog.AbortPrompt");
 
-      int dlgres = dlg.Execute();
+      intptr_t dlgres = dlg.Execute();
 
       HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
       FlushConsoleInputBuffer(h);
@@ -2373,7 +2373,7 @@ int Engine::EngineError(const String & s, const String & fn, int code, int & flg
     dlg["Sep1"]("Visible")=0;
   }
 
-  int res=dlg.Execute();
+  intptr_t res=dlg.Execute();
 
   if ((bool)dlg["Reopen"]("Selected")) flg |= eerReopen;
   if ((bool)dlg["KeepFiles"]("Selected")) flg |= eerKeepFiles;

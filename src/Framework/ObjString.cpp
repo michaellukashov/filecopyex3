@@ -41,7 +41,7 @@ String String::substr(size_t s, size_t l) const
 
 String String::trim() const
 {
-  int start = 0, end = len()-1;
+  intptr_t start = 0, end = len()-1;
   while (start <= end && isbadchar((*this)[start]))
   {
     start++;
@@ -55,7 +55,7 @@ String String::trim() const
 
 String String::ltrim() const
 {
-  int start = 0, end = len()-1;
+  intptr_t start = 0, end = len()-1;
   while (start <= end && isbadchar((*this)[start]))
   {
     start++;
@@ -65,7 +65,7 @@ String String::ltrim() const
 
 String String::rtrim() const
 {
-  int start = 0, end = len()-1;
+  intptr_t start = 0, end = len()-1;
   while (end >= start && isbadchar((*this)[end]))
   {
     end--;
@@ -76,7 +76,7 @@ String String::rtrim() const
 
 String String::trimquotes() const
 {
-  int start = 0, end = len()-1;
+  intptr_t start = 0, end = len()-1;
   while (start <= end && ((*this)[start]) == '"')
   {
     start++;
@@ -102,8 +102,8 @@ String String::replace(const String & what, const String & with) const
     return *this;
   }
   String res;
-  int start=0;
-  int p;
+  intptr_t start=0;
+  intptr_t p;
   while ((p = find(what, start)) != -1)
   {
     res += substr(start, p-start);
@@ -117,14 +117,14 @@ String String::replace(const String & what, const String & with) const
 String String::toUpper() const
 {
   String res(str);
-  CharUpperBuff((LPTSTR)res.c_str(), len());
+  CharUpperBuff((LPTSTR)res.c_str(), (DWORD)len());
   return res;
 }
 
 String String::toLower() const
 {
   String res(str);
-  CharLowerBuff((LPTSTR)res.c_str(), len());
+  CharLowerBuff((LPTSTR)res.c_str(), (DWORD)len());
   return res;
 }
 

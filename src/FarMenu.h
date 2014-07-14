@@ -19,7 +19,7 @@ public:
   void AddLineCheck(const String &, int check);
   void AddSep();
   void SetSelection(int n);
-  int Execute();
+  intptr_t Execute();
 
 protected:
   String Title, Bottom, HelpTopic;

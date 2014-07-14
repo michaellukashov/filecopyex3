@@ -307,7 +307,7 @@ String GetRealFileName(const String & _path, int flg)
 {
   String path=AddEndSlash(_path);
 rep:
-  for (int i=path.len()-1; i>=0; i--)
+  for (size_t i=path.len()-1; i>=0; i--)
   {
     if (path[i]=='\\')
     {
@@ -570,5 +570,5 @@ void Out(const String & s)
 {
   DWORD cb;
   WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), (const void *)s.ptr(),
-               s.len(), &cb, NULL);
+               (DWORD)s.len(), &cb, NULL);
 }

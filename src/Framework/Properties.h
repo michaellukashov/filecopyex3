@@ -42,6 +42,7 @@ public:
   Property & operator = (const Property & p);
 
   operator int() const;
+  operator intptr_t() const;
   operator bool() const;
   operator float() const;
   operator const String() const;
