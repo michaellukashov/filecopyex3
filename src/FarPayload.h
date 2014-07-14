@@ -33,7 +33,7 @@ class FarDialog;
 
 struct Attribute
 {
-  const char * Name;
+  const wchar_t * Name;
   uint64_t Flag;
 };
 const Attribute & Attrib(int i);

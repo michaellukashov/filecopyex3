@@ -31,31 +31,31 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 static const Attribute _Attrib[] =
 {
-//  { "SetColor", DIF_SETCOLOR },
-  { "BoxColor", DIF_BOXCOLOR },
-  { "Group", DIF_GROUP },
-  { "LeftText", DIF_LEFTTEXT },
-  { "MoveSelect", DIF_MOVESELECT },
-  { "ShowAmpersand", DIF_SHOWAMPERSAND },
-  { "CenterGroup", DIF_CENTERGROUP },
-  { "NoBrackets", DIF_NOBRACKETS },
-  { "Separator", DIF_SEPARATOR },
-  { "Editor", DIF_EDITOR },
-  { "History", DIF_HISTORY },
-  { "EditExpand", DIF_EDITEXPAND },
-  { "DropdownList", DIF_DROPDOWNLIST },
-  { "UseLastHistory", DIF_USELASTHISTORY },
-  { "BtnNoClose", DIF_BTNNOCLOSE },
-  { "SelectOnEntry", DIF_SELECTONENTRY },
-  { "NoFocus", DIF_NOFOCUS },
-  { "MaskEdit", DIF_MASKEDIT },
-  { "Disable", DIF_DISABLE },
-  { "ListNoAmpersand", DIF_LISTNOAMPERSAND },
-  { "ReadOnly", DIF_READONLY },
-  { "3State", DIF_3STATE },
-//  { "VarEdit", DIF_VAREDIT },
-  { "Hidden", DIF_HIDDEN },
-  { "ManualAddHistory", DIF_MANUALADDHISTORY },
+//  { L"SetColor", DIF_SETCOLOR },
+  { L"BoxColor", DIF_BOXCOLOR },
+  { L"Group", DIF_GROUP },
+  { L"LeftText", DIF_LEFTTEXT },
+  { L"MoveSelect", DIF_MOVESELECT },
+  { L"ShowAmpersand", DIF_SHOWAMPERSAND },
+  { L"CenterGroup", DIF_CENTERGROUP },
+  { L"NoBrackets", DIF_NOBRACKETS },
+  { L"Separator", DIF_SEPARATOR },
+  { L"Editor", DIF_EDITOR },
+  { L"History", DIF_HISTORY },
+  { L"EditExpand", DIF_EDITEXPAND },
+  { L"DropdownList", DIF_DROPDOWNLIST },
+  { L"UseLastHistory", DIF_USELASTHISTORY },
+  { L"BtnNoClose", DIF_BTNNOCLOSE },
+  { L"SelectOnEntry", DIF_SELECTONENTRY },
+  { L"NoFocus", DIF_NOFOCUS },
+  { L"MaskEdit", DIF_MASKEDIT },
+  { L"Disable", DIF_DISABLE },
+  { L"ListNoAmpersand", DIF_LISTNOAMPERSAND },
+  { L"ReadOnly", DIF_READONLY },
+  { L"3State", DIF_3STATE },
+//  { L"VarEdit", DIF_VAREDIT },
+  { L"Hidden", DIF_HIDDEN },
+  { L"ManualAddHistory", DIF_MANUALADDHISTORY },
 };
 const Attribute & Attrib(int i) { return _Attrib[i]; }
 int AttribCount() { return sizeof(_Attrib) / sizeof(Attribute); }
@@ -95,12 +95,12 @@ void FarDlgPayload::init(const String & _name)
   {
     addProperty(Attrib(i).Name, 0);
   }
-  addProperty("FitWidth", 0);
-  addProperty("Focus", 0);
-  addProperty("NoBreak", 0);
-  addProperty("Visible", 1);
-  addProperty("Persistent", 0);
-  addProperty("Text", "");
+  addProperty(L"FitWidth", 0);
+  addProperty(L"Focus", 0);
+  addProperty(L"NoBreak", 0);
+  addProperty(L"Visible", 1);
+  addProperty(L"Persistent", 0);
+  addProperty(L"Text", "");
 }
 
 void FarDlgPayload::preInitItem(FarDialogItem & item)
