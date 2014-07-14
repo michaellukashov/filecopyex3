@@ -232,7 +232,7 @@ void DebugLog(const wchar_t * DebugMsg, ...)
   OutputDebugString(MsgBuf);
 }
 
-String convertPath(enum CONVERTPATHMODES mode, String src)
+String convertPath(enum CONVERTPATHMODES mode, const String& src)
 {
   wchar_t fullName[MAX_PATH];
   size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, sizeof(fullName));

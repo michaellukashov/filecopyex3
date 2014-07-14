@@ -92,7 +92,7 @@ void beep(int);
 
 void DebugLog(const wchar_t * DebugMsg, ...);
 
-String convertPath(enum CONVERTPATHMODES mode, String src);
+String convertPath(enum CONVERTPATHMODES mode, const String & src);
 
 inline int64_t GetTime()
 {

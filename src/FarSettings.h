@@ -19,7 +19,7 @@ public:
     String name;
     FARSETTINGSTYPES type;
 
-    ParamInfo(String _name, FARSETTINGSTYPES _type): name(_name), type(_type) {};
+    ParamInfo(const String & _name, FARSETTINGSTYPES _type): name(_name), type(_type) {};
   };
   typedef std::vector<ParamInfo> ParamInfoVector;
 
