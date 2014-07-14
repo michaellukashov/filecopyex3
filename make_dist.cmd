@@ -43,8 +43,6 @@ copy /Y ..\%PLUGINNAME%-build\%PLUGINNAME%.dll %PKGDIRARCH%
 
 :: Make archive
 set ARCHIVE_NAME=..\..\..\%PKGNAME%
-echo ARCHIVE_NAME = %ARCHIVE_NAME%
-echo PKGDIRARCH = %PKGDIRARCH%
 if exist %PKGDIRARCH%\%PLUGINNAME%.dll (
   if exist "C:\Program Files\7-Zip\7z.exe" (
     pushd %PKGDIRARCH%
