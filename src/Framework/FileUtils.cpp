@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 inline String ExtractFileName(const String & v)
 {
-  return v.substr(v.find_last_of("\\/")+1);
+  return v.substr(v.find_last_of("\\/") + 1);
 }
 
 inline String ExtractFilePath(const String & v)
@@ -54,22 +54,22 @@ String ExtractFileExt(const String & v)
 
 String ChangeFileExt(const String & v, const String & ext)
 {
-  int p=v.rfind('.');
-  if (p==-1 || p < v.find_last_of("\\/"))
+  int p = v.rfind('.');
+  if (p == -1 || p < v.find_last_of("\\/"))
   {
-    return v+ext;
+    return v + ext;
   }
   else
   {
-    return v.substr(0, p)+ext;
+    return v.substr(0, p) + ext;
   }
 }
 
 inline String CutEndSlash(const String & v)
 {
-  if (v[v.len()-1]=='\\' || v[v.len()-1]=='/')
+  if (v[v.len() - 1] == '\\' || v[v.len() - 1] == '/')
   {
-    return v.left(v.len()-1);
+    return v.left(v.len() - 1);
   }
   else
   {
@@ -79,8 +79,8 @@ inline String CutEndSlash(const String & v)
 
 inline String AddEndSlash(const String & v)
 {
-  wchar_t endChar = v[v.len()-1];
-  if (endChar =='\\' || endChar == '/')
+  wchar_t endChar = v[v.len() - 1];
+  if (endChar == '\\' || endChar == '/')
   {
     return v;
   }
@@ -92,47 +92,47 @@ inline String AddEndSlash(const String & v)
 
 String GetFileNameRoot(const String & v)
 {
-  String l=v.left(2);
+  String l = v.left(2);
   // Bug #12 fixed by axxie
   if (v.left(3) == L"\\\\.")
   {
-    if (l==L"\\\\" || l==L"//")
+    if (l == L"\\\\" || l == L"//")
     {
-      l=v.substr(2);
-      int p=l.find_first_of("\\/");
-      if (p!=-1)
+      l = v.substr(2);
+      int p = l.find_first_of("\\/");
+      if (p != -1)
       {
-        l = l.substr(p+1);
+        l = l.substr(p + 1);
         p = l.find_first_of("\\/");
-        if (p!=-1)
+        if (p != -1)
         {
-          return l.substr(0, p+1);
+          return l.substr(0, p + 1);
         }
       }
     }
   }
-  else if (l=="\\\\")
+  else if (l == "\\\\")
   {
     l = v.substr(2);
-    int p=l.find_first_of("\\/");
-    if (p!=-1)
+    int p = l.find_first_of("\\/");
+    if (p != -1)
     {
-      l = l.substr(p+1);
+      l = l.substr(p + 1);
       int p2 = l.find_first_of("\\/");
       // bug #12 refixed by axxie
-      if (p2!=-1)
+      if (p2 != -1)
       {
-        return v.substr(0,p+p2+2+2);
+        return v.substr(0, p + p2 + 2 + 2);
       }
       else
       {
-        return v+"\\";
+        return v + "\\";
       }
     }
   }
-  else if (l.find(':')==1)
+  else if (l.find(':') == 1)
   {
-    return l+"\\";
+    return l + "\\";
   }
   return "";
 }
@@ -183,8 +183,8 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
   if (!(attr & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT))) return result;
 
   if (GetVolumeNameForVolumeMountPoint(AddEndSlash(VolumeMountPointForPath).ptr(),
-                                      VolumeNameForPath,
-                                      sizeof(VolumeNameForPath)/sizeof(wchar_t)))
+                                       VolumeNameForPath,
+                                       sizeof(VolumeNameForPath) / sizeof(wchar_t)))
   {
     wchar_t VolumeMountPoint[] = L"?:\\";
     wchar_t VolumeName[MAX_FILENAME];
@@ -193,8 +193,8 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
     {
       VolumeMountPoint[0] = drive;
       if (GetVolumeNameForVolumeMountPoint(VolumeMountPoint,
-                                          VolumeName,
-                                          sizeof(VolumeName)/sizeof(wchar_t)))
+                                           VolumeName,
+                                           sizeof(VolumeName) / sizeof(wchar_t)))
       {
         if (wcscmp(VolumeNameForPath, VolumeName) == 0)
         {
@@ -217,23 +217,23 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
 int GetSymLink(const String & _dir, String & res, int flg)
 {
   res = "";
-  String dir=CutEndSlash(_dir);
+  String dir = CutEndSlash(_dir);
   wchar_t buf[MAX_FILENAME];
-  DWORD sz=MAX_FILENAME;
-  res=dir;
+  DWORD sz = MAX_FILENAME;
+  res = dir;
 
-  if (flg & gslExpandSubst && (dir.len()==2) && (dir[1]==':') &&
-      QueryDosDevice(dir.ptr(), buf, MAX_FILENAME)>0)
+  if (flg & gslExpandSubst && (dir.len() == 2) && (dir[1] == ':') &&
+      QueryDosDevice(dir.ptr(), buf, MAX_FILENAME) > 0)
   {
-    String r=buf;
-    if (r.left(8)=="\\??\\UNC\\")
+    String r = buf;
+    if (r.left(8) == "\\??\\UNC\\")
     {
-      res=CutEndSlash(String("\\\\")+r.substr(8));
+      res = CutEndSlash(String("\\\\") + r.substr(8));
       return TRUE;
     }
-    if (r.left(4)=="\\??\\")
+    if (r.left(4) == "\\??\\")
     {
-      res=CutEndSlash(r.substr(4));
+      res = CutEndSlash(r.substr(4));
       return TRUE;
     }
   }
@@ -242,36 +242,36 @@ int GetSymLink(const String & _dir, String & res, int flg)
   // GetFileAttributes returns FILE_ATTRIBUTE_REPARSE_POINT
   // for drives names e.g. "E:"
   // Symlinks should have length > 2
-  if (Win2K && (flg & gslExpandReparsePoints) && dir.len()>2)
+  if (Win2K && (flg & gslExpandReparsePoints) && dir.len() > 2)
   {
-    int attr=GetFileAttributes(dir.ptr());
-    if (attr!=0xFFFFFFFF && attr & FILE_ATTRIBUTE_DIRECTORY
+    int attr = GetFileAttributes(dir.ptr());
+    if (attr != 0xFFFFFFFF && attr & FILE_ATTRIBUTE_DIRECTORY
         && attr & FILE_ATTRIBUTE_REPARSE_POINT)
     {
-      HANDLE hf=CreateFile(dir.ptr(),
-                           GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
-                           NULL,
-                           OPEN_EXISTING,
-                           FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT,
-                           NULL);
-      if (hf!=INVALID_HANDLE_VALUE)
+      HANDLE hf = CreateFile(dir.ptr(),
+                             GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
+                             NULL,
+                             OPEN_EXISTING,
+                             FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT,
+                             NULL);
+      if (hf != INVALID_HANDLE_VALUE)
       {
         uint8_t Data[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
         memset(Data, 0, sizeof(Data));
         DWORD returnedLength = 0;
         if (DeviceIoControl(hf, FSCTL_GET_REPARSE_POINT, NULL, 0,
-                           Data, sizeof(Data), &returnedLength, NULL))
+                            Data, sizeof(Data), &returnedLength, NULL))
         {
           REPARSE_GUID_DATA_BUFFER * rd = (REPARSE_GUID_DATA_BUFFER *)Data;
           if ((IsReparseTagMicrosoft(rd->ReparseTag)) &&
-              (rd->ReparseTag==IO_REPARSE_TAG_MOUNT_POINT) &&
+              (rd->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT) &&
               (!memcmp(rd->ReparseGuid.Data4, L"\\??\\", 8)))
           {
-            String r=(wchar_t *)&rd->GenericReparseBuffer;
-            if (r.left(7)!="Volume{")
+            String r = (wchar_t *)&rd->GenericReparseBuffer;
+            if (r.left(7) != "Volume{")
             {
               CloseHandle(hf);
-              res=CutEndSlash(buf);
+              res = CutEndSlash(buf);
               return TRUE;
             }
           }
@@ -292,10 +292,10 @@ int GetSymLink(const String & _dir, String & res, int flg)
     }
   }
 
-  if (flg & gslExpandNetMappings && (dir.len()==2) && (dir[1]==':') &&
-      WNetGetConnection(dir.ptr(), buf, &sz)==0)
+  if (flg & gslExpandNetMappings && (dir.len() == 2) && (dir[1] == ':') &&
+      WNetGetConnection(dir.ptr(), buf, &sz) == 0)
   {
-    res=CutEndSlash(buf);
+    res = CutEndSlash(buf);
     return TRUE;
   }
 
@@ -305,18 +305,18 @@ int GetSymLink(const String & _dir, String & res, int flg)
 
 String GetRealFileName(const String & _path, int flg)
 {
-  String path=AddEndSlash(_path);
+  String path = AddEndSlash(_path);
 rep:
-  for (intptr_t i=path.len()-1; i>=0; i--)
+  for (intptr_t i = path.len() - 1; i >= 0; i--)
   {
-    if (path[i]=='\\')
+    if (path[i] == '\\')
     {
       String res;
       if (GetSymLink(path.substr(0, i), res,
-                    gslExpandSubst | gslExpandReparsePoints | gslExpandMountPoints |
-                    ((flg&rfnNoNetExpand)?0:gslExpandNetMappings)))
+                     gslExpandSubst | gslExpandReparsePoints | gslExpandMountPoints |
+                     ((flg & rfnNoNetExpand) ? 0 : gslExpandNetMappings)))
       {
-        path=AddEndSlash(res+path.substr(i));
+        path = AddEndSlash(res + path.substr(i));
         goto rep;
       }
     }
@@ -326,16 +326,16 @@ rep:
 
 String GetFileRoot(const String & _path)
 {
-  String path=GetRealFileName(_path), res;
+  String path = GetRealFileName(_path), res;
   if (Win2K)
   {
     wchar_t buf[MAX_FILENAME];
     if (GetVolumePathName(path.ptr(), buf, MAX_FILENAME))
-      res=AddEndSlash(buf);
+      res = AddEndSlash(buf);
     else
-      res=GetFileNameRoot(path);
+      res = GetFileNameRoot(path);
   }
-  else res=GetFileNameRoot(path);
+  else res = GetFileNameRoot(path);
   return res;
 }
 
@@ -349,21 +349,21 @@ String ExpandEnv(const String & v)
 String ApplyFileMask(const String & _name, const String & _mask)
 {
   wchar_t * name = (wchar_t *)_name.ptr(), *mask = (wchar_t *)_mask.ptr(),
-            res[MAX_FILENAME]=L"";
-  int sz=MAX_FILENAME;
-  wchar_t * next = (wchar_t *)_tcsend(name)-1, *mext = (wchar_t *)_tcsend(mask)-1;
+            res[MAX_FILENAME] = L"";
+  int sz = MAX_FILENAME;
+  wchar_t * next = (wchar_t *)_tcsend(name) - 1, *mext = (wchar_t *)_tcsend(mask) - 1;
   while (next >= name && *next != '.') next--;
-  if (next < name) next = name+wcslen(name);
+  if (next < name) next = name + wcslen(name);
   else *next++ = 0;
   while (mext >= mask && *mext != '.') mext--;
-  if (mext < mask) mext = mask+wcslen(mask);
+  if (mext < mask) mext = mask + wcslen(mask);
   else *mext++ = 0;
   wchar_t sym[2] = { 0, 0 };
   for (wchar_t * m = mask; *m; m++)
   {
     if (*m == '*') wcscat_s(res, sz, name);
-    else if (*m == '?') wcscat_s(res, sz, (*sym = m-mask < (int)wcslen(name) ? name[m-mask] : 0, sym));
-    else wcscat_s(res, sz, (*sym=*m, sym));
+    else if (*m == '?') wcscat_s(res, sz, (*sym = m - mask < (int)wcslen(name) ? name[m - mask] : 0, sym));
+    else wcscat_s(res, sz, (*sym = *m, sym));
   }
   if (mext[0])
   {
@@ -371,8 +371,8 @@ String ApplyFileMask(const String & _name, const String & _mask)
     for (wchar_t * m = mext; *m; m++)
     {
       if (*m == '*') wcscat_s(res, sz, next);
-      else if (*m == '?') wcscat_s(res, sz, (*sym = m-mext < (int)wcslen(next) ? next[m-mext] : 0, sym));
-      else wcscat_s(res, sz, (*sym=*m, sym));
+      else if (*m == '?') wcscat_s(res, sz, (*sym = m - mext < (int)wcslen(next) ? next[m - mext] : 0, sym));
+      else wcscat_s(res, sz, (*sym = *m, sym));
     }
   }
   return res;
@@ -380,27 +380,27 @@ String ApplyFileMask(const String & _name, const String & _mask)
 
 String ApplyFileMaskPath(const String & name, const String & mask)
 {
-  if (mask[mask.len()-1]=='\\' || mask[mask.len()-1]=='/')
-    return mask+ExtractFileName(name);
+  if (mask[mask.len() - 1] == '\\' || mask[mask.len() - 1] == '/')
+    return mask + ExtractFileName(name);
   int a = GetFileAttributes(mask.ptr());
   if (a != 0xFFFFFFFF && a & FILE_ATTRIBUTE_DIRECTORY)
   {
-    String res=mask;
-    if (name.icmp(mask)) res+=String("\\")+ExtractFileName(name);
+    String res = mask;
+    if (name.icmp(mask)) res += String("\\") + ExtractFileName(name);
     return res;
   }
-  return ExtractFilePath(mask)+"\\"+
+  return ExtractFilePath(mask) + "\\" +
          ApplyFileMask(ExtractFileName(name), ExtractFileName(mask));
 }
 
 int FileExists(const String & name)
 {
-  return GetFileAttributes(name.ptr())!=0xFFFFFFFF;
+  return GetFileAttributes(name.ptr()) != 0xFFFFFFFF;
 }
 
 int64_t FileSize(HANDLE h)
 {
-  ULONG hsz, lsz=GetFileSize(h, &hsz);
+  ULONG hsz, lsz = GetFileSize(h, &hsz);
   return MAKEINT64(lsz, hsz);
 }
 
@@ -420,7 +420,7 @@ int64_t FileSize(const String & fn)
 inline String TempName()
 {
   srand((uint32_t)time(NULL));
-  return Format(L"%8.8x", rand()*rand()*rand())+"."+Format(L"%3.3x", rand());
+  return Format(L"%8.8x", rand() * rand() * rand()) + "." + Format(L"%3.3x", rand());
 }
 
 String TempPath()
@@ -432,17 +432,17 @@ String TempPath()
 
 String TempPathName()
 {
-  return TempPath()+"\\"+TempName();
+  return TempPath() + "\\" + TempName();
 }
 
 static int __MoveFile(const wchar_t * src, const wchar_t * dst)
 {
-  int attr=GetFileAttributes(dst);
+  int attr = GetFileAttributes(dst);
   SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFile(src, dst)) return TRUE;
   else
   {
-    int err=GetLastError();
+    int err = GetLastError();
     SetFileAttributes(dst, attr);
     SetLastError(err);
     return FALSE;
@@ -451,13 +451,13 @@ static int __MoveFile(const wchar_t * src, const wchar_t * dst)
 
 static int __MoveFileEx(const wchar_t * src, const wchar_t * dst, int flg)
 {
-  int attr=GetFileAttributes(dst);
+  int attr = GetFileAttributes(dst);
   // bug #41 fixed by axxie
   if (_wcsicmp(src, dst) != 0) SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFileEx(src, dst, flg)) return TRUE;
   else
   {
-    int err=GetLastError();
+    int err = GetLastError();
     SetFileAttributes(dst, attr);
     SetLastError(err);
     return FALSE;
@@ -492,30 +492,30 @@ int MoveFile(const String & _src, const String & _dst, int replace)
   ForceDirectories(_dst);
   if (WinNT)
   {
-    return __MoveFileEx(_src.ptr(), _dst.ptr(), replace ? MOVEFILE_REPLACE_EXISTING: 0);
+    return __MoveFileEx(_src.ptr(), _dst.ptr(), replace ? MOVEFILE_REPLACE_EXISTING : 0);
   }
   else
   {
-    String root1=GetFileRoot(_src),
-           root2=GetFileRoot(_dst);
-    if (root1=="" || root2=="")
+    String root1 = GetFileRoot(_src),
+           root2 = GetFileRoot(_dst);
+    if (root1 == "" || root2 == "")
     {
       SetLastError(ERROR_PATH_NOT_FOUND);
       return FALSE;
     }
     if (!root1.icmp(root2))
     {
-      String src=GetRealFileName(_src),
-             dst=GetRealFileName(_dst);
+      String src = GetRealFileName(_src),
+             dst = GetRealFileName(_dst);
       if (!src.icmp(dst)) return TRUE;
-      int sa=GetFileAttributes(src.ptr());
-      if (sa==0xFFFFFFFF)
+      int sa = GetFileAttributes(src.ptr());
+      if (sa == 0xFFFFFFFF)
       {
         SetLastError(ERROR_FILE_NOT_FOUND);
         return FALSE;
       }
-      int da=GetFileAttributes(dst.ptr());
-      if (da!=0xFFFFFFFF)
+      int da = GetFileAttributes(dst.ptr());
+      if (da != 0xFFFFFFFF)
       {
         if (sa & FILE_ATTRIBUTE_DIRECTORY || da & FILE_ATTRIBUTE_DIRECTORY)
         {
@@ -527,11 +527,11 @@ int MoveFile(const String & _src, const String & _dst, int replace)
           SetLastError(ERROR_ALREADY_EXISTS);
           return FALSE;
         }
-        String temp=ExtractFilePath(dst)+"\\"+TempName();
+        String temp = ExtractFilePath(dst) + "\\" + TempName();
         if (!__MoveFile(dst.ptr(), temp.ptr())) return FALSE;
         if (!__MoveFile(src.ptr(), dst.ptr()))
         {
-          int err=GetLastError();
+          int err = GetLastError();
           __MoveFile(temp.ptr(), dst.ptr());
           SetLastError(err);
           return FALSE;
