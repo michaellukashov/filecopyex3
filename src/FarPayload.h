@@ -245,7 +245,7 @@ public:
   DEFINE_CLASS("FarDlgCombobox", FarDlgComboboxPayload)
 
   FarDlgComboboxPayload() { list.ItemsNumber=0; list.Items=NULL; }
-  virtual ~FarDlgComboboxPayload() { if (list.Items) delete(list.Items); }
+  virtual ~FarDlgComboboxPayload() { if (list.Items) delete list.Items; }
 
 protected:
   FarList list;

@@ -39,7 +39,7 @@ void Node::init(Payload * _payload, Node * _parent)
 {
   if (payload)
   {
-    delete(payload);
+    delete payload;
   }
   payload = _payload;
   parent = _parent;
@@ -54,7 +54,7 @@ Node::~Node()
   ClearChilds();
   if (payload)
   {
-    delete(payload);
+    delete payload;
   }
 }
 

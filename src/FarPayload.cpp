@@ -224,7 +224,7 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
   item.ListItems = &list;
   if (list.Items)
   {
-    delete(list.Items);
+    delete list.Items;
     list.Items = NULL;
     list.ItemsNumber = 0;
   }
