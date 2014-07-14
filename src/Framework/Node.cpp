@@ -137,12 +137,12 @@ size_t Node::LoadFromList(StringParent & list, size_t start)
   for (size_t i = start; i < list.Count(); i++)
   {
     String line = list[i].trim();
-    if (line == "end")
+    if (line == L"end")
     {
       res=i;
       break;
     }
-    else if (!line.ncmp("object", 6))
+    else if (!line.ncmp(L"object", 6))
     {
       int p = line.find(' ');
       int p1 = line.find(':');

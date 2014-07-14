@@ -201,9 +201,9 @@ void FarPlugin::InitOptions()
   options["compressDef"] = 2;
   options["encryptDef"] = 2;
   options["readSpeedLimitDef"] = 0;
-  options["readSpeedLimitValueDef"] = String("");
+  options["readSpeedLimitValueDef"] = String(L"");
   options["writeSpeedLimitDef"] = 0;
-  options["writeSpeedLimitLimitDef"] = String("");
+  options["writeSpeedLimitLimitDef"] = String(L"");
 };
 
 void FarPlugin::KeyConfig()
