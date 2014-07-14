@@ -307,7 +307,7 @@ String GetRealFileName(const String & _path, int flg)
 {
   String path=AddEndSlash(_path);
 rep:
-  for (size_t i=path.len()-1; i>=0; i--)
+  for (intptr_t i=path.len()-1; i>=0; i--)
   {
     if (path[i]=='\\')
     {
