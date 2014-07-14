@@ -100,14 +100,14 @@ void FarDlgPayload::init(const String & _name)
   addProperty(L"NoBreak", 0);
   addProperty(L"Visible", 1);
   addProperty(L"Persistent", 0);
-  addProperty(L"Text", "");
+  addProperty(L"Text", L"");
 }
 
 void FarDlgPayload::preInitItem(FarDialogItem & item)
 {
   //  SetItemText(&item, Name());
 
-  String p = getProp("Text");
+  String p = getProp(L"Text");
   if (p.empty())
   {
     String n = getDialog()->getName() + "." + getName();
@@ -123,7 +123,7 @@ void FarDlgPayload::preInitItem(FarDialogItem & item)
       item.Flags |= Attrib(i).Flag;
     }
   }
-  if (getProp("Focus"))
+  if (getProp(L"Focus"))
   {
     item.Flags |= DIF_FOCUS;
   }
@@ -164,7 +164,7 @@ void FarDlgPayload::AddToItems(std::vector<FarDialogItem>& Items, std::vector<Re
   dialogItem = Items.size() - 1;
   if (item.Type == DI_BUTTON && !(item.Flags & DIF_BTNNOCLOSE))
   {
-    int res = getProp("Result");
+    int res = getProp(L"Result");
     if (res != -1)
     {
       RetCode rc;
@@ -178,18 +178,18 @@ void FarDlgPayload::AddToItems(std::vector<FarDialogItem>& Items, std::vector<Re
 // FarDlgCheckboxPayload
 void FarDlgCheckboxPayload::RetrieveProperties(HANDLE dlg)
 {
-  getProp("Selected") = (int)Info.SendDlgMessage(dlg, DM_GETCHECK, dialogItem, 0);
+  getProp(L"Selected") = (int)Info.SendDlgMessage(dlg, DM_GETCHECK, dialogItem, 0);
 }
 
 // FarDlgEditPayload
 void FarDlgEditPayload::realInitItem(FarDialogItem & item)
 {
   item.Type = DI_EDIT;
-  int w = getProp("Width");
+  int w = getProp(L"Width");
   item.X2 = item.X1 + w - 1;
   if (item.Flags & DIF_HISTORY)
   {
-    String p = getProp("HistoryId");
+    String p = getProp(L"HistoryId");
     if (!p.empty())
     {
       (String("FarFramework\\") + getDialog()->getName() + "\\" + getName()).copyTo(HistoryId, sizeof(HistoryId) / sizeof(wchar_t));
@@ -211,14 +211,14 @@ static String GetDlgText(HANDLE dlg, intptr_t id)
 
 void FarDlgEditPayload::RetrieveProperties(HANDLE dlg)
 {
-  getProp("Text") = GetDlgText(dlg, dialogItem);
+  getProp(L"Text") = GetDlgText(dlg, dialogItem);
 }
 
 // FarDlgComboboxPayload
 void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
 {
   item.Type = DI_COMBOBOX;
-  int w = getProp("Width");
+  int w = getProp(L"Width");
   item.X2 = item.X1 + w - 1;
 
   item.ListItems = &list;
@@ -229,14 +229,14 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
     list.ItemsNumber = 0;
   }
   StringVector items;
-  items.loadFromString(getProp("Items"), '\n');
+  items.loadFromString(getProp(L"Items"), '\n');
   if (items.Count())
   {
     list.ItemsNumber = items.Count();
     list.Items = new FarListItem[items.Count()];
     for (size_t i = 0; i < items.Count(); i++)
     {
-      if (getProp("Text") == items[i])
+      if (getProp(L"Text") == items[i])
       {
         list.Items[i].Flags |= LIF_SELECTED;
       }
@@ -246,7 +246,7 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
 
 void FarDlgComboboxPayload::RetrieveProperties(HANDLE dlg)
 {
-  getProp("Text") = GetDlgText(dlg, dialogItem);
+  getProp(L"Text") = GetDlgText(dlg, dialogItem);
 }
 
 size_t lablen(FarDialogItem & item)

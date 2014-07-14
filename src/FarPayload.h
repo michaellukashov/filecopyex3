@@ -101,13 +101,13 @@ protected:
   virtual void init(const String & _name)
   {
     FarDlgPayload::init(_name);
-    addProperty("Shorten", 0);
+    addProperty(L"Shorten", 0);
   }
 
   void realInitItem(FarDialogItem & item)
   {
     item.Type = DI_TEXT;
-    item.X2 = getProp("Shorten") ? (item.X1 - 1) : (item.X1 + lablen(item) - 1);
+    item.X2 = getProp(L"Shorten") ? (item.X1 - 1) : (item.X1 + lablen(item) - 1);
   }
 
   static void BeforeAdd(FarDialogItem & item, FarDlgNode & obj)
@@ -128,14 +128,14 @@ protected:
   virtual void init(const String & _name)
   {
     FarDlgPayload::init(_name);
-    addProperty("Default", 0);
-    addProperty("Result", -1);
+    addProperty(L"Default", 0);
+    addProperty(L"Result", -1);
   }
   virtual void realInitItem(FarDialogItem & item)
   {
     item.Type = DI_BUTTON;
     item.X2 = item.X1 + lablen(item) + 4 - 1;
-    if (getProp("Default"))
+    if (getProp(L"Default"))
     {
       item.Flags |= DIF_DEFAULTBUTTON;
     }
@@ -162,25 +162,25 @@ protected:
   virtual void init(const String & _name)
   {
     FarDlgPayload::init(_name);
-    addProperty("Selected", 0);
+    addProperty(L"Selected", 0);
   }
 
   void realInitItem(FarDialogItem & item)
   {
     item.Type = DI_CHECKBOX;
     item.X2 = item.X1 + lablen(item) + 4 - 1;
-    item.Selected = int(getProp("Selected"));
+    item.Selected = int(getProp(L"Selected"));
   }
 
   void RetrieveProperties(HANDLE dlg);
 
   void LoadState(PropertyMap & state)
   {
-    getProp("Selected") = state[getName()];
+    getProp(L"Selected") = state[getName()];
   }
   void SaveState(PropertyMap & state)
   {
-    state[getName()] = getProp("Selected");
+    state[getName()] = getProp(L"Selected");
   }
 };
 
@@ -213,25 +213,25 @@ protected:
   virtual void init(const String & _name)
   {
     FarDlgPayload::init(_name);
-    addProperty("HistoryId", "FarFramework\\DefaultEditHistory");
-    addProperty("Width", 10);
+    addProperty(L"HistoryId", L"FarFramework\\DefaultEditHistory");
+    addProperty(L"Width", 10);
   }
 
   void realInitItem(FarDialogItem & item);
   void RetrieveProperties(HANDLE dlg);
   void LoadState(PropertyMap & state)
   {
-    getProp("Text") = state[getName()];
+    getProp(L"Text") = state[getName()];
   }
 
   void SaveState(PropertyMap & state)
   {
-    state[getName()] = getProp("Text");
+    state[getName()] = getProp(L"Text");
   }
 
   void BeforeAdd(FarDialogItem & item)
   {
-    if (getProp("History"))
+    if (getProp(L"History"))
     {
       item.X2--;
     }
@@ -253,19 +253,19 @@ protected:
   virtual void init(const String & _name)
   {
     FarDlgPayload::init(_name);
-    addProperty("Width", 10);
-    addProperty("Items", "");
+    addProperty(L"Width", 10);
+    addProperty(L"Items", L"");
   }
 
   void realInitItem(FarDialogItem & item);
   void RetrieveProperties(HANDLE dlg);
   void LoadState(PropertyMap & state)
   {
-    getProp("Text") = state[getName()];
+    getProp(L"Text") = state[getName()];
   }
   void SaveState(PropertyMap & state, FarDlgNode & obj)
   {
-    state[getName()] = getProp("Text");
+    state[getName()] = getProp(L"Text");
   }
   static void BeforeAdd(FarDialogItem & item, FarDlgNode & obj)
   {
@@ -283,9 +283,9 @@ protected:
   virtual void init(const String & _name)
   {
     FarDlgPayload::init(_name);
-    addProperty("HelpTopic", "NoTopic");
-    addProperty("Title", "");
-    addProperty("Warning", 0);
+    addProperty(L"HelpTopic", L"NoTopic");
+    addProperty(L"Title", L"");
+    addProperty(L"Warning", 0);
   }
 };
 
