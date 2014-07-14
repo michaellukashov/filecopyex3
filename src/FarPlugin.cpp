@@ -177,33 +177,34 @@ String FarPlugin::GetDLLPath()
 
 void FarPlugin::InitOptions()
 {
-  options["BufPercent"] = 1;
-  options["BufSize"] = 0;
-  options["BufPercentVal"] = 15;
-  options["BufSizeVal"] = 4096;
-  options["OverwriteDef"] = 0;
-  options["CopyStreamsDef"] = 0;
-  options["CopyRightsDef"] = 0;
-  options["AllowParallel"] = 1;
-  options["DefParallel"] = 1;
-  options["CopyDescs"] = 1;
-  options["DescsInSubdirs"] = 0;
-  options["ConnectLikeBars"] = 0;
-  options["ConfirmBreak"] = 1;
-  options["Sound"] = 1;
-  options["PreallocMin"] = 64;
-  options["UnbuffMin"] = 64;
-  options["ReadFilesOpenedForWriting"] = 1;
-  options["CheckFreeDiskSpace"] = 1;
-  options["copyCreationTime"] = 1;
-  options["copyLastAccessTime"] = 1;
-  options["copyLastWriteTime"] = 1;
-  options["compressDef"] = 2;
-  options["encryptDef"] = 2;
-  options["readSpeedLimitDef"] = 0;
-  options["readSpeedLimitValueDef"] = String(L"");
-  options["writeSpeedLimitDef"] = 0;
-  options["writeSpeedLimitLimitDef"] = String(L"");
+  PropertyMap & Options = this->Options();
+  Options[L"BufPercent"] = 1;
+  Options[L"BufSize"] = 0;
+  Options[L"BufPercentVal"] = 15;
+  Options[L"BufSizeVal"] = 4096;
+  Options[L"OverwriteDef"] = 0;
+  Options[L"CopyStreamsDef"] = 0;
+  Options[L"CopyRightsDef"] = 0;
+  Options[L"AllowParallel"] = 1;
+  Options[L"DefParallel"] = 1;
+  Options[L"CopyDescs"] = 1;
+  Options[L"DescsInSubdirs"] = 0;
+  Options[L"ConnectLikeBars"] = 0;
+  Options[L"ConfirmBreak"] = 1;
+  Options[L"Sound"] = 1;
+  Options[L"PreallocMin"] = 64;
+  Options[L"UnbuffMin"] = 64;
+  Options[L"ReadFilesOpenedForWriting"] = 1;
+  Options[L"CheckFreeDiskSpace"] = 1;
+  Options[L"copyCreationTime"] = 1;
+  Options[L"copyLastAccessTime"] = 1;
+  Options[L"copyLastWriteTime"] = 1;
+  Options[L"compressDef"] = 2;
+  Options[L"encryptDef"] = 2;
+  Options[L"readSpeedLimitDef"] = 0;
+  Options[L"readSpeedLimitValueDef"] = String(L"");
+  Options[L"writeSpeedLimitDef"] = 0;
+  Options[L"writeSpeedLimitLimitDef"] = String(L"");
 };
 
 void FarPlugin::KeyConfig()
@@ -224,18 +225,18 @@ void FarPlugin::KeyConfig()
   if (!altShift && !ctrlShift && !ctrlAlt)
     altShift = true;
 
-  dlg["BindToF5"]("Selected") = bind;
-  dlg["AltShiftF5"]("Selected") = altShift;
-  dlg["CtrlShiftF5"]("Selected") = ctrlShift;
-  dlg["CtrlAltF5"]("Selected") = ctrlAlt;
+  dlg[L"BindToF5"](L"Selected") = bind;
+  dlg[L"AltShiftF5"](L"Selected") = altShift;
+  dlg[L"CtrlShiftF5"](L"Selected") = ctrlShift;
+  dlg[L"CtrlAltF5"](L"Selected") = ctrlAlt;
 
   if (dlg.Execute() == -1)
     return;
 
-  if (dlg["BindToF5"]("Selected") == bind
-      && dlg["AltShiftF5"]("Selected") == altShift
-      && dlg["CtrlShiftF5"]("Selected") == ctrlShift
-      && dlg["CtrlAltF5"]("Selected") == ctrlAlt)
+  if (dlg[L"BindToF5"](L"Selected") == bind
+      && dlg[L"AltShiftF5"](L"Selected") == altShift
+      && dlg[L"CtrlShiftF5"](L"Selected") == ctrlShift
+      && dlg[L"CtrlAltF5"](L"Selected") == ctrlAlt)
     return;
 
   // MacroCommand(MCMD_SAVEALL); // XXX
@@ -246,7 +247,7 @@ void FarPlugin::KeyConfig()
   Unbind("CtrlShiftF5");  Unbind("CtrlShiftF6");
   Unbind("CtrlAltF5");  Unbind("CtrlAltF6");
 
-  if (dlg["BindToF5"]("Selected"))
+  if (dlg[L"BindToF5"](L"Selected"))
   {
     Bind("F5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
     Bind("F6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
@@ -255,9 +256,9 @@ void FarPlugin::KeyConfig()
 
     /*
     String key;
-    if (dlg["AltShiftF5"]("Selected")) key = "AltShift";
-    else if (dlg["CtrlShiftF5"]("Selected")) key = "CtrlShift";
-    else if (dlg["CtrlAltF5"]("Selected")) key = "CtrlAlt";
+    if (dlg[L"AltShiftF5"](L"Selected")) key = "AltShift";
+    else if (dlg[L"CtrlShiftF5"](L"Selected")) key = "CtrlShift";
+    else if (dlg[L"CtrlAltF5"](L"Selected")) key = "CtrlAlt";
     Bind(key + "F5", "F5");
     Bind(key + "F6", "F6");
     */
@@ -277,7 +278,7 @@ void FarPlugin::About()
 {
   FarDialog & dlg = Dialogs()["AboutDialog"];
   dlg.ResetControls();
-  dlg["Label2"]("Text") = String(VersionStr(FARMANAGERVERSION_MAJOR, FARMANAGERVERSION_MINOR, PLUGIN_MAJOR, PLUGIN_BUILD));
+  dlg[L"Label2"](L"Text") = String(VersionStr(FARMANAGERVERSION_MAJOR, FARMANAGERVERSION_MINOR, PLUGIN_MAJOR, PLUGIN_BUILD));
   dlg.Execute();
 }
 

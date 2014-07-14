@@ -139,8 +139,8 @@ HANDLE Open(const String & fn, int mode, int attr)
 {
   // new feature by slst: ReadFilesOpenedForWriting checking (bug #17)
   DWORD dwShareMode = FILE_SHARE_READ;
-
-  if ((mode & OPEN_READ) && (BOOL)(plugin->Options()[L"ReadFilesOpenedForWriting"]))
+  PropertyMap & Options = plugin->Options();
+  if ((mode & OPEN_READ) && (BOOL)(Options[L"ReadFilesOpenedForWriting"]))
     dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
 
   int f;

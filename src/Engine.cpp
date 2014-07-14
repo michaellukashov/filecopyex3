@@ -1149,11 +1149,11 @@ Engine::MResult Engine::Main(int move, int curOnly)
 {
   PropertyMap & Options = plugin->Options();
 
-  _CopyDescs    = Options["CopyDescs"];
-  _DescsInDirs  = Options["DescsInSubdirs"];
-  _ConfirmBreak = Options["ConfirmBreak"];
-  _PreallocMin  = Options["PreallocMin"];
-  _UnbuffMin    = Options["UnbuffMin"];
+  _CopyDescs    = Options[L"CopyDescs"];
+  _DescsInDirs  = Options[L"DescsInSubdirs"];
+  _ConfirmBreak = Options[L"ConfirmBreak"];
+  _PreallocMin  = Options[L"PreallocMin"];
+  _UnbuffMin    = Options[L"UnbuffMin"];
 
   _ClearROFromCD  = 1; //YYY Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, NULL) & FSS_CLEARROATTRIBUTE;
   _HideDescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_SETHIDDEN;
@@ -1244,7 +1244,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
   }
   srcPath = CutEndSlash(curDir);
 
-  _InverseBars = (bool)Options["ConnectLikeBars"] && pi.PanelRect.left > 0;
+  _InverseBars = (bool)Options[L"ConnectLikeBars"] && pi.PanelRect.left > 0;
 
   if (move)
   {
@@ -1254,60 +1254,60 @@ Engine::MResult Engine::Main(int move, int curOnly)
   {
     dlg("Title") = LOC("CopyDialog.Copy");
   }
-  dlg["Label1"]("Text") = prompt;
-  dlg["DestPath"]("Text") = dstPath;
+  dlg[L"Label1"](L"Text") = prompt;
+  dlg[L"DestPath"](L"Text") = dstPath;
 
   // axxie: Reset cp in case when user pressed Shift-F6/Shift-F5
   int cp = (!curOnly && srcPath != "") ? CheckParallel(srcPath, dstPath) : FALSE;
-  if (!Options["AllowParallel"])
+  if (!Options[L"AllowParallel"])
   {
-    dlg["ParallelCopy"]("Selected") = FALSE;
+    dlg[L"ParallelCopy"](L"Selected") = FALSE;
   }
   else
   {
     if (cp == 1)
     {
-      dlg["ParallelCopy"]("Selected") = TRUE;
+      dlg[L"ParallelCopy"](L"Selected") = TRUE;
     }
     else
     {
       if (cp == 0)
       {
-        dlg["ParallelCopy"]("Selected") = FALSE;
+        dlg[L"ParallelCopy"](L"Selected") = FALSE;
       }
       else
       {
-        dlg["ParallelCopy"]("Selected") = Options["DefParallel"];
+        dlg[L"ParallelCopy"](L"Selected") = Options[L"DefParallel"];
       }
     }
   }
-  dlg["Ask"]("Selected") = !Options["OverwriteDef"];
-  dlg["Overwrite"]("Selected") = Options["OverwriteDef"];
+  dlg[L"Ask"](L"Selected") = !Options[L"OverwriteDef"];
+  dlg[L"Overwrite"](L"Selected") = Options[L"OverwriteDef"];
 
   if (WinNT)
   {
-    advdlg["Streams"]("Selected") = Options["CopyStreamsDef"];
-    advdlg["Rights"]("Selected") = Options["CopyRightsDef"];
+    advdlg[L"Streams"](L"Selected") = Options[L"CopyStreamsDef"];
+    advdlg[L"Rights"](L"Selected") = Options[L"CopyRightsDef"];
   }
   else
   {
-    advdlg["Streams"]("Disable") = 1;
-    advdlg["Rights"]("Disable") = 1;
-    advdlg["Compress"]("Disable") = 1;
+    advdlg[L"Streams"](L"Disable") = 1;
+    advdlg[L"Rights"](L"Disable") = 1;
+    advdlg[L"Compress"](L"Disable") = 1;
   }
   if (!Win2K)
   {
-    advdlg["Encrypt"]("Disable") = 1;
+    advdlg[L"Encrypt"](L"Disable") = 1;
   }
-  advdlg["creationTime"]("Selected") = Options["copyCreationTime"];
-  advdlg["lastAccessTime"]("Selected") = Options["copyLastAccessTime"];
-  advdlg["lastWriteTime"]("Selected") = Options["copyLastWriteTime"];
-  advdlg["Compress"]("Selected") = Options["compressDef"];
-  advdlg["Encrypt"]("Selected") = Options["encryptDef"];
-  advdlg["ReadSpeedLimit"]("Selected") = Options["readSpeedLimitDef"];
-  advdlg["ReadSpeedLimitValue"]("Text") = Options["readSpeedLimitValueDef"];
-  advdlg["WriteSpeedLimit"]("Selected") = Options["writeSpeedLimitDef"];
-  advdlg["WriteSpeedLimitValue"]("Text") = Options["writeSpeedLimitLimitDef"];
+  advdlg[L"creationTime"](L"Selected") = Options[L"copyCreationTime"];
+  advdlg[L"lastAccessTime"](L"Selected") = Options[L"copyLastAccessTime"];
+  advdlg[L"lastWriteTime"](L"Selected") = Options[L"copyLastWriteTime"];
+  advdlg[L"Compress"](L"Selected") = Options[L"compressDef"];
+  advdlg[L"Encrypt"](L"Selected") = Options[L"encryptDef"];
+  advdlg[L"ReadSpeedLimit"](L"Selected") = Options[L"readSpeedLimitDef"];
+  advdlg[L"ReadSpeedLimitValue"](L"Text") = Options[L"readSpeedLimitValueDef"];
+  advdlg[L"WriteSpeedLimit"](L"Selected") = Options[L"writeSpeedLimitDef"];
+  advdlg[L"WriteSpeedLimitValue"](L"Text") = Options[L"writeSpeedLimitLimitDef"];
 
 rep:
 
@@ -1327,32 +1327,32 @@ rep:
 
       if (advRes == 1)
       {
-        Options["copyCreationTime"] = advdlg["creationTime"]("Selected");
-        Options["copyLastAccessTime"] = advdlg["lastAccessTime"]("Selected");
-        Options["copyLastWriteTime"] = advdlg["lastWriteTime"]("Selected");
-        Options["compressDef"] = advdlg["Compress"]("Selected");
-        Options["encryptDef"] = advdlg["Encrypt"]("Selected");
-        Options["readSpeedLimitDef"] = advdlg["ReadSpeedLimit"]("Selected");
-        Options["readSpeedLimitValueDef"] = advdlg["ReadSpeedLimitValue"]("Text");
-        Options["writeSpeedLimitDef"] = advdlg["WriteSpeedLimit"]("Selected");
-        Options["writeSpeedLimitLimitDef"] = advdlg["WriteSpeedLimitValue"]("Text");
+        Options[L"copyCreationTime"] = advdlg[L"creationTime"](L"Selected");
+        Options[L"copyLastAccessTime"] = advdlg[L"lastAccessTime"](L"Selected");
+        Options[L"copyLastWriteTime"] = advdlg[L"lastWriteTime"](L"Selected");
+        Options[L"compressDef"] = advdlg[L"Compress"](L"Selected");
+        Options[L"encryptDef"] = advdlg[L"Encrypt"](L"Selected");
+        Options[L"readSpeedLimitDef"] = advdlg[L"ReadSpeedLimit"](L"Selected");
+        Options[L"readSpeedLimitValueDef"] = advdlg[L"ReadSpeedLimitValue"](L"Text");
+        Options[L"writeSpeedLimitDef"] = advdlg[L"WriteSpeedLimit"](L"Selected");
+        Options[L"writeSpeedLimitLimitDef"] = advdlg[L"WriteSpeedLimitValue"](L"Text");
         plugin->SaveOptions();
       }
 
       if (advRes == 0 || advRes == 1)
       {
         adv = 1;
-        bool resume = advdlg["ResumeFiles"]("Selected");
-        dlg["Label2"]("Disable") = resume;
-        dlg["Ask"]("Disable") = resume;
-        dlg["Skip"]("Disable") = resume;
-        dlg["Overwrite"]("Disable") = resume;
-        dlg["Append"]("Disable") = resume;
-        dlg["Rename"]("Disable") = resume;
-        dlg["SkipIfNewer"]("Disable") = resume;
+        bool resume = advdlg[L"ResumeFiles"](L"Selected");
+        dlg[L"Label2"](L"Disable") = resume;
+        dlg[L"Ask"](L"Disable") = resume;
+        dlg[L"Skip"](L"Disable") = resume;
+        dlg[L"Overwrite"](L"Disable") = resume;
+        dlg[L"Append"](L"Disable") = resume;
+        dlg[L"Rename"](L"Disable") = resume;
+        dlg[L"SkipIfNewer"](L"Disable") = resume;
         if (resume)
         {
-          dlg["SkipIfNewer"]("Selected") = 0;
+          dlg[L"SkipIfNewer"](L"Selected") = 0;
         }
       }
       goto rep;
@@ -1363,7 +1363,7 @@ rep:
     }
   }
 
-  String tmpDstText = dlg["DestPath"]("Text");
+  String tmpDstText = dlg[L"DestPath"](L"Text");
 
   // bugfixed by slst:
   String dstText = tmpDstText.trim().trimquotes();
@@ -1418,51 +1418,51 @@ rep:
 
   if (WinNT)
   {
-    Rights = advdlg["Rights"]("Selected");
-    Streams = advdlg["Streams"]("Selected");
-    CompressMode = advdlg["Compress"]("Selected");
+    Rights = advdlg[L"Rights"](L"Selected");
+    Streams = advdlg[L"Streams"](L"Selected");
+    CompressMode = advdlg[L"Compress"](L"Selected");
     if (Win2K)
     {
-      EncryptMode = advdlg["Encrypt"]("Selected");
+      EncryptMode = advdlg[L"Encrypt"](L"Selected");
       if (EncryptMode != ATTR_INHERIT) CompressMode = ATTR_INHERIT;
     }
   }
 
-  copyCreationTime = advdlg["creationTime"]("Selected");
-  copyLastAccessTime = advdlg["lastAccessTime"]("Selected");
-  copyLastWriteTime = advdlg["lastWriteTime"]("Selected");
+  copyCreationTime = advdlg[L"creationTime"](L"Selected");
+  copyLastAccessTime = advdlg[L"lastAccessTime"](L"Selected");
+  copyLastWriteTime = advdlg[L"lastWriteTime"](L"Selected");
 
-  Parallel = dlg["ParallelCopy"]("Selected");
-  SkipNewer = dlg["SkipIfNewer"]("Selected");
-  SkippedToTemp = advdlg["SkippedToTemp"]("Selected");
+  Parallel = dlg[L"ParallelCopy"](L"Selected");
+  SkipNewer = dlg[L"SkipIfNewer"](L"Selected");
+  SkippedToTemp = advdlg[L"SkippedToTemp"](L"Selected");
   ReadSpeedLimit = WriteSpeedLimit = 0;
-  if ((bool)advdlg["ReadSpeedLimit"]("Selected"))
+  if ((bool)advdlg[L"ReadSpeedLimit"](L"Selected"))
   {
-    ReadSpeedLimit = (int)advdlg["ReadSpeedLimitValue"]("Text") * 1024;
+    ReadSpeedLimit = (int)advdlg[L"ReadSpeedLimitValue"](L"Text") * 1024;
   }
-  if ((bool)advdlg["WriteSpeedLimit"]("Selected"))
+  if ((bool)advdlg[L"WriteSpeedLimit"](L"Selected"))
   {
-    WriteSpeedLimit = (int)advdlg["WriteSpeedLimitValue"]("Text") * 1024;
+    WriteSpeedLimit = (int)advdlg[L"WriteSpeedLimitValue"](L"Text") * 1024;
   }
 
   OverwriteMode = OM_PROMPT;
-  if (advdlg["ResumeFiles"]("Selected"))
+  if (advdlg[L"ResumeFiles"](L"Selected"))
   {
     OverwriteMode = OM_RESUME;
   }
-  else if (dlg["Overwrite"]("Selected"))
+  else if (dlg[L"Overwrite"](L"Selected"))
   {
     OverwriteMode = OM_OVERWRITE;
   }
-  else if (dlg["Skip"]("Selected"))
+  else if (dlg[L"Skip"](L"Selected"))
   {
     OverwriteMode = OM_SKIP;
   }
-  else if (dlg["Append"]("Selected"))
+  else if (dlg[L"Append"](L"Selected"))
   {
     OverwriteMode = OM_APPEND;
   }
-  else if (dlg["Rename"]("Selected"))
+  else if (dlg[L"Rename"](L"Selected"))
   {
     OverwriteMode = OM_RENAME;
   };
@@ -1644,18 +1644,18 @@ rep:
 
   ScanFoldersProgressBox.Hide();
 
-  if (Options["BufPercent"])
+  if (Options[L"BufPercent"])
   {
-    BufSize = (int)(GetPhysMemorySize() / 100 * (int)Options["BufPercentVal"]);
+    BufSize = (int)(GetPhysMemorySize() / 100 * (int)Options[L"BufPercentVal"]);
   }
   else
   {
-    BufSize = (int)Options["BufSizeVal"] * 1024;
+    BufSize = (int)Options[L"BufSizeVal"] * 1024;
   }
 
   // bugfixed by slst: bug #32
   // CheckFreeDiskSpace feature added
-  if (Options["CheckFreeDiskSpace"])
+  if (Options[L"CheckFreeDiskSpace"])
   {
     if (!CheckFreeDiskSpace(TotalBytes, Move, srcPath, dstPath))
       return MRES_NONE; // not enough space
@@ -1663,7 +1663,7 @@ rep:
 
   if (CopyCount) Copy();
 
-  if ((bool)Options["Sound"] && !Aborted)
+  if ((bool)Options[L"Sound"] && !Aborted)
   {
     if (GetTime() - Start > 30 * 60 * TicksPerSec()) beep(2);
     else if (GetTime() - Start > 10 * 60 * TicksPerSec()) beep(1);
@@ -2121,26 +2121,26 @@ int Engine::CheckOverwrite(int fnum, const String & Src, const String & Dst, Str
   dlg.ResetControls();
   CopyProgressBox.SetNeedToRedraw(true);
 
-  dlg["Label2"]("Text") = Dst;
+  dlg[L"Label2"](L"Text") = Dst;
   String ssz, dsz, stime, dtime, buf;
 
   WIN32_FIND_DATA fd, fs;
   FindClose(FindFirstFile(Dst.ptr(), &fd));
   dsz = FormatNum(MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh));
   dtime = FormatTime(fd.ftLastWriteTime);
-  dlg["Label4"]("Text") = Format(L"%14s %s %s", dsz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), dtime.ptr());
+  dlg[L"Label4"](L"Text") = Format(L"%14s %s %s", dsz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), dtime.ptr());
 
   FindClose(FindFirstFile(Src.ptr(), &fs));
   ssz = FormatNum(MAKEINT64(fs.nFileSizeLow, fs.nFileSizeHigh));
   stime = FormatTime(fs.ftLastWriteTime);
-  dlg["Label3"]("Text") = Format(L"%14s %s %s", ssz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), stime.ptr());
+  dlg[L"Label3"](L"Text") = Format(L"%14s %s %s", ssz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), stime.ptr());
 
-  dlg["Source"]("Text")      = Format(L"%-16s", LOC("OverwriteDialog.Source").ptr());
-  dlg["Destination"]("Text")  = Format(L"%-16s", LOC("OverwriteDialog.Destination").ptr());
+  dlg[L"Source"](L"Text")      = Format(L"%-16s", LOC("OverwriteDialog.Source").ptr());
+  dlg[L"Destination"](L"Text")  = Format(L"%-16s", LOC("OverwriteDialog.Destination").ptr());
 
-  dlg["AcceptForAll"]("Selected") = 0;
-  dlg["SkipIfNewer"]("Selected") = SkipNewer;
-  dlg["SkippedToTemp"]("Selected") = SkippedToTemp;
+  dlg[L"AcceptForAll"](L"Selected") = 0;
+  dlg[L"SkipIfNewer"](L"Selected") = SkipNewer;
+  dlg[L"SkippedToTemp"](L"Selected") = SkippedToTemp;
   int OldSkipNewer = SkipNewer;
 
   int res = OM_PROMPT, ores = -1;
@@ -2159,9 +2159,9 @@ rep:
       return OM_CANCEL;
   }
 
-  int AcceptForAll = dlg["AcceptForAll"]("Selected");
-  SkipNewer = dlg["SkipIfNewer"]("Selected");
-  SkippedToTemp = dlg["SkippedToTemp"]("Selected");
+  int AcceptForAll = dlg[L"AcceptForAll"](L"Selected");
+  SkipNewer = dlg[L"SkipIfNewer"](L"Selected");
+  SkippedToTemp = dlg[L"SkippedToTemp"](L"Selected");
 
   if (SkipNewer && Newer(fd.ftLastWriteTime, fs.ftLastWriteTime))
   {
@@ -2175,11 +2175,11 @@ rep:
     dlg.ResetControls();
     CopyProgressBox.SetNeedToRedraw(true);
 
-    dlg["Edit"]("Text") = ExtractFileName(Dst);
+    dlg[L"Edit"](L"Text") = ExtractFileName(Dst);
 rep1:
     if (dlg.Execute() == 0)
     {
-      ren = ExtractFilePath(Dst) + "\\" + dlg["Edit"]("Text");
+      ren = ExtractFilePath(Dst) + "\\" + dlg[L"Edit"](L"Text");
       if (ExistsN(ren, 0)) goto rep1;
     }
     else goto rep;
@@ -2261,12 +2261,12 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
       String disk_str = dstroot;
       if (disk_str.len() >= 2)
         if (disk_str[1] == ':') disk_str = disk_str.left(2);
-      dlg["Label1"]("Text") = LOC("FreeSpaceErrorDialog.NotEnoughSpace") + " " + disk_str;
-      dlg["Label2"]("Text") = Format(L"%-20s%12s", LOC("FreeSpaceErrorDialog.AvailableSpace").ptr(),
+      dlg[L"Label1"](L"Text") = LOC("FreeSpaceErrorDialog.NotEnoughSpace") + " " + disk_str;
+      dlg[L"Label2"](L"Text") = Format(L"%-20s%12s", LOC("FreeSpaceErrorDialog.AvailableSpace").ptr(),
                                      FormatValue(FreeBytesAvailable.QuadPart).ptr());
-      dlg["Label3"]("Text") = Format(L"%-20s%12s", LOC("FreeSpaceErrorDialog.RequiredSpace").ptr(),
+      dlg[L"Label3"](L"Text") = Format(L"%-20s%12s", LOC("FreeSpaceErrorDialog.RequiredSpace").ptr(),
                                      FormatValue(TotalBytesToProcess).ptr());
-      dlg["Label4"]("Text") = LOC("FreeSpaceErrorDialog.AbortPrompt");
+      dlg[L"Label4"](L"Text") = LOC("FreeSpaceErrorDialog.AbortPrompt");
 
       intptr_t dlgres = dlg.Execute();
 
@@ -2327,34 +2327,34 @@ int Engine::EngineError(const String & s, const String & fn, int code, int & flg
 
   if (flg & eeShowReopen)
   {
-    dlg["Reopen"]("Visible") = 1;
+    dlg[L"Reopen"](L"Visible") = 1;
   }
   if (flg & eeShowKeepFiles)
   {
-    dlg["KeepFiles"]("Visible") = 1;
+    dlg[L"KeepFiles"](L"Visible") = 1;
   }
   if (flg & eeYesNo)
   {
-    dlg["YesNo"]("Visible") = 1;
+    dlg[L"YesNo"](L"Visible") = 1;
   }
   if (flg & eeRetrySkipAbort)
   {
-    dlg["RetrySkipAbort"]("Visible") = 1;
+    dlg[L"RetrySkipAbort"](L"Visible") = 1;
     if (flg & eeAutoSkipAll)
     {
-      dlg["SkipAll"]("Visible") = 1;
+      dlg[L"SkipAll"](L"Visible") = 1;
     }
   }
-  dlg["Label1"]("Text") = s;
-  dlg["Label1"]("Visible") = 1;
+  dlg[L"Label1"](L"Text") = s;
+  dlg[L"Label1"](L"Visible") = 1;
   if (flg & eeOneLine)
   {
-    dlg["Sep1"]("Visible") = 0;
+    dlg[L"Sep1"](L"Visible") = 0;
   }
   else
   {
-    dlg["Label2"]("Text") = FormatWidthNoExt(fn, msgw());
-    dlg["Label2"]("Visible") = 1;
+    dlg[L"Label2"](L"Text") = FormatWidthNoExt(fn, msgw());
+    dlg[L"Label2"](L"Visible") = 1;
     StringVector list;
     list.loadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
     for (size_t i = 0; i < list.Count(); i++)
@@ -2370,13 +2370,13 @@ int Engine::EngineError(const String & s, const String & fn, int code, int & flg
 
   if (!(flg & eeShowReopen) && !(flg & eeShowKeepFiles))
   {
-    dlg["Sep1"]("Visible") = 0;
+    dlg[L"Sep1"](L"Visible") = 0;
   }
 
   intptr_t res = dlg.Execute();
 
-  if ((bool)dlg["Reopen"]("Selected")) flg |= eerReopen;
-  if ((bool)dlg["KeepFiles"]("Selected")) flg |= eerKeepFiles;
+  if ((bool)dlg[L"Reopen"](L"Selected")) flg |= eerReopen;
+  if ((bool)dlg[L"KeepFiles"](L"Selected")) flg |= eerKeepFiles;
 
   if (flg & eeYesNo)
   {
