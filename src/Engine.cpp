@@ -1965,7 +1965,7 @@ retry:
                 && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 && (idx=plugin->Descs().Find(fd.cFileName))!=-1)
             {
-              if (descidx=-1 || idx<descidx)
+              if (descidx==-1 || idx<descidx)
               {
                 RememberFile(src+L"\\"+fd.cFileName, dst+L"\\"+fd.cFileName,
                              fd, flags | AF_DESCFILE, Level+1, Remember);
