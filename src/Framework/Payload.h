@@ -6,9 +6,9 @@ class Payload
 {
 public:
   Payload() {};
-  virtual ~Payload() {};
+  ~Payload() {};
 
-  virtual void init(const String & AName);
+  void init(const String & AName);
 
   void addProperty(const String & AName, int def);
   void addProperty(const String & AName, float def);
