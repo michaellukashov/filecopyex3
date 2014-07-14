@@ -281,6 +281,7 @@ intptr_t FarDialog::Execute()
         break;
       }
     }
+    Info.DialogFree(hnd);
   }
   ClearDialogItems(Items);
   return ret;
