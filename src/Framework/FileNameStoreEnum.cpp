@@ -10,7 +10,7 @@ String FileNameStoreEnum::GetNext()
 
   const FileName & fn = (*store)[cur++];
 
-  switch(fn.getDirection())
+  switch (fn.getDirection())
   {
     case FileName::levelPlus:
     {
@@ -61,7 +61,7 @@ void FileNameStoreEnum::Skip()
 
   const FileName & fn = (*store)[cur++];
 
-  switch(fn.getDirection())
+  switch (fn.getDirection())
   {
     case FileName::levelPlus:
     {

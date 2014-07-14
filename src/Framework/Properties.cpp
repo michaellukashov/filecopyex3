@@ -53,7 +53,7 @@ Property::Property(const String & v) : type(vtString), vInt(0), vFloat(0.0), vSt
 Property & Property::operator=(const Property & p)
 {
   type = p.type;
-  switch(p.type)
+  switch (p.type)
   {
     case vtInt:
       vInt = (int)p;
@@ -72,7 +72,7 @@ Property & Property::operator=(const Property & p)
 
 Property::operator int() const
 {
-  switch(type)
+  switch (type)
   {
     case vtInt:
       return vInt;
@@ -88,7 +88,7 @@ Property::operator int() const
 
 Property::operator intptr_t() const
 {
-  switch(type)
+  switch (type)
   {
   case vtInt:
     return vInt;
@@ -104,7 +104,7 @@ Property::operator intptr_t() const
 
 Property::operator bool() const
 {
-  switch(type)
+  switch (type)
   {
     case vtInt:
       return vInt != 0;
@@ -120,7 +120,7 @@ Property::operator bool() const
 
 Property::operator float() const
 {
-  switch(type)
+  switch (type)
   {
     case vtInt:
       return (float)vInt;
@@ -136,7 +136,7 @@ Property::operator float() const
 
 Property::operator const String() const
 {
-  switch(type)
+  switch (type)
   {
     case vtInt:
       return String(vInt);
@@ -152,7 +152,7 @@ Property::operator const String() const
 
 bool Property::operator==(const Property & v) const
 {
-  switch(type)
+  switch (type)
   {
     case vtInt:
       return operator==((int)v);

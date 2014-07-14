@@ -38,7 +38,7 @@ TaskBarIcon::~TaskBarIcon()
 }
 void TaskBarIcon::SetState(State state, float param)
 {
-  switch(state)
+  switch (state)
   {
     case S_PROGRESS:
       if (param > 1.0f)

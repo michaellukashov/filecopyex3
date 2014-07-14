@@ -155,7 +155,7 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
   }
 
   int move=0, curOnly=0;
-  switch(command)
+  switch (command)
   {
     case 0: move = 0; curOnly = 0; break;
     case 1: move = 1; curOnly = 0; break;
@@ -283,7 +283,7 @@ void FarPlugin::About()
 
 void beep(int b)
 {
-  switch(b)
+  switch (b)
   {
     case 0:
       MessageBeep(MB_ICONWARNING);
@@ -307,7 +307,7 @@ void FarPlugin::Config()
 
 rep:
   intptr_t res = dlg.Execute();
-  switch(res)
+  switch (res)
   {
     case 0:
       dlg.SaveState(options);

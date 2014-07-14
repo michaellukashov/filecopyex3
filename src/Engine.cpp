@@ -493,7 +493,7 @@ rep:
 
 open_retry:
       int oflg=info.Flags & FLG_BUFFERED? OPEN_BUF: 0;
-      switch(info.OverMode)
+      switch (info.OverMode)
       {
         case OM_OVERWRITE:
         case OM_RENAME:
@@ -1313,7 +1313,7 @@ rep:
 
   intptr_t dres = dlg.Execute();
 
-  switch(dres)
+  switch (dres)
   {
     case 2:
     {
@@ -1886,7 +1886,7 @@ retry:
           {
             res = OverwriteMode;
           }
-          switch(res)
+          switch (res)
           {
             case OM_SKIP:
               info->Flags |= FLG_SKIPPED;
@@ -2093,7 +2093,7 @@ void Engine::SetOverwriteMode(int Start)
       }
       else
       {
-        switch(OverwriteMode)
+        switch (OverwriteMode)
         {
           case OM_SKIP:
           {
@@ -2145,7 +2145,7 @@ int Engine::CheckOverwrite(int fnum, const String & Src, const String & Dst, Str
 
   int res=OM_PROMPT, ores=-1;
 rep:
-  switch(dlg.Execute())
+  switch (dlg.Execute())
   {
     case 0: res = OM_OVERWRITE;
       break;

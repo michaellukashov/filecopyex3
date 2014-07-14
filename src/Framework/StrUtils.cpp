@@ -97,7 +97,7 @@ String FormatProgress(int64_t cb, int64_t total)
   int64_t div=1;
   while (n > 999999) { div*=1024; n/=1024; pw++; }
   String un;
-  switch(pw)
+  switch (pw)
   {
     case 0: un=LOC("Engine.Bytes"); break;
     case 1: un=LOC("Engine.Kb"); break;
@@ -117,7 +117,7 @@ String FormatSpeed(int64_t cb)
   int64_t div=1;
   while (n>=100000) { div*=1024; n/=1024; pw++; }
   String un;
-  switch(pw)
+  switch (pw)
   {
     case 0: un=LOC("Engine.Bytes"); break;
     case 1: un=LOC("Engine.Kb"); break;
@@ -136,7 +136,7 @@ String FormatValue(int64_t Value)
   int64_t div = 1;
   while (Value >= 100000) { div *= 1024; Value /= 1024; pw++; }
   String UnitStr;
-  switch(pw)
+  switch (pw)
   {
     case 0: UnitStr = LOC("Engine.Bytes"); break;
     case 1: UnitStr = LOC("Engine.Kb"); break;
