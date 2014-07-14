@@ -91,7 +91,7 @@ void FarProgress::ShowMessage(const String & msg)
   Hide();
   int sw, sh;
   GetConSize(sw, sh);
-  int W=msg.len()+12, H=5;
+  int W=(int)msg.len()+12, H=5;
   int X1=(sw-W + 1)/2;
   int Y1=(sh-H - 1)/2;
   int X2=X1+W-1, Y2=Y1+H-1;
@@ -176,7 +176,7 @@ void FarProgress::Hide()
   taskbarIcon.SetState(taskbarIcon.S_NO_PROGRESS);
 }
 
-void FarProgress::DrawText(int x, int y, FarColor * c, const String & msg)
+void FarProgress::DrawText(intptr_t x, intptr_t y, FarColor * c, const String & msg)
 {
   Info.Text(x, y, c, msg.ptr());
 }

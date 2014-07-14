@@ -22,18 +22,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-int ShowMessage(const String &, const String &, int);
-int ShowMessageOK(const String &, const String &);
-int ShowMessageHelp(const String &, const String &, int, const String &);
-int ShowMessageEx(const String &, const String &, const String &, int);
-int ShowMessageExHelp(const String &, const String &, const String &, int, const String &);
+intptr_t ShowMessage(const String &, const String &, int);
+intptr_t ShowMessageOK(const String &, const String &);
+intptr_t ShowMessageHelp(const String &, const String &, int, const String &);
+intptr_t ShowMessageEx(const String &, const String &, const String &, int);
+intptr_t ShowMessageExHelp(const String &, const String &, const String &, int, const String &);
 
 #define RES_RETRY 1
 #define RES_SKIP 0
 
 void Error(const String &, int code);
 void Error2(const String &, const String &, int code);
-int Error2RS(const String &, const String &, int code);
+intptr_t Error2RS(const String &, const String &, int code);
 
 String GetErrText(int code);
 

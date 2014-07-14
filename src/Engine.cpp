@@ -364,7 +364,7 @@ del_retry:
   }
 }
 
-void Engine::ProcessDesc(int fnum)
+void Engine::ProcessDesc(intptr_t fnum)
 {
   String DstName=FlushDst.GetByNum(fnum);
   String SrcName=FlushSrc.GetByNum(fnum);
@@ -394,7 +394,7 @@ void Engine::ProcessDesc(int fnum)
   else
     SrcList.SetAllMergeFlags(0);
 
-  int j=fnum-1;
+  intptr_t j=fnum-1;
   while (j>=0 && Files[j].Level>=Files[fnum].Level)
   {
     if (Files[j].Level==Files[fnum].Level)
@@ -905,7 +905,7 @@ skip:
       bi->BuffInf[FilesInBuff].WritePos = abp;
       if (BuffPos%ReadAlign) BuffPos=(BuffPos/ReadAlign+1)*ReadAlign;
       bi->BuffInf[FilesInBuff].NextPos = BuffPos;
-      bi->BuffInf[FilesInBuff].FileNumber = i;
+      bi->BuffInf[FilesInBuff].FileNumber = (int)i;
       if (BuffPos == bi->BuffSize)
       {
         bi->BuffInf[FilesInBuff].EndFlag = 0;
@@ -1030,7 +1030,7 @@ void Engine::Delay(int64_t time, int64_t cb, int64_t & counter, int64_t limit)
 
 void Engine::FarToWin32FindData(const TPanelItem & tpi, WIN32_FIND_DATA & wfd)
 {
-  wfd.dwFileAttributes = tpi->FileAttributes;
+  wfd.dwFileAttributes = (DWORD)tpi->FileAttributes;
   wfd.ftCreationTime = tpi->CreationTime;
   wfd.ftLastAccessTime = tpi->LastAccessTime;
   wfd.ftLastWriteTime = tpi->LastWriteTime;
@@ -1040,7 +1040,7 @@ void Engine::FarToWin32FindData(const TPanelItem & tpi, WIN32_FIND_DATA & wfd)
   wfd.nFileSizeLow=x.LowPart;
 }
 
-String Engine::FindDescFile(const String & dir, int * idx)
+String Engine::FindDescFile(const String & dir, intptr_t * idx)
 {
   for (size_t i=0; i < plugin->Descs().Count(); i++)
   {
@@ -1057,7 +1057,7 @@ String Engine::FindDescFile(const String & dir, int * idx)
   return "";
 }
 
-String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, int * idx)
+String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t * idx)
 {
   for (size_t i=0; i < plugin->Descs().Count(); i++)
   {

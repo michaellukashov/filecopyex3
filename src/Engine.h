@@ -119,7 +119,7 @@ private:
   int WaitForFlushEnd();
   friend uint32_t __stdcall FlushThread(void * p);
   void FinalizeBuf(BuffInfo * bi);
-  void ProcessDesc(int fnum);
+  void ProcessDesc(intptr_t fnum);
   void ShowReadName(const String &);
   void ShowWriteName(const String &);
   void ShowProgress(int64_t, int64_t, int64_t, int64_t, int64_t,
@@ -142,8 +142,8 @@ private:
   int AddRemembered(RememberStruct &);
   int DirStart(const String & dir, const String & dst);
   int DirEnd(const String & dir, const String & dst);
-  static String FindDescFile(const String & dir, int * idx=NULL);
-  static String FindDescFile(const String & dir, WIN32_FIND_DATA & fd, int * idx=NULL);
+  static String FindDescFile(const String & dir, intptr_t* idx=NULL);
+  static String FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t* idx=NULL);
 
   void setFileTime(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
   void setFileSizeAndTime(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
