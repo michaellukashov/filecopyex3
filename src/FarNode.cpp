@@ -138,7 +138,7 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
       {
         group.w-=2;
         if (group.w>sumw) sumw=group.w;
-        sumh+=group.h;
+        // sumh+=group.h;
         group.end=i;
         Groups.push_back(group);
         group.w=group.h=group.nfit=0;
