@@ -37,12 +37,12 @@ void _wtoacs(char * d, size_t size, const wchar_t * s)
   d[size-1]=0;
 }
 
-const wchar_t * _tcsrpbrk(const wchar_t * string, const wchar_t * control)
+const wchar_t * _tcsrpbrk(const wchar_t * s, const wchar_t * control)
 {
   const wchar_t * wcset;
-  const wchar_t * str = _tcsend(string) - 1;
+  const wchar_t * str = _tcsend(s) - 1;
   /* 1st char in control string stops search */
-  while (str >= string)
+  while (str >= s)
   {
     for (wcset = control; *wcset; wcset++)
       if (*wcset == *str)

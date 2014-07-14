@@ -29,5 +29,5 @@ void _wtoacs(char * d, size_t size, const wchar_t * s);
 
 inline const wchar_t * _tcsend(const wchar_t * s) { return s + wcslen(s); }
 
-const wchar_t * _tcsrpbrk(const wchar_t * string, const wchar_t * control);
+const wchar_t * _tcsrpbrk(const wchar_t * s, const wchar_t * control);
 
