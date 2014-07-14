@@ -217,7 +217,7 @@ add_custom_command(TARGET FileCopyEx3
   COMMAND if not exist "${OUTPUT_DIR}" ( mkdir "${OUTPUT_DIR}" )
   COMMAND if not exist "${OUTPUT_DIR}\\doc" ( mkdir "${OUTPUT_DIR}\\doc" )
   COMMAND if not exist "${OUTPUT_DIR}\\resource" ( mkdir "${OUTPUT_DIR}\\resource" )
-  COMMAND copy /Y libFileCopyEx3.dll ${OUTPUT_DIR}\\FileCopyEx3.dll
+  COMMAND copy /Y FileCopyEx3.dll ${OUTPUT_DIR}\\FileCopyEx3.dll
   COMMAND copy /Y ${DATA_DIR}\\*.hlf ${OUTPUT_DIR}
   COMMAND copy /Y ${DATA_DIR}\\*.lng ${OUTPUT_DIR}
   COMMAND copy /Y ${DATA_DIR}\\*.diz ${OUTPUT_DIR}
