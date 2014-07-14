@@ -39,10 +39,12 @@ copy /Y data\*.hlf %PKGDIRARCH%
 copy /Y data\*.lng %PKGDIRARCH%
 copy /Y data\*.diz %PKGDIRARCH%
 copy /Y data\resource\*.* %PKGDIRARCH%\resource
-copy /Y ..\%PLUGINNAME%-build\%FARVER%_%PLUGINARCH%\Plugins\%PLUGINNAME%\%PLUGINNAME%.dll %PKGDIRARCH%
+copy /Y ..\%PLUGINNAME%-build\%PLUGINNAME%.dll %PKGDIRARCH%
 
 :: Make archive
-set ARCHIVE_NAME=..\..\..\..\..\%PLUGINNAME%-build\%PKGNAME%
+set ARCHIVE_NAME=..\..\..\%PKGNAME%
+echo ARCHIVE_NAME = %ARCHIVE_NAME%
+echo PKGDIRARCH = %PKGDIRARCH%
 if exist %PKGDIRARCH%\%PLUGINNAME%.dll (
   if exist "C:\Program Files\7-Zip\7z.exe" (
     pushd %PKGDIRARCH%
