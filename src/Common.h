@@ -22,19 +22,16 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__FWCOMMON_H__
-#define	__FWCOMMON_H__
-
 #pragma once
 
 #include "Framework/ObjString.h"
 #include "SDK/plugin.hpp"
 #include "FarPlugin.h"
 
-typedef void (*ErrorHandler)(const wchar_t*);
+typedef void (*ErrorHandler)(const wchar_t *);
 
-void FWError(const String&);
-void FWError(const wchar_t*);
+void FWError(const String &);
+void FWError(const wchar_t *);
 extern ErrorHandler errorHandler;
 
 #define MAKEINT64(low, high) ((((int64_t)(high))<<32)|((int64_t)low))
@@ -45,11 +42,9 @@ extern HANDLE hInstance;
 BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID);
 
 
-const wchar_t* GetMsg(int MsgId);
-const String& LOC(const String& l);
+const wchar_t * GetMsg(int MsgId);
+const String & LOC(const String & l);
 
 extern PluginStartupInfo Info;
 extern FarStandardFunctions FSF;
-extern FarPlugin* plugin;
-
-#endif//__FWCOMMON_H__
+extern FarPlugin * plugin;

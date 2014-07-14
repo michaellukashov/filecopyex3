@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__PROGRESS_H__
-#define	__PROGRESS_H__
-
 #pragma once
 
 #include "FarPlugin.h"
@@ -38,31 +35,29 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class FarProgress
 {
 public:
-	FarProgress(void);
-	virtual ~FarProgress(void);
-	void ShowMessage(const String&);
-	void ShowProgress(const String&);
-	void ShowScanProgress(const String& msg);
-	void SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize);
-	void Hide();
-	void SetPercent(float);
-	int InverseBars;
+  FarProgress(void);
+  virtual ~FarProgress(void);
+  void ShowMessage(const String &);
+  void ShowProgress(const String &);
+  void ShowScanProgress(const String & msg);
+  void SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize);
+  void Hide();
+  void SetPercent(float);
+  int InverseBars;
 protected:
-	FarColor clrFrame, clrTitle, clrBar, clrText, clrLabel;
-	int ProgX1, ProgX2, ProgY, WinType;
-	HANDLE hScreen;
-	void DrawWindow(int, int, int, int, const String&);
-	void GetConSize(int&, int&);
-	void DrawProgress(int, int, int, float);
-	void DrawText(int, int, FarColor*, const String&);
-	void SetTitle(const String&);
-	void SetTitle2(const String&);
-	String GetTitle();
-	String TitleBuf, ProgTitle;
-	void DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize);
-	int64_t LastUpdate;
+  FarColor clrFrame, clrTitle, clrBar, clrText, clrLabel;
+  int ProgX1, ProgX2, ProgY, WinType;
+  HANDLE hScreen;
+  static void DrawWindow(int, int, int, int, const String &);
+  static void GetConSize(int &, int &);
+  void DrawProgress(int, int, int, float);
+  static void DrawText(int, int, FarColor *, const String &);
+  static void SetTitle(const String &);
+  void SetTitle2(const String &) const;
+  static String GetTitle();
+  String TitleBuf, ProgTitle;
+  void DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize);
+  int64_t LastUpdate;
 
-	TaskBarIcon taskbarIcon;
+  TaskBarIcon taskbarIcon;
 };
-
-#endif//__PROGRESS_H__

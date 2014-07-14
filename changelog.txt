@@ -1,3 +1,11 @@
+build 11
+* fix dialogs drawing issues
+
+build 10
+* bugfix: setFileSizeAndTime2: opened handle was not closed
+  (http://forum.farmanager.com/viewtopic.php?f=5&t=583&p=112815&hilit=filecopyex#p114280)
+* fix memory issues  
+
 build 9
 + добавлен перевод на испанский (автор - Mauro72)
 + сохранение всех параметров из расширенного диалога копирования

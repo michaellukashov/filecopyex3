@@ -32,22 +32,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HARDDISK_CONST_PART         _T("\\Device\\Harddisk")
 #define HARDDISK_CONST_PART_LEN     (sizeof(HARDDISK_CONST_PART)/sizeof(wchar_t)-1)
 
-int GetDriveId(const String& path, String& res)
+int GetDriveId(const String & path, String & res)
 {
   wchar_t buf[MAX_FILENAME];
   if (WinNT4)
   {
-     // axxie: special HDD ID inmplementation for NT4
-     if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME)>0)
-     {
-       String s = buf;
-       String tmp = "\\Device\\Harddisk";
-       if (!s.nicmp(tmp, tmp.len()))
-       {
-         res=s.substr(tmp.len(), 1);
-         return TRUE;
-       }
-     }
+    // axxie: special HDD ID inmplementation for NT4
+    if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME)>0)
+    {
+      String s = buf;
+      String tmp = "\\Device\\Harddisk";
+      if (!s.nicmp(tmp, tmp.len()))
+      {
+        res=s.substr(tmp.len(), 1);
+        return TRUE;
+      }
+    }
   }
   else if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME)>0)
   {
@@ -63,12 +63,12 @@ int GetDriveId(const String& path, String& res)
   return FALSE;
 }
 
-int GetPhysDrive(const String& _path, int& res)
+int GetPhysDrive(const String & _path, int & res)
 {
   String path=_path;
   // bugfixed by slst:
   // if (WinXP)
-  if (Win2K || WinXP) // this also works OK under w2k/sp4
+  if (Win2K || WinXP)  // this also works OK under w2k/sp4
   {
     if (path.left(11)!="\\\\?\\Volume{")
     {
@@ -78,16 +78,16 @@ int GetPhysDrive(const String& _path, int& res)
       path=buf;
     }
     HANDLE hVolume=CreateFile(CutEndSlash(path).ptr(), 0,
-      FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
-      0, NULL);
+                              FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
+                              0, NULL);
     if (hVolume==INVALID_HANDLE_VALUE) return FALSE;
 
     char outbuf[1024];
     DWORD ret;
     if (DeviceIoControl(hVolume, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, NULL, 0,
-      outbuf, 1024, &ret, NULL))
+                       outbuf, 1024, &ret, NULL))
     {
-      VOLUME_DISK_EXTENTS *ext=(VOLUME_DISK_EXTENTS*)outbuf;
+      VOLUME_DISK_EXTENTS * ext=(VOLUME_DISK_EXTENTS *)outbuf;
       res=ext->Extents[0].DiskNumber;
       CloseHandle(hVolume);
       return TRUE;
@@ -101,7 +101,7 @@ int GetPhysDrive(const String& _path, int& res)
 #define FILE_READ_ONLY_VOLUME 0x00080000
 #define FILE_NAMED_STREAMS    0x00040000
 
-int VolFlags(const String& _path)
+int VolFlags(const String & _path)
 {
   String path=_path;
   int sl=path.find_last_of("\\/"),
@@ -110,15 +110,15 @@ int VolFlags(const String& _path)
   if (path.find_first_of("|<>")!=-1) return -1;
   int cl=path.find(':');
   if (cl!=-1 && (cl!=1 || cl!=path.rfind(':') ||
-    (cl!=path.len()-1 && path.find_first_of("\\/")!=2))) return -1;
+                (cl!=path.len()-1 && path.find_first_of("\\/")!=2))) return -1;
   if (ml!=-1) path=ExtractFilePath(path);
   String root=GetFileRoot(path);
 
-  int res=0;
   DWORD clen, flg;
   wchar_t sysname[32];
   if (GetVolumeInformation(root.ptr(), NULL, 0, NULL, &clen, &flg, sysname, 32))
   {
+    int res=0;
     if (flg & FILE_FILE_COMPRESSION) res|=VF_COMPRESSION;
     if (flg & FILE_SUPPORTS_ENCRYPTION) res|=VF_ENCRYPTION;
     if (flg & FILE_PERSISTENT_ACLS) res|=VF_RIGHTS;
@@ -134,7 +134,7 @@ int VolFlags(const String& _path)
   return -1;
 }
 
-int CheckParallel(const String& _srcpath, const String& _dstpath)
+int CheckParallel(const String & _srcpath, const String & _dstpath)
 {
   String root1=GetFileRoot(_srcpath),
          root2=GetFileRoot(_dstpath);
@@ -151,14 +151,14 @@ int CheckParallel(const String& _srcpath, const String& _dstpath)
   {
     int drv1, drv2;
     if (GetPhysDrive(root1, drv1)
-      && GetPhysDrive(root2, drv2))
+        && GetPhysDrive(root2, drv2))
     {
       if (drv1 != drv2) return TRUE;
       else return FALSE;
     }
     String id1, id2;
     if (GetDriveId(root1, id1)
-      && GetDriveId(root2, id2))
+        && GetDriveId(root2, id2))
     {
       if (id1.icmp(id2)) return TRUE;
       else return FALSE;
@@ -168,12 +168,12 @@ int CheckParallel(const String& _srcpath, const String& _dstpath)
   return -1;
 }
 
-String DupName(const String& src, int n)
+String DupName(const String & src, int n)
 {
   return ChangeFileExt(src, "")+"_"+String(n)+ExtractFileExt(src);
 }
 
-int ExistsN(const String& fn, int n)
+int ExistsN(const String & fn, int n)
 {
   if (!n)
     return FileExists(fn);
@@ -181,23 +181,24 @@ int ExistsN(const String& fn, int n)
     return FileExists(DupName(fn, n));
 }
 
-bool Newer(const FILETIME &ft1, const FILETIME &ft2)
+bool Newer(const FILETIME & ft1, const FILETIME & ft2)
 {
   return CompareFileTime(&ft1, &ft2) >= 0;
 }
 
-bool Newer(const String& fn1, const FILETIME &ft2)
+bool Newer(const String & fn1, const FILETIME & ft2)
 {
-	WIN32_FIND_DATA fd;
-	HANDLE hf = FindFirstFile(fn1.ptr(), &fd);
-	if (hf != INVALID_HANDLE_VALUE)  {
-		FindClose(hf);
-		return Newer(fd.ftLastWriteTime, ft2);
-	};
-	return FALSE;
+  WIN32_FIND_DATA fd;
+  HANDLE hf = FindFirstFile(fn1.ptr(), &fd);
+  if (hf != INVALID_HANDLE_VALUE)
+  {
+    FindClose(hf);
+    return Newer(fd.ftLastWriteTime, ft2);
+  };
+  return FALSE;
 }
 
-int RmDir(const String& fn)
+int RmDir(const String & fn)
 {
   int attr=GetFileAttributes(fn.ptr());
   SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
@@ -209,40 +210,43 @@ int RmDir(const String& fn)
   return TRUE;
 }
 
-int Delete(const String& fn)
+int Delete(const String & fn)
 {
   int attr=GetFileAttributes(fn.ptr());
   SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
   if (!DeleteFile(fn.ptr()))
   {
     SetFileAttributes(fn.ptr(), attr);
-      return FALSE;
+    return FALSE;
   }
   return TRUE;
 }
 
-void DebugLog(const wchar_t *DebugMsg, ...)
+void DebugLog(const wchar_t * DebugMsg, ...)
 {
   wchar_t MsgBuf[0x400];
   va_list ArgPtr;
   va_start(ArgPtr, DebugMsg);
-  _vsnwprintf_s(MsgBuf, 0x400, sizeof(MsgBuf), DebugMsg, ArgPtr);
+  _vsnwprintf_s(MsgBuf, sizeof(MsgBuf), sizeof(MsgBuf), DebugMsg, ArgPtr);
   va_end(ArgPtr);
   OutputDebugString(MsgBuf);
 }
 
 String convertPath(enum CONVERTPATHMODES mode, String src)
 {
-	wchar_t fullName[MAX_PATH];
-	size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, MAX_PATH);
-	if (size <= MAX_PATH) {
-		String res(fullName);
-		return res;
-	} else {
-		wchar_t *fullNameBuf = new wchar_t[size];
-		FSF.ConvertPath(mode, src.c_str(), fullNameBuf, size);
-		String res(fullNameBuf);
-		delete[] fullNameBuf;
-		return res;
-	}
+  wchar_t fullName[MAX_PATH];
+  size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, sizeof(fullName));
+  if (size <= MAX_PATH)
+  {
+    String res(fullName);
+    return res;
+  }
+  else
+  {
+    wchar_t * fullNameBuf = new wchar_t[size];
+    FSF.ConvertPath(mode, src.c_str(), fullNameBuf, size);
+    String res(fullNameBuf);
+    delete[] fullNameBuf;
+    return res;
+  }
 }

@@ -26,60 +26,60 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ObjString.h"
 #include "../Common.h"
 
-String Format(const wchar_t* fmt, ...)
+String Format(const wchar_t * fmt, ...)
 {
-	wchar_t buf[8192];
-	va_list args;
-	va_start(args, fmt);
-	_vsnwprintf_s(buf, 8192, fmt, args);
-	va_end(args);
-	return buf;
+  wchar_t buf[8192];
+  va_list args;
+  va_start(args, fmt);
+  _vsnwprintf_s(buf, sizeof(buf), fmt, args);
+  va_end(args);
+  return buf;
 }
 
 String FormatNum(int64_t n)
 {
-	static bool first = true;
-	static NUMBERFMT fmt;
-	static wchar_t DecimalSep[4];
-	static wchar_t ThousandSep[4];
+  static bool first = true;
+  static NUMBERFMT fmt;
+  static wchar_t DecimalSep[4];
+  static wchar_t ThousandSep[4];
 
-	if (first)
-	{
-		GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_STHOUSAND,ThousandSep,ARRAYSIZE(ThousandSep));
-		GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_SDECIMAL,DecimalSep,ARRAYSIZE(DecimalSep));
-		DecimalSep[1]=0;  //Â âèíäå ñåïàðàòîðû öèôð ìîãóò áûòü áîëüøå îäíîãî ñèìâîëà
-		ThousandSep[1]=0; //íî äëÿ íàñ ýòî áóäåò íå î÷åíü õîðîøî
+  if (first)
+  {
+    GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_STHOUSAND,ThousandSep,ARRAYSIZE(ThousandSep));
+    GetLocaleInfo(LOCALE_USER_DEFAULT,LOCALE_SDECIMAL,DecimalSep,ARRAYSIZE(DecimalSep));
+    DecimalSep[1]=0;  //Â âèíäå ñåïàðàòîðû öèôð ìîãóò áûòü áîëüøå îäíîãî ñèìâîëà
+    ThousandSep[1]=0; //íî äëÿ íàñ ýòî áóäåò íå î÷åíü õîðîøî
 
-		/*
-		if (LOWORD(Global->Opt->FormatNumberSeparators)) {
-			*DecimalSep=LOWORD(Global->Opt->FormatNumberSeparators);
-		}
+    /*
+    if (LOWORD(Global->Opt->FormatNumberSeparators)) {
+      *DecimalSep=LOWORD(Global->Opt->FormatNumberSeparators);
+    }
 
-		if (HIWORD(Global->Opt->FormatNumberSeparators)) {
-			*ThousandSep=HIWORD(Global->Opt->FormatNumberSeparators);
-		}
-		*/
+    if (HIWORD(Global->Opt->FormatNumberSeparators)) {
+      *ThousandSep=HIWORD(Global->Opt->FormatNumberSeparators);
+    }
+    */
 
-		fmt.LeadingZero = 1;
-		fmt.Grouping = 3;
-		fmt.lpDecimalSep = DecimalSep;
-		fmt.lpThousandSep = ThousandSep;
-		fmt.NegativeOrder = 1;
-		fmt.NumDigits = 0;
-		first = false;
-	}
+    fmt.LeadingZero = 1;
+    fmt.Grouping = 3;
+    fmt.lpDecimalSep = DecimalSep;
+    fmt.lpThousandSep = ThousandSep;
+    fmt.NegativeOrder = 1;
+    fmt.NumDigits = 0;
+    first = false;
+  }
 
-	String strSrc(n);
-	int size = GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, nullptr, 0);
-	wchar_t *lpwszDest = new wchar_t[size];
-	GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, lpwszDest, size);
-	String strDest(lpwszDest);
-	delete[] lpwszDest;
+  String strSrc(n);
+  int size = GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, nullptr, 0);
+  wchar_t * lpwszDest = new wchar_t[size];
+  GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, lpwszDest, size);
+  String strDest(lpwszDest);
+  delete[] lpwszDest;
 
-	return strDest;
+  return strDest;
 }
 
-String FormatTime(const FILETIME& ft)
+String FormatTime(const FILETIME & ft)
 {
   FILETIME ft1;
   SYSTEMTIME st;
@@ -97,7 +97,7 @@ String FormatProgress(int64_t cb, int64_t total)
   int64_t div=1;
   while (n > 999999) { div*=1024; n/=1024; pw++; }
   String un;
-  switch (pw)
+  switch(pw)
   {
     case 0: un=LOC("Engine.Bytes"); break;
     case 1: un=LOC("Engine.Kb"); break;
@@ -117,7 +117,7 @@ String FormatSpeed(int64_t cb)
   int64_t div=1;
   while (n>=100000) { div*=1024; n/=1024; pw++; }
   String un;
-  switch (pw)
+  switch(pw)
   {
     case 0: un=LOC("Engine.Bytes"); break;
     case 1: un=LOC("Engine.Kb"); break;
@@ -136,7 +136,7 @@ String FormatValue(int64_t Value)
   int64_t div = 1;
   while (Value >= 100000) { div *= 1024; Value /= 1024; pw++; }
   String UnitStr;
-  switch (pw)
+  switch(pw)
   {
     case 0: UnitStr = LOC("Engine.Bytes"); break;
     case 1: UnitStr = LOC("Engine.Kb"); break;

@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__DLGOBJECT_H__
-#define	__DLGOBJECT_H__
-
 #pragma once
 
 #include "Framework/Node.h"
@@ -38,7 +35,7 @@ class FarDialogClass;
 
 struct RetCode
 {
-	int itemNo, retCode;
+  int itemNo, retCode;
 };
 
 class FarDialog;
@@ -47,66 +44,64 @@ class ValueList;
 class FarDlgNode : public CastNode<FarDlgNode,FarDlgNode,FarDlgPayload>
 {
 public:
-	FarDlgNode();
-	virtual ~FarDlgNode(void);
+  FarDlgNode();
+  virtual ~FarDlgNode(void);
 
-	DEFINE_NODE_CLASS(FarDlgNode);
+  DEFINE_NODE_CLASS(FarDlgNode);
 
-	virtual void InitItem(FarDialogItem& item);
-	virtual void RetrieveProperties(HANDLE dlg);
-	virtual void BeforeAdd(FarDialogItem& item);
-	virtual void LoadState(PropertyMap &state);
-	virtual void SaveState(PropertyMap &state);
+  virtual void InitItem(FarDialogItem & item);
+  virtual void RetrieveProperties(HANDLE dlg);
+  virtual void BeforeAdd(FarDialogItem & item);
+  virtual void LoadState(PropertyMap & state);
+  virtual void SaveState(PropertyMap & state);
 
-	virtual void DefSize(int&, int&, int&);
+  virtual void DefSize(int &, int &, int &);
 
-	virtual int IsContainer() { return 0; }
-	virtual void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW);
-	virtual void ClearDialogItem();
-	virtual FarDlgNode* FindChild(const String&);
+  virtual int IsContainer() { return 0; }
+  virtual void AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, int curX, int curY, int curW);
+  virtual void ClearDialogItem();
+  virtual FarDlgNode * FindChild(const String &);
 
 protected:
-	virtual void BeforeLoad();
+  virtual void BeforeLoad();
 };
 
 class FarDlgContainer : public FarDlgNode
 {
 public:
-	DEFINE_NODE_CLASS(FarDlgContainer);
+  DEFINE_NODE_CLASS(FarDlgContainer);
 
-	virtual int IsContainer() { return 1; }
+  virtual int IsContainer() { return 1; }
 
-	virtual void LoadState(PropertyMap &state);
-	virtual void SaveState(PropertyMap &state);
+  virtual void LoadState(PropertyMap & state);
+  virtual void SaveState(PropertyMap & state);
 protected:
-	virtual void AddToItems(std::vector<FarDialogItem>&, std::vector<RetCode>&, int, int, int);
+  virtual void AddToItems(std::vector<FarDialogItem>&, std::vector<RetCode>&, int, int, int);
 
-	virtual void DefSize(int&, int&, int&);
-	virtual void ClearDialogItems(std::vector<FarDialogItem>&);
-	virtual FarDlgNode* FindChild(const String&);
+  virtual void DefSize(int &, int &, int &);
+  virtual void ClearDialogItems(std::vector<FarDialogItem>&);
+  virtual FarDlgNode * FindChild(const String &);
 
-	virtual void RetrieveProperties(HANDLE dlg);
+  virtual void RetrieveProperties(HANDLE dlg);
 };
 
 class FarDialog : public FarDlgContainer
 {
 public:
-	FarDialog();
-	virtual ~FarDialog();
+  FarDialog();
+  virtual ~FarDialog();
 
-	DEFINE_NODE_CLASS(FarDialog);
+  DEFINE_NODE_CLASS(FarDialog);
 
-	int Execute();
-	void ResetControls();
+  int Execute();
+  void ResetControls();
 
-	FarDlgNode& operator[](const String&);
+  FarDlgNode & operator[](const String &);
 
 protected:
-	void BeforeLoad();
+  void BeforeLoad();
 };
 
 class FarDialogList : public CastNode<FarDialog,FarDialog,FarDialogClass>
 {
 };
-
-#endif//__DLGOBJECT_H__

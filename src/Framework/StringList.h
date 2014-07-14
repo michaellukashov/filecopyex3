@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__STRINGLIST_H__
-#define	__STRINGLIST_H__
-
 #pragma once
 
 #include <vector>
@@ -38,29 +35,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class StringList: public StringParent
 {
 public:
-	virtual void Clear() { items.clear(); }
-	virtual const String& operator[](size_t i) const { return items[i].str; }
-	virtual void AddString(const String& v) { Add(v); }
-	virtual size_t Count() const { return items.size(); }
+  virtual void Clear() { items.clear(); }
+  virtual const String& operator[](size_t i) const { return items[i].str; }
+  virtual void AddString(const String& v) { Add(v); }
+  virtual size_t Count() const { return items.size(); }
 
-	int& Values(int);
-	void Set(int, const String&);
-	void Add(const String&, int=0);
-	//void Delete(int);
-	//void Exchange(int, int);
+  int & Values(int);
+  void Set(int, const String &);
+  void Add(const String &, int=0);
+  //void Delete(int);
+  //void Exchange(int, int);
 
-	int Find(const String&, int=0) const;
+  int Find(const String &, int=0) const;
 
-	void AddList(StringList&);
+  void AddList(StringList &);
 
-	struct ListItem
-	{
-		String str;
-		int Data;
-	};
+  struct ListItem
+  {
+    String str;
+    int Data;
+  };
 
 private:
-	std::vector<ListItem> items;
+  std::vector<ListItem> items;
 };
 
-#endif//__STRINGLIST_H__

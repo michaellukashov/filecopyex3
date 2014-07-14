@@ -1,37 +1,36 @@
-#ifndef __OBJECTCLASS_H__
-#define __OBJECTCLASS_H__
+#pragma once
 
 #include "Node.h"
 
 class Payload
 {
 public:
-	Payload() {};
-	virtual ~Payload() {};
+  Payload() {};
+  virtual ~Payload() {};
 
-	virtual void init(const String &_name);
+  virtual void init(const String & AName);
 
-	void addProperty(const String& name, int def);
-	void addProperty(const String& name, float def);
-	void addProperty(const String& name, const String& def);
-	Property& operator()(const String& name) { return getProp(name); }
+  void addProperty(const String & AName, int def);
+  void addProperty(const String & AName, float def);
+  void addProperty(const String & AName, const String & def);
+  Property & operator()(const String & AName) { return getProp(AName); }
 
-	const String getName() const {return name; }
+  const String getName() const {return name; }
 
-	void propSave() { propSaved = prop; }
-	void propLoad() { prop = propSaved; }
+  void propSave() { propSaved = prop; }
+  void propLoad() { prop = propSaved; }
 
 protected:
-	Property& getProp(const String& name) { return prop[name]; }
+  Property & getProp(const String & AName) { return prop[AName]; }
 
-	PropertyMap prop;
-	PropertyMap propSaved;
-	String name;
+  PropertyMap prop;
+  PropertyMap propSaved;
+  String name;
 };
 
 #define DEFINE_CLASS(name, type) \
-	static Payload* create() { return new type; }
+  static Payload* create() { return new type; }
 
 //virtual const String getType() { return ; }
 
-#endif // __OBJECTCLASS_H__
+

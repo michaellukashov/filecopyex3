@@ -1,8 +1,7 @@
-#ifndef __FARMACRO_H__
-#define __FARMACRO_H__
+#pragma once
 
 #include "Framework/ObjString.h"
 
-void Bind(const String& key, const String& code, const String& desc);
+void Bind(const String & key, const String & code, const String & desc);
 
-#endif
+

@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__FARPLUGIN_H__
-#define	__FARPLUGIN_H__
-
 #pragma once
 
 #include "Framework/ObjString.h"
@@ -37,40 +34,38 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class FarPlugin
 {
 public:
-	FarPlugin() : flags(0) {}
-	~FarPlugin();
-	void Create();
-	int Configure(const struct ConfigureInfo *Info);
-	void OpenPlugin(const struct OpenInfo *OInfo);
-	void InitLang();
-	void LoadOptions();
-	void SaveOptions();
-	void InitOptions();
-	void Config();
+  FarPlugin() : flags(0) {}
+  ~FarPlugin();
+  void Create();
+  int Configure(const struct ConfigureInfo * Info);
+  void OpenPlugin(const struct OpenInfo * OInfo);
+  void InitLang();
+  void LoadOptions();
+  void SaveOptions();
+  void InitOptions();
+  void Config();
 
-	const Locale& getLocale() const { return locale; }
-	PropertyMap& Options() { return options; }
-	FarDialogList& Dialogs() { return dialogs; }
+  const Locale & getLocale() const { return locale; }
+  PropertyMap & Options() { return options; }
+  FarDialogList & Dialogs() { return dialogs; }
 
-	const StringList& Descs() const { return descs; }
-	// void	MacroCommand(const FARMACROCOMMAND& cmd); // XXX???
+  const StringList & Descs() const { return descs; }
+  // void MacroCommand(const FARMACROCOMMAND& cmd); // XXX???
 
 private:
-	String GetDLLPath();
+  static String GetDLLPath();
 
-	FarDialogList dialogs;
-	PropertyMap options;
-	FarSettings settings;
-	String CurLocaleFile;
-	Locale locale;
-	StringList descs;
+  FarDialogList dialogs;
+  PropertyMap options;
+  FarSettings settings;
+  String CurLocaleFile;
+  Locale locale;
+  StringList descs;
 
-	int flags;
+  int flags;
 
-	void	About();
-	void	KeyConfig();
+  void  About();
+  static void KeyConfig();
 };
 
 // FileCopyExPlugin* Plugin();
-
-#endif//__PLUGIN_H__

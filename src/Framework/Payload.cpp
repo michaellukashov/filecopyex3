@@ -1,21 +1,21 @@
 #include "Payload.h"
 
-void Payload::addProperty(const String& name, int def)
+void Payload::addProperty(const String & AName, int def)
 {
-	prop[name] = def;
+  prop[AName] = def;
 }
 
-void Payload::addProperty(const String& name, float def)
+void Payload::addProperty(const String & AName, float def)
 {
-	prop[name] = def;
+  prop[AName] = def;
 }
 
-void Payload::addProperty(const String& name, const String& def)
+void Payload::addProperty(const String & AName, const String & def)
 {
-	prop[name] = def;
+  prop[AName] = def;
 }
 
-void Payload::init(const String &_name)
+void Payload::init(const String & AName)
 {
-	name = _name;
+  name = AName;
 }

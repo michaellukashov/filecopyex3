@@ -22,50 +22,46 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__FRAMEWORKSTORE_H__
-#define	__FRAMEWORKSTORE_H__
-
 #pragma once
 
 #include <vector>
 
 #include "ObjString.h"
 
-class FileName 
+class FileName
 {
 public:
-	enum Direction {
-		levelPlus, 
-		levelMinus, 
-		levelSame,
-		levelStar, 
-	};
+  enum Direction
+  {
+    levelPlus,
+    levelMinus,
+    levelSame,
+    levelStar,
+  };
 
-	FileName(const Direction _d, const String& _name): d(_d), Name(_name) {};
-	~FileName() {};
+  FileName(const Direction _d, const String & _name): d(_d), Name(_name) {};
+  ~FileName() {};
 
-	Direction getDirection() const { return d; }
-	String getName() const { return Name; }
+  Direction getDirection() const { return d; }
+  String getName() const { return Name; }
 
 private:
-	Direction d;
-	String Name;
+  Direction d;
+  String Name;
 };
 
 class FileNameStore
 {
 public:
-	FileNameStore() { }
-	~FileNameStore() { }
+  FileNameStore() { }
+  ~FileNameStore() { }
 
-	size_t AddRel(FileName::Direction _d, const String& _name) { items.push_back(FileName(_d, _name)); return items.size()-1; }
-	size_t Count() const { return items.size(); }
-	const String GetNameByNum(size_t n) const { return items[n].getName(); }
-	const FileName& operator[](size_t n) const { return items[n]; }
-	FileName& operator[](size_t n) { return items[n]; }
+  size_t AddRel(FileName::Direction _d, const String& _name) { items.push_back(FileName(_d, _name)); return items.size()-1; }
+  size_t Count() const { return items.size(); }
+  const String GetNameByNum(size_t n) const { return items[n].getName(); }
+  const FileName& operator[](size_t n) const { return items[n]; }
+  FileName& operator[](size_t n) { return items[n]; }
 
 private:
-	std::vector<FileName> items;
+  std::vector<FileName> items;
 };
-
-#endif

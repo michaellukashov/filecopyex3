@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__OBJECT_H__
-#define	__OBJECT_H__
-
 #pragma once
 
 #include "Properties.h"
@@ -36,51 +33,49 @@ class Payload;
 class Node
 {
 public:
-	Node();
-	virtual ~Node();
+  Node();
+  virtual ~Node();
 
-	virtual void init(Payload* _payload, Node *_parent);
+  virtual void init(Payload * _payload, Node * _parent);
 
-	Node& operator[](size_t i) { return child(i); }
-	Node& operator[](const String& v) { return child(v); }
-	Property& operator()(const String& name);
+  Node& operator[](size_t i) { return child(i); }
+  Node& operator[](const String& v) { return child(v); }
+  Property & operator()(const String & name);
 
-	Payload& getPayload() const { return *payload; }
-	Node* getParent() { return parent; }
-	const String getName() const;
-	//const String getType() const;
+  Payload & getPayload() const { return *payload; }
+  Node * getParent() { return parent; }
+  const String getName() const;
+  //const String getType() const;
 
-	int LoadFrom(FILE*);
-	//int SaveTo(FILE*);
-	int Load(const String&);
-	//int Save(const String&);
-	void ReloadProperties();
-	void ReloadPropertiesRecursive();
+  int LoadFrom(FILE *);
+  //int SaveTo(FILE*);
+  int Load(const String &);
+  //int Save(const String&);
+  void ReloadProperties() const;
+  void ReloadPropertiesRecursive();
 
-	//void init(const String &name, const String &type, ObjectClass* cl, Object* parent);
+  //void init(const String &name, const String &type, ObjectClass* cl, Object* parent);
 
 protected:
-	void ClearChilds();
-	Node& child(size_t i) { return *childs[i]; }
-	Node& child(const String& v);
+  void ClearChilds();
+  Node & child(size_t i) { return *childs[i]; }
+  Node & child(const String & v);
 
-	virtual void AfterLoad() {}
-	virtual void BeforeLoad() {}
+  virtual void AfterLoad() {}
+  virtual void BeforeLoad() {}
 
-	std::vector<Node*> childs;
-	Payload* payload;
-	Node* parent;
-
-private:
-	size_t LoadFromList(StringParent&, size_t start = 0);
-	//void SaveToList(StringVector&, int clear=1, int level=0);
+  std::vector<Node *> childs;
+  Payload * payload;
+  Node * parent;
 
 private:
-	Node(const Node&);
-	Node& operator = (const Node&);
+  size_t LoadFromList(StringParent &, size_t start = 0);
+  //void SaveToList(StringVector&, int clear=1, int level=0);
+
+private:
+  Node(const Node &);
+  Node & operator = (const Node &);
 };
 
 #define DEFINE_NODE_CLASS(type) \
-	static Node* create() { return new type(); }
-
-#endif //__OBJECT_H__
+  static Node* create() { return new type(); }

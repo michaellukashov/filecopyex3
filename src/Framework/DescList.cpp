@@ -27,133 +27,164 @@ DescList::DescList()
 //  Names.SetOptions(slSorted | slIgnoreCase);
 }
 
-int DescList::LoadFromFile(const String& lfn)
+int DescList::LoadFromFile(const String & lfn)
 {
-	StringVector temp;
-	if (!temp.loadFromFile(lfn)) {
-		return false;
-	}
-	return LoadFromList(temp);
+  StringVector temp;
+  if (!temp.loadFromFile(lfn))
+  {
+    return false;
+  }
+  return LoadFromList(temp);
 }
 
-int DescList::LoadFromList(StringVector &list)
+int DescList::LoadFromList(StringVector & list)
 {
-	String fn, desc;
-	for (size_t i=0; i<list.Count(); i++) {
-		String s = list[i];
-		wchar_t c=s[0];
-		if (c!='\t' && c!=' ' && c!='>' && c) {
-			if (!fn.empty()) {
-				names[fn] = Data(desc, 0);
-				fn = "";
-				desc = "";
-			}
-			if (c == '"') {
-				int lf=s.substr(1).find('"');
-				if (lf != -1) {
-					fn = s.substr(1, lf).trim();
-					desc = s.substr(lf+2).trim();
+  String fn, desc;
+  for (size_t i=0; i<list.Count(); i++)
+  {
+    String s = list[i];
+    wchar_t c=s[0];
+    if (c!='\t' && c!=' ' && c!='>' && c)
+    {
+      if (!fn.empty())
+      {
+        names[fn] = Data(desc, 0);
+        fn = "";
+        desc = "";
+      }
+      if (c == '"')
+      {
+        int lf=s.substr(1).find('"');
+        if (lf != -1)
+        {
+          fn = s.substr(1, lf).trim();
+          desc = s.substr(lf+2).trim();
 
-				}
-			} else {
-				int lf = s.find_first_of(" \t");
-				if (lf != -1) {
-					fn = s.substr(0, lf).trim();
-					desc = s.substr(lf+1).trim();
-				} else {
-					fn = s;
-					desc = "";
-				}
-			}
-		} else {
-			desc+=String("\n")+s;
-		}
-	}
-	if (!fn.empty()) {
-		names[fn] = Data(desc, 0);
-	}
-	return true;
+        }
+      }
+      else
+      {
+        int lf = s.find_first_of(" \t");
+        if (lf != -1)
+        {
+          fn = s.substr(0, lf).trim();
+          desc = s.substr(lf+1).trim();
+        }
+        else
+        {
+          fn = s;
+          desc = "";
+        }
+      }
+    }
+    else
+    {
+      desc+=String("\n")+s;
+    }
+  }
+  if (!fn.empty())
+  {
+    names[fn] = Data(desc, 0);
+  }
+  return true;
 }
 
 #define dlNoMerge 1
 #define dlNoSave 2
 
-int DescList::SaveToFile(const String& fn)
+int DescList::SaveToFile(const String & fn)
 {
-	StringVector temp;
-	for (DescListMap::iterator it = names.begin(); it != names.end(); ++it ) {
-		if (!(it->second.flags & dlNoSave))	{
-			String s;
-			if (it->first.find(' ')) {
-				s = String("\"") + it->first + "\"";
-			} else {
-				s = it->first;
-			}
-			s += String(" ") + it->second.desc;
-			temp.AddString(s);
-		}
-	}
-	if (temp.Count() > 0) {
-		return temp.saveToFile(fn);
-	}
-	if (Delete(fn) || GetLastError() == ERROR_FILE_NOT_FOUND) {
-		return true;
-	}
-	return false;
+  StringVector temp;
+  for (DescListMap::iterator it = names.begin(); it != names.end(); ++it)
+  {
+    if (!(it->second.flags & dlNoSave))
+    {
+      String s;
+      if (it->first.find(' '))
+      {
+        s = String("\"") + it->first + "\"";
+      }
+      else
+      {
+        s = it->first;
+      }
+      s += String(" ") + it->second.desc;
+      temp.AddString(s);
+    }
+  }
+  if (temp.Count() > 0)
+  {
+    return temp.saveToFile(fn);
+  }
+  if (Delete(fn) || GetLastError() == ERROR_FILE_NOT_FOUND)
+  {
+    return true;
+  }
+  return false;
 }
 
-void DescList::Merge(DescList &add)
+void DescList::Merge(DescList & add)
 {
-	for (DescListMap::iterator it = add.names.begin(); it != add.names.end(); ++it ) {
-		if (!(it->second.flags & dlNoMerge))	{
-			String name = it->first;
-			names[name] = it->second;
-		}
-		}
+  for (DescListMap::iterator it = add.names.begin(); it != add.names.end(); ++it)
+  {
+    if (!(it->second.flags & dlNoMerge))
+    {
+      String name = it->first;
+      names[name] = it->second;
+    }
+  }
 }
 
-void DescList::setFlag(const String& fn, int flag, int v)
+void DescList::setFlag(const String & fn, int flag, int v)
 {
-	DescListMap::iterator it = names.find(fn);
-	if (it != names.end()) {
-		if (v) {
-			it->second.flags &= ~flag;
-		} else {
-			it->second.flags |= flag;
-		}
-	}
+  DescListMap::iterator it = names.find(fn);
+  if (it != names.end())
+  {
+    if (v)
+    {
+      it->second.flags &= ~flag;
+    }
+    else
+    {
+      it->second.flags |= flag;
+    }
+  }
 
 }
 
-void DescList::SetMergeFlag(const String& fn, int v)
+void DescList::SetMergeFlag(const String & fn, int v)
 {
-	setFlag(fn, dlNoMerge, v);
+  setFlag(fn, dlNoMerge, v);
 }
 
-void DescList::SetSaveFlag(const String& fn, int v)
+void DescList::SetSaveFlag(const String & fn, int v)
 {
-	setFlag(fn, dlNoSave, v);
+  setFlag(fn, dlNoSave, v);
 }
 
 void DescList::setAllFlags(int flag, int v)
 {
-	for (DescListMap::iterator it = names.begin(); it != names.end(); ++it ) {
-		if (v) {
-			it->second.flags &= ~flag;
-		} else {
-			it->second.flags |= dlNoMerge;
-		}
-	}
+  for (DescListMap::iterator it = names.begin(); it != names.end(); ++it)
+  {
+    if (v)
+    {
+      it->second.flags &= ~flag;
+    }
+    else
+    {
+      it->second.flags |= dlNoMerge;
+    }
+  }
 }
 
 void DescList::SetAllMergeFlags(int v)
 {
-	setAllFlags(dlNoMerge, v);
+  setAllFlags(dlNoMerge, v);
 }
 
 void DescList::SetAllSaveFlags(int v)
 {
-	setAllFlags(dlNoSave, v);
+  setAllFlags(dlNoSave, v);
 }
 
 /*
@@ -170,10 +201,11 @@ void DescList::Rename(int i, const String& dst, int changeName)
 }
 */
 
-void DescList::Rename(const String& src, const String& dst, int changeName)
+void DescList::Rename(const String & src, const String & dst, int changeName)
 {
-	if (src != dst) {
-		names[dst] = names[src];
-		names.erase(src);
-	}
+  if (src != dst)
+  {
+    names[dst] = names[src];
+    names.erase(src);
+  }
 }

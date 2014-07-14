@@ -22,16 +22,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__LOWLEVELSTR_H__
-#define	__LOWLEVELSTR_H__
-
 #pragma once
 
-void _atowcs(wchar_t *d, size_t size, const char *s);
-void _wtoacs(char *d, size_t size, const wchar_t *s);
+void _atowcs(wchar_t * d, size_t size, const char * s);
+void _wtoacs(char * d, size_t size, const wchar_t * s);
 
-inline const wchar_t* _tcsend(const wchar_t* s) { return s + wcslen(s); }
+inline const wchar_t * _tcsend(const wchar_t * s) { return s + wcslen(s); }
 
-const wchar_t* _tcsrpbrk(const wchar_t* string, const wchar_t* control);
+const wchar_t * _tcsrpbrk(const wchar_t * string, const wchar_t * control);
 
-#endif//__LOWLEVELSTR_H__

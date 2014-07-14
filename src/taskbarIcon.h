@@ -22,22 +22,18 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef __TASKBAR_ICON_H__
-#define __TASKBAR_ICON_H__
-
 #pragma once
 
 class TaskBarIcon
 {
 public:
-	TaskBarIcon();
-	~TaskBarIcon();
+  TaskBarIcon();
+  ~TaskBarIcon();
 
-	enum State { S_PROGRESS, S_NO_PROGRESS, S_WORKING, S_ERROR, S_PAUSED };
-	void SetState(State state, float param = 0.0f);
+  enum State { S_PROGRESS, S_NO_PROGRESS, S_WORKING, S_ERROR, S_PAUSED };
+  void SetState(State state, float param = 0.0f);
 
 protected:
-	State last_state;
+  State last_state;
 };
 
-#endif//__TASKBAR_ICON_H__

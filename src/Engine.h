@@ -22,9 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef	__ENGINE_H__
-#define	__ENGINE_H__
-
 #pragma once
 
 #include <vector>
@@ -34,142 +31,140 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 struct FileStruct
 {
-	int Attr, RenameNum, OverMode, Flags, Level, PanelIndex, SectorSize;
-	int64_t Size, Read, Written, ResumePos;
-	FILETIME creationTime, lastAccessTime, lastWriteTime;
+  int Attr, RenameNum, OverMode, Flags, Level, PanelIndex, SectorSize;
+  int64_t Size, Read, Written, ResumePos;
+  FILETIME creationTime, lastAccessTime, lastWriteTime;
 };
 
 struct BuffStruct
 {
-	int NextPos, WritePos, FileNumber;
-	int EndFlag;
+  int NextPos, WritePos, FileNumber;
+  int EndFlag;
 };
 
 struct BuffInfo
 {
-	uint8_t *Buffer;
-	int BuffSize;
-	int64_t OrgSize;
-	HANDLE OutFile;
-	int OutNum;
-	BuffStruct *BuffInf;
-	String SrcName, DstName;
+  uint8_t *Buffer;
+  int BuffSize;
+  int64_t OrgSize;
+  HANDLE OutFile;
+  int OutNum;
+  BuffStruct * BuffInf;
+  String SrcName, DstName;
 };
 
 struct RememberStruct
 {
-	String Src, Dst;
-	int64_t Size;
-	FILETIME creationTime, lastAccessTime, lastWriteTime;
-	int Attr, Flags, Level;
+  String Src, Dst;
+  int64_t Size;
+  FILETIME creationTime, lastAccessTime, lastWriteTime;
+  int Attr, Flags, Level;
 };
 
-PluginPanelItem* GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1);
+PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1);
 
 struct TPanelItem
 {
 public:
-	TPanelItem(size_t idx, bool active = true, bool selected = false)
-	{
-		ppi = GetPanelItem(
-			active ? PANEL_ACTIVE : PANEL_PASSIVE,
-			selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM,
-			idx
-		);
-	}
-	~TPanelItem()
-	{
-		delete[] ppi;
-	}
-	PluginPanelItem* operator->() const { return ppi; }
+  TPanelItem(size_t idx, bool active = true, bool selected = false)
+  {
+    ppi = GetPanelItem(
+            active ? PANEL_ACTIVE : PANEL_PASSIVE,
+            selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM,
+            idx
+          );
+  }
+  ~TPanelItem()
+  {
+    delete[] ppi;
+  }
+  PluginPanelItem * operator->() const { return ppi; }
 protected:
-	PluginPanelItem* ppi;
+  PluginPanelItem * ppi;
 };
 
 class Engine
 {
 public:
-	Engine();
+  Engine();
 
-	enum MResult{ MRES_NONE, MRES_STDCOPY, MRES_STDCOPY_RET };
-	MResult Main(int move, int curonly);
+  enum MResult { MRES_NONE, MRES_STDCOPY, MRES_STDCOPY_RET };
+  MResult Main(int move, int curonly);
 
 private:
-	FileNameStore SrcNames, DstNames;
-	std::vector<FileStruct> Files;
-	FileNameStoreEnum FlushSrc, FlushDst;
+  FileNameStore SrcNames, DstNames;
+  std::vector<FileStruct> Files;
+  FileNameStoreEnum FlushSrc, FlushDst;
 
-	int Parallel, BufSize, Streams, Rights, Move,
-		CompressMode, EncryptMode, OverwriteMode,
-		SkipNewer, SkippedToTemp;
-	int64_t ReadSpeedLimit, WriteSpeedLimit;
-	int ReadAlign;
-	int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
-		_HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
-	bool copyCreationTime, copyLastAccessTime, copyLastWriteTime;
-	int Aborted, LastFile, KeepFiles, FileCount, CopyCount;
-	void Copy();
+  int Parallel, BufSize, Streams, Rights, Move,
+      CompressMode, EncryptMode, OverwriteMode,
+      SkipNewer, SkippedToTemp;
+  int64_t ReadSpeedLimit, WriteSpeedLimit;
+  int ReadAlign;
+  int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
+      _HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
+  bool copyCreationTime, copyLastAccessTime, copyLastWriteTime;
+  int Aborted, LastFile, KeepFiles, FileCount, CopyCount;
+  void Copy();
 
-	BuffInfo *wbi, *bi;
-	HANDLE BGThread, FlushEnd, UiFree;
-	int InitBuf(BuffInfo *bi);
-	void UninitBuf(BuffInfo *bi);
-	void SwapBufs(BuffInfo *src, BuffInfo *dst);
-	int CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
-	int AskAbort(BOOL ShowKeepFilesCheckBox = TRUE);
-	int FlushBuff(BuffInfo *bi);
-	void BGFlush();
-	int WaitForFlushEnd();
-	friend uint32_t __stdcall FlushThread(void* p);
-	void FinalizeBuf(BuffInfo *bi);
-	void ProcessDesc(int fnum);
-	void ShowReadName(const String&);
-	void ShowWriteName(const String&);
-	void ShowProgress(int64_t, int64_t, int64_t, int64_t, int64_t,
-		int64_t, int64_t, int64_t);
-	int CheckOverwrite(int fnum, String& ren);
-	CopyProgress CopyProgressBox;
-	FarProgress ScanFoldersProgressBox;
-	int64_t ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
-		ReadN, WriteN, TotalN, FirstWrite, StartTime;
-	void Delay(int64_t, int64_t, int64_t&, int64_t);
-	int SectorSize;
+  BuffInfo * wbi, *bi;
+  HANDLE BGThread, FlushEnd, UiFree;
+  int InitBuf(BuffInfo * bi);
+  void UninitBuf(BuffInfo * bi);
+  void SwapBufs(BuffInfo * src, BuffInfo * dst);
+  int CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
+  int AskAbort(BOOL ShowKeepFilesCheckBox = TRUE);
+  int FlushBuff(BuffInfo * bi);
+  void BGFlush();
+  int WaitForFlushEnd();
+  friend uint32_t __stdcall FlushThread(void * p);
+  void FinalizeBuf(BuffInfo * bi);
+  void ProcessDesc(int fnum);
+  void ShowReadName(const String &);
+  void ShowWriteName(const String &);
+  void ShowProgress(int64_t, int64_t, int64_t, int64_t, int64_t,
+                    int64_t, int64_t, int64_t);
+  int CheckOverwrite(int fnum, String & ren);
+  CopyProgress CopyProgressBox;
+  FarProgress ScanFoldersProgressBox;
+  int64_t ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
+          ReadN, WriteN, TotalN, FirstWrite, StartTime;
+  static void Delay(int64_t, int64_t, int64_t &, int64_t);
+  int SectorSize;
 
-	int CheckOverwrite(int, const String&, const String&, String&);
-	int CheckOverwrite2(int, const String&, const String&, String&);
-	void SetOverwriteMode(int);
-	int AddFile(const String& _src, const String& _dst, int Attr, int64_t Size, const FILETIME& creationTime, const FILETIME& lastAccessTime, const FILETIME& lastWriteTime, int Flags, int Level, int PanelIndex=-1);
-	int AddFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, int PanelIndex=-1);
-	void AddTopLevelDir(const String &dir, const String &dstmask, int Flags, FileName::Direction d);
-	void RememberFile(const String& Src, const String& Dst, WIN32_FIND_DATA &fd, int Flags, int Level, RememberStruct&);
-	int AddRemembered(RememberStruct&);
-	int DirStart(const String& dir, const String& dst);
-	int DirEnd(const String& dir, const String& dst);
-	String FindDescFile(const String& dir, int *idx=NULL);
-	String FindDescFile(const String& dir, WIN32_FIND_DATA &fd, int *idx=NULL);
+  int CheckOverwrite(int, const String &, const String &, String &);
+  int CheckOverwrite2(int, const String &, const String &, String &);
+  void SetOverwriteMode(int);
+  int AddFile(const String & _src, const String & _dst, int Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, int Flags, int Level, int PanelIndex=-1);
+  int AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, int Flags, int Level, int PanelIndex=-1);
+  void AddTopLevelDir(const String & dir, const String & dstmask, int Flags, FileName::Direction d);
+  static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, int Flags, int Level, RememberStruct &);
+  int AddRemembered(RememberStruct &);
+  int DirStart(const String & dir, const String & dst);
+  int DirEnd(const String & dir, const String & dst);
+  static String FindDescFile(const String & dir, int * idx=NULL);
+  static String FindDescFile(const String & dir, WIN32_FIND_DATA & fd, int * idx=NULL);
 
-	void setFileTime(HANDLE h, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
-	void setFileSizeAndTime(const String& fn, int64_t size, FILETIME *creationTime, FILETIME *lastAccessTime, FILETIME *lastWriteTime);
+  void setFileTime(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
+  void setFileSizeAndTime(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
 
-	void FarToWin32FindData(
-		const TPanelItem &tpi,
-		WIN32_FIND_DATA &wfd
-	);
-	String CurPathDesc;
-	int CurPathFlags, CurPathAddFlags;
-	WIN32_FIND_DATA DescFindData;
+  static void FarToWin32FindData(
+    const TPanelItem & tpi,
+    WIN32_FIND_DATA & wfd
+  );
+  String CurPathDesc;
+  int CurPathFlags, CurPathAddFlags;
+  WIN32_FIND_DATA DescFindData;
 
-	std::map<String,int> errTypes;
-	int EngineError(const String& s, const String& fn, int code, int& flg,
-		const String& title="", const String& type_id="");
+  std::map<String,int> errTypes;
+  int EngineError(const String & s, const String & fn, int code, int & flg,
+                  const String & title="", const String & type_id="");
 
 
-	BOOL CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,
-		const String& srcpathstr, const String& dstpathstr);
+  BOOL CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,
+                          const String & srcpathstr, const String & dstpathstr);
 };
 
 void Compress(HANDLE handle, int f);
-void Encrypt(const String& fn, int f);
-void CopyACL(const String& src, const String& dst);
-
-#endif//__ENGINE_H__
+void Encrypt(const String & fn, int f);
+void CopyACL(const String & src, const String & dst);

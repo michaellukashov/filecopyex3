@@ -26,81 +26,83 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "guid.hpp"
 #include "ui.h"
 
-int ShowMessage(const String& title, const String& msg, int Flags)
+int ShowMessage(const String & title, const String & msg, int Flags)
 {
-	return ShowMessageHelp(title, msg, Flags, "");
+  return ShowMessageHelp(title, msg, Flags, "");
 }
 
-int ShowMessageOK(const String& title, const String& msg)
+int ShowMessageOK(const String & title, const String & msg)
 {
-	return ShowMessage(title, msg, FMSG_MB_OK);
+  return ShowMessage(title, msg, FMSG_MB_OK);
 }
 
-int ShowMessageHelp(const String& title, const String& msg, int Flags, const String& help)
+int ShowMessageHelp(const String & title, const String & msg, int Flags, const String & help)
 {
-	String msgbuf=title+"\n"+msg+"\n\x01";
-	int res= Info.Message(&MainGuid, &UnkGuid,
-		Flags | FMSG_ALLINONE,
-		help.ptr(),
-		(const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, 0
-	);
-	return res;
+  String msgbuf=title+"\n"+msg+"\n\x01";
+  int res= Info.Message(&MainGuid, &UnkGuid,
+                        Flags | FMSG_ALLINONE,
+                        help.ptr(),
+                        (const wchar_t **)(const wchar_t *)msgbuf.ptr(), 0, 0
+                       );
+  return res;
 }
 
-int ShowMessageEx(const String& title, const String& msg,
-									const String& buttons, int flags)
+int ShowMessageEx(const String & title, const String & msg,
+                  const String & buttons, int flags)
 {
-	return ShowMessageExHelp(title, msg, buttons, flags, "");
+  return ShowMessageExHelp(title, msg, buttons, flags, "");
 }
 
-int ShowMessageExHelp(const String& title, const String& msg,
-									const String& buttons, int flags, const String& help)
+int ShowMessageExHelp(const String & title, const String & msg,
+                      const String & buttons, int flags, const String & help)
 {
-	int nb=0;
-	for (const wchar_t *p=buttons.ptr(); *p; p++) {
-		if (*p=='\n') nb++;
-	}
-	String msgbuf=title+"\n"+msg+"\n\x01\n"+buttons;
-	int res = Info.Message(&MainGuid, &UnkGuid, flags | FMSG_ALLINONE,
-		help.ptr(), (const wchar_t**)(const wchar_t*)msgbuf.ptr(), 0, nb+1
-	);
-	return res;
+  int nb=0;
+  for (const wchar_t * p=buttons.ptr(); *p; p++)
+  {
+    if (*p=='\n') nb++;
+  }
+  String msgbuf=title+"\n"+msg+"\n\x01\n"+buttons;
+  int res = Info.Message(&MainGuid, &UnkGuid, flags | FMSG_ALLINONE,
+                         help.ptr(), (const wchar_t **)(const wchar_t *)msgbuf.ptr(), 0, nb+1
+                        );
+  return res;
 }
 
 int msgw()
 {
-	return 50;
+  return 50;
 }
 
-void Error(const String& s, int code)
+void Error(const String & s, int code)
 {
-	ShowMessageEx(LOC("Framework.Error"),
-		s+"\n"+SplitWidth(GetErrText(code), msgw()),
-		LOC("Framework.OK"),
-		FMSG_WARNING
-	);
+  ShowMessageEx(LOC("Framework.Error"),
+                s+"\n"+SplitWidth(GetErrText(code), msgw()),
+                LOC("Framework.OK"),
+                FMSG_WARNING
+               );
 }
 
-void Error2(const String& s, const String& fn, int code)
+void Error2(const String & s, const String & fn, int code)
 {
-	ShowMessageEx(LOC("Framework.Error"),
-		s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()),
-		LOC("Framework.OK"),
-		FMSG_WARNING
-	);
+  ShowMessageEx(LOC("Framework.Error"),
+                s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()),
+                LOC("Framework.OK"),
+                FMSG_WARNING
+               );
 }
 
-int Error2RS(const String& s, const String& fn, int code)
+int Error2RS(const String & s, const String & fn, int code)
 {
-	int res=ShowMessageEx(LOC("Framework.Error"),
-		s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()),
-		LOC("Framework.Retry")+"\n"+LOC("Framework.Skip"),
-		FMSG_WARNING
-	);
-	if (res==0) {
-		return RES_RETRY;
-	}
-	return RES_SKIP;
+  int res=ShowMessageEx(LOC("Framework.Error"),
+                        s+"\n"+FormatWidthNoExt(fn, msgw())+"\n"+SplitWidth(GetErrText(code), msgw()),
+                        LOC("Framework.Retry")+"\n"+LOC("Framework.Skip"),
+                        FMSG_WARNING
+                       );
+  if (res==0)
+  {
+    return RES_RETRY;
+  }
+  return RES_SKIP;
 }
 
 String GetErrText(int code)
@@ -110,44 +112,53 @@ String GetErrText(int code)
   return buf;
 }
 
-String FormatWidth(const String &s, int len)
+String FormatWidth(const String & s, int len)
 {
-	int dif = s.len()-len;
-	if (dif > 0) {
-		return String("...") + s.right(len-3);
-	} else {
-		return s + String(' ', -dif);
-	}
+  int dif = s.len()-len;
+  if (dif > 0)
+  {
+    return String("...") + s.right(len-3);
+  }
+  else
+  {
+    return s + String(' ', -dif);
+  }
 }
 
-String FormatWidthNoExt(const String& s, int len)
+String FormatWidthNoExt(const String & s, int len)
 {
-	int dif = s.len()-len;
-	if (dif > 0) {
-		return String("...") + s.right(len-3);
-	} else {
-		return s;
-	}
+  int dif = s.len()-len;
+  if (dif > 0)
+  {
+    return String("...") + s.right(len-3);
+  }
+  else
+  {
+    return s;
+  }
 }
 
-String SplitWidth(const String &s, size_t w)
+String SplitWidth(const String & s, size_t w)
 {
-	String res;
-	res.reserve(s.len());
-	size_t curW = 0;
-	for (size_t i = 0; i < s.len(); i++) {
-		wchar_t c = s[i];
+  String res;
+  res.reserve(s.len());
+  size_t curW = 0;
+  for (size_t i = 0; i < s.len(); i++)
+  {
+    wchar_t c = s[i];
 
-		if (c == '\n' || c == '\r') {
-			continue;
-		}
-		if (c == ' ' && (curW > w)) {
-			res += '\n';
-			curW = 0;
-			continue;
-		}
-		res += c;
-		curW++;
-	};
-	return res;
+    if (c == '\n' || c == '\r')
+    {
+      continue;
+    }
+    if (c == ' ' && (curW > w))
+    {
+      res += '\n';
+      curW = 0;
+      continue;
+    }
+    res += c;
+    curW++;
+  };
+  return res;
 }
