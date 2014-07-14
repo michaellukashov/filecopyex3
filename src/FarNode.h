@@ -69,6 +69,7 @@ protected:
 class FarDlgContainer : public FarDlgNode
 {
 public:
+  virtual ~FarDlgContainer() {}
   DEFINE_NODE_CLASS(FarDlgContainer);
 
   virtual int IsContainer() { return 1; }
