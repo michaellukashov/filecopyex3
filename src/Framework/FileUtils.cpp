@@ -77,7 +77,7 @@ inline String CutEndSlash(const String & v)
   }
 }
 
-inline String AddEndSlash(const String & v)
+String AddEndSlash(const String & v)
 {
   wchar_t endChar = v[v.len() - 1];
   if (endChar == '\\' || endChar == '/')
