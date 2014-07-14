@@ -47,9 +47,8 @@ String FormatNum(int64_t n)
   {
     GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_STHOUSAND, ThousandSep, ARRAYSIZE(ThousandSep));
     GetLocaleInfo(LOCALE_USER_DEFAULT, LOCALE_SDECIMAL, DecimalSep, ARRAYSIZE(DecimalSep));
-    DecimalSep[1] = 0; //Â âèíäå ñåïàðàòîðû öèôð ìîãóò áûòü áîëüøå îäíîãî ñèìâîëà
-    ThousandSep[1] = 0; //íî äëÿ íàñ ýòî áóäåò íå î÷åíü õîðîøî
-
+    DecimalSep[1] = 0; //В винде сепараторы цифр могут быть больше одного символа
+    ThousandSep[1] = 0; //но для нас это будет не очень хорошо
     /*
     if (LOWORD(Global->Opt->FormatNumberSeparators)) {
       *DecimalSep=LOWORD(Global->Opt->FormatNumberSeparators);
