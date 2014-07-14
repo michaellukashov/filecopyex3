@@ -1,4 +1,4 @@
-﻿/*
+/*
 FileCopyEx - Extended File Copy plugin for Far 2 file manager
 
 Copyright (C) 2004 - 2010
