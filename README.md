@@ -22,10 +22,11 @@ Improved modes overwriting existing files, including appending, automatic and ma
 
 --- 
 
-Copyright (C) 2004 - 2013
+Copyright (C) 2004 - 2014
  Idea & core: Max Antipin
  Coding: Serge Cheperis aka craZZy
  Bugfixes: slst, CDK, Ivanych, Alter, Axxie and Nsky
  Special thanks to Vitaliy Tsubin
  Far 2 (32 & 64 bit) full unicode version by djdron
- Far 3 (32 & 64 bit) by Ruslan Petrenko (ruslanp@ruslanp.com)
+ Far 3 (32 & 64 bit) Ruslan Petrenko (ruslanp@ruslanp.com), Michael Lukashov
+ 
