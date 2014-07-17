@@ -133,6 +133,19 @@ Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), Flus
   SectorSize = 0;
   CurPathFlags = 0;
   CurPathAddFlags = 0;
+  ReadSpeedLimit = 0;
+  WriteSpeedLimit = 0;
+  ReadCb = 0;
+  WriteCb = 0;
+  ReadTime = 0;
+  WriteTime = 0;
+  TotalBytes = 0;
+  ReadN = 0;
+  WriteN = 0;
+  TotalN = 0;
+  FirstWrite = 0;
+  StartTime = 0;
+  memset(&DescFindData, 0, sizeof(DescFindData));
 }
 
 int Engine::InitBuf(BuffInfo * bi)
