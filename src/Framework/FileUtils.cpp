@@ -35,14 +35,14 @@ inline String ExtractFileName(const String & v)
 
 inline String ExtractFilePath(const String & v)
 {
-  int pos = v.find_last_of("\\/");
-  return (pos == -1) ? "" : v.substr(0, pos);
+  size_t pos = v.find_last_of("\\/");
+  return (pos == (size_t)-1) ? "" : v.substr(0, pos);
 }
 
 String ExtractFileExt(const String & v)
 {
-  int p = v.rfind('.');
-  if (p == -1 || p < v.find_last_of("\\/"))
+  size_t p = v.rfind('.');
+  if (p == (size_t)-1 || p < v.find_last_of("\\/"))
   {
     return "";
   }
@@ -54,8 +54,8 @@ String ExtractFileExt(const String & v)
 
 String ChangeFileExt(const String & v, const String & ext)
 {
-  int p = v.rfind('.');
-  if (p == -1 || p < v.find_last_of("\\/"))
+  size_t p = v.rfind('.');
+  if (p == (size_t)-1 || p < v.find_last_of("\\/"))
   {
     return v + ext;
   }
@@ -99,8 +99,8 @@ String GetFileNameRoot(const String & v)
     if (l == L"\\\\" || l == L"//")
     {
       l = v.substr(2);
-      int p = l.find_first_of("\\/");
-      if (p != -1)
+      size_t p = l.find_first_of("\\/");
+      if (p != (size_t)-1)
       {
         l = l.substr(p + 1);
         p = l.find_first_of("\\/");
@@ -114,13 +114,13 @@ String GetFileNameRoot(const String & v)
   else if (l == "\\\\")
   {
     l = v.substr(2);
-    int p = l.find_first_of("\\/");
-    if (p != -1)
+    size_t p = l.find_first_of("\\/");
+    if (p != (size_t)-1)
     {
       l = l.substr(p + 1);
-      int p2 = l.find_first_of("\\/");
+      size_t p2 = l.find_first_of("\\/");
       // bug #12 refixed by axxie
-      if (p2 != -1)
+      if (p2 != (size_t)-1)
       {
         return v.substr(0, p + p2 + 2 + 2);
       }
