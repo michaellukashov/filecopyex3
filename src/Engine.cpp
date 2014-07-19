@@ -45,8 +45,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //#define ReadBlock  (4 << 20)
 //#define WriteBlock  (4 << 20)
 
-#define ReadBlock  0x20000     // 128 KB
-#define WriteBlock  0x20000    // 128 KB
+#define ReadBlock  1024*1024 // 0x20000     // 128 KB
+#define WriteBlock 1024*1024 // 0x20000    // 128 KB
 
 PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1)
 {
