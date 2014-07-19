@@ -1451,11 +1451,11 @@ rep:
   ReadSpeedLimit = WriteSpeedLimit = 0;
   if ((bool)advdlg[L"ReadSpeedLimit"](L"Selected"))
   {
-    ReadSpeedLimit = (int)advdlg[L"ReadSpeedLimitValue"](L"Text") * 1024;
+    ReadSpeedLimit = (int64_t)advdlg[L"ReadSpeedLimitValue"](L"Text") * 1024;
   }
   if ((bool)advdlg[L"WriteSpeedLimit"](L"Selected"))
   {
-    WriteSpeedLimit = (int)advdlg[L"WriteSpeedLimitValue"](L"Text") * 1024;
+    WriteSpeedLimit = (int64_t)advdlg[L"WriteSpeedLimitValue"](L"Text") * 1024;
   }
 
   OverwriteMode = OM_PROMPT;
