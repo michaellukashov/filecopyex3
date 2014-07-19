@@ -175,7 +175,6 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
 void CopyProgress::DrawProgress(const String & pfx, int y, int64_t cb, int64_t total,
                                 int64_t time, int64_t n, int64_t totaln)
 {
-  RedrawWindowIfNeeded();
   if (cb > total) cb = total;
   Text(X1 + MG, Y1 + y, &clrLabel, pfx);
   String buf;
