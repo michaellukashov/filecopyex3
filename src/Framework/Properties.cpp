@@ -70,12 +70,28 @@ Property & Property::operator=(const Property & p)
   return *this;
 }
 
-Property::operator int() const
+Property::operator int64_t() const
 {
   switch (type)
   {
     case vtInt:
       return vInt;
+
+    case vtFloat:
+      return (int64_t)vFloat;
+
+    case vtString:
+      return vStr.AsInt64();
+  }
+  return 0;
+}
+
+Property::operator int() const
+{
+  switch (type)
+  {
+    case vtInt:
+      return (int)vInt;
 
     case vtFloat:
       return (int)vFloat;
