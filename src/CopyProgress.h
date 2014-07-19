@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 int64_t GetTime();
 
-class CopyProgress : public  FarProgress
+class CopyProgress : public FarProgress
 {
 public:
   CopyProgress(void);
