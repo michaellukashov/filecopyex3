@@ -159,9 +159,10 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   Text(X2 - MG - buf1.len() - buf.len() + 1, Y1 + 10, &clrLabel, buf);
   Text(X2 - MG - buf1.len() + 1, Y1 + 10, &clrText, buf1);
 
-  if (GetTime() - clastupdate > cinterval)
+  int64_t tm = GetTime();
+  if (tm - clastupdate > cinterval)
   {
-    clastupdate = GetTime();
+    clastupdate = tm;
     int pc = TotalBytes ? (int)((float)(ReadBytes + WriteBytes) / (TotalBytes * 2) * 100) : 0;
     if (pc < 0) pc = 0;
     if (pc > 100) pc = 100;
