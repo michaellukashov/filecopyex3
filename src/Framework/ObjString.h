@@ -135,12 +135,12 @@ public:
   String toUpper() const;
   String toLower() const;
 
-  int find(const String & v, size_t start = 0) const { return npos_minus1(str.find(v.str, start)); }
-  int find(wchar_t v, size_t start = 0) const { return npos_minus1(str.find(v, start)); }
-  int find_first_of(const String & v, size_t start = 0) const { return npos_minus1(str.find_first_of(v.str, start)); }
-  int rfind(const String & v, size_t start = std::string::npos) const { return npos_minus1(str.rfind(v.str, start)); }
-  int rfind(wchar_t v, size_t start = std::string::npos) const { return npos_minus1(str.rfind(v, start)); }
-  int find_last_of(const String & v, size_t start = std::string::npos) const { return npos_minus1(str.find_last_of(v.str, start)); }
+  size_t find(const String & v, size_t start = 0) const { return npos_minus1(str.find(v.str, start)); }
+  size_t find(wchar_t v, size_t start = 0) const { return npos_minus1(str.find(v, start)); }
+  size_t find_first_of(const String & v, size_t start = 0) const { return npos_minus1(str.find_first_of(v.str, start)); }
+  size_t rfind(const String & v, size_t start = std::string::npos) const { return npos_minus1(str.rfind(v.str, start)); }
+  size_t rfind(wchar_t v, size_t start = std::string::npos) const { return npos_minus1(str.rfind(v, start)); }
+  size_t find_last_of(const String & v, size_t start = std::string::npos) const { return npos_minus1(str.find_last_of(v.str, start)); }
 
   const wchar_t * ptr() const { return c_str(); }
   const wchar_t * c_str() const { return str.c_str(); }
