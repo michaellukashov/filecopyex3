@@ -10,8 +10,8 @@ void LoadLocale(const String & fn, Locale & locale)
     for (size_t i = 0; i < temp.Count(); i++)
     {
       const String & it = temp[i];
-      int p = it.find("=");
-      if (p != -1)
+      size_t p = it.find("=");
+      if (p != (size_t)-1)
       {
         locale[it.substr(0, p).trim().trimquotes()] = it.substr(p + 1).trim().trimquotes();
       }

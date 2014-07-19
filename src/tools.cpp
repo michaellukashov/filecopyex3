@@ -104,14 +104,14 @@ int GetPhysDrive(const String & _path, int & res)
 int VolFlags(const String & _path)
 {
   String path = _path;
-  int sl = path.find_last_of("\\/"),
+  size_t sl = path.find_last_of("\\/"),
       ml = path.find_first_of("*?");
-  if (ml != -1 && ml < sl) return -1;
-  if (path.find_first_of("|<>") != -1) return -1;
-  int cl = path.find(':');
-  if (cl != -1 && (cl != 1 || cl != path.rfind(':') ||
+  if (ml != (size_t)-1 && ml < sl) return -1;
+  if (path.find_first_of("|<>") != (size_t)-1) return -1;
+  size_t cl = path.find(':');
+  if (cl != (size_t)-1 && (cl != 1 || cl != path.rfind(':') ||
                    (cl != path.len() - 1 && path.find_first_of("\\/") != 2))) return -1;
-  if (ml != -1) path = ExtractFilePath(path);
+  if (ml != (size_t)-1) path = ExtractFilePath(path);
   String root = GetFileRoot(path);
 
   DWORD clen, flg;

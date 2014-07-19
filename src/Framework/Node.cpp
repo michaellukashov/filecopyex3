@@ -144,9 +144,9 @@ size_t Node::LoadFromList(StringParent & list, size_t start)
     }
     else if (!line.ncmp(L"object", 6))
     {
-      int p = line.find(' ');
-      int p1 = line.find(':');
-      if (p != -1 && p1 != -1 && p < p1)
+      size_t p = line.find(' ');
+      size_t p1 = line.find(':');
+      if (p != (size_t)-1 && p1 != (size_t)-1 && p < p1)
       {
         String pname = line.substr(p + 1, p1 - p - 1).trim();
         String ptype = line.substr(p1 + 1).trim();
@@ -163,8 +163,8 @@ size_t Node::LoadFromList(StringParent & list, size_t start)
     }
     else
     {
-      int p = line.find('=');
-      if (p != -1)
+      size_t p = line.find('=');
+      if (p != (size_t)-1)
       {
         String pline = line.substr(0, p).trim();
         String pval = line.substr(p + 1).trim().trimquotes();

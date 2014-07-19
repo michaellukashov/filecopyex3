@@ -54,8 +54,8 @@ int DescList::LoadFromList(StringVector & list)
       }
       if (c == '"')
       {
-        int lf = s.substr(1).find('"');
-        if (lf != -1)
+        size_t lf = s.substr(1).find('"');
+        if (lf != (size_t)-1)
         {
           fn = s.substr(1, lf).trim();
           desc = s.substr(lf + 2).trim();
@@ -64,8 +64,8 @@ int DescList::LoadFromList(StringVector & list)
       }
       else
       {
-        int lf = s.find_first_of(" \t");
-        if (lf != -1)
+        size_t lf = s.find_first_of(" \t");
+        if (lf != (size_t)-1)
         {
           fn = s.substr(0, lf).trim();
           desc = s.substr(lf + 1).trim();
