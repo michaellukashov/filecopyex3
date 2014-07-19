@@ -196,11 +196,12 @@ void CopyProgress::DrawName(const String & fn, int y)
 
 void CopyProgress::ShowReadName(const String & fn)
 {
-  RedrawWindowIfNeeded();
   // bug #22 fixed by axxie
-  if (GetTime() - lastupdate_read > interval)
+  int64_t tm = GetTime();
+  if (tm - lastupdate_read > interval)
   {
-    lastupdate_read = GetTime();
+    RedrawWindowIfNeeded();
+    lastupdate_read = tm;
     DrawName(fn, 4);
     Info.Text(0, 0, 0, NULL);
   }
