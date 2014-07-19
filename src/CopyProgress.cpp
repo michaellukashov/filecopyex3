@@ -226,10 +226,11 @@ void CopyProgress::ShowProgress(int64_t read, int64_t write, int64_t total,
                                 int64_t totalN, int parallel,
                                 int64_t FirstWrite, int64_t StartTime, int BufferSize)
 {
-  RedrawWindowIfNeeded();
-  if (GetTime() - lastupdate > interval)
+  int64_t tm = GetTime();
+  if (tm - lastupdate > interval)
   {
-    lastupdate = GetTime();
+    RedrawWindowIfNeeded();
+    lastupdate = tm;
     DrawProgress(LOC(L"Engine.Reading"), 2, read, total, readTime, readN, totalN);
     DrawProgress(LOC(L"Engine.Writing"), 6, write, total, writeTime, writeN, totalN);
     DrawTime(read, write, total, readTime, writeTime, readN, writeN, totalN,
