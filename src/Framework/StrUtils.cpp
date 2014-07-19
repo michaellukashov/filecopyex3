@@ -94,7 +94,12 @@ String FormatProgress(int64_t cb, int64_t total)
   int64_t n = total;
   int pw = 0;
   int64_t div = 1;
-  while (n > 999999) { div *= 1024; n /= 1024; pw++; }
+  while (n > 999999)
+  {
+    div *= 1024;
+    n /= 1024;
+    pw++;
+  }
   String un;
   switch (pw)
   {
@@ -114,7 +119,12 @@ String FormatSpeed(int64_t cb)
   int64_t n = cb;
   int pw = 0;
   int64_t div = 1;
-  while (n >= 100000) { div *= 1024; n /= 1024; pw++; }
+  while (n >= 100000)
+  {
+    div *= 1024;
+    n /= 1024;
+    pw++;
+  }
   String un;
   switch (pw)
   {
