@@ -108,6 +108,7 @@ public:
   inline bool empty() const { return str.empty(); }
 
   int AsInt() const { return _wtoi(ptr()); }
+  int64_t AsInt64() const { return _wtoi64(ptr()); }
   float AsFloat() const { return (float)_wtof(ptr()); }
   bool AsBool() const { return (*this) == L"1"; }
   void copyTo(wchar_t * buf, size_t sz) const { wcscpy_s(buf, sz, ptr()); }
