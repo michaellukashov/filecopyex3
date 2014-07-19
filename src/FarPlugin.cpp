@@ -278,7 +278,7 @@ void FarPlugin::About()
 {
   FarDialog & dlg = Dialogs()["AboutDialog"];
   dlg.ResetControls();
-  dlg[L"Label2"](L"Text") = String(VersionStr(FARMANAGERVERSION_MAJOR, FARMANAGERVERSION_MINOR, PLUGIN_MAJOR, PLUGIN_BUILD));
+  dlg[L"Label2"](L"Text") = String(VersionStr(PLUGIN_MAJOR, PLUGIN_MINOR, PLUGIN_SUBMINOR, PLUGIN_BUILD));
   dlg.Execute();
 }
 
