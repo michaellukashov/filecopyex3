@@ -53,7 +53,7 @@ int StringParent::loadFromFile(FILE * f)
   else
   {
     const char CR = '\r', LF = '\n';
-    char buffer[bsize], string[ssize];
+    char buffer[bsize + 1], string[ssize + 1];
     int bpos = 0, spos = 0;
     if (read >= 1) buffer[0] = sign.c[0];
     if (read >= 2) buffer[1] = sign.c[1];
