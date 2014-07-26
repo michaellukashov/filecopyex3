@@ -541,7 +541,7 @@ open_retry:
           bi->OrgSize = FileSize(bi->OutFile);
 
           int64_t size = info.OverMode == OM_APPEND ? bi->OrgSize + info.Size : info.Size;
-          if (size >= _PreallocMin * 1024
+          if (size >= (int64_t)_PreallocMin * 1024
               && GetCompression(bi->OutFile) == 0)
           {
             int64_t sp;
