@@ -273,7 +273,7 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
     spacer = String(' ', s);
 
   wchar_t buf[256];
-  _snwprintf_s(buf, 256, sizeof(buf) / sizeof(wchar_t), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
+  _snwprintf_s(buf, 256, LENOF(buf), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
 
   Info.Text(x1, y + 1, &clrText, buf);
   taskbarIcon.SetState(taskbarIcon.S_WORKING);
