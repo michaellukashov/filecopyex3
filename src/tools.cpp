@@ -227,7 +227,7 @@ void DebugLog(const wchar_t * DebugMsg, ...)
   wchar_t MsgBuf[0x400];
   va_list ArgPtr;
   va_start(ArgPtr, DebugMsg);
-  _vsnwprintf_s(MsgBuf, sizeof(MsgBuf), sizeof(MsgBuf), DebugMsg, ArgPtr);
+  _vsnwprintf_s(MsgBuf, LENOF(MsgBuf), LENOF(MsgBuf), DebugMsg, ArgPtr);
   va_end(ArgPtr);
   OutputDebugString(MsgBuf);
 }
