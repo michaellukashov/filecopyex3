@@ -130,7 +130,7 @@ String String::toLower() const
 
 const String emptyString;
 
-int npos_minus1(size_t pos)
+size_t npos_minus1(size_t pos)
 {
-  return (pos == std::string::npos) ? -1 : (int)pos;
+  return (pos == std::string::npos) ? (size_t)-1 : pos;
 }

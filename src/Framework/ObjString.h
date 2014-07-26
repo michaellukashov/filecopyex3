@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "lowlevelstr.h"
 
-int npos_minus1(size_t pos);
+size_t npos_minus1(size_t pos);
 
 class String
 {
