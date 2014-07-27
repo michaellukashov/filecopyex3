@@ -2,6 +2,7 @@
 
 #include <map>
 
+#include "StdHdr.h"
 #include "ObjString.h"
 
 typedef std::map<const String, String> Locale;

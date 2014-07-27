@@ -26,7 +26,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 
-#include "objString.h"
+#include "StdHdr.h"
+#include "ObjString.h"
 #include "StringParent.h"
 
 #define slSorted 1

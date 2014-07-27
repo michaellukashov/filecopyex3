@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "FarNode.h"
 #include "FarPayload.h"
-#include "common.h"
+#include "Common.h"
 #include "Framework/StrUtils.h"
 #include "Framework/ObjString.h"
 #include "guid.hpp"

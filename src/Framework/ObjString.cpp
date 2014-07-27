@@ -22,8 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "stdhdr.h"
-#include "objstring.h"
+#include "StdHdr.h"
+#include "ObjString.h"
 
 const bool isbadchar(wchar_t c)
 {

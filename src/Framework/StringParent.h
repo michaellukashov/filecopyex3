@@ -1,5 +1,6 @@
 #pragma once
 
+#include "StdHdr.h"
 #include "ObjString.h"
 
 enum TextFormat { tfANSI, tfUnicode, tfUnicodeBE };
