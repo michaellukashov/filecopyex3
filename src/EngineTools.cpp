@@ -238,14 +238,14 @@ void setFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, 
 size_t Read(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!ReadFile(h, buf, size, &res, NULL)) return (size_t)-1;
+  if (!ReadFile(h, buf, (DWORD)size, &res, NULL)) return (size_t)-1;
   return res;
 }
 
 size_t Write(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!WriteFile(h, buf, size, &res, NULL)) return (size_t)-1;
+  if (!WriteFile(h, buf, (DWORD)size, &res, NULL)) return (size_t)-1;
   return res;
 }
 
