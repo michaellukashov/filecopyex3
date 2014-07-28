@@ -2310,6 +2310,8 @@ void Engine::setFileSizeAndTime(const String & fn, int64_t size, FILETIME * crea
 
 int Engine::EngineError(const String & s, const String & fn, int code, int & flg, const String & title, const String & type_id)
 {
+  CopyProgressBox.SetNeedToRedraw(true);
+  ScanFoldersProgressBox.SetNeedToRedraw(true);
   int * ix = NULL;
   if (flg & eeAutoSkipAll)
   {

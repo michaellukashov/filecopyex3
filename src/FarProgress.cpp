@@ -56,6 +56,7 @@ FarProgress::FarProgress(void)
   hScreen = 0;
   InverseBars = 0;
   LastUpdate = 0;
+  NeedToRedraw = false;
 }
 
 FarProgress::~FarProgress(void)
@@ -163,6 +164,11 @@ void FarProgress::SetPercent(float pc)
   }
 }
 
+void FarProgress::SetNeedToRedraw(bool Value)
+{
+  NeedToRedraw = Value;
+}
+
 void FarProgress::Hide()
 {
   if (WinType != WIN_NONE)
@@ -258,6 +264,7 @@ void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
 // New class member function
 void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize)
 {
+  RedrawWindowIfNeeded();
   String FilesFmtStr = LOC("Status.FilesString") + " %-6I64d";
   wchar_t FilesStr[256];
   _snwprintf_s(FilesStr, 256, LENOF(FilesStr), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
@@ -277,4 +284,18 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
 
   Info.Text(x1, y + 1, &clrText, buf);
   taskbarIcon.SetState(taskbarIcon.S_WORKING);
+}
+
+void FarProgress::RedrawWindowIfNeeded()
+{
+  if (NeedToRedraw)
+  {
+    NeedToRedraw = false;
+    RedrawWindow();
+  }
+}
+
+void FarProgress::RedrawWindow()
+{
+  ShowScanProgress(ProgTitle);
 }

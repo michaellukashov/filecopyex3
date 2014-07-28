@@ -43,6 +43,8 @@ public:
   void SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize);
   void Hide();
   void SetPercent(float);
+  void SetNeedToRedraw(bool Value);
+
   int InverseBars;
 protected:
   FarColor clrFrame, clrTitle, clrBar, clrText, clrLabel;
@@ -58,6 +60,11 @@ protected:
   String TitleBuf, ProgTitle;
   void DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize);
   int64_t LastUpdate;
+  bool NeedToRedraw;
 
   TaskBarIcon taskbarIcon;
+
+private:
+  void RedrawWindowIfNeeded();
+  void RedrawWindow();
 };
