@@ -91,7 +91,7 @@ void ShowErrorMessage(const String & s)
 }
 
 
-int64_t GetPhysMemorySize()
+static int64_t GetPhysMemorySize()
 {
   MEMORYSTATUS ms;
   GlobalMemoryStatus(&ms);
@@ -465,7 +465,7 @@ void Engine::ProcessDesc(intptr_t fnum)
 
 int Engine::FlushBuff(BuffInfo * bi)
 {
-  int Pos = 0;
+  size_t Pos = 0;
   int PosInStr = 0;
 
   while (Pos < bi->BuffSize && bi->BuffInf[PosInStr].FileNumber >= 0)
@@ -583,7 +583,7 @@ open_retry:
           goto skip;
         }
 
-        int wsz = (int)Min(bi->BuffInf[PosInStr].WritePos - Pos, WriteBlock),
+        int wsz = (int)Min(bi->BuffInf[PosInStr].WritePos - Pos, (size_t)WriteBlock),
             wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
           wsz = (int)Min((long long)wsz, info.Size - info.Written);
@@ -727,8 +727,8 @@ void Engine::Copy()
     FlushEnd = CreateEvent(NULL, FALSE, TRUE, NULL);
   }
 
-  int BuffPos = 0;
-  int FilesInBuff = 0;
+  size_t BuffPos = 0;
+  size_t FilesInBuff = 0;
 
   UiFree = CreateEvent(NULL, FALSE, TRUE, NULL);
 
@@ -845,7 +845,7 @@ open_retry:
       while (BuffPos < bi->BuffSize)
       {
         if (info.Flags & FLG_SKIPPED) break;
-        int j, cb = Min(ReadBlock, bi->BuffSize - BuffPos);
+        int j, cb = Min((size_t)ReadBlock, bi->BuffSize - BuffPos);
 retry:
         int64_t st = GetTime();
         j = Read(InputFile, bi->Buffer + BuffPos, cb);
@@ -1659,11 +1659,11 @@ rep:
 
   if (Options[L"BufPercent"])
   {
-    BufSize = (int)(GetPhysMemorySize() / 100 * (int)Options[L"BufPercentVal"]);
+    BufSize = (size_t)(GetPhysMemorySize() / 100 * (int)Options[L"BufPercentVal"]);
   }
   else
   {
-    BufSize = (int)Options[L"BufSizeVal"] * 1024;
+    BufSize = (size_t)((int64_t)Options[L"BufSizeVal"] * 1024);
   }
 
   // bugfixed by slst: bug #32

@@ -38,14 +38,14 @@ struct FileStruct
 
 struct BuffStruct
 {
-  int NextPos, WritePos, FileNumber;
-  int EndFlag;
+  size_t NextPos, WritePos, FileNumber;
+  size_t EndFlag;
 };
 
 struct BuffInfo
 {
   uint8_t * Buffer;
-  int BuffSize;
+  size_t BuffSize;
   int64_t OrgSize;
   HANDLE OutFile;
   int OutNum;
@@ -96,9 +96,10 @@ private:
   std::vector<FileStruct> Files;
   FileNameStoreEnum FlushSrc, FlushDst;
 
-  int Parallel, BufSize, Streams, Rights, Move,
+  int Parallel, Streams, Rights, Move,
       CompressMode, EncryptMode, OverwriteMode,
       SkipNewer, SkippedToTemp;
+  size_t BufSize;
   int64_t ReadSpeedLimit, WriteSpeedLimit;
   int ReadAlign;
   int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
