@@ -82,7 +82,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
 
   // bugfixed by slst: bug #18
   if (((ReadBytes > MinRWValue)  && (WriteBytes > MinRWValue)) ||
-      ((TotalBytes < BufferSize) && (ReadBytes > MinRWValue))) // if selected files size < buffer size
+      ((TotalBytes < (int64_t)BufferSize) && (ReadBytes > MinRWValue))) // if selected files size < buffer size
   {
     double ReadSpeed  = (ReadTime > 0)  ? (double)ReadBytes  / (double)ReadTime  : 0; // bytes per tick
     double WriteSpeed = (WriteTime > 0) ? (double)WriteBytes / (double)WriteTime : 0; // bytes per tick
