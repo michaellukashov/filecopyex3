@@ -39,14 +39,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Tools.h"
 #include "UI.h"
 
-#define AllocAlign  65536
-
-// Bug #10 fixed by Ivanych
-//#define ReadBlock  (4 << 20)
-//#define WriteBlock  (4 << 20)
-
-#define ReadBlock  1024*1024 // 0x20000     // 128 KB
-#define WriteBlock 1024*1024 // 0x20000    // 128 KB
+static const size_t AllocAlign = 65536;
+static const size_t ReadBlock = 1024 * 1024; // 0x20000     // 128 KB
+static const size_t WriteBlock = 1024 * 1024; // 0x20000    // 128 KB
 
 PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1)
 {
