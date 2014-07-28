@@ -583,13 +583,13 @@ open_retry:
           goto skip;
         }
 
-        int wsz = (int)Min(bi->BuffInf[PosInStr].WritePos - Pos, (size_t)WriteBlock),
+        size_t wsz = (size_t)Min(bi->BuffInf[PosInStr].WritePos - Pos, (size_t)WriteBlock),
             wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
           wsz = (int)Min((long long)wsz, info.Size - info.Written);
 retry:
         int64_t st = GetTime();
-        int k = Write(bi->OutFile, bi->Buffer + Pos, wsz);
+        size_t k = Write(bi->OutFile, bi->Buffer + Pos, wsz);
 
         if (k < wsz)
         {
@@ -845,7 +845,7 @@ open_retry:
       while (BuffPos < bi->BuffSize)
       {
         if (info.Flags & FLG_SKIPPED) break;
-        int j, cb = Min((size_t)ReadBlock, bi->BuffSize - BuffPos);
+        size_t j, cb = Min((size_t)ReadBlock, bi->BuffSize - BuffPos);
 retry:
         int64_t st = GetTime();
         j = Read(InputFile, bi->Buffer + BuffPos, cb);
@@ -913,7 +913,7 @@ reopen_retry:
       } // while (BuffPos < bi->BuffSize)
 
 skip:
-      int abp = BuffPos;
+      size_t abp = BuffPos;
       if (abp % SectorSize) abp = (abp / SectorSize + 1) * SectorSize;
       bi->BuffInf[FilesInBuff].WritePos = abp;
       if (BuffPos % ReadAlign) BuffPos = (BuffPos / ReadAlign + 1) * ReadAlign;

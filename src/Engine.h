@@ -38,7 +38,8 @@ struct FileStruct
 
 struct BuffStruct
 {
-  size_t NextPos, WritePos, FileNumber;
+  size_t NextPos, WritePos;
+  int FileNumber;
   size_t EndFlag;
 };
 

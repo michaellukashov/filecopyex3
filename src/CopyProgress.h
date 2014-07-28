@@ -42,7 +42,7 @@ public:
                     int64_t readTime, int64_t writeTime,
                     int64_t readN, int64_t writeN,
                     int64_t totalN, int parallel,
-                    int64_t FirstWrite, int64_t StartTime, int BufferSize);
+                    int64_t FirstWrite, int64_t StartTime, size_t BufferSize);
   void SetNeedToRedraw(bool Value);
 private:
   void RedrawWindowIfNeeded();
@@ -55,7 +55,7 @@ private:
                 int64_t ReadTime, int64_t WriteTime,
                 int64_t ReadN, int64_t WriteN, int64_t TotalN,
                 int ParallelMode, int64_t FirstWriteTime,
-                int64_t StartTime, int BufferSize);
+                int64_t StartTime, size_t BufferSize);
 
   // bug #22 fixed by axxie
   int64_t lastupdate, lastupdate_read, lastupdate_write, interval, clastupdate, cinterval;

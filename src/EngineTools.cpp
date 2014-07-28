@@ -235,17 +235,17 @@ void setFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, 
   SetFileTime(h, creationTime, lastAccessTime, lastWriteTime);
 }
 
-int Read(HANDLE h, void * buf, int size)
+size_t Read(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!ReadFile(h, buf, size, &res, NULL)) return -1;
+  if (!ReadFile(h, buf, size, &res, NULL)) return (size_t)-1;
   return res;
 }
 
-int Write(HANDLE h, void * buf, int size)
+size_t Write(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!WriteFile(h, buf, size, &res, NULL)) return -1;
+  if (!WriteFile(h, buf, size, &res, NULL)) return (size_t)-1;
   return res;
 }
 
