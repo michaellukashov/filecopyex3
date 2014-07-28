@@ -1,8 +1,12 @@
 version 3.0.1.12 ??.07.2014
 
 version 3.0.0.11 15.07.2014
-* fix dialogs drawing issues
-* fix memory issues
+* Fix Issue 4: Cursor jumps after copying files https://code.google.com/p/filecopyex3/issues/detail?id=4
+* Fix Issue 9: Cannot delete the file https://code.google.com/p/filecopyex3/issues/detail?id=9
+* Fix Issue 10: Dialog not redrawed https://code.google.com/p/filecopyex3/issues/detail?id=10
+* Fix Issue 11: Files locked after copy operation is canceled https://code.google.com/p/filecopyex3/issues/detail?id=11
+* Fix Issue 13: Files locked after copying https://code.google.com/p/filecopyex3/issues/detail?id=13
+* Fix memory issues
 
 build 10
 * bugfix: setFileSizeAndTime2: opened handle was not closed
