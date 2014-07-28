@@ -1,4 +1,6 @@
-version 3.0.1.13 ??.07.2014
+version 3.0.1.14 ??.07.2014
+* Fix Issue #2 scan folders dialog is not redrawed
+  (https://github.com/michaellukashov/filecopyex3/issues/2)
 * Fix Issue #1 Error trying to allocate memory
   (https://github.com/michaellukashov/filecopyex3/issues/1)
 
