@@ -260,11 +260,11 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
 {
   String FilesFmtStr = LOC("Status.FilesString") + " %-6I64d";
   wchar_t FilesStr[256];
-  _snwprintf_s(FilesStr, 256, sizeof(FilesStr) / sizeof(wchar_t), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
+  _snwprintf_s(FilesStr, 256, LENOF(FilesStr), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
 
   String SizeFmtStr = LOC("Status.SizeString") + " %s";
   wchar_t SizeStr[256];
-  _snwprintf_s(SizeStr, 256, sizeof(SizeStr) / sizeof(wchar_t), (const wchar_t *)SizeFmtStr.ptr(), (const wchar_t *)FormatValue(TotalSize).ptr());
+  _snwprintf_s(SizeStr, 256, LENOF(SizeStr), (const wchar_t *)SizeFmtStr.ptr(), (const wchar_t *)FormatValue(TotalSize).ptr());
 
 
   int s = x2 - x1 - (int)wcslen(SizeStr) - (int)wcslen(FilesStr);

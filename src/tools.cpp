@@ -30,7 +30,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // axxie: special HDD ID inmplementation for NT4
 #define HARDDISK_CONST_PART         _T("\\Device\\Harddisk")
-#define HARDDISK_CONST_PART_LEN     (sizeof(HARDDISK_CONST_PART)/sizeof(wchar_t)-1)
+#define HARDDISK_CONST_PART_LEN     (LENOF(HARDDISK_CONST_PART)-1)
 
 int GetDriveId(const String & path, String & res)
 {

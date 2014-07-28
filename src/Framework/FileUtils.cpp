@@ -184,7 +184,7 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
 
   if (GetVolumeNameForVolumeMountPoint(AddEndSlash(VolumeMountPointForPath).ptr(),
                                        VolumeNameForPath,
-                                       sizeof(VolumeNameForPath) / sizeof(wchar_t)))
+                                       LENOF(VolumeNameForPath)))
   {
     wchar_t VolumeMountPoint[] = L"?:\\";
     wchar_t VolumeName[MAX_FILENAME];
@@ -194,7 +194,7 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
       VolumeMountPoint[0] = drive;
       if (GetVolumeNameForVolumeMountPoint(VolumeMountPoint,
                                            VolumeName,
-                                           sizeof(VolumeName) / sizeof(wchar_t)))
+                                           LENOF(VolumeName)))
       {
         if (wcscmp(VolumeNameForPath, VolumeName) == 0)
         {
