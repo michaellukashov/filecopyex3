@@ -178,8 +178,8 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
   wchar_t VolumeNameForPath[MAX_FILENAME];
 
   if (!Win2K) return result;
-  int attr = GetFileAttributes(VolumeMountPointForPath.ptr());
-  if (attr == 0xFFFFFFFF) return result;
+  DWORD attr = GetFileAttributes(VolumeMountPointForPath.ptr());
+  if (attr == INVALID_FILE_ATTRIBUTES) return result;
   if (!(attr & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT))) return result;
 
   if (GetVolumeNameForVolumeMountPoint(AddEndSlash(VolumeMountPointForPath).ptr(),
@@ -244,8 +244,9 @@ int GetSymLink(const String & _dir, String & res, int flg)
   // Symlinks should have length > 2
   if (Win2K && (flg & gslExpandReparsePoints) && dir.len() > 2)
   {
-    int attr = GetFileAttributes(dir.ptr());
-    if (attr != 0xFFFFFFFF && attr & FILE_ATTRIBUTE_DIRECTORY
+    DWORD attr = GetFileAttributes(dir.ptr());
+	if (attr != INVALID_FILE_ATTRIBUTES
+		&& attr & FILE_ATTRIBUTE_DIRECTORY
         && attr & FILE_ATTRIBUTE_REPARSE_POINT)
     {
       HANDLE hf = CreateFile(dir.ptr(),
@@ -350,7 +351,7 @@ String ApplyFileMask(const String & _name, const String & _mask)
 {
   wchar_t * name = (wchar_t *)_name.ptr(), *mask = (wchar_t *)_mask.ptr(),
             res[MAX_FILENAME] = L"";
-  int sz = MAX_FILENAME;
+  size_t sz = MAX_FILENAME;
   wchar_t * next = (wchar_t *)_tcsend(name) - 1, *mext = (wchar_t *)_tcsend(mask) - 1;
   while (next >= name && *next != '.') next--;
   if (next < name) next = name + wcslen(name);
@@ -382,8 +383,8 @@ String ApplyFileMaskPath(const String & name, const String & mask)
 {
   if (mask[mask.len() - 1] == '\\' || mask[mask.len() - 1] == '/')
     return mask + ExtractFileName(name);
-  int a = GetFileAttributes(mask.ptr());
-  if (a != 0xFFFFFFFF && a & FILE_ATTRIBUTE_DIRECTORY)
+  DWORD a = GetFileAttributes(mask.ptr());
+  if (a != INVALID_FILE_ATTRIBUTES && a & FILE_ATTRIBUTE_DIRECTORY)
   {
     String res = mask;
     if (name.icmp(mask)) res += String("\\") + ExtractFileName(name);
@@ -395,7 +396,7 @@ String ApplyFileMaskPath(const String & name, const String & mask)
 
 int FileExists(const String & name)
 {
-  return GetFileAttributes(name.ptr()) != 0xFFFFFFFF;
+  return (GetFileAttributes(name.ptr()) != INVALID_FILE_ATTRIBUTES) ? TRUE : FALSE;
 }
 
 int64_t FileSize(HANDLE h)
@@ -508,14 +509,14 @@ int MoveFile(const String & _src, const String & _dst, int replace)
       String src = GetRealFileName(_src),
              dst = GetRealFileName(_dst);
       if (!src.icmp(dst)) return TRUE;
-      int sa = GetFileAttributes(src.ptr());
-      if (sa == 0xFFFFFFFF)
+      DWORD sa = GetFileAttributes(src.ptr());
+	  if (sa == INVALID_FILE_ATTRIBUTES)
       {
         SetLastError(ERROR_FILE_NOT_FOUND);
         return FALSE;
       }
-      int da = GetFileAttributes(dst.ptr());
-      if (da != 0xFFFFFFFF)
+      DWORD da = GetFileAttributes(dst.ptr());
+	  if (da != INVALID_FILE_ATTRIBUTES)
       {
         if (sa & FILE_ATTRIBUTE_DIRECTORY || da & FILE_ATTRIBUTE_DIRECTORY)
         {

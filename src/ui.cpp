@@ -56,7 +56,7 @@ intptr_t ShowMessageEx(const String & title, const String & msg,
 intptr_t ShowMessageExHelp(const String & title, const String & msg,
                            const String & buttons, int flags, const String & help)
 {
-  int nb = 0;
+  size_t nb = 0;
   for (const wchar_t * p = buttons.ptr(); *p; p++)
   {
     if (*p == '\n') nb++;
@@ -114,7 +114,7 @@ String GetErrText(int code)
 
 String FormatWidth(const String & s, intptr_t len)
 {
-  intptr_t dif = (int)s.len() - len;
+  intptr_t dif = (intptr_t)s.len() - len;
   if (dif > 0)
   {
     return String("...") + s.right(len - 3);
@@ -127,7 +127,7 @@ String FormatWidth(const String & s, intptr_t len)
 
 String FormatWidthNoExt(const String & s, intptr_t len)
 {
-  intptr_t dif = s.len() - len;
+  intptr_t dif = (intptr_t)s.len() - len;
   if (dif > 0)
   {
     return String("...") + s.right(len - 3);

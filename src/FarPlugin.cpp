@@ -135,7 +135,7 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
       FarMacroValue & v = macroInfo->Values[0];
       if (v.Type == FMVT_DOUBLE)
       {
-        command = static_cast<int>(v.Double);
+        command = static_cast<intptr_t>(v.Double);
       };
     };
   }
