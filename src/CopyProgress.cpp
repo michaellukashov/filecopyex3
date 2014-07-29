@@ -135,7 +135,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   //DebugLog(_T("Total: %4.1f  Elapsed: %4.1f  Remain: %4.1f\n"), TotalTime, ElapsedTime, RemainingTime);
   //DebugLog(_T("---------------------------------------------------------------------------\n"));
 
-  int l = X1 + MG;
+  intptr_t l = X1 + MG;
 
   String buf;
   buf = LOC(L"Engine.Total");
