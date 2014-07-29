@@ -48,6 +48,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <conio.h>
 #include <time.h>
 
+#define WIN32_LEAN_AND_MEAN
+#define VC_EXTRALEAN
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif
+
+#define WIN32_NO_STATUS //exclude ntstatus.h macros from winnt.h
 #include <windows.h>
+#undef WIN32_NO_STATUS
+#ifndef _WINIOCTL_
 #include <winioctl.h>
+#endif
 

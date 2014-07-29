@@ -22,10 +22,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "common.h"
-#include "Framework/stdhdr.h"
-#include "Framework/lowlevelstr.h"
-#include "Framework/fileutils.h"
+#include "Framework/StdHdr.h"
+#include "Framework/LowLevelStr.h"
+#include "Framework/FileUtils.h"
+#include "Common.h"
 #include "tools.h"
 
 // axxie: special HDD ID implementation for NT4

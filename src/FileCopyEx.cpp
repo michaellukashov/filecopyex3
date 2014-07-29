@@ -1,12 +1,11 @@
-#include "common.h"
-
 #include <initguid.h>
-#include "guid.hpp"
 
 #include "SDK/plugin.hpp"
-#include "FarPlugin.h"
+#include "Common.h"
 #include "version.hpp"
+#include "FarPlugin.h"
 #include "FarPayload.h"
+#include "guid.hpp"
 
 PluginStartupInfo Info;
 FarStandardFunctions FSF;

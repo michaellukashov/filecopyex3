@@ -22,10 +22,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "taskbarIcon.h"
 #include "Framework/StdHdr.h"
+#include "taskbarIcon.h"
+#include "Common.h"
 #include "guid.hpp"
-#include "common.h"
 
 TaskBarIcon::TaskBarIcon() : last_state(S_NO_PROGRESS)
 {

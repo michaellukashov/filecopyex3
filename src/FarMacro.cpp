@@ -4,7 +4,7 @@
 #include "FarMacro.h"
 
 #include "Framework/StringVector.h"
-#include "common.h"
+#include "Common.h"
 #include "guid.hpp"
 
 String base;

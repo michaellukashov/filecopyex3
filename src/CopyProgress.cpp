@@ -22,10 +22,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "common.h"
+#include "Framework/StrUtils.h"
+#include "Common.h"
 #include "CopyProgress.h"
 #include "tools.h"
-#include "Framework/StrUtils.h"
 #include "ui.h"
 
 const int W = 64, H = 13, MG = 5;

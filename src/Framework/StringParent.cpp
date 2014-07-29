@@ -1,4 +1,4 @@
-#include "stdhdr.h"
+#include "StdHdr.h"
 #include "StringParent.h"
 
 int StringParent::loadFromFile(FILE * f)

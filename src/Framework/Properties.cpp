@@ -22,9 +22,9 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "stdhdr.h"
-#include "lowlevelstr.h"
-#include "properties.h"
+#include "StdHdr.h"
+#include "LowLevelStr.h"
+#include "Properties.h"
 
 Property::Property(const Property & other)
 {

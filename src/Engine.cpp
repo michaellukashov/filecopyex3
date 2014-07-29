@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "FarPlugin.h"
 #include "EngineTools.h"
 #include "Tools.h"
-#include "UI.h"
+#include "ui.h"
 
 static const size_t AllocAlign = 65536;
 static const size_t ReadBlock = 1024 * 1024; // 0x20000     // 128 KB

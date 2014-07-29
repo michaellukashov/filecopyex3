@@ -22,11 +22,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+#include "Framework/StrUtils.h"
+#include "Framework/ObjString.h"
 #include "FarNode.h"
 #include "FarPayload.h"
 #include "Common.h"
-#include "Framework/StrUtils.h"
-#include "Framework/ObjString.h"
 #include "guid.hpp"
 
 

@@ -22,10 +22,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "stdhdr.h"
-#include "fileutils.h"
-#include "strutils.h"
-#include "../common.h"
+#include "StdHdr.h"
+#include "FileUtils.h"
+#include "StrUtils.h"
+#include "../Common.h"
 #include "../EngineTools.h"
 
 inline String ExtractFileName(const String & v)

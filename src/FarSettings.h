@@ -1,6 +1,7 @@
 #pragma once
 
 #include <stddef.h>
+#include "SDK/plugin.hpp"
 #include "Framework/Properties.h"
 
 class FarSettings

@@ -22,14 +22,14 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "FarProgress.h"
 
 #include "Framework/StrUtils.h"
-#include "common.h"
+#include "SDK/farcolor.hpp"
+#include "FarProgress.h"
+#include "Common.h"
 #include "ui.h"
 #include "tools.h"
 #include "guid.hpp"
-#include "SDK/farcolor.hpp"
 
 FarProgress::FarProgress(void)
 {

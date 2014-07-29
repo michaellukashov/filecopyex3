@@ -22,11 +22,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "stdhdr.h"
+#include "StdHdr.h"
 #include "Node.h"
-#include "../common.h"
-#include "lowlevelstr.h"
-#include "strutils.h"
+#include "../Common.h"
+#include "LowLevelStr.h"
+#include "StrUtils.h"
 #include "ObjectManager.h"
 
 Node::Node()

@@ -1,6 +1,6 @@
 #include "FarMenu.h"
 
-#include "common.h"
+#include "Common.h"
 #include "guid.hpp"
 
 FarMenu::FarMenu(): Flags(0), Selection(0)

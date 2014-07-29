@@ -22,8 +22,8 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "stdhdr.h"
-#include "lowlevelstr.h"
+#include "StrUtils.h"
+#include "LowLevelStr.h"
 
 void _atowcs(wchar_t * d, size_t size, const char * s)
 {

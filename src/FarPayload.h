@@ -26,7 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Framework/Node.h"
 #include "SDK/plugin.hpp"
-#include "FarPayload.h"
 
 class FarDlgNode;
 class FarDialog;

@@ -1,6 +1,6 @@
 #include "Common.h"
-#include "guid.hpp"
 #include "FarSettings.h"
+#include "guid.hpp"
 
 #include "SDK/plugin.hpp"
 

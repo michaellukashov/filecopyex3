@@ -22,12 +22,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "FarNode.h"
-#include "FarPayload.h"
-#include "common.h"
 #include "Framework/Node.h"
 #include "Framework/ObjectManager.h"
 #include "Framework/StringVector.h"
+#include "FarNode.h"
+#include "FarPayload.h"
+#include "Common.h"
 
 static const Attribute _Attrib[] =
 {

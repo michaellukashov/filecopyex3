@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include "ObjString.h"
+
 intptr_t ShowMessage(const String &, const String &, int);
 intptr_t ShowMessageOK(const String &, const String &);
 intptr_t ShowMessageHelp(const String &, const String &, int, const String &);

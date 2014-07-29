@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Properties.h"
-#include "Payload.h"
 #include "StringVector.h"
 
 class Payload;

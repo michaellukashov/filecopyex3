@@ -22,16 +22,15 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Framework/stdhdr.h"
-//#include "Framework/lowlevelstr.h"
-#include "Framework/properties.h"
+#include "Framework/StdHdr.h"
+#include "Framework/Properties.h"
 #include "Framework/FileUtils.h"
 #include "Engine.h"
 #include "FarMacro.h"
 #include "FarMenu.h"
 #include "FarPlugin.h"
+#include "Common.h"
 #include "version.hpp"
-#include "common.h"
 #include "guid.hpp"
 
 #include "ui.h"

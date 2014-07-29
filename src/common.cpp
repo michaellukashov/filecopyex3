@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Framework/StdHdr.h"
 #include "Framework/ObjString.h"
-#include "common.h"
+#include "Common.h"
 
 void FWError(const wchar_t * s)
 {

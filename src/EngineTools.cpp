@@ -22,12 +22,12 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include "Framework/stdhdr.h"
+#include "Framework/StdHdr.h"
 #include "Framework/FileUtils.h"
 
-#include "common.h"
+#include "Common.h"
 #include "FarPlugin.h"
-#include "engine.h"
+#include "Engine.h"
 #include "EngineTools.h"
 #include "tools.h"
 #include "ui.h"

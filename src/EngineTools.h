@@ -24,6 +24,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
+#include "Framework/StdHdr.h"
+#include "ObjString.h"
+
 #define OPEN_BUF 128
 #define OPEN_READ 1
 #define OPEN_CREATE 2
