@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Framework/StdHdr.h"
-#include "ObjString.h"
+#include "Framework/ObjString.h"
 
 #define msgw() 50
 
