@@ -53,7 +53,7 @@ protected:
   static void DrawWindow(int, int, int, int, const String &);
   static void GetConSize(int &, int &);
   void DrawProgress(int, int, int, float);
-  static void Text(intptr_t, intptr_t, FarColor *, const String &);
+  static void Text(int, int, FarColor *, const String &);
   static void SetTitle(const String &);
   void SetTitle2(const String &) const;
   static String GetTitle();

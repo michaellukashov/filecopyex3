@@ -70,7 +70,7 @@ void FarMenu::SetBottom(const String & v)
   Bottom = v;
 }
 
-void FarMenu::SetFlags(int f)
+void FarMenu::SetFlags(DWORD f)
 {
   Flags = f;
 }
@@ -80,7 +80,7 @@ void FarMenu::SetHelpTopic(const String & v)
   HelpTopic = v;
 }
 
-void FarMenu::SetSelection(int n)
+void FarMenu::SetSelection(size_t n)
 {
   Selection = n;
 }

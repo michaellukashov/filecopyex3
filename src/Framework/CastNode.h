@@ -7,7 +7,7 @@ class CastNode : public Node
 {
 public:
   ParentType * Parent() { return static_cast<ParentType *>(parent); }
-  ChildType & operator[](int i) { return child(i); }
+  ChildType & operator[](size_t i) { return child(i); }
   ChildType & operator[](const String & name) { return child(name); }
   PayloadType & getPayload() const { return static_cast<PayloadType &>(Node::getPayload()); }
 

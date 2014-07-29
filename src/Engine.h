@@ -31,7 +31,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 struct FileStruct
 {
-  int Attr, RenameNum, OverMode, Flags, Level, PanelIndex, SectorSize;
+  DWORD Attr;
+  int RenameNum;
+  int OverMode;
+  DWORD Flags;
+  int Level, PanelIndex, SectorSize;
   int64_t Size, Read, Written, ResumePos;
   FILETIME creationTime, lastAccessTime, lastWriteTime;
 };
@@ -59,7 +63,8 @@ struct RememberStruct
   String Src, Dst;
   int64_t Size;
   FILETIME creationTime, lastAccessTime, lastWriteTime;
-  int Attr, Flags, Level;
+  DWORD Attr, Flags;
+  int Level;
 };
 
 PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1);
@@ -137,10 +142,10 @@ private:
   int CheckOverwrite(int, const String &, const String &, String &);
   int CheckOverwrite2(int, const String &, const String &, String &);
   void SetOverwriteMode(int);
-  int AddFile(const String & _src, const String & _dst, int Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, int Flags, int Level, int PanelIndex = -1);
-  int AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, int Flags, int Level, int PanelIndex = -1);
-  void AddTopLevelDir(const String & dir, const String & dstmask, int Flags, FileName::Direction d);
-  static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, int Flags, int Level, RememberStruct &);
+  int AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, int Level, int PanelIndex = -1);
+  int AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, int Level, int PanelIndex = -1);
+  void AddTopLevelDir(const String & dir, const String & dstmask, DWORD Flags, FileName::Direction d);
+  static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, int Level, RememberStruct &);
   int AddRemembered(RememberStruct &);
   int DirStart(const String & dir, const String & dst);
   int DirEnd(const String & dir, const String & dst);
@@ -155,7 +160,7 @@ private:
     WIN32_FIND_DATA & wfd
   );
   String CurPathDesc;
-  int CurPathFlags, CurPathAddFlags;
+  DWORD CurPathFlags, CurPathAddFlags;
   WIN32_FIND_DATA DescFindData;
 
   std::map<String, int> errTypes;

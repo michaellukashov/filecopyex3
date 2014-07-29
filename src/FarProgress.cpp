@@ -182,9 +182,9 @@ void FarProgress::Hide()
   taskbarIcon.SetState(taskbarIcon.S_NO_PROGRESS);
 }
 
-void FarProgress::Text(intptr_t x, intptr_t y, FarColor * c, const String & msg)
+void FarProgress::Text(int x, int y, FarColor * c, const String & msg)
 {
-  Info.Text(x, y, c, msg.ptr());
+	Info.Text((intptr_t)x, (intptr_t)y, c, msg.ptr());
 }
 
 void FarProgress::SetTitle(const String & v)

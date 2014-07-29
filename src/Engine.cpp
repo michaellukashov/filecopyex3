@@ -48,23 +48,20 @@ PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, in
   size_t Size = Info.PanelControl(hPlugin, Command, Param1, 0);
   PluginPanelItem * item = reinterpret_cast<PluginPanelItem *>(new char[Size]);
 
-  if (item)
-  {
-    FarGetPluginPanelItem gpi = {sizeof(FarGetPluginPanelItem), Size, item};
-    Info.PanelControl(hPlugin, Command, Param1, &gpi);
-    /*
-    *Param2=*item;
-    Param2->FileName=wcsdup(item->FileName);
-    Param2->AlternateFileName=wcsdup(item->AlternateFileName);
-    Param2->Description=NULL;
-    Param2->Owner=NULL;
-    Param2->CustomColumnData=NULL;
-    Param2->CustomColumnNumber=0;
-    Param2->UserData.Data=NULL;
-    Param2->UserData.FreeData=NULL;
-    free(item);
-    */
-  }
+  FarGetPluginPanelItem gpi = {sizeof(FarGetPluginPanelItem), Size, item};
+  Info.PanelControl(hPlugin, Command, Param1, &gpi);
+  /*
+  *Param2=*item;
+  Param2->FileName=wcsdup(item->FileName);
+  Param2->AlternateFileName=wcsdup(item->AlternateFileName);
+  Param2->Description=NULL;
+  Param2->Owner=NULL;
+  Param2->CustomColumnData=NULL;
+  Param2->CustomColumnNumber=0;
+  Param2->UserData.Data=NULL;
+  Param2->UserData.FreeData=NULL;
+  free(item);
+  */
   return item;
 }
 
@@ -389,7 +386,7 @@ void Engine::ProcessDesc(intptr_t fnum)
   DescList SrcList, DstList;
   SrcList.LoadFromFile(SrcName);
   int attr = GetFileAttributes(DstName.ptr());
-  if (!_UpdateRODescs && attr != 0xFFFFFFFF
+  if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES
       && (attr & FILE_ATTRIBUTE_READONLY)) return;
   DstList.LoadFromFile(DstName);
 
@@ -445,7 +442,7 @@ void Engine::ProcessDesc(intptr_t fnum)
     if (Move)
     {
       int attr = GetFileAttributes(SrcName.ptr());
-      if (!_UpdateRODescs && attr != 0xFFFFFFFF
+	  if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES
           && (attr & FILE_ATTRIBUTE_READONLY)) return;
       if (!SrcList.SaveToFile(SrcName))
         Error2(LOC(L"Error.WriteDesc"), SrcName, GetLastError());
@@ -461,7 +458,7 @@ void Engine::ProcessDesc(intptr_t fnum)
 int Engine::FlushBuff(BuffInfo * bi)
 {
   size_t Pos = 0;
-  int PosInStr = 0;
+  size_t PosInStr = 0;
 
   while (Pos < bi->BuffSize && bi->BuffInf[PosInStr].FileNumber >= 0)
   {
@@ -578,10 +575,10 @@ open_retry:
           goto skip;
         }
 
-        size_t wsz = (size_t)Min(bi->BuffInf[PosInStr].WritePos - Pos, WriteBlock),
-            wsz1 = wsz;
+	size_t wsz = Min((size_t)(bi->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
+	size_t wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
-          wsz = (int)Min((long long)wsz, info.Size - info.Written);
+          wsz = Min(wsz, (size_t)(info.Size - info.Written));
 retry:
         int64_t st = GetTime();
         size_t k = Write(bi->OutFile, bi->Buffer + Pos, wsz);
@@ -776,7 +773,7 @@ void Engine::Copy()
 
       CurDirInfo cdi;
       int dattr = GetFileAttributes(DstName.ptr());
-      if (!CurDirStack.size() || (dattr != 0xFFFFFFFF && dattr & FILE_ATTRIBUTE_REPARSE_POINT))
+	  if (!CurDirStack.size() || (dattr != INVALID_FILE_ATTRIBUTES && dattr & FILE_ATTRIBUTE_REPARSE_POINT))
       {
         cdi.SectorSize = GetSectorSize(DstName);
       }
@@ -1081,7 +1078,7 @@ String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t *
   return L"";
 }
 
-void Engine::AddTopLevelDir(const String & dir, const String & dstMask, int flags, FileName::Direction d)
+void Engine::AddTopLevelDir(const String & dir, const String & dstMask, DWORD flags, FileName::Direction d)
 {
   HANDLE hf;
   WIN32_FIND_DATA fd;
@@ -1763,12 +1760,12 @@ fin:
   return MRES_NONE;
 }
 
-int Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, int Flags, int Level, int PanelIndex)
+int Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, int Level, int PanelIndex)
 {
   return AddFile(Src, Dst, fd.dwFileAttributes, MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh), fd.ftCreationTime, fd.ftLastAccessTime, fd.ftLastWriteTime, Flags, Level, PanelIndex);
 }
 
-int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, int flags, int Level, int PanelIndex)
+int Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD flags, int Level, int PanelIndex)
 {
   // bugfixed by slst: bug #23
   if (CheckEscape(FALSE))
@@ -1776,7 +1773,7 @@ int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t 
     return FALSE;
   }
 
-  if (attr == 0xFFFFFFFF)
+  if (attr == INVALID_FILE_ATTRIBUTES)
   {
     return TRUE;
   }
@@ -2217,7 +2214,7 @@ rep1:
 }
 
 void Engine::RememberFile(const String & Src, const String & Dst,
-                          WIN32_FIND_DATA & fd, int Flags, int Level,
+                          WIN32_FIND_DATA & fd, DWORD Flags, int Level,
                           RememberStruct & Remember)
 {
   Remember.Src = Src;

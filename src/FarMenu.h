@@ -14,16 +14,17 @@ public:
   void SetTitle(const String &);
   void SetBottom(const String &);
   void SetHelpTopic(const String &);
-  void SetFlags(int f);
+  void SetFlags(DWORD f);
   void AddLine(const String &);
   void AddLineCheck(const String &, int check);
   void AddSep();
-  void SetSelection(int n);
+  void SetSelection(size_t n);
   intptr_t Execute();
 
 protected:
   String Title, Bottom, HelpTopic;
-  int Flags, Selection;
+  DWORD Flags;
+  size_t Selection;
   std::vector<FarMenuItem> items;
 
   static void SetItemText(FarMenuItem * item, const String & text);

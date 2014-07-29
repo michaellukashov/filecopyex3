@@ -26,7 +26,7 @@ DescList::DescList()
 //  Names.SetOptions(slSorted | slIgnoreCase);
 }
 
-int DescList::LoadFromFile(const String & lfn)
+bool DescList::LoadFromFile(const String & lfn)
 {
   StringVector temp;
   if (!temp.loadFromFile(lfn))
@@ -36,7 +36,7 @@ int DescList::LoadFromFile(const String & lfn)
   return LoadFromList(temp);
 }
 
-int DescList::LoadFromList(StringVector & list)
+bool DescList::LoadFromList(StringVector & list)
 {
   String fn, desc;
   for (size_t i = 0; i < list.Count(); i++)
@@ -91,7 +91,7 @@ int DescList::LoadFromList(StringVector & list)
 #define dlNoMerge 1
 #define dlNoSave 2
 
-int DescList::SaveToFile(const String & fn)
+bool DescList::SaveToFile(const String & fn)
 {
   StringVector temp;
   for (DescListMap::iterator it = names.begin(); it != names.end(); ++it)

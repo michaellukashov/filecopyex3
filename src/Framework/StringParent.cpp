@@ -157,7 +157,7 @@ int StringParent::saveToFile(FILE * f, TextFormat tf)
 
 int StringParent::saveToFile(const String & fn, TextFormat tf)
 {
-  int attr = GetFileAttributes(fn.ptr());
+  DWORD attr = GetFileAttributes(fn.ptr());
   SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
   FILE * f = NULL;
   _wfopen_s(&f, fn.ptr(), L"wb");
@@ -167,7 +167,7 @@ int StringParent::saveToFile(const String & fn, TextFormat tf)
     res = saveToFile(f, tf);
     fclose(f);
   }
-  if (attr != 0xFFFFFFFF)
+  if (attr != INVALID_FILE_ATTRIBUTES)
   {
     SetFileAttributes(fn.ptr(), attr);
   }
@@ -182,7 +182,7 @@ void StringParent::loadFromString(const wchar_t * s, wchar_t delim)
   {
     if (!*p || *p == delim)
     {
-      int len = __min((int)(p - pp), 4095);
+      size_t len = __min((size_t)(p - pp), 4095);
       wcsncpy_s(buf, 4096, pp, len);
       buf[len] = 0;
       pp = p + 1;

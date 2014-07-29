@@ -8,9 +8,9 @@ class DescList
 {
 public:
   DescList();
-  int LoadFromFile(const String & fn);
+  bool LoadFromFile(const String & fn);
   void Merge(DescList &);
-  int SaveToFile(const String & fn);
+  bool SaveToFile(const String & fn);
   void SetAllMergeFlags(int v);
   void SetAllSaveFlags(int v);
   void SetMergeFlag(const String &, int v);
@@ -33,6 +33,6 @@ private:
   typedef std::map<String, Data> DescListMap;
   DescListMap names;
 
-  int LoadFromString(wchar_t * ptr);
-  int LoadFromList(StringVector & list);
+  bool LoadFromString(wchar_t * ptr);
+  bool LoadFromList(StringVector & list);
 };
