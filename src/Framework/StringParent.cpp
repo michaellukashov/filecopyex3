@@ -157,7 +157,7 @@ int StringParent::saveToFile(FILE * f, TextFormat tf)
 
 int StringParent::saveToFile(const String & fn, TextFormat tf)
 {
-  int attr = GetFileAttributes(fn.ptr());
+  DWORD attr = GetFileAttributes(fn.ptr());
   SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
   FILE * f = NULL;
   _wfopen_s(&f, fn.ptr(), L"wb");

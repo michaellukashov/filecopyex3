@@ -1081,7 +1081,7 @@ String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t *
   return "";
 }
 
-void Engine::AddTopLevelDir(const String & dir, const String & dstMask, int flags, FileName::Direction d)
+void Engine::AddTopLevelDir(const String & dir, const String & dstMask, DWORD flags, FileName::Direction d)
 {
   HANDLE hf;
   WIN32_FIND_DATA fd;
@@ -1763,12 +1763,12 @@ fin:
   return MRES_NONE;
 }
 
-int Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, int Flags, int Level, int PanelIndex)
+int Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, int Level, int PanelIndex)
 {
   return AddFile(Src, Dst, fd.dwFileAttributes, MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh), fd.ftCreationTime, fd.ftLastAccessTime, fd.ftLastWriteTime, Flags, Level, PanelIndex);
 }
 
-int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, int flags, int Level, int PanelIndex)
+int Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD flags, int Level, int PanelIndex)
 {
   // bugfixed by slst: bug #23
   if (CheckEscape(FALSE))
@@ -2217,7 +2217,7 @@ rep1:
 }
 
 void Engine::RememberFile(const String & Src, const String & Dst,
-                          WIN32_FIND_DATA & fd, int Flags, int Level,
+                          WIN32_FIND_DATA & fd, DWORD Flags, int Level,
                           RememberStruct & Remember)
 {
   Remember.Src = Src;
