@@ -167,7 +167,7 @@ int StringParent::saveToFile(const String & fn, TextFormat tf)
     res = saveToFile(f, tf);
     fclose(f);
   }
-  if (attr != 0xFFFFFFFF)
+  if (attr != INVALID_FILE_ATTRIBUTES)
   {
     SetFileAttributes(fn.ptr(), attr);
   }
