@@ -175,12 +175,6 @@ HANDLE Open(const String & fn, int mode, int attr)
 }
 
 
-void Close(HANDLE h)
-{
-  CloseHandle(h);
-}
-
-
 int64_t FSeek(HANDLE h, int64_t pos, int method)
 {
   LONG hi32 = HI32(pos), lo32 = SetFilePointer(h, LO32(pos), &hi32, method);
@@ -197,7 +191,7 @@ int64_t FTell(HANDLE h)
 
 void setFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
-  HANDLE h = Open(fn, OPEN_WRITE_BUF);
+  HANDLE h = Open(fn, OPEN_WRITE_BUF, 0);
   if (!h)
   {
     Error2(LOC(L"Error.FileOpen"), fn, GetLastError());
@@ -218,7 +212,7 @@ void setFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETI
 
 void setFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
-  HANDLE h = Open(fn, OPEN_WRITE_BUF);
+  HANDLE h = Open(fn, OPEN_WRITE_BUF, 0);
   if (!h)
   {
     Error2(LOC(L"Error.FileOpen"), fn, GetLastError());

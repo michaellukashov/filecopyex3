@@ -27,16 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/StdHdr.h"
 #include "ObjString.h"
 
-#define OPEN_BUF 128
-#define OPEN_READ 1
-#define OPEN_CREATE 2
-#define OPEN_APPEND 4
-#define OPEN_WRITE 8
-#define OPEN_WRITE_BUF OPEN_WRITE|OPEN_BUF
-
-#define LO32(i) (int)(i & 0xFFFFFFFF)
-#define HI32(i) (int)(i >> 32)
-
 #define msgw() 50
 
 #define eeShowReopen 1
@@ -64,8 +54,7 @@ void Encrypt(const String & fn, int f);
 void Encrypt(HANDLE handle, int f);
 void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si);
 void CopyACL(const String & src, const String & dst);
-HANDLE Open(const String & fn, int mode, int attr = 0);
-void Close(HANDLE h);
+HANDLE Open(const String & fn, int mode, int attr);
 int64_t FSeek(HANDLE h, int64_t pos, int method);
 int64_t FTell(HANDLE h);
 void setFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);

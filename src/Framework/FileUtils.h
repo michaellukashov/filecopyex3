@@ -29,6 +29,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define MAX_FILENAME 4096
 
+#define OPEN_BUF 128
+#define OPEN_READ 1
+#define OPEN_CREATE 2
+#define OPEN_APPEND 4
+#define OPEN_WRITE 8
+#define OPEN_WRITE_BUF OPEN_WRITE|OPEN_BUF
+
+#define LO32(i) (int)(i & 0xFFFFFFFF)
+#define HI32(i) (int)(i >> 32)
+
 String ExtractFileName(const String &);
 String ExtractFilePath(const String &);
 String ExtractFileExt(const String &);
@@ -42,6 +52,10 @@ String ChangeFileExt(const String &, const String &);
 #define gslExpandMountPoints 8
 
 #define rfnNoNetExpand 1
+
+extern HANDLE Open(const String & fn, int mode, int attr);
+void Close(HANDLE h);
+int Delete(const String & fn);
 
 String GetFileRoot(const String &);
 String GetRealFileName(const String &, int flg = 0);

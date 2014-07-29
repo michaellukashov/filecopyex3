@@ -509,9 +509,9 @@ open_retry:
         case OM_APPEND:
           info.Flags |= FLG_BUFFERED;
           oflg |= OPEN_BUF;
-          bi->OutFile = Open(DstName, OPEN_APPEND | oflg); break;
+          bi->OutFile = Open(DstName, OPEN_APPEND | oflg, 0); break;
         case OM_RESUME:
-          bi->OutFile = Open(DstName, OPEN_WRITE | oflg);
+          bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
           if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN) == -1)
             FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
                            (int)GetLastError()));
@@ -602,7 +602,7 @@ retry:
               Close(bi->OutFile);
 reopen_retry:
               int oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-              bi->OutFile = Open(DstName, OPEN_WRITE | oflg);
+              bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
               if (!bi->OutFile)
               {
                 WaitForSingleObject(UiFree, INFINITE);
@@ -804,7 +804,7 @@ void Engine::Copy()
     }
 
 open_retry:
-    HANDLE InputFile = Open(SrcName, OPEN_READ);
+    HANDLE InputFile = Open(SrcName, OPEN_READ, 0);
     ShowReadName(SrcName);
 
     if (!InputFile)
@@ -860,7 +860,7 @@ retry:
               if (info.OverMode == OM_RESUME) Pos += info.ResumePos;
               Close(InputFile);
 reopen_retry:
-              InputFile = Open(SrcName, OPEN_READ);
+              InputFile = Open(SrcName, OPEN_READ, 0);
               if (!InputFile)
               {
                 WaitForSingleObject(UiFree, INFINITE);

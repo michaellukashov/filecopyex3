@@ -26,7 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "FileUtils.h"
 #include "StrUtils.h"
 #include "FrameworkUtils.h"
-#include "../EngineTools.h"
 
 inline String ExtractFileName(const String & v)
 {
@@ -470,7 +469,7 @@ int MoveFile(const String & _src, const String & _dst, int replace)
   // return false if dst is hard link
   if (WinNT && replace)
   {
-    HANDLE DstFileHandle = Open(_dst, OPEN_READ);
+    HANDLE DstFileHandle = Open(_dst, OPEN_READ, 0);
     if (DstFileHandle == NULL) return FALSE;
     BY_HANDLE_FILE_INFORMATION FileInformation;
     if (GetFileInformationByHandle(DstFileHandle, &FileInformation))
@@ -572,3 +571,22 @@ void Out(const String & s)
   WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), (const void *)s.ptr(),
                (DWORD)s.len(), &cb, NULL);
 }
+
+
+void Close(HANDLE h)
+{
+  CloseHandle(h);
+}
+
+int Delete(const String & fn)
+{
+  int attr = GetFileAttributes(fn.ptr());
+  SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
+  if (!DeleteFile(fn.ptr()))
+  {
+    SetFileAttributes(fn.ptr(), attr);
+    return FALSE;
+  }
+  return TRUE;
+}
+

@@ -210,18 +210,6 @@ int RmDir(const String & fn)
   return TRUE;
 }
 
-int Delete(const String & fn)
-{
-  int attr = GetFileAttributes(fn.ptr());
-  SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
-  if (!DeleteFile(fn.ptr()))
-  {
-    SetFileAttributes(fn.ptr(), attr);
-    return FALSE;
-  }
-  return TRUE;
-}
-
 void DebugLog(const wchar_t * DebugMsg, ...)
 {
   wchar_t MsgBuf[0x400];
