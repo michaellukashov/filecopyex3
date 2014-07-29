@@ -106,7 +106,7 @@ int StringParent::loadFromFile(const String & fn)
 }
 
 
-int StringParent::saveToFile(FILE * f, TextFormat tf)
+bool StringParent::saveToFile(FILE * f, TextFormat tf)
 {
   if (tf == tfUnicode)
   {
@@ -152,16 +152,16 @@ int StringParent::saveToFile(FILE * f, TextFormat tf)
       fwrite("\r\n", sizeof(char), 2, f);
     }
   }
-  return 1;
+  return true;
 }
 
-int StringParent::saveToFile(const String & fn, TextFormat tf)
+bool StringParent::saveToFile(const String & fn, TextFormat tf)
 {
   DWORD attr = GetFileAttributes(fn.ptr());
   SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
   FILE * f = NULL;
   _wfopen_s(&f, fn.ptr(), L"wb");
-  int res = 0;
+  bool res = false;
   if (f)
   {
     res = saveToFile(f, tf);

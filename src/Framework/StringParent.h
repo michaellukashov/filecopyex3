@@ -21,7 +21,7 @@ public:
   void loadFromString(const String &, wchar_t delim);
   void loadFromString(const wchar_t *, wchar_t delim);
 
-  int saveToFile(FILE * f, TextFormat tf = tfANSI);
-  int saveToFile(const String & fileName, TextFormat tf = tfANSI);
+  bool saveToFile(FILE * f, TextFormat tf = tfANSI);
+  bool saveToFile(const String & fileName, TextFormat tf = tfANSI);
 };
 
