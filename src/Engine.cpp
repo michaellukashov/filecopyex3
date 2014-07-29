@@ -48,23 +48,20 @@ PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, in
   size_t Size = Info.PanelControl(hPlugin, Command, Param1, 0);
   PluginPanelItem * item = reinterpret_cast<PluginPanelItem *>(new char[Size]);
 
-  if (item)
-  {
-    FarGetPluginPanelItem gpi = {sizeof(FarGetPluginPanelItem), Size, item};
-    Info.PanelControl(hPlugin, Command, Param1, &gpi);
-    /*
-    *Param2=*item;
-    Param2->FileName=wcsdup(item->FileName);
-    Param2->AlternateFileName=wcsdup(item->AlternateFileName);
-    Param2->Description=NULL;
-    Param2->Owner=NULL;
-    Param2->CustomColumnData=NULL;
-    Param2->CustomColumnNumber=0;
-    Param2->UserData.Data=NULL;
-    Param2->UserData.FreeData=NULL;
-    free(item);
-    */
-  }
+  FarGetPluginPanelItem gpi = {sizeof(FarGetPluginPanelItem), Size, item};
+  Info.PanelControl(hPlugin, Command, Param1, &gpi);
+  /*
+  *Param2=*item;
+  Param2->FileName=wcsdup(item->FileName);
+  Param2->AlternateFileName=wcsdup(item->AlternateFileName);
+  Param2->Description=NULL;
+  Param2->Owner=NULL;
+  Param2->CustomColumnData=NULL;
+  Param2->CustomColumnNumber=0;
+  Param2->UserData.Data=NULL;
+  Param2->UserData.FreeData=NULL;
+  free(item);
+  */
   return item;
 }
 
