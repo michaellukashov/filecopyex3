@@ -389,7 +389,7 @@ void Engine::ProcessDesc(intptr_t fnum)
   DescList SrcList, DstList;
   SrcList.LoadFromFile(SrcName);
   int attr = GetFileAttributes(DstName.ptr());
-  if (!_UpdateRODescs && attr != 0xFFFFFFFF
+  if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES
       && (attr & FILE_ATTRIBUTE_READONLY)) return;
   DstList.LoadFromFile(DstName);
 
@@ -445,7 +445,7 @@ void Engine::ProcessDesc(intptr_t fnum)
     if (Move)
     {
       int attr = GetFileAttributes(SrcName.ptr());
-      if (!_UpdateRODescs && attr != 0xFFFFFFFF
+	  if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES
           && (attr & FILE_ATTRIBUTE_READONLY)) return;
       if (!SrcList.SaveToFile(SrcName))
         Error2(LOC("Error.WriteDesc"), SrcName, GetLastError());
@@ -776,7 +776,7 @@ void Engine::Copy()
 
       CurDirInfo cdi;
       int dattr = GetFileAttributes(DstName.ptr());
-      if (!CurDirStack.size() || (dattr != 0xFFFFFFFF && dattr & FILE_ATTRIBUTE_REPARSE_POINT))
+	  if (!CurDirStack.size() || (dattr != INVALID_FILE_ATTRIBUTES && dattr & FILE_ATTRIBUTE_REPARSE_POINT))
       {
         cdi.SectorSize = GetSectorSize(DstName);
       }
@@ -1776,7 +1776,7 @@ int Engine::AddFile(const String & _src, const String & _dst, int attr, int64_t 
     return FALSE;
   }
 
-  if (attr == 0xFFFFFFFF)
+  if (attr == INVALID_FILE_ATTRIBUTES)
   {
     return TRUE;
   }
