@@ -43,7 +43,6 @@ CopyProgress::CopyProgress(void)
   Y1 = (h - H - 1) / 2;
   X2 = X1 + W - 1, Y2 = Y1 + H - 1;
   Move = 0;
-  NeedToRedraw = false;
 }
 
 CopyProgress::~CopyProgress(void)
@@ -237,11 +236,6 @@ void CopyProgress::ShowProgress(int64_t read, int64_t write, int64_t total,
              parallel, FirstWrite, StartTime, BufferSize);
     Info.Text(0, 0, 0, NULL);
   }
-}
-
-void CopyProgress::SetNeedToRedraw(bool Value)
-{
-  NeedToRedraw = Value;
 }
 
 void CopyProgress::RedrawWindowIfNeeded()

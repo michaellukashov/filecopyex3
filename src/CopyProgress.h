@@ -43,7 +43,6 @@ public:
                     int64_t readN, int64_t writeN,
                     int64_t totalN, int parallel,
                     int64_t FirstWrite, int64_t StartTime, size_t BufferSize);
-  void SetNeedToRedraw(bool Value);
 private:
   void RedrawWindowIfNeeded();
   void RedrawWindow();
@@ -61,5 +60,4 @@ private:
   int64_t lastupdate, lastupdate_read, lastupdate_write, interval, clastupdate, cinterval;
 
   int X1, Y1, X2, Y2, Move;
-  bool NeedToRedraw;
 };
