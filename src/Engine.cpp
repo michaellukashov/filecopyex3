@@ -578,7 +578,7 @@ open_retry:
           goto skip;
         }
 
-        size_t wsz = (size_t)Min(bi->BuffInf[PosInStr].WritePos - Pos, (size_t)WriteBlock),
+        size_t wsz = (size_t)Min(bi->BuffInf[PosInStr].WritePos - Pos, WriteBlock),
             wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
           wsz = (int)Min((long long)wsz, info.Size - info.Written);
@@ -840,7 +840,7 @@ open_retry:
       while (BuffPos < bi->BuffSize)
       {
         if (info.Flags & FLG_SKIPPED) break;
-        size_t j, cb = Min((size_t)ReadBlock, bi->BuffSize - BuffPos);
+        size_t j, cb = Min(ReadBlock, bi->BuffSize - BuffPos);
 retry:
         int64_t st = GetTime();
         j = Read(InputFile, bi->Buffer + BuffPos, cb);
