@@ -19,7 +19,7 @@ String getEnv(const String & name)
     free(buf);
     return v;
   }
-  return "";
+  return L"";
 }
 
 void Bind(const String & key, const String & code, const String & desc)
@@ -49,21 +49,21 @@ void Bind(const String & key, const String & code, const String & desc)
     base = getEnv("APPDATA");
     if (!base.empty())
     {
-      base += "\\Far Manager\\Profile";
+      base += L"\\Far Manager\\Profile";
     }
   }
   if (base.empty())
   {
     return; // Cannot find correct path
   }
-  String fname = String(L"Shell_") + key + ".lua";
+  String fname = String(L"Shell_") + key + L".lua";
   StringVector v;
   v.AddString(L"area=\"Shell\"");
-  v.AddString(String(L"key=\"") + key + "\"");
+  v.AddString(String(L"key=\"") + key + L"\"");
   v.AddString(L"flags=\"NoPluginPanels NoPluginPPanels NoSendKeysToPlugins\"");
-  v.AddString(String(L"description=\"") + desc + "\"");
-  v.AddString(String(L"code=\"") + code + "\"");
-  v.saveToFile(base + "\\Macros\\internal\\" + fname);
+  v.AddString(String(L"description=\"") + desc + L"\"");
+  v.AddString(String(L"code=\"") + code + L"\"");
+  v.saveToFile(base + L"\\Macros\\internal\\" + fname);
 
   Info.MacroControl(&MainGuid, MCTL_LOADALL, 0, NULL);
 }
@@ -71,7 +71,7 @@ void Bind(const String & key, const String & code, const String & desc)
 /*
 int Binded(const String& key)
 {
-  //XXX String seq = registry.GetString(regkey + "\\" + key, "Sequence", "");
+  //XXX String seq = registry.GetString(regkey + L"\\" + key, "Sequence", "");
   //XXX return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp("F5") || !seq.icmp("F6"));
   return true;
 }

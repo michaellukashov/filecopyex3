@@ -30,21 +30,21 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 inline String ExtractFileName(const String & v)
 {
-  return v.substr(v.find_last_of("\\/") + 1);
+  return v.substr(v.find_last_of(L"\\/") + 1);
 }
 
 inline String ExtractFilePath(const String & v)
 {
-  size_t pos = v.find_last_of("\\/");
-  return (pos == (size_t)-1) ? "" : v.substr(0, pos);
+  size_t pos = v.find_last_of(L"\\/");
+  return (pos == (size_t)-1) ? L"" : v.substr(0, pos);
 }
 
 String ExtractFileExt(const String & v)
 {
   size_t p = v.rfind('.');
-  if (p == (size_t)-1 || p < v.find_last_of("\\/"))
+  if (p == (size_t)-1 || p < v.find_last_of(L"\\/"))
   {
-    return "";
+    return L"";
   }
   else
   {
@@ -55,7 +55,7 @@ String ExtractFileExt(const String & v)
 String ChangeFileExt(const String & v, const String & ext)
 {
   size_t p = v.rfind('.');
-  if (p == (size_t)-1 || p < v.find_last_of("\\/"))
+  if (p == (size_t)-1 || p < v.find_last_of(L"\\/"))
   {
     return v + ext;
   }
@@ -86,7 +86,7 @@ String AddEndSlash(const String & v)
   }
   else
   {
-    return v + "\\";
+    return v + L"\\";
   }
 }
 
@@ -111,7 +111,7 @@ String GetFileNameRoot(const String & v)
       }
     }
   }
-  else if (l == "\\\\")
+  else if (l == L"\\\\")
   {
     l = v.substr(2);
     size_t p = l.find_first_of("\\/");
@@ -126,15 +126,15 @@ String GetFileNameRoot(const String & v)
       }
       else
       {
-        return v + "\\";
+        return v + L"\\";
       }
     }
   }
   else if (l.find(':') == 1)
   {
-    return l + "\\";
+    return l + L"\\";
   }
-  return "";
+  return L"";
 }
 
 //typedef
@@ -216,7 +216,7 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
 
 int GetSymLink(const String & _dir, String & res, int flg)
 {
-  res = "";
+  res = L"";
   String dir = CutEndSlash(_dir);
   wchar_t buf[MAX_FILENAME];
   DWORD sz = MAX_FILENAME;
@@ -226,12 +226,12 @@ int GetSymLink(const String & _dir, String & res, int flg)
       QueryDosDevice(dir.ptr(), buf, MAX_FILENAME) > 0)
   {
     String r = buf;
-    if (r.left(8) == "\\??\\UNC\\")
+    if (r.left(8) == L"\\??\\UNC\\")
     {
       res = CutEndSlash(String(L"\\\\") + r.substr(8));
       return TRUE;
     }
-    if (r.left(4) == "\\??\\")
+    if (r.left(4) == L"\\??\\")
     {
       res = CutEndSlash(r.substr(4));
       return TRUE;
@@ -268,7 +268,7 @@ int GetSymLink(const String & _dir, String & res, int flg)
               (!memcmp(rd->ReparseGuid.Data4, L"\\??\\", 8)))
           {
             String r = (wchar_t *)&rd->GenericReparseBuffer;
-            if (r.left(7) != "Volume{")
+            if (r.left(7) != L"Volume{")
             {
               CloseHandle(hf);
               res = CutEndSlash(buf);
@@ -389,7 +389,7 @@ String ApplyFileMaskPath(const String & name, const String & mask)
     if (name.icmp(mask)) res += String(L"\\") + ExtractFileName(name);
     return res;
   }
-  return ExtractFilePath(mask) + "\\" +
+  return ExtractFilePath(mask) + L"\\" +
          ApplyFileMask(ExtractFileName(name), ExtractFileName(mask));
 }
 
@@ -420,7 +420,7 @@ int64_t FileSize(const String & fn)
 inline String TempName()
 {
   srand((uint32_t)time(NULL));
-  return Format(L"%8.8x", rand() * rand() * rand()) + "." + Format(L"%3.3x", rand());
+  return Format(L"%8.8x", rand() * rand() * rand()) + L"." + Format(L"%3.3x", rand());
 }
 
 String TempPath()
@@ -432,7 +432,7 @@ String TempPath()
 
 String TempPathName()
 {
-  return TempPath() + "\\" + TempName();
+  return TempPath() + L"\\" + TempName();
 }
 
 static int __MoveFile(const wchar_t * src, const wchar_t * dst)
@@ -498,7 +498,7 @@ int MoveFile(const String & _src, const String & _dst, int replace)
   {
     String root1 = GetFileRoot(_src),
            root2 = GetFileRoot(_dst);
-    if (root1 == "" || root2 == "")
+    if (root1 == L"" || root2 == L"")
     {
       SetLastError(ERROR_PATH_NOT_FOUND);
       return FALSE;
@@ -527,7 +527,7 @@ int MoveFile(const String & _src, const String & _dst, int replace)
           SetLastError(ERROR_ALREADY_EXISTS);
           return FALSE;
         }
-        String temp = ExtractFilePath(dst) + "\\" + TempName();
+        String temp = ExtractFilePath(dst) + L"\\" + TempName();
         if (!__MoveFile(dst.ptr(), temp.ptr())) return FALSE;
         if (!__MoveFile(src.ptr(), dst.ptr()))
         {

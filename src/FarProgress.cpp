@@ -68,9 +68,9 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String & capt
 {
   int W = X2 - X1 + 1, H = Y2 - Y1 + 1;
   String tpl = caption;
-  tpl += "\n";
+  tpl += L"\n";
   String bkg = String(' ', W - 10);
-  bkg += "\n";
+  bkg += L"\n";
   for (int i = 0; i < H - 4; ++i)
   {
     tpl += bkg;
@@ -97,7 +97,7 @@ void FarProgress::ShowMessage(const String & msg)
   int Y1 = (sh - H - 1) / 2;
   int X2 = X1 + W - 1, Y2 = Y1 + H - 1;
   hScreen = Info.SaveScreen(X1, Y1, X2 + 2, Y2 + 2);
-  DrawWindow(X1, Y1, X2, Y2, "");
+  DrawWindow(X1, Y1, X2, Y2, L"");
   Info.Text(X1 + 6, Y1 + 2, &clrText, FormatWidth(msg, X2 - X1 - 11).ptr());
   Info.Text(0, 0, 0, NULL);
   WinType = WIN_MESSAGE;
@@ -116,7 +116,7 @@ void FarProgress::ShowProgress(const String & msg)
   int Y1 = (sh - H - 1) / 2;
   int X2 = X1 + W - 1, Y2 = Y1 + H - 1;
   hScreen = Info.SaveScreen(X1, Y1, X2 + 2, Y2 + 2);
-  DrawWindow(X1, Y1, X2, Y2, "");
+  DrawWindow(X1, Y1, X2, Y2, L"");
   Info.Text(X1 + 5, Y1 + 2, &clrText, FormatWidth(msg, X2 - X1 - 9).ptr());
   ProgX1 = X1 + 5;
   ProgX2 = X2 - 5;
@@ -158,7 +158,7 @@ void FarProgress::SetPercent(float pc)
     {
       DrawProgress(ProgX1, ProgX2, ProgY, pc);
       Info.Text(0, 0, 0, NULL);
-      SetTitle2(ProgTitle + " {" + String((int)(pc * 100)) + "%}");
+      SetTitle2(ProgTitle + L" {" + String((int)(pc * 100)) + L"%}");
       LastUpdate = GetTime();
     }
   }
@@ -200,7 +200,7 @@ void FarProgress::SetTitle2(const String & v) const
     far_desc = far_desc.substr(x);
   else
     far_desc = L"- Far";
-  SetTitle(v + " " + far_desc);
+  SetTitle(v + L" " + far_desc);
 }
 
 String FarProgress::GetTitle()
@@ -229,7 +229,7 @@ void FarProgress::ShowScanProgress(const String & msg)
   int WindowCoordY2 = WindowCoordY1 + WindowHeight - 1;
   hScreen = Info.SaveScreen(WindowCoordX1, WindowCoordY1,
                             WindowCoordX2 + 2, WindowCoordY2 + 2);
-  DrawWindow(WindowCoordX1, WindowCoordY1, WindowCoordX2, WindowCoordY2, "");
+  DrawWindow(WindowCoordX1, WindowCoordY1, WindowCoordX2, WindowCoordY2, L"");
   Info.Text(WindowCoordX1 + 5, WindowCoordY1 + 2, &clrText,
             FormatWidth(msg, WindowCoordX2 - WindowCoordX1 - 9).ptr());
   ProgX1  = WindowCoordX1 + 5;
@@ -265,11 +265,11 @@ void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
 void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize)
 {
   RedrawWindowIfNeeded();
-  String FilesFmtStr = LOC(L"Status.FilesString") + " %-6I64d";
+  String FilesFmtStr = LOC(L"Status.FilesString") + L" %-6I64d";
   wchar_t FilesStr[256];
   _snwprintf_s(FilesStr, 256, LENOF(FilesStr), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
 
-  String SizeFmtStr = LOC(L"Status.SizeString") + " %s";
+  String SizeFmtStr = LOC(L"Status.SizeString") + L" %s";
   wchar_t SizeStr[256];
   _snwprintf_s(SizeStr, 256, LENOF(SizeStr), (const wchar_t *)SizeFmtStr.ptr(), (const wchar_t *)FormatValue(TotalSize).ptr());
 

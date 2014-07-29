@@ -37,10 +37,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void BindAll()
 {
-  Bind("F5", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0)", "FileCopyEx - Copy file(s)");
-  Bind("F6", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1)", "FileCopyEx - Move file(s)");
-  Bind("ShiftF5", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2)", "FileCopyEx - Copy current file");
-  Bind("ShiftF6", "Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3)", "FileCopyEx - Move current file");
+  Bind(L"F5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0)", L"FileCopyEx - Copy file(s)");
+  Bind(L"F6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1)", L"FileCopyEx - Move file(s)");
+  Bind(L"ShiftF5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2)", L"FileCopyEx - Copy current file");
+  Bind(L"ShiftF6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3)", L"FileCopyEx - Move current file");
 }
 
 
@@ -54,7 +54,7 @@ void FarPlugin::InitLang()
   if (fn != CurLocaleFile)
   {
     CurLocaleFile = fn;
-    LoadLocale(GetDLLPath() + "\\resource\\" + fn, locale);
+    LoadLocale(GetDLLPath() + L"\\resource\\" + fn, locale);
   }
 }
 
@@ -63,7 +63,7 @@ void FarPlugin::Create()
   // bug #15 fixed by Ivanych
   InitLang();
 
-  if (!dialogs.Load(GetDLLPath() + "\\resource\\dialogs.objd"))
+  if (!dialogs.Load(GetDLLPath() + L"\\resource\\dialogs.objd"))
   {
     FWError("Could not load dialogs.objd");
     exit(0);
@@ -211,7 +211,7 @@ void FarPlugin::KeyConfig()
   //int res = Info.MacroControl(&MainGuid, MCTL_SAVEALL, 0, NULL);
   //
   BindAll();
-  ShowMessage("", "Hotkeys binded", FMSG_MB_OK);
+  ShowMessage(L"", L"Hotkeys binded", FMSG_MB_OK);
   return;
 #if 0
   FarDialog & dlg = Dialogs()[L"KeysDialog"];
@@ -258,8 +258,8 @@ void FarPlugin::KeyConfig()
     if (dlg[L"AltShiftF5"](L"Selected")) key = "AltShift";
     else if (dlg[L"CtrlShiftF5"](L"Selected")) key = "CtrlShift";
     else if (dlg[L"CtrlAltF5"](L"Selected")) key = "CtrlAlt";
-    Bind(key + "F5", "F5");
-    Bind(key + "F6", "F6");
+    Bind(key + L"F5", "F5");
+    Bind(key + L"F6", "F6");
     */
   }
   // MacroCommand(MCMD_LOADALL); // XXX

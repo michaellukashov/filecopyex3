@@ -38,7 +38,7 @@ intptr_t ShowMessageOK(const String & title, const String & msg)
 
 intptr_t ShowMessageHelp(const String & title, const String & msg, int Flags, const String & help)
 {
-  String msgbuf = title + "\n" + msg + "\n\x01";
+  String msgbuf = title + L"\n" + msg + L"\n\x01";
   intptr_t res = Info.Message(&MainGuid, &UnkGuid,
                               Flags | FMSG_ALLINONE,
                               help.ptr(),
@@ -61,7 +61,7 @@ intptr_t ShowMessageExHelp(const String & title, const String & msg,
   {
     if (*p == '\n') nb++;
   }
-  String msgbuf = title + "\n" + msg + "\n\x01\n" + buttons;
+  String msgbuf = title + L"\n" + msg + L"\n\x01\n" + buttons;
   intptr_t res = Info.Message(&MainGuid, &UnkGuid, flags | FMSG_ALLINONE,
                               help.ptr(), (const wchar_t **)(const wchar_t *)msgbuf.ptr(), 0, nb + 1
                              );
@@ -76,7 +76,7 @@ int msgw()
 void Error(const String & s, int code)
 {
   ShowMessageEx(LOC(L"Framework.Error"),
-                s + "\n" + SplitWidth(GetErrText(code), msgw()),
+                s + L"\n" + SplitWidth(GetErrText(code), msgw()),
                 LOC(L"Framework.OK"),
                 FMSG_WARNING
                );
@@ -85,7 +85,7 @@ void Error(const String & s, int code)
 void Error2(const String & s, const String & fn, int code)
 {
   ShowMessageEx(LOC(L"Framework.Error"),
-                s + "\n" + FormatWidthNoExt(fn, msgw()) + "\n" + SplitWidth(GetErrText(code), msgw()),
+                s + L"\n" + FormatWidthNoExt(fn, msgw()) + L"\n" + SplitWidth(GetErrText(code), msgw()),
                 LOC(L"Framework.OK"),
                 FMSG_WARNING
                );
@@ -94,8 +94,8 @@ void Error2(const String & s, const String & fn, int code)
 intptr_t Error2RS(const String & s, const String & fn, int code)
 {
   intptr_t res = ShowMessageEx(LOC(L"Framework.Error"),
-                               s + "\n" + FormatWidthNoExt(fn, msgw()) + "\n" + SplitWidth(GetErrText(code), msgw()),
-                               LOC(L"Framework.Retry") + "\n" + LOC(L"Framework.Skip"),
+                               s + L"\n" + FormatWidthNoExt(fn, msgw()) + L"\n" + SplitWidth(GetErrText(code), msgw()),
+                               LOC(L"Framework.Retry") + L"\n" + LOC(L"Framework.Skip"),
                                FMSG_WARNING
                               );
   if (res == 0)

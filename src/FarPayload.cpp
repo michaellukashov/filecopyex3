@@ -110,9 +110,9 @@ void FarDlgPayload::preInitItem(FarDialogItem & item)
   String p = getProp(L"Text");
   if (p.empty())
   {
-    String n = getDialog()->getName() + "." + getName();
+    String n = getDialog()->getName() + L"." + getName();
     String loc = LOC(n);
-    p = (n == loc) ? "" : loc;
+    p = (n == loc) ? L"" : loc;
   }
   SetItemText(item, p);
 
@@ -192,7 +192,7 @@ void FarDlgEditPayload::realInitItem(FarDialogItem & item)
     String p = getProp(L"HistoryId");
     if (!p.empty())
     {
-      (String(L"FarFramework\\") + getDialog()->getName() + "\\" + getName()).copyTo(HistoryId, LENOF(HistoryId));
+      (String(L"FarFramework\\") + getDialog()->getName() + L"\\" + getName()).copyTo(HistoryId, LENOF(HistoryId));
       item.History = HistoryId;
     }
   }

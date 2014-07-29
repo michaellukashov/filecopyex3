@@ -48,8 +48,8 @@ int DescList::LoadFromList(StringVector & list)
       if (!fn.empty())
       {
         names[fn] = Data(desc, 0);
-        fn = "";
-        desc = "";
+        fn = L"";
+        desc = L"";
       }
       if (c == '"')
       {
@@ -72,7 +72,7 @@ int DescList::LoadFromList(StringVector & list)
         else
         {
           fn = s;
-          desc = "";
+          desc = L"";
         }
       }
     }
@@ -101,7 +101,7 @@ int DescList::SaveToFile(const String & fn)
       String s;
       if (it->first.find(' '))
       {
-        s = String(L"\"") + it->first + "\"";
+        s = String(L"\"") + it->first + L"\"";
       }
       else
       {

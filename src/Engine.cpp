@@ -71,7 +71,7 @@ PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, in
 
 int warn(const String & s)
 {
-  return ShowMessage(LOC(L"CopyDialog.Warning"), s + "\n" + LOC(L"CopyDialog.WarnPrompt"), FMSG_MB_YESNO) == 0;
+  return ShowMessage(LOC(L"CopyDialog.Warning"), s + L"\n" + LOC(L"CopyDialog.WarnPrompt"), FMSG_MB_YESNO) == 0;
 }
 
 
@@ -79,7 +79,7 @@ void ShowErrorMessage(const String & s)
 {
   //ShowMessage(LOC(L"CopyDialog.Error"), s, FMSG_WARNING | FMSG_MB_OK);
 
-  String msgbuf = LOC(L"CopyDialog.Error") + "\n" + s + "\n";
+  String msgbuf = LOC(L"CopyDialog.Error") + L"\n" + s + L"\n";
 
   Info.Message(&MainGuid, &UnkGuid, FMSG_WARNING | FMSG_MB_OK | FMSG_ALLINONE, NULL, (const wchar_t * const *)msgbuf.ptr(), 0, 0);
 
@@ -192,7 +192,7 @@ int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
     int flg = eeYesNo | eeOneLine;
     if (ShowKeepFilesCheckBox) flg |= eeShowKeepFiles;
 
-    int res = EngineError(LOC(L"CopyError.StopPrompt"), "", 0, flg, LOC(L"CopyError.StopTitle"));
+    int res = EngineError(LOC(L"CopyError.StopPrompt"), L"", 0, flg, LOC(L"CopyError.StopTitle"));
 
     HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
     FlushConsoleInputBuffer(h);
@@ -290,7 +290,7 @@ del_retry:
       {
         WaitForSingleObject(UiFree, INFINITE);
         int flg = eeRetrySkipAbort | eeAutoSkipAll;
-        int res = EngineError(LOC(L"Error.FileDelete"), SrcName, GetLastError(), flg, "", "Error.FileDelete");
+        int res = EngineError(LOC(L"Error.FileDelete"), SrcName, GetLastError(), flg, L"", L"Error.FileDelete");
         SetEvent(UiFree);
         if (res == RES_RETRY)
         {
@@ -558,7 +558,7 @@ open_retry:
           WaitForSingleObject(UiFree, INFINITE);
           int flg = eeRetrySkipAbort | eeAutoSkipAll,
               res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, GetLastError(),
-                                flg, "", "Error.OutputFileCreate");
+                                flg, L"", L"Error.OutputFileCreate");
           SetEvent(UiFree);
           if (res == RES_RETRY) goto open_retry;
           else if (res == RES_ABORT) Aborted = 1;
@@ -591,7 +591,7 @@ retry:
           WaitForSingleObject(UiFree, INFINITE);
           int flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
               res = EngineError(LOC(L"Error.Write"), DstName, GetLastError(), flg,
-                                "", "Error.Write");
+                                L"", L"Error.Write");
           SetEvent(UiFree);
           if (res == RES_RETRY)
           {
@@ -608,7 +608,7 @@ reopen_retry:
                 WaitForSingleObject(UiFree, INFINITE);
                 int flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
                     res = EngineError(LOC(L"Error.OutputFileCreate"),
-                                      DstName, GetLastError(), flg, "", "Error.OutputFileCreate");
+                                      DstName, GetLastError(), flg, L"", L"Error.OutputFileCreate");
                 SetEvent(UiFree);
                 if (res == RES_RETRY) goto reopen_retry;
                 else
@@ -660,8 +660,8 @@ skip: ;
       FinalizeBuf(bi);
       bi->OutFile = NULL;
       bi->OutNum = -1;
-      bi->SrcName = "";
-      bi->DstName = "";
+      bi->SrcName = L"";
+      bi->DstName = L"";
     }
 
     if (Aborted) break;
@@ -812,7 +812,7 @@ open_retry:
       WaitForSingleObject(UiFree, INFINITE);
       int flg = eeRetrySkipAbort | eeAutoSkipAll,
           res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, GetLastError(),
-                            flg, "", "Error.InputFileOpen");
+                            flg, L"", L"Error.InputFileOpen");
       SetEvent(UiFree);
       if (res == RES_RETRY) goto open_retry;
       else
@@ -850,7 +850,7 @@ retry:
           WaitForSingleObject(UiFree, INFINITE);
           int flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
               res = EngineError(LOC(L"Error.Read"), SrcName, GetLastError(), flg,
-                                "", "Error.Read");
+                                L"", L"Error.Read");
           SetEvent(UiFree);
           if (res == RES_RETRY)
           {
@@ -866,7 +866,7 @@ reopen_retry:
                 WaitForSingleObject(UiFree, INFINITE);
                 int flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
                     res = EngineError(LOC(L"Error.InputFileOpen"), SrcName,
-                                      GetLastError(), flg, "", "Error.InputFileOpen");
+                                      GetLastError(), flg, L"", L"Error.InputFileOpen");
                 SetEvent(UiFree);
                 if (res == RES_RETRY) goto reopen_retry;
                 else
@@ -1062,7 +1062,7 @@ String Engine::FindDescFile(const String & dir, intptr_t * idx)
   {
     *idx = -1;
   }
-  return "";
+  return L"";
 }
 
 String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t * idx)
@@ -1078,7 +1078,7 @@ String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t *
     }
   }
   if (idx) *idx = -1;
-  return "";
+  return L"";
 }
 
 void Engine::AddTopLevelDir(const String & dir, const String & dstMask, int flags, FileName::Direction d)
@@ -1087,7 +1087,7 @@ void Engine::AddTopLevelDir(const String & dir, const String & dstMask, int flag
   WIN32_FIND_DATA fd;
 
   SrcNames.AddRel(d, dir);
-  DstNames.AddRel(d, ExtractFilePath(ApplyFileMaskPath(dir + "\\somefile.txt", dstMask)));
+  DstNames.AddRel(d, ExtractFilePath(ApplyFileMaskPath(dir + L"\\somefile.txt", dstMask)));
 
   FileStruct info;
   memset(&info, 0, sizeof(info));
@@ -1122,10 +1122,10 @@ int Engine::DirStart(const String & dir, const String & dstMask)
 
 int Engine::DirEnd(const String & dir, const String & dstMask)
 {
-  if (_CopyDescs && CurPathDesc != "")
+  if (_CopyDescs && CurPathDesc != L"")
   {
-    if (!AddFile(dir + "\\" + CurPathDesc,
-                 AddEndSlash(ExtractFilePath(ApplyFileMaskPath(dir + "\\" + CurPathDesc, dstMask))) + CurPathDesc, DescFindData, AF_DESCFILE | AF_DESC_INVERSE | CurPathAddFlags, 1)
+    if (!AddFile(dir + L"\\" + CurPathDesc,
+                 AddEndSlash(ExtractFilePath(ApplyFileMaskPath(dir + L"\\" + CurPathDesc, dstMask))) + CurPathDesc, DescFindData, AF_DESCFILE | AF_DESC_INVERSE | CurPathAddFlags, 1)
        )
     {
       return FALSE;
@@ -1187,14 +1187,14 @@ Engine::MResult Engine::Main(int move, int curOnly)
 
   if ((pi.Flags & PFLAGS_PLUGIN) == PFLAGS_PLUGIN)
   {
-    dstPath = "plugin:";
+    dstPath = L"plugin:";
     allowPlug = 1;
   }
   else
   {
     if (pi.PanelType == PTYPE_QVIEWPANEL || pi.PanelType == PTYPE_INFOPANEL ||  !(pi.Flags & PFLAGS_VISIBLE))
     {
-      dstPath = "";
+      dstPath = L"";
     }
     else
     {
@@ -1266,7 +1266,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
   dlg[L"DestPath"](L"Text") = dstPath;
 
   // axxie: Reset cp in case when user pressed Shift-F6/Shift-F5
-  int cp = (!curOnly && srcPath != "") ? CheckParallel(srcPath, dstPath) : FALSE;
+  int cp = (!curOnly && srcPath != L"") ? CheckParallel(srcPath, dstPath) : FALSE;
   if (!Options[L"AllowParallel"])
   {
     dlg[L"ParallelCopy"](L"Selected") = FALSE;
@@ -1381,7 +1381,7 @@ rep:
     dstText = L"nul";
 
   // bugfixed by slst: bug #7
-  dstText = dstText.replace("\"", "");
+  dstText = dstText.replace(L"\"", L"");
 
   if (dstText == L"plugin:")
   {
@@ -1396,8 +1396,8 @@ rep:
     }
   }
 
-  String relDstPath = ExpandEnv(dstText.replace("/", "\\"));
-  dstPath = "";
+  String relDstPath = ExpandEnv(dstText.replace(L"/", L"\\"));
+  dstPath = L"";
 
   wchar_t CurrentDir[MAX_FILENAME];
   wchar_t dstbuf[MAX_FILENAME];
@@ -1593,16 +1593,16 @@ rep:
     if (_CopyDescs && !ExtractFileName(file).icmp(CurPathDesc))
     {
       if (ShowMessageEx(LOC(L"CopyDialog.Warning"),
-                        FormatWidthNoExt(file, 50) + "\n" +
-                        LOC(L"CopyDialog.DescSelectedWarn") + "\n" +
+                        FormatWidthNoExt(file, 50) + L"\n" +
+                        LOC(L"CopyDialog.DescSelectedWarn") + L"\n" +
                         LOC(L"CopyDialog.DescSelectedWarn1"),
-                        LOC(L"Framework.No") + "\n" + LOC(L"Framework.Yes"), 0) != 1)
+                        LOC(L"Framework.No") + L"\n" + LOC(L"Framework.Yes"), 0) != 1)
       {
         continue;
       }
       else
       {
-        CurPathDesc = "";
+        CurPathDesc = L"";
       }
     }
 
@@ -1960,7 +1960,7 @@ retry:
       }
       WIN32_FIND_DATA fd;
       HANDLE hf;
-      if ((hf = FindFirstFile((src + "\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
+      if ((hf = FindFirstFile((src + L"\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
       {
         intptr_t descidx = -1;
         RememberStruct Remember;
@@ -1989,9 +1989,9 @@ retry:
                   (fd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))
               {
                 // compare current folder & unfolded symlink name in current folder
-                if (GetRealFileName(src) != GetRealFileName(src + "\\" + fd.cFileName))
+                if (GetRealFileName(src) != GetRealFileName(src + L"\\" + fd.cFileName))
                 {
-                  if (!AddFile(src + "\\" + fd.cFileName, dst + "\\" + fd.cFileName, fd, flags, Level + 1))
+                  if (!AddFile(src + L"\\" + fd.cFileName, dst + L"\\" + fd.cFileName, fd, flags, Level + 1))
                   {
                     FindClose(hf);
                     return FALSE;
@@ -2000,7 +2000,7 @@ retry:
               }
               else
               {
-                if (!AddFile(src + "\\" + fd.cFileName, dst + "\\" + fd.cFileName, fd, flags, Level + 1))
+                if (!AddFile(src + L"\\" + fd.cFileName, dst + L"\\" + fd.cFileName, fd, flags, Level + 1))
                 {
                   FindClose(hf);
                   return FALSE;
@@ -2187,7 +2187,7 @@ rep:
 rep1:
     if (dlg.Execute() == 0)
     {
-      ren = ExtractFilePath(Dst) + "\\" + dlg[L"Edit"](L"Text");
+      ren = ExtractFilePath(Dst) + L"\\" + dlg[L"Edit"](L"Text");
       if (ExistsN(ren, 0)) goto rep1;
     }
     else goto rep;
@@ -2269,7 +2269,7 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
       String disk_str = dstroot;
       if (disk_str.len() >= 2)
         if (disk_str[1] == ':') disk_str = disk_str.left(2);
-      dlg[L"Label1"](L"Text") = LOC(L"FreeSpaceErrorDialog.NotEnoughSpace") + " " + disk_str;
+      dlg[L"Label1"](L"Text") = LOC(L"FreeSpaceErrorDialog.NotEnoughSpace") + L" " + disk_str;
       dlg[L"Label2"](L"Text") = Format(L"%-20s%12s", LOC(L"FreeSpaceErrorDialog.AvailableSpace").ptr(),
                                      FormatValue(FreeBytesAvailable.QuadPart).ptr());
       dlg[L"Label3"](L"Text") = Format(L"%-20s%12s", LOC(L"FreeSpaceErrorDialog.RequiredSpace").ptr(),

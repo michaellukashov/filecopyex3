@@ -41,7 +41,7 @@ int GetDriveId(const String & path, String & res)
     if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME) > 0)
     {
       String s = buf;
-      String tmp = "\\Device\\Harddisk";
+      String tmp = L"\\Device\\Harddisk";
       if (!s.nicmp(tmp, tmp.len()))
       {
         res = s.substr(tmp.len(), 1);
@@ -52,7 +52,7 @@ int GetDriveId(const String & path, String & res)
   else if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME) > 0)
   {
     String s = buf;
-    String tmp = "\\Device\\HarddiskDmVolumes\\";
+    String tmp = L"\\Device\\HarddiskDmVolumes\\";
     if (!s.nicmp(tmp, tmp.len()))
     {
       s = s.substr(tmp.len());
@@ -70,7 +70,7 @@ int GetPhysDrive(const String & _path, int & res)
   // if (WinXP)
   if (Win2K || WinXP)  // this also works OK under w2k/sp4
   {
-    if (path.left(11) != "\\\\?\\Volume{")
+    if (path.left(11) != L"\\\\?\\Volume{")
     {
       wchar_t buf[MAX_FILENAME];
       if (!GetVolumeNameForVolumeMountPoint(path.ptr(), buf, MAX_FILENAME))
@@ -104,7 +104,7 @@ int GetPhysDrive(const String & _path, int & res)
 int VolFlags(const String & _path)
 {
   String path = _path;
-  size_t sl = path.find_last_of("\\/"),
+  size_t sl = path.find_last_of(L"\\/"),
       ml = path.find_first_of("*?");
   if (ml != (size_t)-1 && ml < sl) return -1;
   if (path.find_first_of("|<>") != (size_t)-1) return -1;
@@ -170,7 +170,7 @@ int CheckParallel(const String & _srcpath, const String & _dstpath)
 
 String DupName(const String & src, int n)
 {
-  return ChangeFileExt(src, "") + "_" + String(n) + ExtractFileExt(src);
+  return ChangeFileExt(src, "") + L"_" + String(n) + ExtractFileExt(src);
 }
 
 int ExistsN(const String & fn, int n)

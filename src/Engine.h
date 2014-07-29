@@ -160,7 +160,7 @@ private:
 
   std::map<String, int> errTypes;
   int EngineError(const String & s, const String & fn, int code, int & flg,
-                  const String & title = "", const String & type_id = "");
+                  const String & title = L"", const String & type_id = L"");
 
 
   BOOL CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,

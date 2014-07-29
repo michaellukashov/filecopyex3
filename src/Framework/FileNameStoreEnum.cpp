@@ -5,7 +5,7 @@ String FileNameStoreEnum::GetNext()
 {
   if (cur >= store->Count())
   {
-    return "";
+    return L"";
   }
 
   const FileName & fn = (*store)[cur++];
@@ -16,7 +16,7 @@ String FileNameStoreEnum::GetNext()
     {
       if (!curPath.empty())
       {
-        curPath += "\\";
+        curPath += L"\\";
       };
       curPath += fn.getName();
       buffer = curPath;
@@ -34,7 +34,7 @@ String FileNameStoreEnum::GetNext()
     case FileName::levelStar:
     {
       buffer = curPath;
-      curPath = "";
+      curPath = L"";
       break;
     }
 
@@ -43,7 +43,7 @@ String FileNameStoreEnum::GetNext()
       buffer = curPath;
       if (!buffer.empty())
       {
-        buffer += "\\";
+        buffer += L"\\";
       }
       buffer += fn.getName();
     }
@@ -67,7 +67,7 @@ void FileNameStoreEnum::Skip()
     {
       if (!curPath.empty())
       {
-        curPath += "\\";
+        curPath += L"\\";
       };
       curPath += fn.getName();
       break;
@@ -81,7 +81,7 @@ void FileNameStoreEnum::Skip()
 
     case FileName::levelStar:
     {
-      curPath = "";
+      curPath = L"";
       break;
     }
   }
@@ -90,8 +90,8 @@ void FileNameStoreEnum::Skip()
 void FileNameStoreEnum::ToFirst()
 {
   cur = 0;
-  curPath = "";
-  buffer = "";
+  curPath = L"";
+  buffer = L"";
 }
 
 String FileNameStoreEnum::GetByNum(size_t n)
@@ -99,7 +99,7 @@ String FileNameStoreEnum::GetByNum(size_t n)
   if (cur > n + 1)
   {
     FWError(L"FileNameStoreEnum::GetByNum - assertion failure");
-    return "";
+    return L"";
   }
 
   if (cur == n + 1)
