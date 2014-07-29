@@ -117,6 +117,7 @@ set(FILECOPYEX_SOURCES
   src/Framework/Node.cpp
   src/Framework/FileNameStoreEnum.cpp
   src/Framework/DescList.cpp
+  src/Framework/FrameworkUtils.cpp
 
   FileCopyEx.rc
 )

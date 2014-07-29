@@ -25,7 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "StdHdr.h"
 #include "FileUtils.h"
 #include "StrUtils.h"
-#include "../Common.h"
+#include "FrameworkUtils.h"
 #include "../EngineTools.h"
 
 inline String ExtractFileName(const String & v)

@@ -81,7 +81,6 @@ String DupName(const String & src, int n);
 int RmDir(const String & fn);
 bool Newer(const FILETIME & ft1, const FILETIME & ft2);
 bool Newer(const String & fn1, const FILETIME & ft2);
-int Delete(const String & fn);
 
 int VolFlags(const String & path);
 int CheckParallel(const String & srcpath, const String & dstpath);

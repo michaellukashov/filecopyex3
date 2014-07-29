@@ -22,20 +22,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#pragma once
+#include <crtdbg.h>
+#include <stdexcept>
 
-#include "Framework/ObjString.h"
-#include "Framework/FrameworkUtils.h"
-#include "SDK/plugin.hpp"
-#include "FarPlugin.h"
+#include "StdHdr.h"
+#include "FrameworkUtils.h"
 
-extern HANDLE hInstance;
+int WinNT = 0, WinNT4 = 0, Win2K = 0, WinXP = 0;
 
-BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID);
+void FWError(const wchar_t * s)
+{
+  if (errorHandler)
+  {
+    errorHandler(s);
+  }
+  else
+  {
+    MessageBox(0, s, L"FileCopyEx plugin error", MB_OK | MB_ICONSTOP | MB_SETFOREGROUND);
+    DebugBreak();
+  }
+}
 
-const wchar_t * GetMsg(int MsgId);
-const String & LOC(const String & l);
+void FWError(const String & s)
+{
+  FWError(s.ptr());
+}
 
-extern PluginStartupInfo Info;
-extern FarStandardFunctions FSF;
-extern FarPlugin * plugin;
+ErrorHandler errorHandler = NULL;

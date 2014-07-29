@@ -22,34 +22,10 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#include <crtdbg.h>
-#include <stdexcept>
-
 #include "Framework/StdHdr.h"
 #include "Framework/ObjString.h"
 #include "Common.h"
 
-void FWError(const wchar_t * s)
-{
-  if (errorHandler)
-  {
-    errorHandler(s);
-  }
-  else
-  {
-    MessageBox(0, s, L"FileCopyEx plugin error", MB_OK | MB_ICONSTOP | MB_SETFOREGROUND);
-    DebugBreak();
-  }
-}
-
-void FWError(const String & s)
-{
-  FWError(s.ptr());
-}
-
-ErrorHandler errorHandler = NULL;
-
-int WinNT, WinNT4, Win2K, WinXP;
 HANDLE hInstance;
 
 BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID)

@@ -24,18 +24,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#include "Framework/ObjString.h"
-#include "Framework/FrameworkUtils.h"
-#include "SDK/plugin.hpp"
-#include "FarPlugin.h"
+#include "ObjString.h"
 
-extern HANDLE hInstance;
+#ifdef LENOF
+#undef LENOF
+#endif
+#define LENOF(x) ( (sizeof((x))) / (sizeof(*(x))))
 
-BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID);
+typedef void (*ErrorHandler)(const wchar_t *);
 
-const wchar_t * GetMsg(int MsgId);
-const String & LOC(const String & l);
+void FWError(const String &);
+void FWError(const wchar_t *);
 
-extern PluginStartupInfo Info;
-extern FarStandardFunctions FSF;
-extern FarPlugin * plugin;
+extern int WinNT, WinNT4, Win2K, WinXP;
+extern const String & LOC(const String &);
+extern ErrorHandler errorHandler;
+
+#define MAKEINT64(low, high) ((((int64_t)(high))<<32)|((int64_t)low))
+
+

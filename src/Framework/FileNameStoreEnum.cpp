@@ -1,5 +1,5 @@
 #include "FileNameStoreEnum.h"
-#include "../Common.h"
+#include "FrameworkUtils.h"
 
 String FileNameStoreEnum::GetNext()
 {

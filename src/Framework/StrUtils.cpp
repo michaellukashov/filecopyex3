@@ -23,8 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <stdarg.h>
+#include "StdHdr.h"
 #include "ObjString.h"
-#include "../Common.h"
+#include "FrameworkUtils.h"
 
 String Format(const wchar_t * fmt, ...)
 {
