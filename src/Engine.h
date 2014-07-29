@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include <vector>
 
-#include "copyprogress.h"
+#include "CopyProgress.h"
 #include "Framework/FileNameStoreEnum.h"
 
 struct FileStruct
