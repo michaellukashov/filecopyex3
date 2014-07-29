@@ -290,6 +290,7 @@
     <ClCompile Include="src\Framework\DescList.cpp" />
     <ClCompile Include="src\framework\FileNameStoreEnum.cpp" />
     <ClCompile Include="src\Framework\FileUtils.cpp" />
+    <ClCompile Include="src\Framework\FrameworkUtils.cpp" />
     <ClCompile Include="src\Framework\LocaleUtils.cpp" />
     <ClCompile Include="src\Framework\LowLevelStr.cpp" />
     <ClCompile Include="src\Framework\Node.cpp" />
