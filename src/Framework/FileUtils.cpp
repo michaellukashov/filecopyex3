@@ -351,7 +351,7 @@ String ApplyFileMask(const String & _name, const String & _mask)
 {
   wchar_t * name = (wchar_t *)_name.ptr(), *mask = (wchar_t *)_mask.ptr(),
             res[MAX_FILENAME] = L"";
-  int sz = MAX_FILENAME;
+  size_t sz = MAX_FILENAME;
   wchar_t * next = (wchar_t *)_tcsend(name) - 1, *mext = (wchar_t *)_tcsend(mask) - 1;
   while (next >= name && *next != '.') next--;
   if (next < name) next = name + wcslen(name);

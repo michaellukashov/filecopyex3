@@ -189,8 +189,8 @@ void FarDlgContainer::SaveState(PropertyMap & state)
 
 void FarDlgContainer::RetrieveProperties(HANDLE dlg)
 {
-  intptr_t cnt = childs.size();
-  for (int i = 0; i < cnt; i++)
+  size_t cnt = childs.size();
+  for (size_t i = 0; i < cnt; i++)
   {
     FarDlgNode & fdo = child(i);
     if (fdo.getPayload().getDialogItem() != -1 || fdo.IsContainer())

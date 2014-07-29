@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "LowLevelStr.h"
 #include "StringList.h"
 
-void StringList::Set(int n, const String & v)
+void StringList::Set(size_t n, const String & v)
 {
   ListItem item;
   item.str = v;
@@ -34,7 +34,7 @@ void StringList::Set(int n, const String & v)
   items[n] = item;
 }
 
-int & StringList::Values(int n)
+int & StringList::Values(size_t n)
 {
   return items[n].Data;
 }

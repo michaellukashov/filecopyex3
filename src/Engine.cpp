@@ -461,7 +461,7 @@ void Engine::ProcessDesc(intptr_t fnum)
 int Engine::FlushBuff(BuffInfo * bi)
 {
   size_t Pos = 0;
-  int PosInStr = 0;
+  size_t PosInStr = 0;
 
   while (Pos < bi->BuffSize && bi->BuffInf[PosInStr].FileNumber >= 0)
   {
@@ -578,10 +578,10 @@ open_retry:
           goto skip;
         }
 
-        size_t wsz = (size_t)Min(bi->BuffInf[PosInStr].WritePos - Pos, (size_t)WriteBlock),
-            wsz1 = wsz;
+		size_t wsz = Min((size_t)(bi->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
+		size_t wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
-          wsz = (int)Min((long long)wsz, info.Size - info.Written);
+          wsz = Min(wsz, (size_t)(info.Size - info.Written));
 retry:
         int64_t st = GetTime();
         size_t k = Write(bi->OutFile, bi->Buffer + Pos, wsz);
