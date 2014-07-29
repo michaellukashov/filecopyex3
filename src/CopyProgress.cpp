@@ -138,14 +138,14 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   intptr_t l = X1 + MG;
 
   String buf;
-  buf = LOC("Engine.Total");
+  buf = LOC(L"Engine.Total");
   Text(l, Y1 + 10, &clrLabel, buf);
   l += buf.len();
   buf = Format(L" %2.2d:%2.2d  ", (int)TotalTime / 60, (int)TotalTime % 60);
   Text(l, Y1 + 10, &clrText, buf);
   l += buf.len();
 
-  buf = LOC("Engine.Elapsed");
+  buf = LOC(L"Engine.Elapsed");
   Text(l, Y1 + 10, &clrLabel, buf);
   l += buf.len();
   buf = Format(L" %2.2d:%2.2d  ", (int)ElapsedTime / 60, (int)ElapsedTime % 60);
@@ -153,7 +153,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   // l += buf.len();
 
   String buf1;
-  buf = String("        ") + LOC("Engine.Remaining");
+  buf = String(L"        ") + LOC(L"Engine.Remaining");
   buf1 = Format(L" %2.2d:%2.2d", (int)RemainingTime / 60, (int)RemainingTime % 60);
   Text(X2 - MG - buf1.len() - buf.len() + 1, Y1 + 10, &clrLabel, buf);
   Text(X2 - MG - buf1.len() + 1, Y1 + 10, &clrText, buf1);
@@ -166,7 +166,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
     if (pc < 0) pc = 0;
     if (pc > 100) pc = 100;
     buf = Format(L"{%d%% %2.2d:%2.2d} %s", pc, (int)RemainingTime / 60, (int)RemainingTime % 60,
-                 Move ? LOC("Engine.Moving").ptr() : LOC("Engine.Copying").ptr());
+                 Move ? LOC(L"Engine.Moving").ptr() : LOC(L"Engine.Copying").ptr());
     SetTitle2(buf);
   }
 }
@@ -249,7 +249,7 @@ void CopyProgress::RedrawWindowIfNeeded()
 
 void CopyProgress::RedrawWindow()
 {
-  DrawWindow(X1, Y1, X2, Y2, Move ? LOC("Engine.Moving") : LOC("Engine.Copying"));
+  DrawWindow(X1, Y1, X2, Y2, Move ? LOC(L"Engine.Moving") : LOC(L"Engine.Copying"));
   wchar_t buf[512], *p = buf;
   for (int i = 0; i < W - MG * 2 + 2; i++) *p++ = 0x2500; //'─'
   *p = 0;

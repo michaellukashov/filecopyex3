@@ -228,7 +228,7 @@ int GetSymLink(const String & _dir, String & res, int flg)
     String r = buf;
     if (r.left(8) == "\\??\\UNC\\")
     {
-      res = CutEndSlash(String("\\\\") + r.substr(8));
+      res = CutEndSlash(String(L"\\\\") + r.substr(8));
       return TRUE;
     }
     if (r.left(4) == "\\??\\")
@@ -386,7 +386,7 @@ String ApplyFileMaskPath(const String & name, const String & mask)
   if (a != 0xFFFFFFFF && a & FILE_ATTRIBUTE_DIRECTORY)
   {
     String res = mask;
-    if (name.icmp(mask)) res += String("\\") + ExtractFileName(name);
+    if (name.icmp(mask)) res += String(L"\\") + ExtractFileName(name);
     return res;
   }
   return ExtractFilePath(mask) + "\\" +

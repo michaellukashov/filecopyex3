@@ -58,11 +58,11 @@ void Bind(const String & key, const String & code, const String & desc)
   }
   String fname = String(L"Shell_") + key + ".lua";
   StringVector v;
-  v.AddString("area=\"Shell\"");
-  v.AddString(String("key=\"") + key + "\"");
-  v.AddString("flags=\"NoPluginPanels NoPluginPPanels NoSendKeysToPlugins\"");
-  v.AddString(String("description=\"") + desc + "\"");
-  v.AddString(String("code=\"") + code + "\"");
+  v.AddString(L"area=\"Shell\"");
+  v.AddString(String(L"key=\"") + key + "\"");
+  v.AddString(L"flags=\"NoPluginPanels NoPluginPPanels NoSendKeysToPlugins\"");
+  v.AddString(String(L"description=\"") + desc + "\"");
+  v.AddString(String(L"code=\"") + code + "\"");
   v.saveToFile(base + "\\Macros\\internal\\" + fname);
 
   Info.MacroControl(&MainGuid, MCTL_LOADALL, 0, NULL);

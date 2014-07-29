@@ -72,10 +72,10 @@ void FarPlugin::Create()
   settings.create();
   LoadOptions();
 
-  // XXX descs.LoadFromString(registry.GetString("\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');
+  // XXX descs.LoadFromString(registry.GetString(L"\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');
   // XXX Workaround
-  descs.AddString("Descript.ion");
-  descs.AddString("Files.bbs");
+  descs.AddString(L"Descript.ion");
+  descs.AddString(L"Files.bbs");
 }
 
 void FarPlugin::LoadOptions()
@@ -142,14 +142,14 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
   {
     FarMenu menu;
     menu.SetFlags(FMENU_WRAPMODE);
-    menu.SetTitle(LOC("PluginName"));
+    menu.SetTitle(LOC(L"PluginName"));
     menu.SetHelpTopic("Menu");
-    menu.AddLine(LOC("Menu.CopyFiles"));
-    menu.AddLine(LOC("Menu.MoveFiles"));
-    menu.AddLine(LOC("Menu.CopyFilesUnderCursor"));
-    menu.AddLine(LOC("Menu.MoveFilesUnderCursor"));
+    menu.AddLine(LOC(L"Menu.CopyFiles"));
+    menu.AddLine(LOC(L"Menu.MoveFiles"));
+    menu.AddLine(LOC(L"Menu.CopyFilesUnderCursor"));
+    menu.AddLine(LOC(L"Menu.MoveFilesUnderCursor"));
     menu.AddSep();
-    menu.AddLine(LOC("Menu.Config"));
+    menu.AddLine(LOC(L"Menu.Config"));
     command = menu.Execute();
   }
 
@@ -214,7 +214,7 @@ void FarPlugin::KeyConfig()
   ShowMessage("", "Hotkeys binded", FMSG_MB_OK);
   return;
 #if 0
-  FarDialog & dlg = Dialogs()["KeysDialog"];
+  FarDialog & dlg = Dialogs()[L"KeysDialog"];
   dlg.ResetControls();
 
   bool bind = Binded("F5") && Binded("F6") && Binded("ShiftF5") && Binded("ShiftF6");
@@ -275,7 +275,7 @@ void FarPlugin::KeyConfig()
 
 void FarPlugin::About()
 {
-  FarDialog & dlg = Dialogs()["AboutDialog"];
+  FarDialog & dlg = Dialogs()[L"AboutDialog"];
   dlg.ResetControls();
   dlg[L"Label2"](L"Text") = String(VersionStr(PLUGIN_MAJOR, PLUGIN_MINOR, PLUGIN_SUBMINOR, PLUGIN_BUILD));
   dlg.Execute();
@@ -301,7 +301,7 @@ void beep(int b)
 
 void FarPlugin::Config()
 {
-  FarDialog & dlg = Dialogs()["SetupDialog"];
+  FarDialog & dlg = Dialogs()[L"SetupDialog"];
   dlg.ResetControls();
   dlg.LoadState(options);
 

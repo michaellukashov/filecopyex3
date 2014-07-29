@@ -75,27 +75,27 @@ int msgw()
 
 void Error(const String & s, int code)
 {
-  ShowMessageEx(LOC("Framework.Error"),
+  ShowMessageEx(LOC(L"Framework.Error"),
                 s + "\n" + SplitWidth(GetErrText(code), msgw()),
-                LOC("Framework.OK"),
+                LOC(L"Framework.OK"),
                 FMSG_WARNING
                );
 }
 
 void Error2(const String & s, const String & fn, int code)
 {
-  ShowMessageEx(LOC("Framework.Error"),
+  ShowMessageEx(LOC(L"Framework.Error"),
                 s + "\n" + FormatWidthNoExt(fn, msgw()) + "\n" + SplitWidth(GetErrText(code), msgw()),
-                LOC("Framework.OK"),
+                LOC(L"Framework.OK"),
                 FMSG_WARNING
                );
 }
 
 intptr_t Error2RS(const String & s, const String & fn, int code)
 {
-  intptr_t res = ShowMessageEx(LOC("Framework.Error"),
+  intptr_t res = ShowMessageEx(LOC(L"Framework.Error"),
                                s + "\n" + FormatWidthNoExt(fn, msgw()) + "\n" + SplitWidth(GetErrText(code), msgw()),
-                               LOC("Framework.Retry") + "\n" + LOC("Framework.Skip"),
+                               LOC(L"Framework.Retry") + "\n" + LOC(L"Framework.Skip"),
                                FMSG_WARNING
                               );
   if (res == 0)
@@ -117,7 +117,7 @@ String FormatWidth(const String & s, intptr_t len)
   intptr_t dif = (int)s.len() - len;
   if (dif > 0)
   {
-    return String("...") + s.right(len - 3);
+    return String(L"...") + s.right(len - 3);
   }
   else
   {
@@ -130,7 +130,7 @@ String FormatWidthNoExt(const String & s, intptr_t len)
   intptr_t dif = s.len() - len;
   if (dif > 0)
   {
-    return String("...") + s.right(len - 3);
+    return String(L"...") + s.right(len - 3);
   }
   else
   {

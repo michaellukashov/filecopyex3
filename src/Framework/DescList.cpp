@@ -78,7 +78,7 @@ int DescList::LoadFromList(StringVector & list)
     }
     else
     {
-      desc += String("\n") + s;
+      desc += String(L"\n") + s;
     }
   }
   if (!fn.empty())
@@ -101,13 +101,13 @@ int DescList::SaveToFile(const String & fn)
       String s;
       if (it->first.find(' '))
       {
-        s = String("\"") + it->first + "\"";
+        s = String(L"\"") + it->first + "\"";
       }
       else
       {
         s = it->first;
       }
-      s += String(" ") + it->second.desc;
+      s += String(L" ") + it->second.desc;
       temp.AddString(s);
     }
   }
@@ -195,7 +195,7 @@ void DescList::Rename(int i, const String& dst, int changeName)
   else
     str=str.substr(str.cfind(" \t\n"));
   Values.Set(Names.Values(i),
-    ((dst.cfind(" ")!=-1)?(String("\"")+dst+"\""):(dst))+str);
+    ((dst.cfind(" ")!=-1)?(String(L"\"")+dst+"\""):(dst))+str);
   if (changeName) Names.Set(i, dst);
 }
 */

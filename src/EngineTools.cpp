@@ -52,7 +52,7 @@ void Compress(HANDLE handle, int f)
   DWORD cb;
   if (!DeviceIoControl(handle, FSCTL_SET_COMPRESSION,
                        (LPVOID)&b, sizeof(b), NULL, 0, &cb, NULL))
-    Error(LOC("Error.Compress"), GetLastError());
+    Error(LOC(L"Error.Compress"), GetLastError());
 }
 
 int GetCompression(HANDLE handle)
@@ -74,7 +74,7 @@ void Encrypt(const String & fn, int f)
   if (f) res = EncryptFile(fn.ptr());
   else res = DecryptFile(fn.ptr(), 0);
   if (!res)
-    Error2(LOC("Error.Encrypt"), fn, GetLastError());
+    Error2(LOC(L"Error.Encrypt"), fn, GetLastError());
 }
 
 void Encrypt(HANDLE handle, int f)
@@ -88,7 +88,7 @@ void Encrypt(HANDLE handle, int f)
   enc.Private[0] = 0;
   if (!DeviceIoControl(handle, FSCTL_SET_ENCRYPTION,
                        (LPVOID)&enc, sizeof(enc), NULL, 0, &cb, NULL))
-    Error(LOC("Error.Encrypt"), GetLastError());
+    Error(LOC(L"Error.Encrypt"), GetLastError());
 }
 
 void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si)
@@ -200,7 +200,7 @@ void setFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTim
   HANDLE h = Open(fn, OPEN_WRITE_BUF);
   if (!h)
   {
-    Error2(LOC("Error.FileOpen"), fn, GetLastError());
+    Error2(LOC(L"Error.FileOpen"), fn, GetLastError());
   }
   else
   {
@@ -221,7 +221,7 @@ void setFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAcc
   HANDLE h = Open(fn, OPEN_WRITE_BUF);
   if (!h)
   {
-    Error2(LOC("Error.FileOpen"), fn, GetLastError());
+    Error2(LOC(L"Error.FileOpen"), fn, GetLastError());
   }
   else
   {

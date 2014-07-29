@@ -71,15 +71,15 @@ PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, in
 
 int warn(const String & s)
 {
-  return ShowMessage(LOC("CopyDialog.Warning"), s + "\n" + LOC("CopyDialog.WarnPrompt"), FMSG_MB_YESNO) == 0;
+  return ShowMessage(LOC(L"CopyDialog.Warning"), s + "\n" + LOC(L"CopyDialog.WarnPrompt"), FMSG_MB_YESNO) == 0;
 }
 
 
 void ShowErrorMessage(const String & s)
 {
-  //ShowMessage(LOC("CopyDialog.Error"), s, FMSG_WARNING | FMSG_MB_OK);
+  //ShowMessage(LOC(L"CopyDialog.Error"), s, FMSG_WARNING | FMSG_MB_OK);
 
-  String msgbuf = LOC("CopyDialog.Error") + "\n" + s + "\n";
+  String msgbuf = LOC(L"CopyDialog.Error") + "\n" + s + "\n";
 
   Info.Message(&MainGuid, &UnkGuid, FMSG_WARNING | FMSG_MB_OK | FMSG_ALLINONE, NULL, (const wchar_t * const *)msgbuf.ptr(), 0, 0);
 
@@ -155,14 +155,14 @@ int Engine::InitBuf(BuffInfo * bi)
   bi->Buffer = static_cast<UCHAR *>(Alloc(bi->BuffSize));
   if (!bi->Buffer)
   {
-    Error(LOC("Error.MemAlloc"), GetLastError());
+    Error(LOC(L"Error.MemAlloc"), GetLastError());
     return FALSE;
   }
   bi->BuffInf = static_cast<BuffStruct *>(Alloc(SrcNames.Count() * sizeof(BuffStruct)));
   if (!bi->BuffInf)
   {
     Free(bi->Buffer);
-    Error(LOC("Error.MemAlloc"), GetLastError());
+    Error(LOC(L"Error.MemAlloc"), GetLastError());
     return FALSE;
   }
 
@@ -192,7 +192,7 @@ int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
     int flg = eeYesNo | eeOneLine;
     if (ShowKeepFilesCheckBox) flg |= eeShowKeepFiles;
 
-    int res = EngineError(LOC("CopyError.StopPrompt"), "", 0, flg, LOC("CopyError.StopTitle"));
+    int res = EngineError(LOC(L"CopyError.StopPrompt"), "", 0, flg, LOC(L"CopyError.StopTitle"));
 
     HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
     FlushConsoleInputBuffer(h);
@@ -290,7 +290,7 @@ del_retry:
       {
         WaitForSingleObject(UiFree, INFINITE);
         int flg = eeRetrySkipAbort | eeAutoSkipAll;
-        int res = EngineError(LOC("Error.FileDelete"), SrcName, GetLastError(), flg, "", "Error.FileDelete");
+        int res = EngineError(LOC(L"Error.FileDelete"), SrcName, GetLastError(), flg, "", "Error.FileDelete");
         SetEvent(UiFree);
         if (res == RES_RETRY)
         {
@@ -448,12 +448,12 @@ void Engine::ProcessDesc(intptr_t fnum)
       if (!_UpdateRODescs && attr != 0xFFFFFFFF
           && (attr & FILE_ATTRIBUTE_READONLY)) return;
       if (!SrcList.SaveToFile(SrcName))
-        Error2(LOC("Error.WriteDesc"), SrcName, GetLastError());
+        Error2(LOC(L"Error.WriteDesc"), SrcName, GetLastError());
     }
   }
   else
   {
-    Error2(LOC("Error.WriteDesc"), DstName, GetLastError());
+    Error2(LOC(L"Error.WriteDesc"), DstName, GetLastError());
     info.Flags |= FLG_SKIPPED | FLG_ERROR;
   }
 }
@@ -557,7 +557,7 @@ open_retry:
         {
           WaitForSingleObject(UiFree, INFINITE);
           int flg = eeRetrySkipAbort | eeAutoSkipAll,
-              res = EngineError(LOC("Error.OutputFileCreate"), DstName, GetLastError(),
+              res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, GetLastError(),
                                 flg, "", "Error.OutputFileCreate");
           SetEvent(UiFree);
           if (res == RES_RETRY) goto open_retry;
@@ -590,7 +590,7 @@ retry:
         {
           WaitForSingleObject(UiFree, INFINITE);
           int flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
-              res = EngineError(LOC("Error.Write"), DstName, GetLastError(), flg,
+              res = EngineError(LOC(L"Error.Write"), DstName, GetLastError(), flg,
                                 "", "Error.Write");
           SetEvent(UiFree);
           if (res == RES_RETRY)
@@ -607,7 +607,7 @@ reopen_retry:
               {
                 WaitForSingleObject(UiFree, INFINITE);
                 int flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
-                    res = EngineError(LOC("Error.OutputFileCreate"),
+                    res = EngineError(LOC(L"Error.OutputFileCreate"),
                                       DstName, GetLastError(), flg, "", "Error.OutputFileCreate");
                 SetEvent(UiFree);
                 if (res == RES_RETRY) goto reopen_retry;
@@ -811,7 +811,7 @@ open_retry:
     {
       WaitForSingleObject(UiFree, INFINITE);
       int flg = eeRetrySkipAbort | eeAutoSkipAll,
-          res = EngineError(LOC("Error.InputFileOpen"), SrcName, GetLastError(),
+          res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, GetLastError(),
                             flg, "", "Error.InputFileOpen");
       SetEvent(UiFree);
       if (res == RES_RETRY) goto open_retry;
@@ -849,7 +849,7 @@ retry:
         {
           WaitForSingleObject(UiFree, INFINITE);
           int flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
-              res = EngineError(LOC("Error.Read"), SrcName, GetLastError(), flg,
+              res = EngineError(LOC(L"Error.Read"), SrcName, GetLastError(), flg,
                                 "", "Error.Read");
           SetEvent(UiFree);
           if (res == RES_RETRY)
@@ -865,7 +865,7 @@ reopen_retry:
               {
                 WaitForSingleObject(UiFree, INFINITE);
                 int flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
-                    res = EngineError(LOC("Error.InputFileOpen"), SrcName,
+                    res = EngineError(LOC(L"Error.InputFileOpen"), SrcName,
                                       GetLastError(), flg, "", "Error.InputFileOpen");
                 SetEvent(UiFree);
                 if (res == RES_RETRY) goto reopen_retry;
@@ -1167,9 +1167,9 @@ Engine::MResult Engine::Main(int move, int curOnly)
   _HideDescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_SETHIDDEN;
   _UpdateRODescs  = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_UPDATEREADONLY;
 
-  FarDialog & dlg = plugin->Dialogs()["CopyDialog"];
+  FarDialog & dlg = plugin->Dialogs()[L"CopyDialog"];
   dlg.ResetControls();
-  FarDialog & advdlg = plugin->Dialogs()["AdvCopyDialog"];
+  FarDialog & advdlg = plugin->Dialogs()[L"AdvCopyDialog"];
   advdlg.ResetControls();
   CopyProgressBox.SetNeedToRedraw(true);
 
@@ -1217,11 +1217,11 @@ Engine::MResult Engine::Main(int move, int curOnly)
   {
     if (move)
     {
-      prompt = LOC("CopyDialog.MoveFilesTo");
+      prompt = LOC(L"CopyDialog.MoveFilesTo");
     }
     else
     {
-      prompt = LOC("CopyDialog.CopyFilesTo");
+      prompt = LOC(L"CopyDialog.CopyFilesTo");
     }
   }
   else
@@ -1237,11 +1237,11 @@ Engine::MResult Engine::Main(int move, int curOnly)
     String fmt;
     if (!move)
     {
-      fmt = LOC("CopyDialog.CopyTo");
+      fmt = LOC(L"CopyDialog.CopyTo");
     }
     else
     {
-      fmt = LOC("CopyDialog.MoveTo");
+      fmt = LOC(L"CopyDialog.MoveTo");
     }
     prompt = Format(fmt.ptr(), fn.ptr());
     if (curOnly || dstPath.empty()) dstPath = fn;
@@ -1256,11 +1256,11 @@ Engine::MResult Engine::Main(int move, int curOnly)
 
   if (move)
   {
-    dlg("Title") = LOC("CopyDialog.Move");
+    dlg("Title") = LOC(L"CopyDialog.Move");
   }
   else
   {
-    dlg("Title") = LOC("CopyDialog.Copy");
+    dlg("Title") = LOC(L"CopyDialog.Copy");
   }
   dlg[L"Label1"](L"Text") = prompt;
   dlg[L"DestPath"](L"Text") = dstPath;
@@ -1391,7 +1391,7 @@ rep:
     }
     else
     {
-      ShowMessage(dlg("Text"), LOC("CopyDialog.InvalidPath"), FMSG_MB_OK);
+      ShowMessage(dlg("Text"), LOC(L"CopyDialog.InvalidPath"), FMSG_MB_OK);
       goto rep;
     }
   }
@@ -1493,32 +1493,32 @@ rep:
       if (!(vf & VF_ENCRYPTION) && !adv) EncryptMode = ATTR_INHERIT;
 
       if (vf & VF_READONLY)
-        if (!warn(LOC("CopyDialog.ReadOnlyWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.ReadOnlyWarn"))) goto rep;
       if (!(vf & VF_COMPRESSION) && CompressMode == ATTR_ON)
       {
-        if (!warn(LOC("CopyDialog.CompressWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.CompressWarn"))) goto rep;
         CompressMode = ATTR_INHERIT;
       }
       if (!(vf & VF_ENCRYPTION) && EncryptMode == ATTR_ON)
       {
-        if (!warn(LOC("CopyDialog.EncryptWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.EncryptWarn"))) goto rep;
         EncryptMode = ATTR_INHERIT;
       }
       if (!(vf & VF_STREAMS) && Streams)
       {
-        if (!warn(LOC("CopyDialog.StreamsWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.StreamsWarn"))) goto rep;
         Streams = 0;
       }
       if (!(vf & VF_RIGHTS) && Rights == ATTR_ON)
       {
-        if (!warn(LOC("CopyDialog.RightsWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.RightsWarn"))) goto rep;
         Rights = 0;
       }
     }
     else
     {
-      //if (!warn(LOC("CopyDialog.InvalidPathWarn")))
-      ShowErrorMessage(LOC("CopyDialog.InvalidPathWarn"));
+      //if (!warn(LOC(L"CopyDialog.InvalidPathWarn")))
+      ShowErrorMessage(LOC(L"CopyDialog.InvalidPathWarn"));
       goto rep;
     }
   }
@@ -1527,7 +1527,7 @@ rep:
   // Check if srcpath=dstpath
   if (GetRealFileName(srcPath) == GetRealFileName(dstPath))
   {
-    ShowErrorMessage(LOC("CopyDialog.OntoItselfError"));
+    ShowErrorMessage(LOC(L"CopyDialog.OntoItselfError"));
     return MRES_NONE;
   }
 
@@ -1537,8 +1537,8 @@ rep:
   int64_t Start = GetTime();
 
   // bugfixed by slst: bug #24
-  //progress.ShowMessage(LOC("Status.CreatingList"));
-  ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
+  //progress.ShowMessage(LOC(L"Status.CreatingList"));
+  ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
 
   size_t curItem = curOnly;
   if (!curItem)
@@ -1592,11 +1592,11 @@ rep:
 
     if (_CopyDescs && !ExtractFileName(file).icmp(CurPathDesc))
     {
-      if (ShowMessageEx(LOC("CopyDialog.Warning"),
+      if (ShowMessageEx(LOC(L"CopyDialog.Warning"),
                         FormatWidthNoExt(file, 50) + "\n" +
-                        LOC("CopyDialog.DescSelectedWarn") + "\n" +
-                        LOC("CopyDialog.DescSelectedWarn1"),
-                        LOC("Framework.No") + "\n" + LOC("Framework.Yes"), 0) != 1)
+                        LOC(L"CopyDialog.DescSelectedWarn") + "\n" +
+                        LOC(L"CopyDialog.DescSelectedWarn1"),
+                        LOC(L"Framework.No") + "\n" + LOC(L"Framework.Yes"), 0) != 1)
       {
         continue;
       }
@@ -1621,8 +1621,8 @@ rep:
   {
     FileNameStoreEnum Enum(&DstNames);
     // bugfixed by slst: bug #24
-    //progress.ShowMessage(LOC("Status.ScanningDest"));
-    ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
+    //progress.ShowMessage(LOC(L"Status.ScanningDest"));
+    ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
     for (size_t i = 0; i < Enum.Count(); i++)
     {
       if (!(Files[i].Flags & FLG_SKIPPED) & !(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY))
@@ -1645,8 +1645,8 @@ rep:
   else if (OverwriteMode == OM_SKIP || OverwriteMode == OM_RENAME || SkipNewer)
   {
     // bugfixed by slst: bug #24
-    //progress.ShowMessage(LOC("Status.ScanningDest"));
-    ScanFoldersProgressBox.ShowScanProgress(LOC("Status.ScanningFolders"));
+    //progress.ShowMessage(LOC(L"Status.ScanningDest"));
+    ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
     SetOverwriteMode(0);
   }
 
@@ -2125,7 +2125,7 @@ void Engine::SetOverwriteMode(int Start)
 
 int Engine::CheckOverwrite(int fnum, const String & Src, const String & Dst, String & ren)
 {
-  FarDialog & dlg = plugin->Dialogs()["OverwriteDialog"];
+  FarDialog & dlg = plugin->Dialogs()[L"OverwriteDialog"];
   dlg.ResetControls();
   CopyProgressBox.SetNeedToRedraw(true);
 
@@ -2136,15 +2136,15 @@ int Engine::CheckOverwrite(int fnum, const String & Src, const String & Dst, Str
   FindClose(FindFirstFile(Dst.ptr(), &fd));
   dsz = FormatNum(MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh));
   dtime = FormatTime(fd.ftLastWriteTime);
-  dlg[L"Label4"](L"Text") = Format(L"%14s %s %s", dsz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), dtime.ptr());
+  dlg[L"Label4"](L"Text") = Format(L"%14s %s %s", dsz.ptr(), LOC(L"OverwriteDialog.Bytes").ptr(), dtime.ptr());
 
   FindClose(FindFirstFile(Src.ptr(), &fs));
   ssz = FormatNum(MAKEINT64(fs.nFileSizeLow, fs.nFileSizeHigh));
   stime = FormatTime(fs.ftLastWriteTime);
-  dlg[L"Label3"](L"Text") = Format(L"%14s %s %s", ssz.ptr(), LOC("OverwriteDialog.Bytes").ptr(), stime.ptr());
+  dlg[L"Label3"](L"Text") = Format(L"%14s %s %s", ssz.ptr(), LOC(L"OverwriteDialog.Bytes").ptr(), stime.ptr());
 
-  dlg[L"Source"](L"Text")      = Format(L"%-16s", LOC("OverwriteDialog.Source").ptr());
-  dlg[L"Destination"](L"Text")  = Format(L"%-16s", LOC("OverwriteDialog.Destination").ptr());
+  dlg[L"Source"](L"Text")      = Format(L"%-16s", LOC(L"OverwriteDialog.Source").ptr());
+  dlg[L"Destination"](L"Text")  = Format(L"%-16s", LOC(L"OverwriteDialog.Destination").ptr());
 
   dlg[L"AcceptForAll"](L"Selected") = 0;
   dlg[L"SkipIfNewer"](L"Selected") = SkipNewer;
@@ -2179,7 +2179,7 @@ rep:
 
   if (res == OM_RENAME && !AcceptForAll)
   {
-    FarDialog & dlg = plugin->Dialogs()["RenameDialog"];
+    FarDialog & dlg = plugin->Dialogs()[L"RenameDialog"];
     dlg.ResetControls();
     CopyProgressBox.SetNeedToRedraw(true);
 
@@ -2201,7 +2201,7 @@ rep1:
     if (fnum != -1)
     {
       //FarProgress progress;
-      //progress.ShowMessage(LOC("Status.ScanningDest"));
+      //progress.ShowMessage(LOC(L"Status.ScanningDest"));
 
       SetOverwriteMode(fnum + 1);
       if (res == OM_RENAME)
@@ -2261,20 +2261,20 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
     {
       WaitForSingleObject(UiFree, INFINITE);
 
-      FarDialog & dlg = plugin->Dialogs()["FreeSpaceErrorDialog"];
+      FarDialog & dlg = plugin->Dialogs()[L"FreeSpaceErrorDialog"];
       dlg.ResetControls();
       CopyProgressBox.SetNeedToRedraw(true);
 
-      dlg("Title") = LOC("FreeSpaceErrorDialog.Title");
+      dlg("Title") = LOC(L"FreeSpaceErrorDialog.Title");
       String disk_str = dstroot;
       if (disk_str.len() >= 2)
         if (disk_str[1] == ':') disk_str = disk_str.left(2);
-      dlg[L"Label1"](L"Text") = LOC("FreeSpaceErrorDialog.NotEnoughSpace") + " " + disk_str;
-      dlg[L"Label2"](L"Text") = Format(L"%-20s%12s", LOC("FreeSpaceErrorDialog.AvailableSpace").ptr(),
+      dlg[L"Label1"](L"Text") = LOC(L"FreeSpaceErrorDialog.NotEnoughSpace") + " " + disk_str;
+      dlg[L"Label2"](L"Text") = Format(L"%-20s%12s", LOC(L"FreeSpaceErrorDialog.AvailableSpace").ptr(),
                                      FormatValue(FreeBytesAvailable.QuadPart).ptr());
-      dlg[L"Label3"](L"Text") = Format(L"%-20s%12s", LOC("FreeSpaceErrorDialog.RequiredSpace").ptr(),
+      dlg[L"Label3"](L"Text") = Format(L"%-20s%12s", LOC(L"FreeSpaceErrorDialog.RequiredSpace").ptr(),
                                      FormatValue(TotalBytesToProcess).ptr());
-      dlg[L"Label4"](L"Text") = LOC("FreeSpaceErrorDialog.AbortPrompt");
+      dlg[L"Label4"](L"Text") = LOC(L"FreeSpaceErrorDialog.AbortPrompt");
 
       intptr_t dlgres = dlg.Execute();
 
@@ -2326,7 +2326,7 @@ int Engine::EngineError(const String & s, const String & fn, int code, int & flg
     }
   }
 
-  FarDialog & dlg = plugin->Dialogs()["CopyError"];
+  FarDialog & dlg = plugin->Dialogs()[L"CopyError"];
   dlg.ResetControls();
   CopyProgressBox.SetNeedToRedraw(true);
 
@@ -2371,7 +2371,7 @@ int Engine::EngineError(const String & s, const String & fn, int code, int & flg
     {
       if (i <= 7)
       {
-        String name = String("Label") + String(i + 3);
+        String name = String(L"Label") + String(i + 3);
         dlg[name]("Visible") = 1;
         dlg[name]("Text") = list[i];
       }

@@ -192,7 +192,7 @@ void FarDlgEditPayload::realInitItem(FarDialogItem & item)
     String p = getProp(L"HistoryId");
     if (!p.empty())
     {
-      (String("FarFramework\\") + getDialog()->getName() + "\\" + getName()).copyTo(HistoryId, LENOF(HistoryId));
+      (String(L"FarFramework\\") + getDialog()->getName() + "\\" + getName()).copyTo(HistoryId, LENOF(HistoryId));
       item.History = HistoryId;
     }
   }
