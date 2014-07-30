@@ -265,7 +265,6 @@ void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
 // New class member function
 void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize)
 {
-  RedrawWindowIfNeeded();
   String FilesFmtStr = LOC(L"Status.FilesString") + L" %-6I64d";
   wchar_t FilesStr[256];
   _snwprintf_s(FilesStr, LENOF(FilesStr), LENOF(FilesStr), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
@@ -278,10 +277,22 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
   int s = x2 - x1 - (int)wcslen(SizeStr) - (int)wcslen(FilesStr);
   String spacer;
   if (s > 0)
+  {
     spacer = String(' ', s);
+  }
+  else
+  {
+    SetNeedToRedraw(true);
+  }
 
   wchar_t buf[256];
   _snwprintf_s(buf, LENOF(buf), LENOF(buf), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
+
+  if (wcslen(buf) > x2 - x1 + 2)
+  {
+    SetNeedToRedraw(true);
+  }
+  RedrawWindowIfNeeded();
 
   Info.Text(x1, y + 1, &clrText, buf);
   taskbarIcon.SetState(taskbarIcon.S_WORKING);
