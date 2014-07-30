@@ -219,7 +219,8 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
     INPUT_RECORD rec;
     DWORD rc;
     PeekConsoleInput(h, &rec, 1, &rc);
-    if (!rc) break;
+    if (!rc)
+      break;
     ReadConsoleInput(h, &rec, 1, &rc);
     if (rec.EventType == KEY_EVENT)
       if (rec.Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE
@@ -463,9 +464,8 @@ int Engine::FlushBuff(BuffInfo * bi)
   while (Pos < bi->BuffSize && bi->BuffInf[PosInStr].FileNumber >= 0)
   {
     intptr_t fnum = bi->BuffInf[PosInStr].FileNumber;
-    String
-    SrcName = FlushSrc.GetByNum(fnum),
-    DstName = FlushDst.GetByNum(fnum);
+    String SrcName = FlushSrc.GetByNum(fnum);
+    String DstName = FlushDst.GetByNum(fnum);
     FileStruct & info = Files[fnum];
     bi->OutNum = fnum;
 
@@ -575,8 +575,8 @@ open_retry:
           goto skip;
         }
 
-	size_t wsz = Min((size_t)(bi->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
-	size_t wsz1 = wsz;
+        size_t wsz = Min((size_t)(bi->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
+        size_t wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
           wsz = Min(wsz, (size_t)(info.Size - info.Written));
 retry:
@@ -661,7 +661,8 @@ skip: ;
       bi->DstName = L"";
     }
 
-    if (Aborted) break;
+    if (Aborted)
+      break;
     PosInStr++;
   }
 
@@ -829,18 +830,20 @@ open_retry:
 
     while (1)
     {
-      if (info.Flags & FLG_SKIPPED) break;
+      if (info.Flags & FLG_SKIPPED)
+        break;
       info.SectorSize = SectorSize;
       if (info.Size < _UnbuffMin * 1024)
         info.Flags |= FLG_BUFFERED;
 
       while (BuffPos < bi->BuffSize)
       {
-        if (info.Flags & FLG_SKIPPED) break;
-        size_t j, cb = Min(ReadBlock, bi->BuffSize - BuffPos);
+        if (info.Flags & FLG_SKIPPED)
+          break;
+        size_t cb = Min(ReadBlock, bi->BuffSize - BuffPos);
 retry:
         int64_t st = GetTime();
-        j = Read(InputFile, bi->Buffer + BuffPos, cb);
+        size_t j = Read(InputFile, bi->Buffer + BuffPos, cb);
 
         if (j == -1)
         {
@@ -871,7 +874,8 @@ reopen_retry:
                   info.Flags |= FLG_SKIPPED | FLG_ERROR;
                   if (flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
                   if (res == RES_ABORT) goto abort;
-                  else goto skip;
+                  else
+                    goto skip;
                 }
               }
               if (FSeek(InputFile, Pos, FILE_BEGIN) == -1)
@@ -885,7 +889,8 @@ reopen_retry:
             info.Flags |= FLG_SKIPPED | FLG_ERROR;
             if (flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
             if (res == RES_ABORT) goto abort;
-            else goto skip;
+            else
+              goto skip;
           }
         } // if (j==-1)
 
@@ -901,7 +906,8 @@ reopen_retry:
         ShowReadName(SrcName);
 
         if (CheckEscape()) goto abort;
-        if (j < cb) break;
+        if (j < cb)
+          break;
       } // while (BuffPos < bi->BuffSize)
 
 skip:
@@ -2005,7 +2011,8 @@ retry:
               }
             }
           }
-          if (!FindNextFile(hf, &fd)) break;
+          if (!FindNextFile(hf, &fd))
+            break;
         }
         FindClose(hf);
         if (descidx != -1)
@@ -2028,8 +2035,8 @@ retry:
         {
           wchar_t strn[1024];
           DWORD cb1, cb2;
-          if (!BackupRead(hf, (LPBYTE)&sid, hsz, &cb1, FALSE, FALSE, &ctx)
-              || !cb1) break;
+          if (!BackupRead(hf, (LPBYTE)&sid, hsz, &cb1, FALSE, FALSE, &ctx) || !cb1)
+            break;
           strn[0] = 0;
           if (sid.dwStreamNameSize)
             if (!BackupRead(hf, (LPBYTE)strn, sid.dwStreamNameSize, &cb2, FALSE, FALSE, &ctx)

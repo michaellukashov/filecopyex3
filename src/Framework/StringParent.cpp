@@ -24,7 +24,8 @@ int StringParent::loadFromFile(FILE * f)
     {
       wchar_t oldc = 0;
       read = (int)fread(buffer + bpos, sizeof(wchar_t), bsize - bpos, f);
-      if (read < 1) break;
+      if (read < 1)
+        break;
       for (int i = bpos; i < read; i++)
       {
         if (inv) buffer[i] = ((buffer[i] & 0x00FF) << 8) | ((buffer[i] & 0xFF00) >> 8);
@@ -63,7 +64,8 @@ int StringParent::loadFromFile(FILE * f)
     {
       char oldc = 0;
       read = (int)fread(buffer + bpos, sizeof(char), bsize - bpos, f);
-      if (read < 1) break;
+      if (read < 1)
+        break;
       for (int i = 0; i < read + bpos; i++)
       {
         if (buffer[i] == CR || (buffer[i] == LF && oldc != CR))
