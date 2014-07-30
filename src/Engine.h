@@ -164,7 +164,7 @@ private:
   WIN32_FIND_DATA DescFindData;
 
   std::map<String, int> errTypes;
-  int EngineError(const String & s, const String & fn, int code, int & flg,
+  intptr_t EngineError(const String & s, const String & fn, int code, uint32_t & flg,
                   const String & title = L"", const String & type_id = L"");
 
 

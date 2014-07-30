@@ -134,7 +134,7 @@ void DescList::Merge(DescList & add)
   }
 }
 
-void DescList::setFlag(const String & fn, int flag, int v)
+void DescList::setFlag(const String & fn, uint32_t flag, uint32_t v)
 {
   DescListMap::iterator it = names.find(fn);
   if (it != names.end())
@@ -151,17 +151,17 @@ void DescList::setFlag(const String & fn, int flag, int v)
 
 }
 
-void DescList::SetMergeFlag(const String & fn, int v)
+void DescList::SetMergeFlag(const String & fn, uint32_t v)
 {
   setFlag(fn, dlNoMerge, v);
 }
 
-void DescList::SetSaveFlag(const String & fn, int v)
+void DescList::SetSaveFlag(const String & fn, uint32_t v)
 {
   setFlag(fn, dlNoSave, v);
 }
 
-void DescList::setAllFlags(int flag, int v)
+void DescList::setAllFlags(uint32_t flag, uint32_t v)
 {
   for (DescListMap::iterator it = names.begin(); it != names.end(); ++it)
   {

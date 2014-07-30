@@ -35,8 +35,8 @@ struct Attribute
   const wchar_t * Name;
   uint64_t Flag;
 };
-const Attribute & Attrib(int i);
-int AttribCount();
+const Attribute & Attrib(uint32_t i);
+uint32_t AttribCount();
 
 size_t lablen(FarDialogItem & item);
 String FormatWidth(const String & v, int len);

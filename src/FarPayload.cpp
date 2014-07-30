@@ -57,8 +57,8 @@ static const Attribute _Attrib[] =
   { L"Hidden", DIF_HIDDEN },
   { L"ManualAddHistory", DIF_MANUALADDHISTORY },
 };
-const Attribute & Attrib(int i) { return _Attrib[i]; }
-int AttribCount() { return sizeof(_Attrib) / sizeof(Attribute); }
+const Attribute & Attrib(uint32_t i) { return _Attrib[i]; }
+uint32_t AttribCount() { return sizeof(_Attrib) / sizeof(Attribute); }
 
 void DestroyItemText(FarDialogItem & item)
 {
@@ -91,7 +91,7 @@ void FarDlgPayload::init(const String & _name)
 {
   Payload::init(_name);
 
-  for (int i = 0; i < AttribCount(); i++)
+  for (uint32_t i = 0; i < AttribCount(); i++)
   {
     addProperty(Attrib(i).Name, 0);
   }
@@ -116,7 +116,7 @@ void FarDlgPayload::preInitItem(FarDialogItem & item)
   }
   SetItemText(item, p);
 
-  for (int i = 0; i < AttribCount(); i++)
+  for (uint32_t i = 0; i < AttribCount(); i++)
   {
     if (getProp(Attrib(i).Name))
     {

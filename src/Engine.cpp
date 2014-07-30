@@ -186,10 +186,10 @@ int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
   {
     ::WaitForSingleObject(UiFree, INFINITE);
 
-    int flg = eeYesNo | eeOneLine;
+    uint32_t flg = eeYesNo | eeOneLine;
     if (ShowKeepFilesCheckBox) flg |= eeShowKeepFiles;
 
-    int res = EngineError(LOC(L"CopyError.StopPrompt"), L"", 0, flg, LOC(L"CopyError.StopTitle"));
+    intptr_t res = EngineError(LOC(L"CopyError.StopPrompt"), L"", 0, flg, LOC(L"CopyError.StopTitle"));
 
     HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
     FlushConsoleInputBuffer(h);
@@ -286,8 +286,8 @@ del_retry:
       if (FileExists(SrcName) && !Delete(SrcName))
       {
         ::WaitForSingleObject(UiFree, INFINITE);
-        int flg = eeRetrySkipAbort | eeAutoSkipAll;
-        int res = EngineError(LOC(L"Error.FileDelete"), SrcName, GetLastError(), flg, L"", L"Error.FileDelete");
+        uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
+        intptr_t res = EngineError(LOC(L"Error.FileDelete"), SrcName, GetLastError(), flg, L"", L"Error.FileDelete");
         ::SetEvent(UiFree);
         if (res == RES_RETRY)
         {
@@ -553,8 +553,8 @@ open_retry:
         else
         {
           ::WaitForSingleObject(UiFree, INFINITE);
-          int flg = eeRetrySkipAbort | eeAutoSkipAll,
-              res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, GetLastError(),
+          uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
+          intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, GetLastError(),
                                 flg, L"", L"Error.OutputFileCreate");
           ::SetEvent(UiFree);
           if (res == RES_RETRY) goto open_retry;
@@ -586,8 +586,8 @@ retry:
         if (k < wsz)
         {
           ::WaitForSingleObject(UiFree, INFINITE);
-          int flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
-              res = EngineError(LOC(L"Error.Write"), DstName, GetLastError(), flg,
+          uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
+          intptr_t res = EngineError(LOC(L"Error.Write"), DstName, GetLastError(), flg,
                                 L"", L"Error.Write");
           ::SetEvent(UiFree);
           if (res == RES_RETRY)
@@ -603,8 +603,8 @@ reopen_retry:
               if (!bi->OutFile)
               {
                 ::WaitForSingleObject(UiFree, INFINITE);
-                int flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
-                    res = EngineError(LOC(L"Error.OutputFileCreate"),
+                uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
+                intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
                                       DstName, GetLastError(), flg, L"", L"Error.OutputFileCreate");
                 ::SetEvent(UiFree);
                 if (res == RES_RETRY) goto reopen_retry;
@@ -807,8 +807,8 @@ open_retry:
     if (!InputFile)
     {
       ::WaitForSingleObject(UiFree, INFINITE);
-      int flg = eeRetrySkipAbort | eeAutoSkipAll,
-          res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, GetLastError(),
+      uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
+      intptr_t res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, GetLastError(),
                             flg, L"", L"Error.InputFileOpen");
       ::SetEvent(UiFree);
       if (res == RES_RETRY) goto open_retry;
@@ -845,8 +845,8 @@ retry:
         if (j == -1)
         {
           ::WaitForSingleObject(UiFree, INFINITE);
-          int flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
-              res = EngineError(LOC(L"Error.Read"), SrcName, GetLastError(), flg,
+          uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
+          intptr_t res = EngineError(LOC(L"Error.Read"), SrcName, GetLastError(), flg,
                                 L"", L"Error.Read");
           ::SetEvent(UiFree);
           if (res == RES_RETRY)
@@ -861,8 +861,8 @@ reopen_retry:
               if (!InputFile)
               {
                 ::WaitForSingleObject(UiFree, INFINITE);
-                int flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
-                    res = EngineError(LOC(L"Error.InputFileOpen"), SrcName,
+                uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
+                intptr_t res = EngineError(LOC(L"Error.InputFileOpen"), SrcName,
                                       GetLastError(), flg, L"", L"Error.InputFileOpen");
                 ::SetEvent(UiFree);
                 if (res == RES_RETRY) goto reopen_retry;
@@ -2305,7 +2305,7 @@ void Engine::setFileSizeAndTime(const String & fn, int64_t size, FILETIME * crea
   setFileSizeAndTime2(fn, size, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
 }
 
-int Engine::EngineError(const String & s, const String & fn, int code, int & flg, const String & title, const String & type_id)
+intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint32_t & flg, const String & title, const String & type_id)
 {
   CopyProgressBox.SetNeedToRedraw(true);
   ScanFoldersProgressBox.SetNeedToRedraw(true);
