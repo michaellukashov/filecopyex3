@@ -288,7 +288,7 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
   wchar_t buf[256];
   _snwprintf_s(buf, LENOF(buf), LENOF(buf), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
 
-  if (wcslen(buf) > x2 - x1 + 2)
+  if ((int)wcslen(buf) > x2 - x1 + 2)
   {
     SetNeedToRedraw(true);
   }
