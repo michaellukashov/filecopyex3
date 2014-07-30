@@ -83,6 +83,17 @@ void FarMenu::SetHelpTopic(const String & v)
 void FarMenu::SetSelection(size_t n)
 {
   Selection = n;
+  if (Selection < items.size())
+  {
+    for (size_t I = 0; I < items.size(); I++)
+    {
+      FarMenuItem & item = items[I];
+      if (I != Selection)
+        item.Flags &= ~MIF_SELECTED;
+      else
+        item.Flags |= MIF_SELECTED;
+    }
+  };
 }
 
 void FarMenu::SetTitle(const String & v)
