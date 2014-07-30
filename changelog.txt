@@ -1,4 +1,6 @@
 version 3.0.1.15 ??.07.2014
+* Fix Issue #4: wrong file mask handling
+  (https://github.com/michaellukashov/filecopyex3/issues/4)
 
 version 3.0.1.14 28.07.2014
 * Fix Issue #2 scan folders dialog is not redrawed
