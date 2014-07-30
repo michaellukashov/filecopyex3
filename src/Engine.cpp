@@ -1241,7 +1241,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
       fmt = LOC(L"CopyDialog.MoveTo");
     }
     prompt = Format(fmt.ptr(), fn.ptr());
-    if (curOnly || dstPath.empty()) dstPath = fn;
+    if (dstPath.empty()) dstPath = fn;
     /*else if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
       && dstpath!="queue:" && dstpath!="plugin:")
         dstpath=AddEndSlash(dstpath)+fn;*/
