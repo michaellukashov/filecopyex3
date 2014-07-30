@@ -184,7 +184,7 @@ int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 {
   if (_ConfirmBreak)
   {
-    WaitForSingleObject(UiFree, INFINITE);
+    ::WaitForSingleObject(UiFree, INFINITE);
 
     int flg = eeYesNo | eeOneLine;
     if (ShowKeepFilesCheckBox) flg |= eeShowKeepFiles;
@@ -193,7 +193,7 @@ int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 
     HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
     FlushConsoleInputBuffer(h);
-    SetEvent(UiFree);
+    ::SetEvent(UiFree);
 
     Aborted = (res == 0);
     if (Aborted) KeepFiles = flg & eerKeepFiles;
@@ -210,7 +210,7 @@ int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 // Added parameter with default TRUE value
 int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
 {
-  if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return FALSE;
+  if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return FALSE;
 
   int escape = FALSE;
   HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
@@ -233,7 +233,7 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
       }
   }
 
-  SetEvent(UiFree);
+  ::SetEvent(UiFree);
 
   if (escape && !AskAbort(ShowKeepFilesCheckBox)) escape = 0;
 
@@ -285,10 +285,10 @@ del_retry:
       // Bug #6 fixed by CDK
       if (FileExists(SrcName) && !Delete(SrcName))
       {
-        WaitForSingleObject(UiFree, INFINITE);
+        ::WaitForSingleObject(UiFree, INFINITE);
         int flg = eeRetrySkipAbort | eeAutoSkipAll;
         int res = EngineError(LOC(L"Error.FileDelete"), SrcName, GetLastError(), flg, L"", L"Error.FileDelete");
-        SetEvent(UiFree);
+        ::SetEvent(UiFree);
         if (res == RES_RETRY)
         {
           goto del_retry;
@@ -385,7 +385,7 @@ void Engine::ProcessDesc(intptr_t fnum)
 
   DescList SrcList, DstList;
   SrcList.LoadFromFile(SrcName);
-  int attr = GetFileAttributes(DstName.ptr());
+  DWORD attr = ::GetFileAttributes(DstName.ptr());
   if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES
       && (attr & FILE_ATTRIBUTE_READONLY)) return;
   DstList.LoadFromFile(DstName);
@@ -437,12 +437,12 @@ void Engine::ProcessDesc(intptr_t fnum)
   {
     info.Flags |= FLG_COPIED;
     if (_HideDescs)
-      SetFileAttributes(DstName.ptr(),
-                        GetFileAttributes(DstName.ptr()) | FILE_ATTRIBUTE_HIDDEN);
+      ::SetFileAttributes(DstName.ptr(),
+                        ::GetFileAttributes(DstName.ptr()) | FILE_ATTRIBUTE_HIDDEN);
     if (Move)
     {
-      int attr = GetFileAttributes(SrcName.ptr());
-	  if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES
+      DWORD attr = ::GetFileAttributes(SrcName.ptr());
+      if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES
           && (attr & FILE_ATTRIBUTE_READONLY)) return;
       if (!SrcList.SaveToFile(SrcName))
         Error2(LOC(L"Error.WriteDesc"), SrcName, GetLastError());
@@ -552,11 +552,11 @@ open_retry:
         }
         else
         {
-          WaitForSingleObject(UiFree, INFINITE);
+          ::WaitForSingleObject(UiFree, INFINITE);
           int flg = eeRetrySkipAbort | eeAutoSkipAll,
               res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, GetLastError(),
                                 flg, L"", L"Error.OutputFileCreate");
-          SetEvent(UiFree);
+          ::SetEvent(UiFree);
           if (res == RES_RETRY) goto open_retry;
           else if (res == RES_ABORT) Aborted = 1;
         }
@@ -585,11 +585,11 @@ retry:
 
         if (k < wsz)
         {
-          WaitForSingleObject(UiFree, INFINITE);
+          ::WaitForSingleObject(UiFree, INFINITE);
           int flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
               res = EngineError(LOC(L"Error.Write"), DstName, GetLastError(), flg,
                                 L"", L"Error.Write");
-          SetEvent(UiFree);
+          ::SetEvent(UiFree);
           if (res == RES_RETRY)
           {
             if (flg & eerReopen)
@@ -602,11 +602,11 @@ reopen_retry:
               bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
               if (!bi->OutFile)
               {
-                WaitForSingleObject(UiFree, INFINITE);
+                ::WaitForSingleObject(UiFree, INFINITE);
                 int flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
                     res = EngineError(LOC(L"Error.OutputFileCreate"),
                                       DstName, GetLastError(), flg, L"", L"Error.OutputFileCreate");
-                SetEvent(UiFree);
+                ::SetEvent(UiFree);
                 if (res == RES_RETRY) goto reopen_retry;
                 else
                 {
@@ -665,7 +665,7 @@ skip: ;
     PosInStr++;
   }
 
-  if (Parallel) SetEvent(FlushEnd);
+  if (Parallel) ::SetEvent(FlushEnd);
   return !Aborted;
 }
 
@@ -682,11 +682,11 @@ void Engine::BGFlush()
 
 int Engine::WaitForFlushEnd()
 {
-  while (WaitForSingleObject(FlushEnd, 200) == WAIT_TIMEOUT)
+  while (::WaitForSingleObject(FlushEnd, 200) == WAIT_TIMEOUT)
   {
     if (CheckEscape()) return FALSE;
   }
-  WaitForSingleObject(BGThread, INFINITE);
+  ::WaitForSingleObject(BGThread, INFINITE);
   CloseHandle(BGThread);
   BGThread = NULL;
   return TRUE;
@@ -772,8 +772,8 @@ void Engine::Copy()
       info.Flags |= FLG_COPIED;
 
       CurDirInfo cdi;
-      int dattr = GetFileAttributes(DstName.ptr());
-	  if (!CurDirStack.size() || (dattr != INVALID_FILE_ATTRIBUTES && dattr & FILE_ATTRIBUTE_REPARSE_POINT))
+      DWORD dattr = ::GetFileAttributes(DstName.ptr());
+      if (!CurDirStack.size() || (dattr != INVALID_FILE_ATTRIBUTES && dattr & FILE_ATTRIBUTE_REPARSE_POINT))
       {
         cdi.SectorSize = GetSectorSize(DstName);
       }
@@ -806,11 +806,11 @@ open_retry:
 
     if (!InputFile)
     {
-      WaitForSingleObject(UiFree, INFINITE);
+      ::WaitForSingleObject(UiFree, INFINITE);
       int flg = eeRetrySkipAbort | eeAutoSkipAll,
           res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, GetLastError(),
                             flg, L"", L"Error.InputFileOpen");
-      SetEvent(UiFree);
+      ::SetEvent(UiFree);
       if (res == RES_RETRY) goto open_retry;
       else
       {
@@ -844,11 +844,11 @@ retry:
 
         if (j == -1)
         {
-          WaitForSingleObject(UiFree, INFINITE);
+          ::WaitForSingleObject(UiFree, INFINITE);
           int flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll,
               res = EngineError(LOC(L"Error.Read"), SrcName, GetLastError(), flg,
                                 L"", L"Error.Read");
-          SetEvent(UiFree);
+          ::SetEvent(UiFree);
           if (res == RES_RETRY)
           {
             if (flg & eerReopen)
@@ -860,11 +860,11 @@ reopen_retry:
               InputFile = Open(SrcName, OPEN_READ, 0);
               if (!InputFile)
               {
-                WaitForSingleObject(UiFree, INFINITE);
+                ::WaitForSingleObject(UiFree, INFINITE);
                 int flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/,
                     res = EngineError(LOC(L"Error.InputFileOpen"), SrcName,
                                       GetLastError(), flg, L"", L"Error.InputFileOpen");
-                SetEvent(UiFree);
+                ::SetEvent(UiFree);
                 if (res == RES_RETRY) goto reopen_retry;
                 else
                 {
@@ -990,35 +990,35 @@ abort:
 
 void Engine::ShowReadName(const String & fn)
 {
-  if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
+  if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
   CopyProgressBox.ShowReadName(fn);
-  SetEvent(UiFree);
+  ::SetEvent(UiFree);
 }
 
 void Engine::ShowWriteName(const String & fn)
 {
-  if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
+  if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
   CopyProgressBox.ShowWriteName(fn);
-  SetEvent(UiFree);
+  ::SetEvent(UiFree);
 }
 
 void Engine::ShowProgress(int64_t read, int64_t write, int64_t total,
                           int64_t readTime, int64_t writeTime,
                           int64_t readN, int64_t writeN, int64_t totalN)
 {
-  if (WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
+  if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT) return;
 
   CopyProgressBox.ShowProgress(read, write, total, readTime, writeTime,
                                readN, writeN, totalN, Parallel, FirstWrite,
                                StartTime, BufSize);
-  SetEvent(UiFree);
+  ::SetEvent(UiFree);
 }
 
 int Engine::CheckOverwrite2(int fnum, const String & src, const String & dst, String & ren)
 {
-  WaitForSingleObject(UiFree, INFINITE);
+  ::WaitForSingleObject(UiFree, INFINITE);
   int res = CheckOverwrite(fnum, src, dst, ren);
-  SetEvent(UiFree);
+  ::SetEvent(UiFree);
   return res;
 }
 
@@ -1785,7 +1785,7 @@ int Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_
   // Get here the real file names
   // unfold symlinks in file paths (if any)
   // src path
-//  DWORD _src_attr = GetFileAttributes(ExtractFilePath(_src).ptr());
+//  DWORD _src_attr = ::GetFileAttributes(ExtractFilePath(_src).ptr());
 //  if ((_src_attr != 0xFFFFFFFF) &&
 //          (_src_attr & FILE_ATTRIBUTE_DIRECTORY)  &&
 //          (_src_attr & FILE_ATTRIBUTE_REPARSE_POINT))
@@ -1794,7 +1794,7 @@ int Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_
 //      src = _src;
 //
 //  // dst path
-//  DWORD _dst_attr = GetFileAttributes(ExtractFilePath(_dst).ptr());
+//  DWORD _dst_attr = ::GetFileAttributes(ExtractFilePath(_dst).ptr());
 //  if ((_dst_attr != 0xFFFFFFFF) &&
 //      (_dst_attr & FILE_ATTRIBUTE_DIRECTORY)  &&
 //      (_dst_attr & FILE_ATTRIBUTE_REPARSE_POINT))
@@ -2256,7 +2256,7 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
   {
     if (FreeBytesAvailable.QuadPart < (ULONGLONG)TotalBytesToProcess)
     {
-      WaitForSingleObject(UiFree, INFINITE);
+      ::WaitForSingleObject(UiFree, INFINITE);
 
       FarDialog & dlg = plugin->Dialogs()[L"FreeSpaceErrorDialog"];
       dlg.ResetControls();
@@ -2277,7 +2277,7 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
 
       HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
       FlushConsoleInputBuffer(h);
-      SetEvent(UiFree);
+      ::SetEvent(UiFree);
 
       if (dlgres == RES_YES)
         result = FALSE;

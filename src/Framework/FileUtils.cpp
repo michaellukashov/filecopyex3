@@ -177,7 +177,7 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
   wchar_t VolumeNameForPath[MAX_FILENAME];
 
   if (!Win2K) return result;
-  DWORD attr = GetFileAttributes(VolumeMountPointForPath.ptr());
+  DWORD attr = ::GetFileAttributes(VolumeMountPointForPath.ptr());
   if (attr == INVALID_FILE_ATTRIBUTES) return result;
   if (!(attr & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT))) return result;
 
@@ -238,17 +238,17 @@ int GetSymLink(const String & _dir, String & res, int flg)
   }
 
   // bugfixed by slst:
-  // GetFileAttributes returns FILE_ATTRIBUTE_REPARSE_POINT
+  // ::GetFileAttributes returns FILE_ATTRIBUTE_REPARSE_POINT
   // for drives names e.g. "E:"
   // Symlinks should have length > 2
   if (Win2K && (flg & gslExpandReparsePoints) && dir.len() > 2)
   {
-    DWORD attr = GetFileAttributes(dir.ptr());
-	if (attr != INVALID_FILE_ATTRIBUTES
-		&& attr & FILE_ATTRIBUTE_DIRECTORY
+    DWORD attr = ::GetFileAttributes(dir.ptr());
+    if (attr != INVALID_FILE_ATTRIBUTES
+        && attr & FILE_ATTRIBUTE_DIRECTORY
         && attr & FILE_ATTRIBUTE_REPARSE_POINT)
     {
-      HANDLE hf = CreateFile(dir.ptr(),
+      HANDLE hf = ::CreateFile(dir.ptr(),
                              GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
                              NULL,
                              OPEN_EXISTING,
@@ -400,7 +400,7 @@ String ApplyFileMaskPath(const String & name, const String & mask)
 {
   if (mask[mask.len() - 1] == '\\' || mask[mask.len() - 1] == '/')
     return mask + ExtractFileName(name);
-  DWORD a = GetFileAttributes(mask.ptr());
+  DWORD a = ::GetFileAttributes(mask.ptr());
   if (a != INVALID_FILE_ATTRIBUTES && a & FILE_ATTRIBUTE_DIRECTORY)
   {
     String res = mask;
@@ -413,22 +413,22 @@ String ApplyFileMaskPath(const String & name, const String & mask)
 
 int FileExists(const String & name)
 {
-  return (GetFileAttributes(name.ptr()) != INVALID_FILE_ATTRIBUTES) ? TRUE : FALSE;
+  return (::GetFileAttributes(name.ptr()) != INVALID_FILE_ATTRIBUTES) ? TRUE : FALSE;
 }
 
 int64_t FileSize(HANDLE h)
 {
-  ULONG hsz, lsz = GetFileSize(h, &hsz);
+  ULONG hsz, lsz = ::GetFileSize(h, &hsz);
   return MAKEINT64(lsz, hsz);
 }
 
 int64_t FileSize(const String & fn)
 {
   WIN32_FIND_DATA fd;
-  HANDLE h = FindFirstFile(fn.ptr(), &fd);
+  HANDLE h = ::FindFirstFile(fn.ptr(), &fd);
   if (h != INVALID_HANDLE_VALUE)
   {
-    FindClose(h);
+    ::FindClose(h);
     return MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh);
   }
   else
@@ -444,7 +444,7 @@ inline String TempName()
 String TempPath()
 {
   wchar_t buf[MAX_FILENAME];
-  GetTempPath(MAX_FILENAME, buf);
+  ::GetTempPath(MAX_FILENAME, buf);
   return CutEndSlash(buf);
 }
 
@@ -455,13 +455,13 @@ String TempPathName()
 
 static int __MoveFile(const wchar_t * src, const wchar_t * dst)
 {
-  int attr = GetFileAttributes(dst);
-  SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
+  DWORD attr = ::GetFileAttributes(dst);
+  ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFile(src, dst)) return TRUE;
   else
   {
     int err = GetLastError();
-    SetFileAttributes(dst, attr);
+    ::SetFileAttributes(dst, attr);
     SetLastError(err);
     return FALSE;
   }
@@ -469,14 +469,14 @@ static int __MoveFile(const wchar_t * src, const wchar_t * dst)
 
 static int __MoveFileEx(const wchar_t * src, const wchar_t * dst, int flg)
 {
-  int attr = GetFileAttributes(dst);
+  DWORD attr = ::GetFileAttributes(dst);
   // bug #41 fixed by axxie
-  if (_wcsicmp(src, dst) != 0) SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
+  if (_wcsicmp(src, dst) != 0) ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFileEx(src, dst, flg)) return TRUE;
   else
   {
     int err = GetLastError();
-    SetFileAttributes(dst, attr);
+    ::SetFileAttributes(dst, attr);
     SetLastError(err);
     return FALSE;
   }
@@ -526,14 +526,14 @@ int MoveFile(const String & _src, const String & _dst, int replace)
       String src = GetRealFileName(_src),
              dst = GetRealFileName(_dst);
       if (!src.icmp(dst)) return TRUE;
-      DWORD sa = GetFileAttributes(src.ptr());
-	  if (sa == INVALID_FILE_ATTRIBUTES)
+      DWORD sa = ::GetFileAttributes(src.ptr());
+      if (sa == INVALID_FILE_ATTRIBUTES)
       {
         SetLastError(ERROR_FILE_NOT_FOUND);
         return FALSE;
       }
-      DWORD da = GetFileAttributes(dst.ptr());
-	  if (da != INVALID_FILE_ATTRIBUTES)
+      DWORD da = ::GetFileAttributes(dst.ptr());
+      if (da != INVALID_FILE_ATTRIBUTES)
       {
         if (sa & FILE_ATTRIBUTE_DIRECTORY || da & FILE_ATTRIBUTE_DIRECTORY)
         {
@@ -554,8 +554,8 @@ int MoveFile(const String & _src, const String & _dst, int replace)
           SetLastError(err);
           return FALSE;
         }
-        SetFileAttributes(temp.ptr(), FILE_ATTRIBUTE_NORMAL);
-        DeleteFile(temp.ptr());
+        ::SetFileAttributes(temp.ptr(), FILE_ATTRIBUTE_NORMAL);
+        ::DeleteFile(temp.ptr());
         return TRUE;
       }
       return __MoveFile(src.ptr(), dst.ptr());
@@ -578,7 +578,7 @@ void ForceDirectories(const String & s)
     {
       wchar_t t = *ptr;
       *ptr = 0;
-      CreateDirectory(sptr, NULL);
+      ::CreateDirectory(sptr, NULL);
       *ptr = t;
     }
     ptr++;
@@ -595,16 +595,16 @@ void Out(const String & s)
 
 void Close(HANDLE h)
 {
-  CloseHandle(h);
+  ::CloseHandle(h);
 }
 
 int Delete(const String & fn)
 {
-  int attr = GetFileAttributes(fn.ptr());
-  SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
-  if (!DeleteFile(fn.ptr()))
+  DWORD attr = ::GetFileAttributes(fn.ptr());
+  ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
+  if (!::DeleteFile(fn.ptr()))
   {
-    SetFileAttributes(fn.ptr(), attr);
+    ::SetFileAttributes(fn.ptr(), attr);
     return FALSE;
   }
   return TRUE;

@@ -158,8 +158,8 @@ bool StringParent::saveToFile(FILE * f, TextFormat tf)
 
 bool StringParent::saveToFile(const String & fn, TextFormat tf)
 {
-  DWORD attr = GetFileAttributes(fn.ptr());
-  SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
+  DWORD attr = ::GetFileAttributes(fn.ptr());
+  ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
   FILE * f = NULL;
   _wfopen_s(&f, fn.ptr(), L"wb");
   bool res = false;
@@ -170,7 +170,7 @@ bool StringParent::saveToFile(const String & fn, TextFormat tf)
   }
   if (attr != INVALID_FILE_ATTRIBUTES)
   {
-    SetFileAttributes(fn.ptr(), attr);
+    ::SetFileAttributes(fn.ptr(), attr);
   }
   return res;
 }
