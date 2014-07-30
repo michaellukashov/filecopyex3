@@ -1,4 +1,5 @@
 version 3.0.1.15 ??.07.2014
+* Bugfix: "Copy file under cursor", "Move file under cursor" was not working
 * Fix Issue #3: "Scanning directories" dialog is not correctly redrawed
   (https://github.com/michaellukashov/filecopyex3/issues/3)
 * Fix Issue #4: wrong file mask handling
