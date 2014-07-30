@@ -94,10 +94,11 @@ int FarPlugin::Configure(const struct ConfigureInfo * Info)
   return TRUE;
 }
 
-void CallCopy(int move, int curOnly)
+static bool CallCopy(int move, int curOnly)
 {
   Engine engine;
   Engine::MResult res = engine.Main(move, curOnly);
+  bool Result = res != Engine::MRES_NONE;
   if (res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
   {
     /* svs 09.02.2011 18:51:58 +0300 - build 1844                                                                                                                                                     ░
@@ -120,6 +121,7 @@ void CallCopy(int move, int curOnly)
     Info.AdvControl(Info.ModuleNumber, ACTL_POSTKEYSEQUENCE, (void*)&seq);
     */
   }
+  return Result;
 }
 
 void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
@@ -140,30 +142,40 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
   }
   if (command == -1)
   {
-    FarMenu menu;
-    menu.SetFlags(FMENU_WRAPMODE);
-    menu.SetTitle(LOC(L"PluginName"));
-    menu.SetHelpTopic("Menu");
-    menu.AddLine(LOC(L"Menu.CopyFiles"));
-    menu.AddLine(LOC(L"Menu.MoveFiles"));
-    menu.AddLine(LOC(L"Menu.CopyFilesUnderCursor"));
-    menu.AddLine(LOC(L"Menu.MoveFilesUnderCursor"));
-    menu.AddSep();
-    menu.AddLine(LOC(L"Menu.Config"));
-    command = menu.Execute();
-  }
+    bool repeat = true;
+    size_t selectedMenuItem = 0;
+    while (repeat)
+    {
+      FarMenu menu;
+      menu.SetFlags(FMENU_WRAPMODE);
+      menu.SetTitle(LOC(L"PluginName"));
+      menu.SetHelpTopic("Menu");
+      menu.AddLine(LOC(L"Menu.CopyFiles"));
+      menu.AddLine(LOC(L"Menu.MoveFiles"));
+      menu.AddLine(LOC(L"Menu.CopyFilesUnderCursor"));
+      menu.AddLine(LOC(L"Menu.MoveFilesUnderCursor"));
+      menu.AddSep();
+      menu.AddLine(LOC(L"Menu.Config"));
+      menu.SetSelection(selectedMenuItem);
+      command = menu.Execute();
 
-  int move = 0, curOnly = 0;
-  switch (command)
-  {
-    case 0: move = 0; curOnly = 0; break;
-    case 1: move = 1; curOnly = 0; break;
-    case 2: move = 0; curOnly = 1; break;
-    case 3: move = 1; curOnly = 1; break;
-    case 5: Config(); return;
-    default: return;
+      int move = 0, curOnly = 0;
+      switch (command)
+      {
+      case 0: move = 0; curOnly = 0; selectedMenuItem = 0; repeat = false; break;
+      case 1: move = 1; curOnly = 0; selectedMenuItem = 1; repeat = false; break;
+      case 2: move = 0; curOnly = 1; selectedMenuItem = 2; repeat = false; break;
+      case 3: move = 1; curOnly = 1; selectedMenuItem = 3; repeat = false; break;
+      case 5: Config(); move = -1; curOnly = -1; selectedMenuItem = 5; repeat = true; break;
+      default: return;
+      }
+      if (move != -1 && curOnly != -1)
+      {
+        if (!CallCopy(move, curOnly))
+          repeat = true;
+      }
+    }
   }
-  CallCopy(move, curOnly);
 }
 
 String FarPlugin::GetDLLPath()
