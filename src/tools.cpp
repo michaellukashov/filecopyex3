@@ -66,7 +66,6 @@ int GetDriveId(const String & path, String & res)
 int GetPhysDrive(const String & _path, int & res)
 {
   String path = _path;
-  // bugfixed by slst:
   // if (WinXP)
   if (Win2K || WinXP)  // this also works OK under w2k/sp4
   {
@@ -124,7 +123,6 @@ int VolFlags(const String & _path)
     if (flg & FILE_PERSISTENT_ACLS) res |= VF_RIGHTS;
     if (flg & FILE_NAMED_STREAMS) res |= VF_STREAMS;
     // NT4 supports streams, but has no special flag for this fact
-    // bug #13 fixed by Alter
     if (!_wcsicmp(sysname, TEXT("NTFS"))) res |= VF_STREAMS;
     if (flg & FILE_READ_ONLY_VOLUME) res |= VF_READONLY;
     if (flg & FILE_UNICODE_ON_DISK) res |= VF_UNICODE;

@@ -152,16 +152,12 @@ HANDLE Open(const String & fn, int mode, int attr)
     SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
 
   HANDLE res = CreateFile(
-                 // fixed by Nsky: bug #28
                  (!fn.left(4).icmp("nul\\")) ? L"nul" : fn.ptr(),
-                 // fixed by slst: bug #17
                  // mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
-                 // fixed by slst: bug #48
                  // fix #17 is partially rolled back:
                  // Setting "compressed" attribute requires GENERIC_READ | GENERIC_WRITE
                  // access mode during file write.
                  mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
-                 // fixed by slst: bug #12
                  // FILE_SHARE_READ | FILE_SHARE_WRITE | (WinNT ? FILE_SHARE_DELETE : 0),
                  dwShareMode,
                  NULL,

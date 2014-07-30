@@ -92,7 +92,6 @@ String AddEndSlash(const String & v)
 String GetFileNameRoot(const String & v)
 {
   String l = v.left(2);
-  // Bug #12 fixed by axxie
   if (v.left(3) == L"\\\\.")
   {
     if (l == L"\\\\" || l == L"//")
@@ -118,7 +117,6 @@ String GetFileNameRoot(const String & v)
     {
       l = l.substr(p + 1);
       size_t p2 = l.find_first_of("\\/");
-      // bug #12 refixed by axxie
       if (p2 != (size_t)-1)
       {
         return v.substr(0, p + p2 + 2 + 2);
@@ -165,7 +163,6 @@ String GetFileNameRoot(const String & v)
 //#endif
 
 
-// bugfixed by slst: bug #34
 // Added new function
 // Returns primary volume mount point for other volume mount points
 // E.g.: E:\ is mounted D:\mnt\drive_e\ and
@@ -237,7 +234,6 @@ int GetSymLink(const String & _dir, String & res, int flg)
     }
   }
 
-  // bugfixed by slst:
   // ::GetFileAttributes returns FILE_ATTRIBUTE_REPARSE_POINT
   // for drives names e.g. "E:"
   // Symlinks should have length > 2
@@ -283,8 +279,6 @@ int GetSymLink(const String & _dir, String & res, int flg)
 
   if (Win2K && (flg & gslExpandMountPoints))
   {
-    // bugfixed by slst: bug #34
-    //
     //if (pGetVolumeNameForVolumeMountPoint(AddEndSlash(dir).ptr(), buf, MAX_FILENAME))
     if (GetPrimaryVolumeMountPoint(dir, res))
     {
@@ -470,7 +464,6 @@ static int __MoveFile(const wchar_t * src, const wchar_t * dst)
 static int __MoveFileEx(const wchar_t * src, const wchar_t * dst, int flg)
 {
   DWORD attr = ::GetFileAttributes(dst);
-  // bug #41 fixed by axxie
   if (_wcsicmp(src, dst) != 0) ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFileEx(src, dst, flg)) return TRUE;
   else
@@ -484,7 +477,6 @@ static int __MoveFileEx(const wchar_t * src, const wchar_t * dst, int flg)
 
 int MoveFile(const String & _src, const String & _dst, int replace)
 {
-  // bugfixed by slst: bug #31
   // return false if dst is hard link
   if (WinNT && replace)
   {

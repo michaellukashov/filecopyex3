@@ -32,7 +32,6 @@ const int W = 64, H = 13, MG = 5;
 
 CopyProgress::CopyProgress(void)
 {
-  // bug #22 fixed by axxie
   lastupdate = lastupdate_read = lastupdate_write = 0;
   interval = TicksPerSec() / 10;
   clastupdate = 0;
@@ -79,7 +78,6 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
 
   const int64_t MinRWValue = 0x10000;
 
-  // bugfixed by slst: bug #18
   if (((ReadBytes > MinRWValue)  && (WriteBytes > MinRWValue)) ||
       ((TotalBytes < (int64_t)BufferSize) && (ReadBytes > MinRWValue))) // if selected files size < buffer size
   {
@@ -195,7 +193,6 @@ void CopyProgress::DrawName(const String & fn, int y)
 
 void CopyProgress::ShowReadName(const String & fn)
 {
-  // bug #22 fixed by axxie
   int64_t tm = GetTime();
   if (tm - lastupdate_read > interval)
   {
@@ -208,7 +205,6 @@ void CopyProgress::ShowReadName(const String & fn)
 
 void CopyProgress::ShowWriteName(const String & fn)
 {
-  // bug #22 fixed by axxie
   int64_t tm = GetTime();
   if (tm - lastupdate_write > interval)
   {

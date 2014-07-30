@@ -214,7 +214,6 @@ String FarProgress::GetTitle()
 }
 
 
-// bugfixed by slst: bug #24
 // New class member function
 void FarProgress::ShowScanProgress(const String & msg)
 {
@@ -247,7 +246,6 @@ void FarProgress::ShowScanProgress(const String & msg)
   Info.RestoreScreen(NULL);
 }
 
-// bugfixed by slst: bug #24
 // New class member function
 void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
 {
@@ -263,7 +261,6 @@ void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
   }
 }
 
-// bugfixed by slst: bug #24
 // New class member function
 void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize)
 {

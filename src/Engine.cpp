@@ -178,7 +178,6 @@ void Engine::SwapBufs(BuffInfo * src, BuffInfo * dst)
   memcpy(dst->BuffInf, src->BuffInf, SrcNames.Count()*sizeof(BuffStruct));
 }
 
-// bugfixed by slst: bug #24
 // Added parameter with default TRUE value
 intptr_t Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 {
@@ -206,7 +205,6 @@ intptr_t Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
   }
 }
 
-// bugfixed by slst: bug #24
 // Added parameter with default TRUE value
 int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
 {
@@ -283,7 +281,6 @@ void Engine::FinalizeBuf(BuffInfo * bi)
     if (Move)
     {
 del_retry:
-      // Bug #6 fixed by CDK
       if (FileExists(SrcName) && !Delete(SrcName))
       {
         ::WaitForSingleObject(UiFree, INFINITE);
@@ -409,7 +406,6 @@ void Engine::ProcessDesc(intptr_t fnum)
       String dn = DstNames.GetNameByNum(j);
       int Same = 0;
 
-      // bug #43 fixed by axxie
       if (sn.cmp(dn))
       {
         SrcList.Rename(sn, dn, 1);
@@ -643,7 +639,6 @@ reopen_retry:
         if (!FirstWrite) FirstWrite = GetTime() - StartTime;
 
         Delay(wt, k, WriteTime, WriteSpeedLimit);
-        // bug #22 fixed by Axxie
         ShowWriteName(DstName);
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
 
@@ -910,7 +905,6 @@ reopen_retry:
 
         Delay(rt, j, ReadTime, ReadSpeedLimit);
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, CopyCount);
-        // bug #22 fixed by Axxie
         ShowReadName(SrcName);
 
         if (CheckEscape())
@@ -1196,8 +1190,6 @@ Engine::MResult Engine::Main(int move, int curOnly)
   PanelInfo pi;
   pi.StructSize = sizeof(PanelInfo);
   Info.PanelControl(PANEL_PASSIVE, FCTL_GETPANELINFO, 0, &pi); // !!! check result!
-  // fixed by Nsky: bug #40
-//  _toansi(pi.CurDir);
 
   if ((pi.Flags & PFLAGS_PLUGIN) == PFLAGS_PLUGIN)
   {
@@ -1219,13 +1211,10 @@ Engine::MResult Engine::Main(int move, int curOnly)
   curDir = getPanelDir(PANEL_ACTIVE);
   Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &pi); // !!! check result!
 
-  // fixed by Nsky: bug #40
-//  _toansi(pi.CurDir);
   if (pi.PanelType == PTYPE_QVIEWPANEL || pi.PanelType == PTYPE_INFOPANEL || !pi.ItemsNumber)
   {
     return MRES_NONE;
   }
-  // Bug #5 fixed by CDK
   if ((pi.Flags & PFLAGS_REALNAMES) == 0) return MRES_STDCOPY;
   if (pi.SelectedItemsNumber > 1 && !curOnly)
   {
@@ -1387,14 +1376,11 @@ rep:
 
   String tmpDstText = dlg[L"DestPath"](L"Text");
 
-  // bugfixed by slst:
   String dstText = tmpDstText.trim().trimquotes();
 
-  // fixed by Nsky: bug #28
   if (!dstText.left(4).icmp("nul\\"))
     dstText = L"nul";
 
-  // bugfixed by slst: bug #7
   dstText = dstText.replace(L"\"", L"");
 
   if (dstText == L"plugin:")
@@ -1421,7 +1407,6 @@ rep:
   // srcpath.ptr() for temporary file panel is empty
   // Current directory is set by Far to file path of selected file
   BOOL SCDResult = SetCurrentDirectory(srcPath.ptr());
-  // fixed by Nsky: bug #28
   if (relDstPath.icmp("nul") != 0)
   {
     dstPath = convertPath(CPM_REAL, relDstPath);
@@ -1489,7 +1474,6 @@ rep:
     OverwriteMode = OM_RENAME;
   };
 
-  // fixed by Nsky: bug #28
   if (!dstPath.icmp("nul"))
   {
     OverwriteMode = OM_OVERWRITE;
@@ -1542,7 +1526,6 @@ rep:
     }
   }
 
-  // bugfixed by slst: bug #14
   // Check if srcpath=dstpath
   if (GetRealFileName(srcPath) == GetRealFileName(dstPath))
   {
@@ -1555,7 +1538,6 @@ rep:
   FileCount = CopyCount = 0;
   int64_t Start = GetTime();
 
-  // bugfixed by slst: bug #24
   //progress.ShowMessage(LOC(L"Status.CreatingList"));
   ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
 
@@ -1584,7 +1566,6 @@ rep:
   String curPath;
   int haveCurPath = 0;
 
-  // bugfixed by slst: bug #23
   for (size_t ii = 0; ii < sortIndex.size(); ii++)
   {
     size_t i = sortIndex[ii];
@@ -1642,7 +1623,6 @@ rep:
   if (OverwriteMode == OM_RESUME)
   {
     FileNameStoreEnum Enum(&DstNames);
-    // bugfixed by slst: bug #24
     //progress.ShowMessage(LOC(L"Status.ScanningDest"));
     ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
     for (size_t i = 0; i < Enum.Count(); i++)
@@ -1666,7 +1646,6 @@ rep:
   }
   else if (OverwriteMode == OM_SKIP || OverwriteMode == OM_RENAME || SkipNewer)
   {
-    // bugfixed by slst: bug #24
     //progress.ShowMessage(LOC(L"Status.ScanningDest"));
     ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
     SetOverwriteMode(0);
@@ -1683,7 +1662,6 @@ rep:
     BufSize = (size_t)((int64_t)Options[L"BufSizeVal"] * 1024);
   }
 
-  // bugfixed by slst: bug #32
   // CheckFreeDiskSpace feature added
   if (Options[L"CheckFreeDiskSpace"])
   {
@@ -1739,14 +1717,12 @@ fin:
       }
     }
     Info.PanelControl(PANEL_ACTIVE, FCTL_ENDSELECTION, 0, NULL);
-    // fixed by Nsky: bug #40
   }
   else
   {
-    // Bugfixed by slst: bug #2
     Info.PanelControl(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
     Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &pi);
-    // fixed by Nsky: bug #40
+
     PanelRedrawInfo rpi;
     rpi.TopPanelItem = pi.TopPanelItem;
 
@@ -1770,7 +1746,6 @@ fin:
       {
         rpi.CurrentItem = i;
         Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, &rpi);
-        // fixed by Nsky: bug #40
         break;
       }
     }
@@ -1780,7 +1755,6 @@ fin:
   Info.PanelControl(PANEL_PASSIVE, FCTL_UPDATEPANEL, 1, NULL);
   Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, NULL);
   Info.PanelControl(PANEL_PASSIVE, FCTL_REDRAWPANEL, 0, NULL);
-  // fixed by Nsky: bug #40
 
   return MRES_NONE;
 }
@@ -1792,7 +1766,6 @@ int Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd
 
 int Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD flags, int Level, int PanelIndex)
 {
-  // bugfixed by slst: bug #23
   if (CheckEscape(FALSE))
   {
     return FALSE;
@@ -1806,7 +1779,6 @@ int Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_
   String src(_src);
   String dst(_dst);
 
-  // bugfixed by slst:
   // Get here the real file names
   // unfold symlinks in file paths (if any)
   // src path
@@ -1967,7 +1939,6 @@ retry:
   TotalBytes += sz1;
   info->OverMode = owmode;
 
-  // bugfixed by slst: bug #24
   // Updates folder scan progress dialog
   ScanFoldersProgressBox.SetScanProgressInfo(TotalN, TotalBytes);
 
@@ -2004,7 +1975,6 @@ retry:
             }
             else
             {
-              // bugfixed by slst:
               // check for recursive symlinks
               // recursive symlinks results in stack overflow :(
               if ((fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
@@ -2113,7 +2083,6 @@ void Engine::SetOverwriteMode(intptr_t Start)
       TotalBytes += info.Size;
       TotalN++;
     }
-    // bug #47 fixed by axxie
     if (!(info.Flags & FLG_SKIPPED) && !(info.Flags & FLG_DIR_PRE) && !(info.Flags & FLG_DIR_POST) && FileExists(fn))
     {
       if (SkipNewer && Newer(fn, info.lastWriteTime))
@@ -2260,7 +2229,6 @@ int Engine::AddRemembered(RememberStruct & Remember)
   return AddFile(Remember.Src, Remember.Dst, Remember.Attr, Remember.Size, Remember.creationTime, Remember.lastAccessTime, Remember.lastWriteTime, Remember.Flags, Remember.Level);
 }
 
-// bugfixed by slst: bug #32
 // Returns TRUE if there is enough space on target disk
 BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,
                                 const String & srcpathstr, const String & dstpathstr)

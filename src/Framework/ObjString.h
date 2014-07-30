@@ -119,7 +119,6 @@ public:
   int icmp(const String & v) const { return nicmp(v, 0x7FFFFFFF); }
   int ncmp(const String & v, size_t sz) const { return wcsncmp(ptr(), v.ptr(), sz); }
   int nicmp(const String & v, size_t sz) const { return _wcsnicmp(ptr(), v.ptr(), sz); }
-  // bug #46 fixed by axxie
 
   String substr(size_t pos = 0, size_t len = std::string::npos) const;
 

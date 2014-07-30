@@ -60,7 +60,6 @@ void FarPlugin::InitLang()
 
 void FarPlugin::Create()
 {
-  // bug #15 fixed by Ivanych
   InitLang();
 
   if (!dialogs.Load(GetDLLPath() + L"\\resource\\dialogs.objd"))

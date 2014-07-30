@@ -56,7 +56,6 @@ private:
                 int ParallelMode, int64_t FirstWriteTime,
                 int64_t StartTime, size_t BufferSize);
 
-  // bug #22 fixed by axxie
   int64_t lastupdate, lastupdate_read, lastupdate_write, interval, clastupdate, cinterval;
 
   int X1, Y1, X2, Y2, Move;
