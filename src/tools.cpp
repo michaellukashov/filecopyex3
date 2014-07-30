@@ -85,7 +85,7 @@ int GetPhysDrive(const String & _path, int & res)
     char outbuf[1024];
     DWORD ret;
     if (DeviceIoControl(hVolume, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, NULL, 0,
-                        outbuf, 1024, &ret, NULL))
+                        outbuf, LENOF(outbuf), &ret, NULL))
     {
       VOLUME_DISK_EXTENTS * ext = (VOLUME_DISK_EXTENTS *)outbuf;
       res = ext->Extents[0].DiskNumber;

@@ -108,7 +108,7 @@ intptr_t Error2RS(const String & s, const String & fn, int code)
 String GetErrText(int code)
 {
   wchar_t buf[1024];
-  FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, NULL, code, 0, buf, 1024, NULL);
+  FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, NULL, code, 0, buf, LENOF(buf), NULL);
   return buf;
 }
 

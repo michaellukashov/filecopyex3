@@ -207,7 +207,7 @@ void FarProgress::SetTitle2(const String & v) const
 String FarProgress::GetTitle()
 {
   wchar_t buf[512];
-  GetConsoleTitle(buf, 512);
+  GetConsoleTitle(buf, LENOF(buf));
   return buf;
 }
 
@@ -268,11 +268,11 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
   RedrawWindowIfNeeded();
   String FilesFmtStr = LOC(L"Status.FilesString") + L" %-6I64d";
   wchar_t FilesStr[256];
-  _snwprintf_s(FilesStr, 256, LENOF(FilesStr), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
+  _snwprintf_s(FilesStr, LENOF(FilesStr), LENOF(FilesStr), (const wchar_t *)FilesFmtStr.ptr(), NumberOfFiles);
 
   String SizeFmtStr = LOC(L"Status.SizeString") + L" %s";
   wchar_t SizeStr[256];
-  _snwprintf_s(SizeStr, 256, LENOF(SizeStr), (const wchar_t *)SizeFmtStr.ptr(), (const wchar_t *)FormatValue(TotalSize).ptr());
+  _snwprintf_s(SizeStr, LENOF(SizeStr), LENOF(SizeStr), (const wchar_t *)SizeFmtStr.ptr(), (const wchar_t *)FormatValue(TotalSize).ptr());
 
 
   int s = x2 - x1 - (int)wcslen(SizeStr) - (int)wcslen(FilesStr);
@@ -281,7 +281,7 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
     spacer = String(' ', s);
 
   wchar_t buf[256];
-  _snwprintf_s(buf, 256, LENOF(buf), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
+  _snwprintf_s(buf, LENOF(buf), LENOF(buf), L"%s %s%s", FilesStr, spacer.ptr(), SizeStr);
 
   Info.Text(x1, y + 1, &clrText, buf);
   taskbarIcon.SetState(taskbarIcon.S_WORKING);
