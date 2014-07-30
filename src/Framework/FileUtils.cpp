@@ -361,7 +361,13 @@ String ApplyFileMask(const String & _name, const String & _mask)
   wchar_t sym[2] = { 0, 0 };
   for (wchar_t * m = mask; *m; m++)
   {
-    if (*m == '*') wcscat_s(res, sz, name);
+    if (*m == '*')
+    {
+      if (!*sym)
+        wcscat_s(res, sz, name);
+      else
+        wcscat_s(res, sz, next);
+    }
     else if (*m == '?') wcscat_s(res, sz, (*sym = m - mask < (int)wcslen(name) ? name[m - mask] : 0, sym));
     else wcscat_s(res, sz, (*sym = *m, sym));
   }
