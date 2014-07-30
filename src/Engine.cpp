@@ -910,7 +910,7 @@ skip:
       bi->BuffInf[FilesInBuff].WritePos = abp;
       if (BuffPos % ReadAlign) BuffPos = (BuffPos / ReadAlign + 1) * ReadAlign;
       bi->BuffInf[FilesInBuff].NextPos = BuffPos;
-      bi->BuffInf[FilesInBuff].FileNumber = (int)i;
+      bi->BuffInf[FilesInBuff].FileNumber = (intptr_t)i;
       if (BuffPos == bi->BuffSize)
       {
         bi->BuffInf[FilesInBuff].EndFlag = 0;
