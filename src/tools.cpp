@@ -189,10 +189,10 @@ bool Newer(const FILETIME & ft1, const FILETIME & ft2)
 bool Newer(const String & fn1, const FILETIME & ft2)
 {
   WIN32_FIND_DATA fd;
-  HANDLE hf = FindFirstFile(fn1.ptr(), &fd);
+  HANDLE hf = ::FindFirstFile(fn1.ptr(), &fd);
   if (hf != INVALID_HANDLE_VALUE)
   {
-    FindClose(hf);
+    ::FindClose(hf);
     return Newer(fd.ftLastWriteTime, ft2);
   };
   return FALSE;

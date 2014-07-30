@@ -1084,9 +1084,9 @@ String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t *
   for (size_t i = 0; i < plugin->Descs().Count(); i++)
   {
     HANDLE hf;
-    if ((hf = FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
+    if ((hf = ::FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
     {
-      FindClose(hf);
+      ::FindClose(hf);
       if (idx) *idx = i;
       return plugin->Descs()[i];
     }
@@ -1108,9 +1108,9 @@ void Engine::AddTopLevelDir(const String & dir, const String & dstMask, DWORD fl
   info.Flags = flags;
   info.Level = 0;
   info.PanelIndex = -1;
-  if ((hf = FindFirstFile(dir.ptr(), &fd)) != INVALID_HANDLE_VALUE)
+  if ((hf = ::FindFirstFile(dir.ptr(), &fd)) != INVALID_HANDLE_VALUE)
   {
-    FindClose(hf);
+    ::FindClose(hf);
     info.Attr = fd.dwFileAttributes;
     info.creationTime = fd.ftCreationTime;
     info.lastAccessTime = fd.ftLastAccessTime;
@@ -1982,7 +1982,7 @@ retry:
       }
       WIN32_FIND_DATA fd;
       HANDLE hf;
-      if ((hf = FindFirstFile((src + L"\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
+      if ((hf = ::FindFirstFile((src + L"\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
       {
         intptr_t descidx = -1;
         RememberStruct Remember;
@@ -2015,7 +2015,7 @@ retry:
                 {
                   if (!AddFile(src + L"\\" + fd.cFileName, dst + L"\\" + fd.cFileName, fd, flags, Level + 1))
                   {
-                    FindClose(hf);
+                    ::FindClose(hf);
                     return FALSE;
                   }
                 }
@@ -2024,7 +2024,7 @@ retry:
               {
                 if (!AddFile(src + L"\\" + fd.cFileName, dst + L"\\" + fd.cFileName, fd, flags, Level + 1))
                 {
-                  FindClose(hf);
+                  ::FindClose(hf);
                   return FALSE;
                 }
               }
@@ -2033,7 +2033,7 @@ retry:
           if (!FindNextFile(hf, &fd))
             break;
         }
-        FindClose(hf);
+        ::FindClose(hf);
         if (descidx != -1)
           if (!AddRemembered(Remember)) return FALSE;
       }
@@ -2156,12 +2156,12 @@ int Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String & Dst
   String ssz, dsz, stime, dtime, buf;
 
   WIN32_FIND_DATA fd, fs;
-  FindClose(FindFirstFile(Dst.ptr(), &fd));
+  ::FindClose(::FindFirstFile(Dst.ptr(), &fd));
   dsz = FormatNum(MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh));
   dtime = FormatTime(fd.ftLastWriteTime);
   dlg[L"Label4"](L"Text") = Format(L"%14s %s %s", dsz.ptr(), LOC(L"OverwriteDialog.Bytes").ptr(), dtime.ptr());
 
-  FindClose(FindFirstFile(Src.ptr(), &fs));
+  ::FindClose(::FindFirstFile(Src.ptr(), &fs));
   ssz = FormatNum(MAKEINT64(fs.nFileSizeLow, fs.nFileSizeHigh));
   stime = FormatTime(fs.ftLastWriteTime);
   dlg[L"Label3"](L"Text") = Format(L"%14s %s %s", ssz.ptr(), LOC(L"OverwriteDialog.Bytes").ptr(), stime.ptr());
