@@ -348,16 +348,24 @@ String ExpandEnv(const String & v)
 
 String ApplyFileMask(const String & _name, const String & _mask)
 {
-  wchar_t * name = (wchar_t *)_name.ptr(), *mask = (wchar_t *)_mask.ptr(),
-            res[MAX_FILENAME] = L"";
+  wchar_t * name = (wchar_t *)_name.ptr();
+  wchar_t * mask = (wchar_t *)_mask.ptr();
+  wchar_t res[MAX_FILENAME] = L"";
   size_t sz = MAX_FILENAME;
-  wchar_t * next = (wchar_t *)_tcsend(name) - 1, *mext = (wchar_t *)_tcsend(mask) - 1;
-  while (next >= name && *next != '.') next--;
-  if (next < name) next = name + wcslen(name);
-  else *next++ = 0;
-  while (mext >= mask && *mext != '.') mext--;
-  if (mext < mask) mext = mask + wcslen(mask);
-  else *mext++ = 0;
+  wchar_t * next = (wchar_t *)_tcsend(name) - 1;
+  wchar_t * mext = (wchar_t *)_tcsend(mask) - 1;
+  while (next >= name && *next != '.')
+    next--;
+  if (next < name)
+    next = name + wcslen(name);
+  else
+    *next++ = 0;
+  while (mext >= mask && *mext != '.')
+    mext--;
+  if (mext < mask)
+    mext = mask + wcslen(mask);
+  else
+    *mext++ = 0;
   wchar_t sym[2] = { 0, 0 };
   for (wchar_t * m = mask; *m; m++)
   {
@@ -368,8 +376,10 @@ String ApplyFileMask(const String & _name, const String & _mask)
       else
         wcscat_s(res, sz, next);
     }
-    else if (*m == '?') wcscat_s(res, sz, (*sym = m - mask < (int)wcslen(name) ? name[m - mask] : 0, sym));
-    else wcscat_s(res, sz, (*sym = *m, sym));
+    else if (*m == '?')
+      wcscat_s(res, sz, (*sym = m - mask < (int)wcslen(name) ? name[m - mask] : 0, sym));
+    else
+      wcscat_s(res, sz, (*sym = *m, sym));
   }
   if (mext[0])
   {
@@ -377,8 +387,10 @@ String ApplyFileMask(const String & _name, const String & _mask)
     for (wchar_t * m = mext; *m; m++)
     {
       if (*m == '*') wcscat_s(res, sz, next);
-      else if (*m == '?') wcscat_s(res, sz, (*sym = m - mext < (int)wcslen(next) ? next[m - mext] : 0, sym));
-      else wcscat_s(res, sz, (*sym = *m, sym));
+      else if (*m == '?')
+        wcscat_s(res, sz, (*sym = m - mext < (int)wcslen(next) ? next[m - mext] : 0, sym));
+      else
+        wcscat_s(res, sz, (*sym = *m, sym));
     }
   }
   return res;
@@ -558,7 +570,8 @@ int MoveFile(const String & _src, const String & _dst, int replace)
 
 void ForceDirectories(const String & s)
 {
-  wchar_t * ptr = (wchar_t *)s.ptr(), *sptr = ptr;
+  wchar_t * ptr = (wchar_t *)s.ptr();
+  wchar_t * sptr = ptr;
   while (*ptr)
   {
     if (*ptr == '\\' || *ptr == '/')

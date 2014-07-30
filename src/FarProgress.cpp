@@ -134,7 +134,8 @@ void FarProgress::ShowProgress(const String & msg)
 void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
 {
   int n = x2 - x1 + 1, fn = (int)(pc * n), en = n - fn;
-  wchar_t buf[512], *bp = buf;
+  wchar_t buf[512];
+  wchar_t * bp = buf;
   if (!InverseBars)
   {
     for (int i = 0; i < fn; i++) *bp++ = 0x2588; //'█'

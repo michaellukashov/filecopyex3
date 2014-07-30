@@ -177,7 +177,9 @@ bool StringParent::saveToFile(const String & fn, TextFormat tf)
 void StringParent::loadFromString(const wchar_t * s, wchar_t delim)
 {
   Clear();
-  wchar_t * p = (wchar_t *)s, *pp = p, buf[4096];
+  wchar_t * p = (wchar_t *)s;
+  wchar_t * pp = p;
+  wchar_t buf[4096];
   do
   {
     if (!*p || *p == delim)

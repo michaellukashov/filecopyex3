@@ -250,8 +250,10 @@ void CopyProgress::RedrawWindowIfNeeded()
 void CopyProgress::RedrawWindow()
 {
   DrawWindow(X1, Y1, X2, Y2, Move ? LOC(L"Engine.Moving") : LOC(L"Engine.Copying"));
-  wchar_t buf[512], *p = buf;
-  for (int i = 0; i < W - MG * 2 + 2; i++) *p++ = 0x2500; //'─'
+  wchar_t buf[512];
+  wchar_t * p = buf;
+  for (int i = 0; i < W - MG * 2 + 2; i++)
+    *p++ = 0x2500; //'─'
   *p = 0;
   Info.Text(X1 + MG - 1, Y1 + 5, &clrFrame, buf);
   Info.Text(X1 + MG - 1, Y1 + 9, &clrFrame, buf);

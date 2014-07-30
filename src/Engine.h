@@ -114,7 +114,7 @@ private:
   int Aborted, LastFile, KeepFiles, FileCount, CopyCount;
   void Copy();
 
-  BuffInfo * wbi, *bi;
+  BuffInfo * wbi, * bi;
   HANDLE BGThread, FlushEnd, UiFree;
   int InitBuf(BuffInfo * bi);
   void UninitBuf(BuffInfo * bi);
