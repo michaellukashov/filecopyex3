@@ -33,7 +33,7 @@ extern HANDLE hInstance;
 
 BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID);
 
-const wchar_t * GetMsg(int MsgId);
+const wchar_t * GetMsg(intptr_t MsgId);
 const String & LOC(const String & l);
 
 extern PluginStartupInfo Info;

@@ -16,7 +16,7 @@ FarPlugin * plugin = NULL;
  Функция GetMsg возвращает строку сообщения из языкового файла.
  А это надстройка над Info.GetMsg для сокращения кода :-)
 */
-const wchar_t * GetMsg(int MsgId)
+const wchar_t * GetMsg(intptr_t MsgId)
 {
   return Info.GetMsg(&MainGuid, MsgId);
 }

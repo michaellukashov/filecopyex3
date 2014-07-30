@@ -180,7 +180,7 @@ void Engine::SwapBufs(BuffInfo * src, BuffInfo * dst)
 
 // bugfixed by slst: bug #24
 // Added parameter with default TRUE value
-int Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
+intptr_t Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 {
   if (_ConfirmBreak)
   {
@@ -243,7 +243,7 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
 void Engine::FinalizeBuf(BuffInfo * bi)
 {
   HANDLE Handle = bi->OutFile;
-  int fnum = bi->OutNum;
+  intptr_t fnum = bi->OutNum;
   String & DstName = bi->DstName;
   String & SrcName = bi->SrcName;
   FileStruct & info = Files[fnum];
@@ -462,7 +462,7 @@ int Engine::FlushBuff(BuffInfo * bi)
 
   while (Pos < bi->BuffSize && bi->BuffInf[PosInStr].FileNumber >= 0)
   {
-    int fnum = bi->BuffInf[PosInStr].FileNumber;
+    intptr_t fnum = bi->BuffInf[PosInStr].FileNumber;
     String
     SrcName = FlushSrc.GetByNum(fnum),
     DstName = FlushDst.GetByNum(fnum);
@@ -1014,7 +1014,7 @@ void Engine::ShowProgress(int64_t read, int64_t write, int64_t total,
   ::SetEvent(UiFree);
 }
 
-int Engine::CheckOverwrite2(int fnum, const String & src, const String & dst, String & ren)
+int Engine::CheckOverwrite2(intptr_t fnum, const String & src, const String & dst, String & ren)
 {
   ::WaitForSingleObject(UiFree, INFINITE);
   int res = CheckOverwrite(fnum, src, dst, ren);
@@ -2074,7 +2074,7 @@ fin:
   return TRUE;
 }
 
-void Engine::SetOverwriteMode(int Start)
+void Engine::SetOverwriteMode(intptr_t Start)
 {
   FileNameStoreEnum Enum(&DstNames);
   for (size_t i = Start; i < Enum.Count(); i++)
@@ -2120,7 +2120,7 @@ void Engine::SetOverwriteMode(int Start)
   }
 }
 
-int Engine::CheckOverwrite(int fnum, const String & Src, const String & Dst, String & ren)
+int Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String & Dst, String & ren)
 {
   FarDialog & dlg = plugin->Dialogs()[L"OverwriteDialog"];
   dlg.ResetControls();

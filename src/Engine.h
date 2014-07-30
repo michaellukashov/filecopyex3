@@ -43,7 +43,7 @@ struct FileStruct
 struct BuffStruct
 {
   size_t NextPos, WritePos;
-  int FileNumber;
+  intptr_t FileNumber;
   size_t EndFlag;
 };
 
@@ -53,7 +53,7 @@ struct BuffInfo
   size_t BuffSize;
   int64_t OrgSize;
   HANDLE OutFile;
-  int OutNum;
+  intptr_t OutNum;
   BuffStruct * BuffInf;
   String SrcName, DstName;
 };
@@ -111,7 +111,7 @@ private:
   int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
       _HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
   bool copyCreationTime, copyLastAccessTime, copyLastWriteTime;
-  int Aborted, LastFile, KeepFiles, FileCount, CopyCount;
+  intptr_t Aborted, LastFile, KeepFiles, FileCount, CopyCount;
   void Copy();
 
   BuffInfo * wbi, * bi;
@@ -120,7 +120,7 @@ private:
   void UninitBuf(BuffInfo * bi);
   void SwapBufs(BuffInfo * src, BuffInfo * dst);
   int CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
-  int AskAbort(BOOL ShowKeepFilesCheckBox = TRUE);
+  intptr_t AskAbort(BOOL ShowKeepFilesCheckBox = TRUE);
   int FlushBuff(BuffInfo * bi);
   void BGFlush();
   int WaitForFlushEnd();
@@ -131,7 +131,7 @@ private:
   void ShowWriteName(const String &);
   void ShowProgress(int64_t, int64_t, int64_t, int64_t, int64_t,
                     int64_t, int64_t, int64_t);
-  int CheckOverwrite(int fnum, String & ren);
+  int CheckOverwrite(intptr_t fnum, String & ren);
   CopyProgress CopyProgressBox;
   FarProgress ScanFoldersProgressBox;
   int64_t ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
@@ -139,9 +139,9 @@ private:
   static void Delay(int64_t, int64_t, int64_t &, int64_t);
   int SectorSize;
 
-  int CheckOverwrite(int, const String &, const String &, String &);
-  int CheckOverwrite2(int, const String &, const String &, String &);
-  void SetOverwriteMode(int);
+  int CheckOverwrite(intptr_t, const String &, const String &, String &);
+  int CheckOverwrite2(intptr_t, const String &, const String &, String &);
+  void SetOverwriteMode(intptr_t);
   int AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, int Level, int PanelIndex = -1);
   int AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, int Level, int PanelIndex = -1);
   void AddTopLevelDir(const String & dir, const String & dstmask, DWORD Flags, FileName::Direction d);
