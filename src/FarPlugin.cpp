@@ -71,8 +71,6 @@ void FarPlugin::Create()
   settings.create();
   LoadOptions();
 
-  // XXX descs.LoadFromString(registry.GetString(L"\\Software\\Far2\\Descriptions", "ListNames", "Descript.ion,Files.bbs"), ',');
-  // XXX Workaround
   descs.AddString(L"Descript.ion");
   descs.AddString(L"Files.bbs");
 }
@@ -249,7 +247,7 @@ void FarPlugin::KeyConfig()
       && dlg[L"CtrlAltF5"](L"Selected") == ctrlAlt)
     return;
 
-  // MacroCommand(MCMD_SAVEALL); // XXX
+  // MacroCommand(MCMD_SAVEALL);
 
   Unbind("KEY_F5"); Unbind("ShiftF5");
   Unbind("KEY_F5");     Unbind("ShiftF6");
@@ -273,7 +271,7 @@ void FarPlugin::KeyConfig()
     Bind(key + L"F6", "F6");
     */
   }
-  // MacroCommand(MCMD_LOADALL); // XXX
+  // MacroCommand(MCMD_LOADALL);
 #endif
 }
 

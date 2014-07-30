@@ -50,7 +50,7 @@ public:
   FarDialogList & Dialogs() { return dialogs; }
 
   const StringList & Descs() const { return descs; }
-  // void MacroCommand(const FARMACROCOMMAND& cmd); // XXX???
+  // void MacroCommand(const FARMACROCOMMAND& cmd);
 
 private:
   static String GetDLLPath();

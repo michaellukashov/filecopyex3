@@ -37,7 +37,6 @@ FarProgress::FarProgress(void)
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGBOXTITLE, &clrTitle);
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrBar);
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrText);
-  // XXX !!!
   /* switch (clrFrame >> 4)
   {
     // [exp] color changed by CDK

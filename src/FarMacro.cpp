@@ -84,7 +84,6 @@ void FarPlugin::Unbind(void *id)
 }
 */
 
-// XXX I don't know how to replace FARMACROCOMMAND
 /*
 void FarPlugin::MacroCommand(const FARMACROCOMMAND& cmd)
 {
