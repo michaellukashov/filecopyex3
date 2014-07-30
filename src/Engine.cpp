@@ -557,8 +557,10 @@ open_retry:
           intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, GetLastError(),
                                 flg, L"", L"Error.OutputFileCreate");
           ::SetEvent(UiFree);
-          if (res == RES_RETRY) goto open_retry;
-          else if (res == RES_ABORT) Aborted = 1;
+          if (res == RES_RETRY)
+            goto open_retry;
+          else if (res == RES_ABORT)
+            Aborted = 1;
         }
       }
     }
@@ -607,7 +609,8 @@ reopen_retry:
                 intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
                                       DstName, GetLastError(), flg, L"", L"Error.OutputFileCreate");
                 ::SetEvent(UiFree);
-                if (res == RES_RETRY) goto reopen_retry;
+                if (res == RES_RETRY)
+                  goto reopen_retry;
                 else
                 {
                   info.Flags |= FLG_SKIPPED | FLG_ERROR;
@@ -812,11 +815,13 @@ open_retry:
       intptr_t res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, GetLastError(),
                             flg, L"", L"Error.InputFileOpen");
       ::SetEvent(UiFree);
-      if (res == RES_RETRY) goto open_retry;
+      if (res == RES_RETRY)
+        goto open_retry;
       else
       {
         info.Flags |= FLG_SKIPPED | FLG_ERROR;
-        if (res == RES_ABORT) goto abort;
+        if (res == RES_ABORT)
+          goto abort;
         else continue;
       }
     }
@@ -868,12 +873,14 @@ reopen_retry:
                 intptr_t res = EngineError(LOC(L"Error.InputFileOpen"), SrcName,
                                       GetLastError(), flg, L"", L"Error.InputFileOpen");
                 ::SetEvent(UiFree);
-                if (res == RES_RETRY) goto reopen_retry;
+                if (res == RES_RETRY)
+                  goto reopen_retry;
                 else
                 {
                   info.Flags |= FLG_SKIPPED | FLG_ERROR;
                   if (flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
-                  if (res == RES_ABORT) goto abort;
+                  if (res == RES_ABORT)
+                    goto abort;
                   else
                     goto skip;
                 }
@@ -888,7 +895,8 @@ reopen_retry:
           {
             info.Flags |= FLG_SKIPPED | FLG_ERROR;
             if (flg & eerKeepFiles) info.Flags |= FLG_KEEPFILE;
-            if (res == RES_ABORT) goto abort;
+            if (res == RES_ABORT)
+              goto abort;
             else
               goto skip;
           }
@@ -905,7 +913,8 @@ reopen_retry:
         // bug #22 fixed by Axxie
         ShowReadName(SrcName);
 
-        if (CheckEscape()) goto abort;
+        if (CheckEscape())
+          goto abort;
         if (j < cb)
           break;
       } // while (BuffPos < bi->BuffSize)
@@ -922,11 +931,13 @@ skip:
         bi->BuffInf[FilesInBuff].EndFlag = 0;
         if (!Parallel)
         {
-          if (!FlushBuff(bi)) goto abort;
+          if (!FlushBuff(bi))
+            goto abort;
         }
         else
         {
-          if (!WaitForFlushEnd()) goto abort;
+          if (!WaitForFlushEnd())
+            goto abort;
           SwapBufs(bi, wbi);
           BGFlush();
         }
@@ -1496,25 +1507,30 @@ rep:
       if (!(vf & VF_ENCRYPTION) && !adv) EncryptMode = ATTR_INHERIT;
 
       if (vf & VF_READONLY)
-        if (!warn(LOC(L"CopyDialog.ReadOnlyWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.ReadOnlyWarn")))
+          goto rep;
       if (!(vf & VF_COMPRESSION) && CompressMode == ATTR_ON)
       {
-        if (!warn(LOC(L"CopyDialog.CompressWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.CompressWarn")))
+          goto rep;
         CompressMode = ATTR_INHERIT;
       }
       if (!(vf & VF_ENCRYPTION) && EncryptMode == ATTR_ON)
       {
-        if (!warn(LOC(L"CopyDialog.EncryptWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.EncryptWarn")))
+          goto rep;
         EncryptMode = ATTR_INHERIT;
       }
       if (!(vf & VF_STREAMS) && Streams)
       {
-        if (!warn(LOC(L"CopyDialog.StreamsWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.StreamsWarn")))
+          goto rep;
         Streams = 0;
       }
       if (!(vf & VF_RIGHTS) && Rights == ATTR_ON)
       {
-        if (!warn(LOC(L"CopyDialog.RightsWarn"))) goto rep;
+        if (!warn(LOC(L"CopyDialog.RightsWarn")))
+          goto rep;
         Rights = 0;
       }
     }
@@ -1582,10 +1598,12 @@ rep:
     String filePath = ExtractFilePath(file);
     if (!haveCurPath || filePath.icmp(curPath))
     {
-      if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
+      if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath))
+        goto fin;
       curPath = filePath;
       haveCurPath = 1;
-      if (!DirStart(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
+      if (!DirStart(!curPath.empty() ? curPath : srcPath, dstPath))
+        goto fin;
     }
 
     if (file.find('\\') == -1)
@@ -1618,7 +1636,8 @@ rep:
     }
   } // for (int ii=0; ii<c; ii++)
 
-  if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath)) goto fin;
+  if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath))
+    goto fin;
 
   if (OverwriteMode == OM_RESUME)
   {
@@ -2192,7 +2211,8 @@ rep1:
     if (dlg.Execute() == 0)
     {
       ren = ExtractFilePath(Dst) + L"\\" + dlg[L"Edit"](L"Text");
-      if (ExistsN(ren, 0)) goto rep1;
+      if (ExistsN(ren, 0))
+        goto rep1;
     }
     else goto rep;
   }
