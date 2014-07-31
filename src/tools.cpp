@@ -37,7 +37,7 @@ int GetDriveId(const String & path, String & res)
   wchar_t buf[MAX_FILENAME];
   if (WinNT4)
   {
-    // axxie: special HDD ID inmplementation for NT4
+    // axxie: special HDD ID implementation for NT4
     if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME) > 0)
     {
       String s = buf;
