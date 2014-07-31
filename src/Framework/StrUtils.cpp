@@ -104,12 +104,24 @@ String FormatProgress(int64_t cb, int64_t total)
   String un;
   switch (pw)
   {
-    case 0: un=LOC(L"Engine.Bytes"); break;
-    case 1: un=LOC(L"Engine.Kb"); break;
-    case 2: un=LOC(L"Engine.Mb"); break;
-    case 3: un=LOC(L"Engine.Gb"); break;
-    case 4: un=LOC(L"Engine.Tb"); break;
-    case 5: un=LOC(L"Engine.Pb"); break;
+    case 0:
+      un=LOC(L"Engine.Bytes");
+      break;
+    case 1:
+      un=LOC(L"Engine.Kb");
+      break;
+    case 2:
+      un=LOC(L"Engine.Mb");
+      break;
+    case 3:
+      un=LOC(L"Engine.Gb");
+      break;
+    case 4:
+      un=LOC(L"Engine.Tb");
+      break;
+    case 5:
+      un=LOC(L"Engine.Pb");
+      break;
   }
   return Format(L"%s %s %s %s [%d%%]", FormatNum(cb / div).ptr(), LOC(L"Engine.Of").ptr(),
                 FormatNum(total / div).ptr(), un.ptr(), (int)(total ? (float)cb / total * 100 : 0));
@@ -129,12 +141,24 @@ String FormatSpeed(int64_t cb)
   String un;
   switch (pw)
   {
-    case 0: un=LOC(L"Engine.Bytes"); break;
-    case 1: un=LOC(L"Engine.Kb"); break;
-    case 2: un=LOC(L"Engine.Mb"); break;
-    case 3: un=LOC(L"Engine.Gb"); break;
-    case 4: un=LOC(L"Engine.Tb"); break;
-    case 5: un=LOC(L"Engine.Pb"); break;
+    case 0:
+      un=LOC(L"Engine.Bytes");
+      break;
+    case 1:
+      un=LOC(L"Engine.Kb");
+      break;
+    case 2:
+      un=LOC(L"Engine.Mb");
+      break;
+    case 3:
+      un=LOC(L"Engine.Gb");
+      break;
+    case 4:
+      un=LOC(L"Engine.Tb");
+      break;
+    case 5:
+      un=LOC(L"Engine.Pb");
+      break;
   }
 
   return Format(L"%s %s/%s", FormatNum(cb / div).ptr(), un.ptr(), LOC(L"Engine.Sec").ptr());
@@ -148,12 +172,24 @@ String FormatValue(int64_t Value)
   String UnitStr;
   switch (pw)
   {
-    case 0: UnitStr = LOC(L"Engine.Bytes"); break;
-    case 1: UnitStr = LOC(L"Engine.Kb"); break;
-    case 2: UnitStr = LOC(L"Engine.Mb"); break;
-    case 3: UnitStr = LOC(L"Engine.Gb"); break;
-    case 4: UnitStr = LOC(L"Engine.Tb"); break;
-    case 5: UnitStr = LOC(L"Engine.Pb"); break;
+    case 0:
+      UnitStr = LOC(L"Engine.Bytes");
+      break;
+    case 1:
+      UnitStr = LOC(L"Engine.Kb");
+      break;
+    case 2:
+      UnitStr = LOC(L"Engine.Mb");
+      break;
+    case 3:
+      UnitStr = LOC(L"Engine.Gb");
+      break;
+    case 4:
+      UnitStr = LOC(L"Engine.Tb");
+      break;
+    case 5:
+      UnitStr = LOC(L"Engine.Pb");
+      break;
   }
   return Format(L"%s %s", FormatNum(Value).ptr(), UnitStr.ptr());
 }

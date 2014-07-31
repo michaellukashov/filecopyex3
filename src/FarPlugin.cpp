@@ -159,11 +159,37 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
       int move = 0, curOnly = 0;
       switch (command)
       {
-      case 0: move = 0; curOnly = 0; selectedMenuItem = 0; repeat = false; break;
-      case 1: move = 1; curOnly = 0; selectedMenuItem = 1; repeat = false; break;
-      case 2: move = 0; curOnly = 1; selectedMenuItem = 2; repeat = false; break;
-      case 3: move = 1; curOnly = 1; selectedMenuItem = 3; repeat = false; break;
-      case 5: Config(); move = -1; curOnly = -1; selectedMenuItem = 5; repeat = true; break;
+      case 0:
+        move = 0;
+        curOnly = 0;
+        selectedMenuItem = 0;
+        repeat = false;
+        break;
+      case 1:
+        move = 1;
+        curOnly = 0;
+        selectedMenuItem = 1;
+        repeat = false;
+        break;
+      case 2:
+        move = 0;
+        curOnly = 1;
+        selectedMenuItem = 2;
+        repeat = false;
+        break;
+      case 3:
+        move = 1;
+        curOnly = 1;
+        selectedMenuItem = 3;
+        repeat = false;
+        break;
+      case 5:
+        Config();
+        move = -1;
+        curOnly = -1;
+        selectedMenuItem = 5;
+        repeat = true;
+        break;
       default: return;
       }
       if (move != -1 && curOnly != -1)

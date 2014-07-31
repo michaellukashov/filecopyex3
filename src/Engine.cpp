@@ -519,11 +519,13 @@ open_retry:
       {
         case OM_OVERWRITE:
         case OM_RENAME:
-          bi->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr); break;
+          bi->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
+          break;
         case OM_APPEND:
           info.Flags |= FLG_BUFFERED;
           oflg |= OPEN_BUF;
-          bi->OutFile = Open(DstName, OPEN_APPEND | oflg, 0); break;
+          bi->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
+          break;
         case OM_RESUME:
           bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
           if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN) == -1)
@@ -531,7 +533,8 @@ open_retry:
                            (int)GetLastError()));
           break;
         case OM_SKIP:
-          info.Flags |= FLG_SKIPPED; break;
+          info.Flags |= FLG_SKIPPED;
+          break;
         case OM_PROMPT:
         case OM_CANCEL:
           if (AskAbort())
@@ -2211,13 +2214,17 @@ int Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String & Dst
 rep:
   switch (dlg.Execute())
   {
-    case 0: res = OM_OVERWRITE;
+    case 0:
+      res = OM_OVERWRITE;
       break;
-    case 1: res = OM_SKIP;
+    case 1:
+      res = OM_SKIP;
       break;
-    case 2: res = OM_APPEND;
+    case 2:
+      res = OM_APPEND;
       break;
-    case 3: res = OM_RENAME;
+    case 3:
+      res = OM_RENAME;
       break;
     case -1:
       return OM_CANCEL;
