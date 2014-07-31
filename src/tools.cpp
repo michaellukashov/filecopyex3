@@ -168,7 +168,8 @@ int CheckParallel(const String & _srcpath, const String & _dstpath)
     {
       if (drv1 != drv2)
         return TRUE;
-      else return FALSE;
+      else
+        return FALSE;
     }
     String id1, id2;
     if (GetDriveId(root1, id1)
@@ -176,7 +177,8 @@ int CheckParallel(const String & _srcpath, const String & _dstpath)
     {
       if (id1.icmp(id2))
         return TRUE;
-      else return FALSE;
+      else
+        return FALSE;
     }
   }
 

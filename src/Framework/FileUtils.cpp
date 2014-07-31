@@ -332,7 +332,8 @@ String GetFileRoot(const String & _path)
     else
       res = GetFileNameRoot(path);
   }
-  else res = GetFileNameRoot(path);
+  else
+    res = GetFileNameRoot(path);
   return res;
 }
 

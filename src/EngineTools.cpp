@@ -75,7 +75,8 @@ void Encrypt(const String & fn, int f)
   SetFileAttributes(fn.ptr(), 0);
   if (f)
     res = EncryptFile(fn.ptr());
-  else res = DecryptFile(fn.ptr(), 0);
+  else
+    res = DecryptFile(fn.ptr(), 0);
   if (!res)
     Error2(LOC(L"Error.Encrypt"), fn, GetLastError());
 }

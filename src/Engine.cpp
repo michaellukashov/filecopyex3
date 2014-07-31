@@ -494,11 +494,13 @@ rep:
             DstName = renn;
         }
       }
-      else info.OverMode = OM_OVERWRITE;
+      else
+        info.OverMode = OM_OVERWRITE;
 
       if (EncryptMode == ATTR_ON)
         info.Attr |= FILE_ATTRIBUTE_ENCRYPTED;
-      else info.Attr &= ~FILE_ATTRIBUTE_ENCRYPTED;
+      else
+        info.Attr &= ~FILE_ATTRIBUTE_ENCRYPTED;
 
       bi->SrcName = SrcName;
       bi->DstName = DstName;
@@ -526,7 +528,8 @@ open_retry:
         case OM_CANCEL:
           if (AskAbort())
             info.Flags |= FLG_SKIPPED;
-          else goto rep;
+          else
+            goto rep;
           break;
       }
 
@@ -552,7 +555,8 @@ open_retry:
                 sp++;
               sp *= info.SectorSize;
             }
-            else sp = size;
+            else
+              sp = size;
             int64_t bp = FTell(bi->OutFile);
             FSeek(bi->OutFile, sp, FILE_BEGIN);
             SetEndOfFile(bi->OutFile);
@@ -840,7 +844,8 @@ open_retry:
         info.Flags |= FLG_SKIPPED | FLG_ERROR;
         if (res == RES_ABORT)
           goto abort;
-        else continue;
+        else
+          continue;
       }
     }
 
@@ -2234,7 +2239,8 @@ rep1:
       if (ExistsN(ren, 0))
         goto rep1;
     }
-    else goto rep;
+    else
+      goto rep;
   }
 
   if (AcceptForAll || SkipNewer != OldSkipNewer)
