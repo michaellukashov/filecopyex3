@@ -517,7 +517,7 @@ int MoveFile(const String & _src, const String & _dst, int replace)
   {
     String root1 = GetFileRoot(_src),
            root2 = GetFileRoot(_dst);
-    if (root1 == L"" || root2 == L"")
+    if (root1.IsEmpty() || root2.IsEmpty())
     {
       SetLastError(ERROR_PATH_NOT_FOUND);
       return FALSE;

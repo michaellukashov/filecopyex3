@@ -1181,7 +1181,7 @@ int Engine::DirStart(const String & dir, const String & dstMask)
 
 int Engine::DirEnd(const String & dir, const String & dstMask)
 {
-  if (_CopyDescs && CurPathDesc != L"")
+  if (_CopyDescs && !CurPathDesc.IsEmpty())
   {
     if (!AddFile(dir + L"\\" + CurPathDesc,
                  AddEndSlash(ExtractFilePath(ApplyFileMaskPath(dir + L"\\" + CurPathDesc, dstMask))) + CurPathDesc, DescFindData, AF_DESCFILE | AF_DESC_INVERSE | CurPathAddFlags, 1)
@@ -1323,7 +1323,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
   dlg[L"DestPath"](L"Text") = dstPath;
 
   // axxie: Reset cp in case when user pressed Shift-F6/Shift-F5
-  int cp = (!curOnly && srcPath != L"") ? CheckParallel(srcPath, dstPath) : FALSE;
+  int cp = (!curOnly && !srcPath.IsEmpty()) ? CheckParallel(srcPath, dstPath) : FALSE;
   if (!Options[L"AllowParallel"])
   {
     dlg[L"ParallelCopy"](L"Selected") = FALSE;
