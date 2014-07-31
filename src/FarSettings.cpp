@@ -96,7 +96,7 @@ bool saveOptions(const PropertyMap & options, FarSettings & settings)
     if (!settings.set(it->first, it->second.operator const String()))
     {
       ok = false;
-    };
+    }
   }
 
   return ok;
@@ -153,7 +153,7 @@ bool Settings::set_dir(const wstring& path) {
     dir_id = control(SCTL_CREATESUBKEY, &fsv);
     if (dir_id == 0)
       return false;
-  };
+  }
   this->dir_id = dir_id;
   return true;
 }

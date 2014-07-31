@@ -46,7 +46,7 @@ void FarMenu::AddLineCheck(const String & line, int check)
   if (Selection == items.size())
   {
     item.Flags = MIF_SELECTED;
-  };
+  }
   SetItemText(&item, line);
   items.push_back(item);
 }
@@ -93,7 +93,7 @@ void FarMenu::SetSelection(size_t n)
       else
         item.Flags |= MIF_SELECTED;
     }
-  };
+  }
 }
 
 void FarMenu::SetTitle(const String & v)

@@ -34,7 +34,7 @@ size_t npos_minus1(size_t pos);
 class String
 {
 public:
-  String() {};
+  String() {}
 
   String(const char * v)
   {

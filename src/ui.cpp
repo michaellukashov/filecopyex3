@@ -160,6 +160,6 @@ String SplitWidth(const String & s, intptr_t w)
     }
     res += c;
     curW++;
-  };
+  }
   return res;
 }

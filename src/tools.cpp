@@ -211,7 +211,7 @@ bool Newer(const String & fn1, const FILETIME & ft2)
   {
     ::FindClose(hf);
     return Newer(fd.ftLastWriteTime, ft2);
-  };
+  }
   return FALSE;
 }
 

@@ -17,7 +17,7 @@ String FileNameStoreEnum::GetNext()
       if (!curPath.empty())
       {
         curPath += L"\\";
-      };
+      }
       curPath += fn.getName();
       buffer = curPath;
       break;
@@ -68,7 +68,7 @@ void FileNameStoreEnum::Skip()
       if (!curPath.empty())
       {
         curPath += L"\\";
-      };
+      }
       curPath += fn.getName();
       break;
     }

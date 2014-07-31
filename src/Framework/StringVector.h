@@ -7,8 +7,8 @@
 class StringVector: public StringParent
 {
 public:
-  StringVector() {};
-  virtual ~StringVector() {};
+  StringVector() {}
+  virtual ~StringVector() {}
 
   virtual void Clear() { data.clear(); }
   virtual const String & operator[](size_t i) const { return data[i]; }

@@ -1527,7 +1527,7 @@ rep:
   else if (dlg[L"Rename"](L"Selected"))
   {
     OverwriteMode = OM_RENAME;
-  };
+  }
 
   if (!dstPath.icmp(L"nul"))
   {

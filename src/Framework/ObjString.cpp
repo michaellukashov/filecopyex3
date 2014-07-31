@@ -45,11 +45,11 @@ String String::trim() const
   while (start <= end && isbadchar((*this)[start]))
   {
     start++;
-  };
+  }
   while (end >= start && isbadchar((*this)[end]))
   {
     end--;
-  };
+  }
   return substr(start, end - start + 1);
 }
 
@@ -59,7 +59,7 @@ String String::ltrim() const
   while (start <= end && isbadchar((*this)[start]))
   {
     start++;
-  };
+  }
   return substr(start, end - start + 1);
 }
 
@@ -69,7 +69,7 @@ String String::rtrim() const
   while (end >= start && isbadchar((*this)[end]))
   {
     end--;
-  };
+  }
   return substr(start, end - start + 1);
 
 }
@@ -80,11 +80,11 @@ String String::trimquotes() const
   while (start <= end && ((*this)[start]) == '"')
   {
     start++;
-  };
+  }
   while (end >= start && ((*this)[end]) == '"')
   {
     end--;
-  };
+  }
   return substr(start, end - start + 1);
 }
 

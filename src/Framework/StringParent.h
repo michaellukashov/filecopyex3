@@ -8,8 +8,8 @@ enum TextFormat { tfANSI, tfUnicode, tfUnicodeBE };
 class StringParent
 {
 public:
-  StringParent() {};
-  virtual ~StringParent() {};
+  StringParent() {}
+  virtual ~StringParent() {}
 
   virtual void Clear() = 0;
   virtual const String & operator[](size_t) const = 0;

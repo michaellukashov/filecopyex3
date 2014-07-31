@@ -5,8 +5,8 @@
 class Payload
 {
 public:
-  Payload() {};
-  virtual ~Payload() {};
+  Payload() {}
+  virtual ~Payload() {}
 
   virtual void init(const String & AName);
 
