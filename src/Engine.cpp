@@ -1816,7 +1816,7 @@ fin:
   Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, NULL);
   Info.PanelControl(PANEL_PASSIVE, FCTL_REDRAWPANEL, 0, NULL);
 
-  return MRES_NONE;
+  return MRES_OK;
 }
 
 intptr_t Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex)

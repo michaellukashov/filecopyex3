@@ -94,7 +94,7 @@ class Engine
 public:
   Engine();
 
-  enum MResult { MRES_NONE, MRES_STDCOPY, MRES_STDCOPY_RET };
+  enum MResult { MRES_NONE, MRES_OK, MRES_STDCOPY, MRES_STDCOPY_RET };
   MResult Main(int move, int curonly);
 
 private:

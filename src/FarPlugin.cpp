@@ -95,7 +95,7 @@ static bool CallCopy(int move, int curOnly)
 {
   Engine engine;
   Engine::MResult res = engine.Main(move, curOnly);
-  bool Result = res != Engine::MRES_NONE;
+  bool Result = res == Engine::MRES_OK;
   if (res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
   {
     /* svs 09.02.2011 18:51:58 +0300 - build 1844                                                                                                                                                     ░
