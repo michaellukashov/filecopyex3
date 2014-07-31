@@ -34,7 +34,7 @@ String FileNameStoreEnum::GetNext()
     case FileName::levelStar:
     {
       buffer = curPath;
-      curPath = L"";
+      curPath.Clear();
       break;
     }
 
@@ -81,7 +81,7 @@ void FileNameStoreEnum::Skip()
 
     case FileName::levelStar:
     {
-      curPath = L"";
+      curPath.Clear();
       break;
     }
   }
@@ -90,8 +90,8 @@ void FileNameStoreEnum::Skip()
 void FileNameStoreEnum::ToFirst()
 {
   cur = 0;
-  curPath = L"";
-  buffer = L"";
+  curPath.Clear();
+  buffer.Clear();
 }
 
 String FileNameStoreEnum::GetByNum(size_t n)

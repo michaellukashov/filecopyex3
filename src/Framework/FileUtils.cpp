@@ -215,7 +215,7 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
 
 int GetSymLink(const String & _dir, String & res, int flg)
 {
-  res = L"";
+  res.Clear();
   String dir = CutEndSlash(_dir);
   wchar_t buf[MAX_FILENAME];
   DWORD sz = MAX_FILENAME;

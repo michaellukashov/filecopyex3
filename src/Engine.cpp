@@ -689,8 +689,8 @@ skip: ;
       FinalizeBuf(bi);
       bi->OutFile = NULL;
       bi->OutNum = -1;
-      bi->SrcName = L"";
-      bi->DstName = L"";
+      bi->SrcName.Clear();
+      bi->DstName.Clear();
     }
 
     if (Aborted)
@@ -1251,7 +1251,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
   {
     if (pi.PanelType == PTYPE_QVIEWPANEL || pi.PanelType == PTYPE_INFOPANEL ||  !(pi.Flags & PFLAGS_VISIBLE))
     {
-      dstPath = L"";
+      dstPath.Clear();
     }
     else
     {
@@ -1451,7 +1451,7 @@ rep:
   }
 
   String relDstPath = ExpandEnv(dstText.replace(L"/", L"\\"));
-  dstPath = L"";
+  dstPath.Clear();
 
   wchar_t CurrentDir[MAX_FILENAME];
   wchar_t dstbuf[MAX_FILENAME];
@@ -1663,7 +1663,7 @@ rep:
       }
       else
       {
-        CurPathDesc = L"";
+        CurPathDesc.Clear();
       }
     }
 

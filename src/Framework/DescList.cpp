@@ -48,8 +48,8 @@ bool DescList::LoadFromList(StringVector & list)
       if (!fn.empty())
       {
         names[fn] = Data(desc, 0);
-        fn = L"";
-        desc = L"";
+        fn.Clear();
+        desc.Clear();
       }
       if (c == '"')
       {
@@ -72,7 +72,7 @@ bool DescList::LoadFromList(StringVector & list)
         else
         {
           fn = s;
-          desc = L"";
+          desc.Clear();
         }
       }
     }
