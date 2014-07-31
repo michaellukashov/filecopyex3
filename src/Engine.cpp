@@ -109,6 +109,8 @@ Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), Flus
   KeepFiles = 0;
   FileCount = 0;
   CopyCount = 0;
+  _LastCheckEscape = 0;
+  _CheckEscapeInterval = TicksPerSec() / 2;
   wbi = NULL;
   bi = NULL;
 
@@ -211,6 +213,12 @@ intptr_t Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 // Added parameter with default TRUE value
 int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
 {
+  //int64_t tm = GetTime();
+  //if (tm - _LastCheckEscape < _CheckEscapeInterval)
+  //{
+  //  return FALSE;
+  //}
+  //_LastCheckEscape = tm;
   if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT)
     return FALSE;
 

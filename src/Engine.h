@@ -112,6 +112,7 @@ private:
       _HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
   bool copyCreationTime, copyLastAccessTime, copyLastWriteTime;
   intptr_t Aborted, LastFile, KeepFiles, FileCount, CopyCount;
+  int64_t _LastCheckEscape, _CheckEscapeInterval;
   void Copy();
 
   BuffInfo * wbi, * bi;
