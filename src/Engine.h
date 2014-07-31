@@ -123,6 +123,7 @@ private:
   int CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
   intptr_t AskAbort(BOOL ShowKeepFilesCheckBox = TRUE);
   int FlushBuff(BuffInfo * bi);
+  void CheckDstFileExists(BuffInfo * bi, intptr_t fnum, FileStruct & info, const String & SrcName, String & DstName);
   void BGFlush();
   int WaitForFlushEnd();
   friend uint32_t __stdcall FlushThread(void * p);

@@ -469,6 +469,110 @@ void Engine::ProcessDesc(intptr_t fnum)
   }
 }
 
+void Engine::CheckDstFileExists(BuffInfo * bi, intptr_t fnum, FileStruct & info, const String & SrcName, String & DstName)
+{
+  if (FileExists(DstName))
+  {
+    if (info.OverMode == OM_PROMPT)
+      info.OverMode = OverwriteMode;
+    if (info.OverMode == OM_RENAME && info.RenameNum)
+      DstName = DupName(DstName, info.RenameNum);
+    if (info.OverMode == OM_PROMPT)
+    {
+rep:
+      String renn;
+      info.OverMode = CheckOverwrite2(fnum, SrcName, DstName, renn);
+      if (info.OverMode == OM_RENAME)
+        DstName = renn;
+    }
+  }
+  else
+    info.OverMode = OM_OVERWRITE;
+
+  if (EncryptMode == ATTR_ON)
+    info.Attr |= FILE_ATTRIBUTE_ENCRYPTED;
+  else
+    info.Attr &= ~FILE_ATTRIBUTE_ENCRYPTED;
+
+  bi->SrcName = SrcName;
+  bi->DstName = DstName;
+
+open_retry:
+  int oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
+  switch (info.OverMode)
+  {
+    case OM_OVERWRITE:
+    case OM_RENAME:
+      bi->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
+      break;
+    case OM_APPEND:
+      info.Flags |= FLG_BUFFERED;
+      oflg |= OPEN_BUF;
+      bi->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
+      break;
+    case OM_RESUME:
+      bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
+      if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN) == -1)
+        FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
+                       (int)GetLastError()));
+      break;
+    case OM_SKIP:
+      info.Flags |= FLG_SKIPPED;
+      break;
+    case OM_PROMPT:
+    case OM_CANCEL:
+      if (AskAbort())
+        info.Flags |= FLG_SKIPPED;
+      else
+        goto rep;
+      break;
+  }
+
+  ShowWriteName(DstName);
+
+  if (!(info.Flags & FLG_SKIPPED))
+  {
+    if (bi->OutFile)
+    {
+      Compress(bi->OutFile, CompressMode);
+      //Encrypt(bi->OutFile, EncryptMode);
+      bi->OrgSize = FileSize(bi->OutFile);
+
+      int64_t size = info.OverMode == OM_APPEND ? bi->OrgSize + info.Size : info.Size;
+      if (size >= (int64_t)_PreallocMin * 1024
+          && GetCompression(bi->OutFile) == 0)
+      {
+        int64_t sp;
+        if (!(info.Flags & FLG_BUFFERED))
+        {
+          sp = size / info.SectorSize;
+          if (size % info.SectorSize)
+            sp++;
+          sp *= info.SectorSize;
+        }
+        else
+          sp = size;
+        int64_t bp = FTell(bi->OutFile);
+        FSeek(bi->OutFile, sp, FILE_BEGIN);
+        SetEndOfFile(bi->OutFile);
+        FSeek(bi->OutFile, bp, FILE_BEGIN);
+      }
+    }
+    else
+    {
+      ::WaitForSingleObject(UiFree, INFINITE);
+      uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
+      intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, GetLastError(),
+                            flg, L"", L"Error.OutputFileCreate");
+      ::SetEvent(UiFree);
+      if (res == RES_RETRY)
+        goto open_retry;
+      else if (res == RES_ABORT)
+        Aborted = 1;
+    }
+  }
+}
+
 int Engine::FlushBuff(BuffInfo * bi)
 {
   size_t Pos = 0;
@@ -487,106 +591,7 @@ int Engine::FlushBuff(BuffInfo * bi)
 
     if (!bi->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      if (FileExists(DstName))
-      {
-        if (info.OverMode == OM_PROMPT)
-          info.OverMode = OverwriteMode;
-        if (info.OverMode == OM_RENAME && info.RenameNum)
-          DstName = DupName(DstName, info.RenameNum);
-        if (info.OverMode == OM_PROMPT)
-        {
-rep:
-          String renn;
-          info.OverMode = CheckOverwrite2(fnum, SrcName, DstName, renn);
-          if (info.OverMode == OM_RENAME)
-            DstName = renn;
-        }
-      }
-      else
-        info.OverMode = OM_OVERWRITE;
-
-      if (EncryptMode == ATTR_ON)
-        info.Attr |= FILE_ATTRIBUTE_ENCRYPTED;
-      else
-        info.Attr &= ~FILE_ATTRIBUTE_ENCRYPTED;
-
-      bi->SrcName = SrcName;
-      bi->DstName = DstName;
-
-open_retry:
-      int oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-      switch (info.OverMode)
-      {
-        case OM_OVERWRITE:
-        case OM_RENAME:
-          bi->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
-          break;
-        case OM_APPEND:
-          info.Flags |= FLG_BUFFERED;
-          oflg |= OPEN_BUF;
-          bi->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
-          break;
-        case OM_RESUME:
-          bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
-          if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN) == -1)
-            FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
-                           (int)GetLastError()));
-          break;
-        case OM_SKIP:
-          info.Flags |= FLG_SKIPPED;
-          break;
-        case OM_PROMPT:
-        case OM_CANCEL:
-          if (AskAbort())
-            info.Flags |= FLG_SKIPPED;
-          else
-            goto rep;
-          break;
-      }
-
-      ShowWriteName(DstName);
-
-      if (!(info.Flags & FLG_SKIPPED))
-      {
-        if (bi->OutFile)
-        {
-          Compress(bi->OutFile, CompressMode);
-          //Encrypt(bi->OutFile, EncryptMode);
-          bi->OrgSize = FileSize(bi->OutFile);
-
-          int64_t size = info.OverMode == OM_APPEND ? bi->OrgSize + info.Size : info.Size;
-          if (size >= (int64_t)_PreallocMin * 1024
-              && GetCompression(bi->OutFile) == 0)
-          {
-            int64_t sp;
-            if (!(info.Flags & FLG_BUFFERED))
-            {
-              sp = size / info.SectorSize;
-              if (size % info.SectorSize)
-                sp++;
-              sp *= info.SectorSize;
-            }
-            else
-              sp = size;
-            int64_t bp = FTell(bi->OutFile);
-            FSeek(bi->OutFile, sp, FILE_BEGIN);
-            SetEndOfFile(bi->OutFile);
-            FSeek(bi->OutFile, bp, FILE_BEGIN);
-          }
-        }
-        else
-        {
-          ::WaitForSingleObject(UiFree, INFINITE);
-          uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-          intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, GetLastError(),
-                                flg, L"", L"Error.OutputFileCreate");
-          ::SetEvent(UiFree);
-          if (res == RES_RETRY)
-            goto open_retry;
-          else if (res == RES_ABORT)
-            Aborted = 1;
-        }
-      }
+      CheckDstFileExists(bi, fnum, info, SrcName, DstName);
     }
     if (!(info.Flags & FLG_SKIPPED) && !bi->OutFile)
       info.Flags |= FLG_SKIPPED | FLG_ERROR;
