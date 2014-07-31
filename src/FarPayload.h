@@ -54,10 +54,10 @@ public:
   virtual void init(const String & _name);
 
   virtual void InitItem(FarDialogItem & item);
-  virtual void RetrieveProperties(HANDLE) { ; }
-  virtual void BeforeAdd(FarDialogItem &) { ; }
-  virtual void LoadState(PropertyMap & state) { ; }
-  virtual void SaveState(PropertyMap & state) { ; }
+  virtual void RetrieveProperties(HANDLE) {}
+  virtual void BeforeAdd(FarDialogItem &) {}
+  virtual void LoadState(PropertyMap & state) {}
+  virtual void SaveState(PropertyMap & state) {}
 
   virtual void DefSize(intptr_t &, intptr_t &, intptr_t &);
   virtual void ClearDialogItem() { dialogItem = -1; }
