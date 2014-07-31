@@ -27,10 +27,6 @@ endif()
 
 set(OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/${FAR_VERSION}_${CONF}/Plugins/FileCopyEx3)
 
-set(LIBS_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/libs)
-set(SRC_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(TESTS_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/tests)
-
 #-------------------------------------------------------------------------------
 
 if(MSVC)
@@ -82,7 +78,6 @@ include_directories(
   src
   src/Framework
   src/SDK
-  ${LIBS_ROOT}
 )
 
 #-------------------------------------------------------------------------------
