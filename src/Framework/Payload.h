@@ -15,7 +15,7 @@ public:
   void addProperty(const String & AName, const String & def);
   Property & operator()(const String & AName) { return getProp(AName); }
 
-  const String getName() const {return name; }
+  const String getName() const { return name; }
 
   void propSave() { propSaved = prop; }
   void propLoad() { prop = propSaved; }
