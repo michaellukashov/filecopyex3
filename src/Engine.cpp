@@ -846,6 +846,12 @@ open_retry:
     HANDLE InputFile = Open(SrcName, OPEN_READ, 0);
     ShowReadName(SrcName);
 
+    info.SectorSize = SectorSize;
+    if (!Parallel && !bi->OutFile && !(info.Flags & FLG_SKIPPED))
+    {
+      CheckDstFileExists(bi, i, info, SrcName, DstName);
+    }
+
     if (!InputFile)
     {
       ::WaitForSingleObject(UiFree, INFINITE);
