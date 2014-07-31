@@ -57,7 +57,7 @@ void CopyProgress::Start(int move)
 
 void CopyProgress::Stop()
 {
-  Info.RestoreScreen(NULL);
+  Info.RestoreScreen(nullptr);
   Info.RestoreScreen(hScreen);
 }
 
@@ -205,7 +205,7 @@ void CopyProgress::ShowReadName(const String & fn)
     RedrawWindowIfNeeded();
     lastupdate_read = tm;
     DrawName(fn, 4);
-    Info.Text(0, 0, 0, NULL);
+    Info.Text(0, 0, 0, nullptr);
   }
 }
 
@@ -217,7 +217,7 @@ void CopyProgress::ShowWriteName(const String & fn)
     RedrawWindowIfNeeded();
     lastupdate_write = tm;
     DrawName(fn, 8);
-    Info.Text(0, 0, 0, NULL);
+    Info.Text(0, 0, 0, nullptr);
   }
 }
 
@@ -236,7 +236,7 @@ void CopyProgress::ShowProgress(int64_t read, int64_t write, int64_t total,
     DrawProgress(LOC(L"Engine.Writing"), 6, write, total, writeTime, writeN, totalN);
     DrawTime(read, write, total, readTime, writeTime, readN, writeN, totalN,
              parallel, FirstWrite, StartTime, BufferSize);
-    Info.Text(0, 0, 0, NULL);
+    Info.Text(0, 0, 0, nullptr);
   }
 }
 
@@ -259,7 +259,7 @@ void CopyProgress::RedrawWindow()
   *p = 0;
   Info.Text(X1 + MG - 1, Y1 + 5, &clrFrame, buf);
   Info.Text(X1 + MG - 1, Y1 + 9, &clrFrame, buf);
-  Info.Text(0, 0, 0, NULL);
-  Info.RestoreScreen(NULL);
+  Info.Text(0, 0, 0, nullptr);
+  Info.RestoreScreen(nullptr);
   TitleBuf = GetTitle();
 }

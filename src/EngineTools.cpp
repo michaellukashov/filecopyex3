@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void * Alloc(size_t size)
 {
   size = (size / 4096 + 1) * 4096;
-  return VirtualAlloc(NULL, size, MEM_COMMIT, PAGE_READWRITE);
+  return VirtualAlloc(nullptr, size, MEM_COMMIT, PAGE_READWRITE);
 }
 
 void Free(void * ptr)
@@ -52,7 +52,7 @@ void Compress(HANDLE handle, int f)
              COMPRESSION_FORMAT_NONE;
   DWORD cb;
   if (!DeviceIoControl(handle, FSCTL_SET_COMPRESSION,
-                       (LPVOID)&b, sizeof(b), NULL, 0, &cb, NULL))
+                       (LPVOID)&b, sizeof(b), nullptr, 0, &cb, nullptr))
     Error(LOC(L"Error.Compress"), GetLastError());
 }
 
@@ -61,7 +61,7 @@ int GetCompression(HANDLE handle)
   USHORT res;
   DWORD cb;
   if (!DeviceIoControl(handle, FSCTL_GET_COMPRESSION,
-                       NULL, 0, &res, sizeof(res), &cb, NULL))
+                       nullptr, 0, &res, sizeof(res), &cb, nullptr))
     return -1;
   else
     return res != COMPRESSION_FORMAT_NONE;
@@ -92,7 +92,7 @@ void Encrypt(HANDLE handle, int f)
                             FILE_CLEAR_ENCRYPTION;
   enc.Private[0] = 0;
   if (!DeviceIoControl(handle, FSCTL_SET_ENCRYPTION,
-                       (LPVOID)&enc, sizeof(enc), NULL, 0, &cb, NULL))
+                       (LPVOID)&enc, sizeof(enc), nullptr, 0, &cb, nullptr))
     Error(LOC(L"Error.Encrypt"), GetLastError());
 }
 
@@ -127,12 +127,12 @@ void CopyACL(const String & src, const String & dst)
     TOKEN_PRIVILEGES tkp;
     OpenProcessToken(GetCurrentProcess(),
                      TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
-    LookupPrivilegeValue(NULL, SE_SECURITY_NAME, &luid
+    LookupPrivilegeValue(nullptr, SE_SECURITY_NAME, &luid
                         );
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Luid = luid;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    AdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), NULL, NULL);
+    AdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), nullptr, nullptr);
     SACLPriv = 1;
   }
   _CopyACL(src, dst, DACL_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION);
@@ -167,14 +167,14 @@ HANDLE Open(const String & fn, int mode, int attr)
                  mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
                  // FILE_SHARE_READ | FILE_SHARE_WRITE | (WinNT ? FILE_SHARE_DELETE : 0),
                  dwShareMode,
-                 NULL,
+                 nullptr,
                  f,
                  (mode & OPEN_BUF ? 0 : FILE_FLAG_NO_BUFFERING) | attr,
-                 NULL);
+                 nullptr);
   if (res == INVALID_HANDLE_VALUE)
-    res = NULL;
+    res = nullptr;
   if (res && (mode & OPEN_APPEND))
-    SetFilePointer(res, 0, NULL, FILE_END);
+    SetFilePointer(res, 0, nullptr, FILE_END);
   return res;
 }
 
@@ -236,7 +236,7 @@ void setFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, 
 size_t Read(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!ReadFile(h, buf, (DWORD)size, &res, NULL))
+  if (!ReadFile(h, buf, (DWORD)size, &res, nullptr))
     return (size_t)-1;
   return res;
 }
@@ -244,7 +244,7 @@ size_t Read(HANDLE h, void * buf, size_t size)
 size_t Write(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!WriteFile(h, buf, (DWORD)size, &res, NULL))
+  if (!WriteFile(h, buf, (DWORD)size, &res, nullptr))
     return (size_t)-1;
   return res;
 }

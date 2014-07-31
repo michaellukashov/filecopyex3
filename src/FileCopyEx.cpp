@@ -10,7 +10,7 @@
 PluginStartupInfo Info;
 FarStandardFunctions FSF;
 
-FarPlugin * plugin = NULL;
+FarPlugin * plugin = nullptr;
 
 /*
  Функция GetMsg возвращает строку сообщения из языкового файла.
@@ -24,7 +24,7 @@ const wchar_t * GetMsg(intptr_t MsgId)
 static void FarErrorHandler(const wchar_t * s)
 {
   const wchar_t * items[] = { L"Framework Error", s, L"OK", L"Debug" };
-  if (Info.Message(&MainGuid, &MainGuid, FMSG_WARNING, NULL, items, 4, 2) == 1)
+  if (Info.Message(&MainGuid, &MainGuid, FMSG_WARNING, nullptr, items, 4, 2) == 1)
   {
     DebugBreak();
   }

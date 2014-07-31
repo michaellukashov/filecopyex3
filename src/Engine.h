@@ -150,8 +150,8 @@ private:
   intptr_t AddRemembered(RememberStruct &);
   int DirStart(const String & dir, const String & dst);
   int DirEnd(const String & dir, const String & dst);
-  static String FindDescFile(const String & dir, intptr_t * idx = NULL);
-  static String FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t * idx = NULL);
+  static String FindDescFile(const String & dir, intptr_t * idx = nullptr);
+  static String FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t * idx = nullptr);
 
   void setFileTime(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
   void setFileSizeAndTime(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);

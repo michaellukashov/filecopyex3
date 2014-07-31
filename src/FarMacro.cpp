@@ -35,7 +35,7 @@ void Bind(const String & key, const String & code, const String & desc)
   macro.AKey = ir;
   //ShowMessage(L"Bind - key convert", String(resKey), FMSG_MB_OK);
   macro.Area = MACROAREA_SHELL;
-  macro.Callback = NULL;
+  macro.Callback = nullptr;
   int res = Info.MacroControl(&MainGuid, MCTL_ADDMACRO, 0, &macro);
   ShowMessage(L"Bind", key + L": " + String(res), FMSG_MB_OK);
   */
@@ -65,7 +65,7 @@ void Bind(const String & key, const String & code, const String & desc)
   v.AddString(String(L"code=\"") + code + L"\"");
   v.saveToFile(base + L"\\Macros\\internal\\" + fname);
 
-  Info.MacroControl(&MainGuid, MCTL_LOADALL, 0, NULL);
+  Info.MacroControl(&MainGuid, MCTL_LOADALL, 0, nullptr);
 }
 
 /*

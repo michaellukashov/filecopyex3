@@ -243,7 +243,7 @@ class FarDlgComboboxPayload: public FarDlgPayload
 public:
   DEFINE_CLASS(L"FarDlgCombobox", FarDlgComboboxPayload)
 
-  FarDlgComboboxPayload() { list.StructSize = sizeof(list); list.ItemsNumber = 0; list.Items = NULL; }
+  FarDlgComboboxPayload() { list.StructSize = sizeof(list); list.ItemsNumber = 0; list.Items = nullptr; }
   virtual ~FarDlgComboboxPayload() { delete list.Items; }
 
 protected:

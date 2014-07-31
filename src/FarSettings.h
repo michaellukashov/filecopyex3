@@ -29,7 +29,7 @@ private:
   HANDLE handle;
   size_t dirId;
 
-  intptr_t control(FAR_SETTINGS_CONTROL_COMMANDS cmd, void * param = NULL);
+  intptr_t control(FAR_SETTINGS_CONTROL_COMMANDS cmd, void * param = nullptr);
   void clean();
 };
 

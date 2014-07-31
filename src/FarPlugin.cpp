@@ -243,7 +243,7 @@ void FarPlugin::InitOptions()
 
 void FarPlugin::KeyConfig()
 {
-  //int res = Info.MacroControl(&MainGuid, MCTL_SAVEALL, 0, NULL);
+  //int res = Info.MacroControl(&MainGuid, MCTL_SAVEALL, 0, nullptr);
   //
   BindAll();
   ShowMessage(L"", L"Hotkeys binded", FMSG_MB_OK);

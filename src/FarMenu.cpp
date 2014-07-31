@@ -62,7 +62,7 @@ void FarMenu::AddSep()
 
 intptr_t FarMenu::Execute()
 {
-  return Info.Menu(&MainGuid, &MenuGuid, -1, -1, 0, FMENU_WRAPMODE, Title.c_str(), NULL, HelpTopic.c_str(), NULL, NULL, items.data(), items.size());
+  return Info.Menu(&MainGuid, &MenuGuid, -1, -1, 0, FMENU_WRAPMODE, Title.c_str(), nullptr, HelpTopic.c_str(), nullptr, nullptr, items.data(), items.size());
 }
 
 void FarMenu::SetBottom(const String & v)

@@ -63,7 +63,7 @@ uint32_t AttribCount() { return sizeof(_Attrib) / sizeof(Attribute); }
 void DestroyItemText(FarDialogItem & item)
 {
   delete[] item.Data;
-  item.Data = NULL;
+  item.Data = nullptr;
 }
 
 void SetItemText(FarDialogItem & item, const String & text)
@@ -79,7 +79,7 @@ void SetItemText(FarDialogItem & item, const String & text)
 // ===== FarDlgPayload =====
 FarDlgPayload::FarDlgPayload()
 {
-  dialog = NULL;
+  dialog = nullptr;
   dialogItem = -1;
 }
 
@@ -201,7 +201,7 @@ void FarDlgEditPayload::realInitItem(FarDialogItem & item)
 static String GetDlgText(HANDLE dlg, intptr_t id)
 {
   FarDialogItemData item = { sizeof(FarDialogItemData) };
-  item.PtrLength = Info.SendDlgMessage(dlg, DM_GETTEXT, id, NULL);
+  item.PtrLength = Info.SendDlgMessage(dlg, DM_GETTEXT, id, nullptr);
   item.PtrData = new wchar_t[item.PtrLength + 1];
   Info.SendDlgMessage(dlg, DM_GETTEXT, id, &item);
   String t(item.PtrData);
@@ -225,7 +225,7 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
   if (list.Items)
   {
     delete list.Items;
-    list.Items = NULL;
+    list.Items = nullptr;
     list.ItemsNumber = 0;
   }
   StringVector items;

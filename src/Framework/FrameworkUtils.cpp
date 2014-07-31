@@ -48,4 +48,4 @@ void FWError(const String & s)
   FWError(s.ptr());
 }
 
-ErrorHandler errorHandler = NULL;
+ErrorHandler errorHandler = nullptr;

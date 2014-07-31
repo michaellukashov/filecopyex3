@@ -33,7 +33,7 @@ void _atowcs(wchar_t * d, size_t size, const char * s)
 
 void _wtoacs(char * d, size_t size, const wchar_t * s)
 {
-  WideCharToMultiByte(CP_ACP, 0, s, -1, d, (int)size, NULL, NULL);
+  WideCharToMultiByte(CP_ACP, 0, s, -1, d, (int)size, nullptr, nullptr);
   d[size - 1] = 0;
 }
 
@@ -49,5 +49,5 @@ const wchar_t * _tcsrpbrk(const wchar_t * s, const wchar_t * control)
         return str;
     str--;
   }
-  return NULL;
+  return nullptr;
 }

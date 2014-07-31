@@ -249,17 +249,17 @@ int GetSymLink(const String & _dir, String & res, int flg)
     {
       HANDLE hf = ::CreateFile(dir.ptr(),
                              GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,
-                             NULL,
+                             nullptr,
                              OPEN_EXISTING,
                              FILE_FLAG_BACKUP_SEMANTICS | FILE_FLAG_OPEN_REPARSE_POINT,
-                             NULL);
+                             nullptr);
       if (hf != INVALID_HANDLE_VALUE)
       {
         uint8_t Data[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
         memset(Data, 0, sizeof(Data));
         DWORD returnedLength = 0;
-        if (DeviceIoControl(hf, FSCTL_GET_REPARSE_POINT, NULL, 0,
-                            Data, sizeof(Data), &returnedLength, NULL))
+        if (DeviceIoControl(hf, FSCTL_GET_REPARSE_POINT, nullptr, 0,
+                            Data, sizeof(Data), &returnedLength, nullptr))
         {
           REPARSE_GUID_DATA_BUFFER * rd = (REPARSE_GUID_DATA_BUFFER *)Data;
           if ((IsReparseTagMicrosoft(rd->ReparseTag)) &&
@@ -437,7 +437,7 @@ int64_t FileSize(const String & fn)
 
 inline String TempName()
 {
-  srand((uint32_t)time(NULL));
+  srand((uint32_t)time(nullptr));
   return Format(L"%8.8x", rand() * rand() * rand()) + L"." + Format(L"%3.3x", rand());
 }
 
@@ -489,7 +489,7 @@ int MoveFile(const String & _src, const String & _dst, int replace)
   if (WinNT && replace)
   {
     HANDLE DstFileHandle = Open(_dst, OPEN_READ, 0);
-    if (DstFileHandle == NULL)
+    if (DstFileHandle == nullptr)
       return FALSE;
     BY_HANDLE_FILE_INFORMATION FileInformation;
     if (GetFileInformationByHandle(DstFileHandle, &FileInformation))
@@ -581,7 +581,7 @@ void ForceDirectories(const String & s)
     {
       wchar_t t = *ptr;
       *ptr = 0;
-      ::CreateDirectory(sptr, NULL);
+      ::CreateDirectory(sptr, nullptr);
       *ptr = t;
     }
     ptr++;
@@ -592,7 +592,7 @@ void Out(const String & s)
 {
   DWORD cb;
   WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), (const void *)s.ptr(),
-               (DWORD)s.len(), &cb, NULL);
+               (DWORD)s.len(), &cb, nullptr);
 }
 
 

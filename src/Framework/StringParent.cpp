@@ -100,7 +100,7 @@ int StringParent::loadFromFile(FILE * f)
 
 int StringParent::loadFromFile(const String & fn)
 {
-  FILE * f = NULL;
+  FILE * f = nullptr;
   _wfopen_s(&f, fn.ptr(), L"rb");
   if (!f)
   {
@@ -165,7 +165,7 @@ bool StringParent::saveToFile(const String & fn, TextFormat tf)
 {
   DWORD attr = ::GetFileAttributes(fn.ptr());
   ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
-  FILE * f = NULL;
+  FILE * f = nullptr;
   _wfopen_s(&f, fn.ptr(), L"wb");
   bool res = false;
   if (f)

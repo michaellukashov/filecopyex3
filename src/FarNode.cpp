@@ -84,7 +84,7 @@ FarDlgNode * FarDlgNode::FindChild(const String & name)
   if (getName() == name)
     return this;
   else
-    return NULL;
+    return nullptr;
 }
 
 struct _group
@@ -226,7 +226,7 @@ FarDlgNode * FarDlgContainer::FindChild(const String & name)
     if (obj)
       return obj;
   }
-  return NULL;
+  return nullptr;
 }
 
 void FarDlgNode::BeforeLoad()

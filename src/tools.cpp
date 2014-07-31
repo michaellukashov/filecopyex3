@@ -77,15 +77,15 @@ int GetPhysDrive(const String & _path, int & res)
       path = buf;
     }
     HANDLE hVolume = CreateFile(CutEndSlash(path).ptr(), 0,
-                                FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
-                                0, NULL);
+                                FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING,
+                                0, nullptr);
     if (hVolume == INVALID_HANDLE_VALUE)
       return FALSE;
 
     char outbuf[1024];
     DWORD ret;
-    if (DeviceIoControl(hVolume, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, NULL, 0,
-                        outbuf, LENOF(outbuf), &ret, NULL))
+    if (DeviceIoControl(hVolume, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, nullptr, 0,
+                        outbuf, LENOF(outbuf), &ret, nullptr))
     {
       VOLUME_DISK_EXTENTS * ext = (VOLUME_DISK_EXTENTS *)outbuf;
       res = ext->Extents[0].DiskNumber;
@@ -120,7 +120,7 @@ int VolFlags(const String & _path)
 
   DWORD clen, flg;
   wchar_t sysname[32];
-  if (GetVolumeInformation(root.ptr(), NULL, 0, NULL, &clen, &flg, sysname, 32))
+  if (GetVolumeInformation(root.ptr(), nullptr, 0, nullptr, &clen, &flg, sysname, 32))
   {
     int res = 0;
     if (flg & FILE_FILE_COMPRESSION)

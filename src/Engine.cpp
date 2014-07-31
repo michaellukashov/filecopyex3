@@ -54,12 +54,12 @@ PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, in
   *Param2=*item;
   Param2->FileName=wcsdup(item->FileName);
   Param2->AlternateFileName=wcsdup(item->AlternateFileName);
-  Param2->Description=NULL;
-  Param2->Owner=NULL;
-  Param2->CustomColumnData=NULL;
+  Param2->Description=nullptr;
+  Param2->Owner=nullptr;
+  Param2->CustomColumnData=nullptr;
   Param2->CustomColumnNumber=0;
-  Param2->UserData.Data=NULL;
-  Param2->UserData.FreeData=NULL;
+  Param2->UserData.Data=nullptr;
+  Param2->UserData.FreeData=nullptr;
   free(item);
   */
   return item;
@@ -78,7 +78,7 @@ void ShowErrorMessage(const String & s)
 
   String msgbuf = LOC(L"CopyDialog.Error") + L"\n" + s + L"\n";
 
-  Info.Message(&MainGuid, &UnkGuid, FMSG_WARNING | FMSG_MB_OK | FMSG_ALLINONE, NULL, (const wchar_t * const *)msgbuf.ptr(), 0, 0);
+  Info.Message(&MainGuid, &UnkGuid, FMSG_WARNING | FMSG_MB_OK | FMSG_ALLINONE, nullptr, (const wchar_t * const *)msgbuf.ptr(), 0, 0);
 
 }
 
@@ -90,7 +90,7 @@ static int64_t GetPhysMemorySize()
   return ms.dwTotalPhys;
 }
 
-Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), FlushEnd(NULL), UiFree(NULL)
+Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(nullptr), FlushEnd(nullptr), UiFree(nullptr)
 {
   _CopyDescs = 0;
   _ClearROFromCD = 0;
@@ -111,8 +111,8 @@ Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), Flus
   CopyCount = 0;
   _LastCheckEscape = 0;
   _CheckEscapeInterval = TicksPerSec() / 2;
-  wbi = NULL;
-  bi = NULL;
+  wbi = nullptr;
+  bi = nullptr;
 
   Parallel = Streams = Rights = Move = SkipNewer = SkippedToTemp = 0;
   CompressMode = EncryptMode = ATTR_INHERIT;
@@ -144,7 +144,7 @@ Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(NULL), Flus
 
 int Engine::InitBuf(BuffInfo * bi)
 {
-  bi->OutFile = NULL;
+  bi->OutFile = nullptr;
   bi->OutNum = -1;
 
   bi->BuffSize = BufSize;
@@ -687,7 +687,7 @@ skip: ;
     if (bi->BuffInf[PosInStr].EndFlag || info.Flags & FLG_SKIPPED)
     {
       FinalizeBuf(bi);
-      bi->OutFile = NULL;
+      bi->OutFile = nullptr;
       bi->OutNum = -1;
       bi->SrcName.Clear();
       bi->DstName.Clear();
@@ -710,7 +710,7 @@ uint32_t __stdcall FlushThread(void * p)
 
 void Engine::BGFlush()
 {
-  BGThread = (HANDLE)_beginthreadex(NULL, 0, FlushThread, this, 0, NULL);
+  BGThread = (HANDLE)_beginthreadex(nullptr, 0, FlushThread, this, 0, nullptr);
 }
 
 int Engine::WaitForFlushEnd()
@@ -722,7 +722,7 @@ int Engine::WaitForFlushEnd()
   }
   ::WaitForSingleObject(BGThread, INFINITE);
   CloseHandle(BGThread);
-  BGThread = NULL;
+  BGThread = nullptr;
   return TRUE;
 }
 
@@ -751,13 +751,13 @@ void Engine::Copy()
       UninitBuf(bi);
       return;
     }
-    FlushEnd = CreateEvent(NULL, FALSE, TRUE, NULL);
+    FlushEnd = CreateEvent(nullptr, FALSE, TRUE, nullptr);
   }
 
   size_t BuffPos = 0;
   size_t FilesInBuff = 0;
 
-  UiFree = CreateEvent(NULL, FALSE, TRUE, NULL);
+  UiFree = CreateEvent(nullptr, FALSE, TRUE, nullptr);
 
   CopyProgressBox.InverseBars = _InverseBars;
   if (FileCount)
@@ -784,14 +784,14 @@ void Engine::Copy()
         ForceDirectories(AddEndSlash(DstName));
       else
       {
-        CreateDirectory(DstName.ptr(), NULL);
+        CreateDirectory(DstName.ptr(), nullptr);
         SetFileAttributes(DstName.ptr(), info.Attr);
       }
       if (!(info.Flags & FLG_TOP_DIR))
       {
         HANDLE hd = CreateFile(DstName.ptr(), GENERIC_READ | GENERIC_WRITE,
-                               FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
-                               OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, NULL);
+                               FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
+                               OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, nullptr);
         if (hd != INVALID_HANDLE_VALUE)
         {
           Compress(hd, CompressMode);
@@ -1222,9 +1222,9 @@ Engine::MResult Engine::Main(int move, int curOnly)
   _PreallocMin  = Options[L"PreallocMin"];
   _UnbuffMin    = Options[L"UnbuffMin"];
 
-  _ClearROFromCD  = 1; //YYY Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, NULL) & FSS_CLEARROATTRIBUTE;
-  _HideDescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_SETHIDDEN;
-  _UpdateRODescs  = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, NULL) & FDS_UPDATEREADONLY;
+  _ClearROFromCD  = 1; //YYY Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, nullptr) & FSS_CLEARROATTRIBUTE;
+  _HideDescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_SETHIDDEN;
+  _UpdateRODescs  = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_UPDATEREADONLY;
 
   FarDialog & dlg = plugin->Dialogs()[L"CopyDialog"];
   dlg.ResetControls();
@@ -1746,7 +1746,7 @@ fin:
 
   if (!Move)
   {
-    Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, NULL);
+    Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, nullptr);
     for (size_t i = 0; i < Files.size(); i++)
     {
       if (Files[i].PanelIndex != -1)
@@ -1779,11 +1779,11 @@ fin:
         }
       }
     }
-    Info.PanelControl(PANEL_ACTIVE, FCTL_ENDSELECTION, 0, NULL);
+    Info.PanelControl(PANEL_ACTIVE, FCTL_ENDSELECTION, 0, nullptr);
   }
   else
   {
-    Info.PanelControl(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
+    Info.PanelControl(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, nullptr);
     Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &pi);
 
     PanelRedrawInfo rpi;
@@ -1814,10 +1814,10 @@ fin:
     }
   }
 
-  Info.PanelControl(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, NULL);
-  Info.PanelControl(PANEL_PASSIVE, FCTL_UPDATEPANEL, 1, NULL);
-  Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, NULL);
-  Info.PanelControl(PANEL_PASSIVE, FCTL_REDRAWPANEL, 0, NULL);
+  Info.PanelControl(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, nullptr);
+  Info.PanelControl(PANEL_PASSIVE, FCTL_UPDATEPANEL, 1, nullptr);
+  Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, nullptr);
+  Info.PanelControl(PANEL_PASSIVE, FCTL_REDRAWPANEL, 0, nullptr);
 
   return MRES_OK;
 }
@@ -2079,12 +2079,12 @@ retry:
       ZeroMemory(&sid, sizeof(sid));
 
       HANDLE hf = CreateFile(src.ptr(), GENERIC_READ,
-                             FILE_SHARE_READ | FILE_SHARE_WRITE, NULL,
-                             OPEN_EXISTING, 0, NULL);
+                             FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
+                             OPEN_EXISTING, 0, nullptr);
       if (hf != INVALID_HANDLE_VALUE)
       {
         DWORD hsz = (DWORD)((LPBYTE)&sid.cStreamName - (LPBYTE)&sid);
-        LPVOID ctx = NULL;
+        LPVOID ctx = nullptr;
         while (1)
         {
           wchar_t strn[1024];
@@ -2105,7 +2105,7 @@ retry:
             if (!AddFile(src + strn, dst + strn, attr,
                          sid.Size.QuadPart, creationTime, lastAccessTime, lastWriteTime, flags | AF_STREAM, Level + 1))
             {
-              BackupRead(NULL, NULL, 0, NULL, TRUE, FALSE, &ctx);
+              BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
               CloseHandle(hf);
               return FALSE;
             }
@@ -2113,7 +2113,7 @@ retry:
           BackupSeek(hf, sid.Size.LowPart, sid.Size.HighPart,
                      &cb1, &cb2, &ctx);
         }
-        BackupRead(NULL, NULL, 0, NULL, TRUE, FALSE, &ctx);
+        BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
         CloseHandle(hf);
       }
     }
@@ -2365,7 +2365,7 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
   return result;
 }
 
-#define check(a, b) a ? b : NULL
+#define check(a, b) a ? b : nullptr
 
 void Engine::setFileTime(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
@@ -2381,7 +2381,7 @@ intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint
 {
   CopyProgressBox.SetNeedToRedraw(true);
   ScanFoldersProgressBox.SetNeedToRedraw(true);
-  int * ix = NULL;
+  int * ix = nullptr;
   if (flg & eeAutoSkipAll)
   {
     ix = &errTypes[type_id];

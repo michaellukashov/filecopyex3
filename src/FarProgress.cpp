@@ -74,7 +74,7 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String & capt
   {
     tpl += bkg;
   }
-  Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN | FMSG_ALLINONE, NULL, (const wchar_t **)tpl.ptr(), 0, 0);
+  Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN | FMSG_ALLINONE, nullptr, (const wchar_t **)tpl.ptr(), 0, 0);
 }
 
 void FarProgress::GetConSize(int & w, int & h)
@@ -98,11 +98,11 @@ void FarProgress::ShowMessage(const String & msg)
   hScreen = Info.SaveScreen(X1, Y1, X2 + 2, Y2 + 2);
   DrawWindow(X1, Y1, X2, Y2, L"");
   Info.Text(X1 + 6, Y1 + 2, &clrText, FormatWidth(msg, X2 - X1 - 11).ptr());
-  Info.Text(0, 0, 0, NULL);
+  Info.Text(0, 0, 0, nullptr);
   WinType = WIN_MESSAGE;
   TitleBuf = GetTitle();
   SetTitle2(msg);
-  Info.RestoreScreen(NULL);
+  Info.RestoreScreen(nullptr);
 }
 
 void FarProgress::ShowProgress(const String & msg)
@@ -123,11 +123,11 @@ void FarProgress::ShowProgress(const String & msg)
   WinType = WIN_PROGRESS;
   SetPercent(0);
   DrawProgress(ProgX1, ProgX2, ProgY, 0);
-  Info.Text(0, 0, 0, NULL);
+  Info.Text(0, 0, 0, nullptr);
   TitleBuf = GetTitle();
   ProgTitle = msg;
   SetTitle2(msg);
-  Info.RestoreScreen(NULL);
+  Info.RestoreScreen(nullptr);
 }
 
 void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
@@ -159,7 +159,7 @@ void FarProgress::SetPercent(float pc)
     if (GetTime() - LastUpdate > TicksPerSec() / 5)
     {
       DrawProgress(ProgX1, ProgX2, ProgY, pc);
-      Info.Text(0, 0, 0, NULL);
+      Info.Text(0, 0, 0, nullptr);
       SetTitle2(ProgTitle + L" {" + String((int)(pc * 100)) + L"%}");
       LastUpdate = GetTime();
     }
@@ -175,7 +175,7 @@ void FarProgress::Hide()
 {
   if (WinType != WIN_NONE)
   {
-    Info.RestoreScreen(NULL);
+    Info.RestoreScreen(nullptr);
     Info.RestoreScreen(hScreen);
     SetTitle(TitleBuf);
     hScreen = 0;
@@ -240,11 +240,11 @@ void FarProgress::ShowScanProgress(const String & msg)
   ProgY   = WindowCoordY1 + 3;
   WinType = WIN_SCAN_PROGRESS;
   DrawScanProgress(ProgX1, ProgX2, ProgY, 0, 0);
-  Info.Text(0, 0, 0, NULL);
+  Info.Text(0, 0, 0, nullptr);
   TitleBuf = GetTitle();
   ProgTitle = msg;
   SetTitle2(msg);
-  Info.RestoreScreen(NULL);
+  Info.RestoreScreen(nullptr);
 }
 
 // New class member function
@@ -255,7 +255,7 @@ void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
     if (GetTime() - LastUpdate > TicksPerSec() / 5)
     {
       DrawScanProgress(ProgX1, ProgX2, ProgY, NumberOfFiles, TotalSize);
-      Info.Text(0, 0, 0, NULL);
+      Info.Text(0, 0, 0, nullptr);
       //SetTitle2(ProgTitle+" {"+String((int)(pc*100))+"%}");
       LastUpdate = GetTime();
     }

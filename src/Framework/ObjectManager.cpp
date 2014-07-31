@@ -23,6 +23,6 @@ Node * ObjectManager::create(const String & type, const String & name, Node * pa
     node->init(payload, parent);
     return node;
   }
-  return NULL;
+  return nullptr;
 }
 
