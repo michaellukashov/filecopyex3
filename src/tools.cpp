@@ -38,7 +38,7 @@ int GetDriveId(const String & path, String & res)
   if (WinNT4)
   {
     // axxie: special HDD ID implementation for NT4
-    if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME) > 0)
+    if (QueryDosDevice(path.left(2).ptr(), buf, LENOF(buf)) > 0)
     {
       String s = buf;
       String tmp = L"\\Device\\Harddisk";
@@ -49,7 +49,7 @@ int GetDriveId(const String & path, String & res)
       }
     }
   }
-  else if (QueryDosDevice(path.left(2).ptr(), buf, MAX_FILENAME) > 0)
+  else if (QueryDosDevice(path.left(2).ptr(), buf, LENOF(buf)) > 0)
   {
     String s = buf;
     String tmp = L"\\Device\\HarddiskDmVolumes\\";
@@ -72,7 +72,7 @@ int GetPhysDrive(const String & _path, int & res)
     if (path.left(11) != L"\\\\?\\Volume{")
     {
       wchar_t buf[MAX_FILENAME];
-      if (!GetVolumeNameForVolumeMountPoint(path.ptr(), buf, MAX_FILENAME))
+      if (!GetVolumeNameForVolumeMountPoint(path.ptr(), buf, LENOF(buf)))
         return FALSE;
       path = buf;
     }

@@ -218,11 +218,11 @@ int GetSymLink(const String & _dir, String & res, int flg)
   res.Clear();
   String dir = CutEndSlash(_dir);
   wchar_t buf[MAX_FILENAME];
-  DWORD sz = MAX_FILENAME;
+  DWORD sz = LENOF(buf);
   res = dir;
 
   if (flg & gslExpandSubst && (dir.len() == 2) && (dir[1] == ':') &&
-      QueryDosDevice(dir.ptr(), buf, MAX_FILENAME) > 0)
+      QueryDosDevice(dir.ptr(), buf, LENOF(buf)) > 0)
   {
     String r = buf;
     if (r.left(8) == L"\\??\\UNC\\")
@@ -282,7 +282,7 @@ int GetSymLink(const String & _dir, String & res, int flg)
 
   if (Win2K && (flg & gslExpandMountPoints))
   {
-    //if (pGetVolumeNameForVolumeMountPoint(AddEndSlash(dir).ptr(), buf, MAX_FILENAME))
+    //if (pGetVolumeNameForVolumeMountPoint(AddEndSlash(dir).ptr(), buf, LENOF(buf)))
     if (GetPrimaryVolumeMountPoint(dir, res))
     {
       return TRUE;
@@ -327,7 +327,7 @@ String GetFileRoot(const String & _path)
   if (Win2K)
   {
     wchar_t buf[MAX_FILENAME];
-    if (GetVolumePathName(path.ptr(), buf, MAX_FILENAME))
+    if (GetVolumePathName(path.ptr(), buf, LENOF(buf)))
       res = AddEndSlash(buf);
     else
       res = GetFileNameRoot(path);
@@ -340,7 +340,7 @@ String GetFileRoot(const String & _path)
 String ExpandEnv(const String & v)
 {
   wchar_t buf[MAX_FILENAME];
-  ExpandEnvironmentStrings(v.ptr(), buf, MAX_FILENAME);
+  ExpandEnvironmentStrings(v.ptr(), buf, LENOF(buf));
   return buf;
 }
 
@@ -349,7 +349,7 @@ String ApplyFileMask(const String & _name, const String & _mask)
   wchar_t * name = (wchar_t *)_name.ptr();
   wchar_t * mask = (wchar_t *)_mask.ptr();
   wchar_t res[MAX_FILENAME] = L"";
-  size_t sz = MAX_FILENAME;
+  size_t sz = LENOF(res);
   wchar_t * next = (wchar_t *)_tcsend(name) - 1;
   wchar_t * mext = (wchar_t *)_tcsend(mask) - 1;
   while (next >= name && *next != '.')
@@ -444,7 +444,7 @@ inline String TempName()
 String TempPath()
 {
   wchar_t buf[MAX_FILENAME];
-  ::GetTempPath(MAX_FILENAME, buf);
+  ::GetTempPath(LENOF(buf), buf);
   return CutEndSlash(buf);
 }
 

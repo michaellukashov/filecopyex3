@@ -1285,7 +1285,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
     bool pit_sel = pi.SelectedItemsNumber && !curOnly;
     TPanelItem pit(pit_sel ? 0 : pi.CurrentItem, true, pit_sel);
 
-    wcsncpy_s(buf, MAX_FILENAME, pit->FileName, MAX_FILENAME);
+    wcsncpy_s(buf, LENOF(buf), pit->FileName, LENOF(buf));
     // _toansi(buf);
     String fn = ExtractFileName(buf);
     if (fn == L"..")
@@ -1457,7 +1457,7 @@ rep:
   wchar_t dstbuf[MAX_FILENAME];
   memset(dstbuf, 0, sizeof(dstbuf));
   // Get absolute path for relative dstpath
-  FSF.GetCurrentDirectory(MAX_FILENAME, CurrentDir);
+  FSF.GetCurrentDirectory(LENOF(CurrentDir), CurrentDir);
   // srcpath.ptr() for temporary file panel is empty
   // Current directory is set by Far to file path of selected file
   BOOL SCDResult = SetCurrentDirectory(srcPath.ptr());
