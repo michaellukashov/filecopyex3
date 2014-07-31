@@ -515,8 +515,8 @@ int MoveFile(const String & _src, const String & _dst, int replace)
   }
   else
   {
-    String root1 = GetFileRoot(_src),
-           root2 = GetFileRoot(_dst);
+    String root1 = GetFileRoot(_src);
+    String root2 = GetFileRoot(_dst);
     if (root1.IsEmpty() || root2.IsEmpty())
     {
       SetLastError(ERROR_PATH_NOT_FOUND);
@@ -524,8 +524,8 @@ int MoveFile(const String & _src, const String & _dst, int replace)
     }
     if (!root1.icmp(root2))
     {
-      String src = GetRealFileName(_src),
-             dst = GetRealFileName(_dst);
+      String src = GetRealFileName(_src);
+      String dst = GetRealFileName(_dst);
       if (!src.icmp(dst))
         return TRUE;
       DWORD sa = ::GetFileAttributes(src.ptr());

@@ -104,8 +104,8 @@ int GetPhysDrive(const String & _path, int & res)
 int VolFlags(const String & _path)
 {
   String path = _path;
-  size_t sl = path.find_last_of(L"\\/"),
-      ml = path.find_first_of(L"*?");
+  size_t sl = path.find_last_of(L"\\/");
+  size_t ml = path.find_first_of(L"*?");
   if (ml != (size_t)-1 && ml < sl)
     return -1;
   if (path.find_first_of(L"|<>") != (size_t)-1)
@@ -147,10 +147,10 @@ int VolFlags(const String & _path)
 
 int CheckParallel(const String & _srcpath, const String & _dstpath)
 {
-  String root1 = GetFileRoot(_srcpath),
-         root2 = GetFileRoot(_dstpath);
-  int srctype = GetDriveType(root1.ptr()),
-      dsttype = GetDriveType(root2.ptr());
+  String root1 = GetFileRoot(_srcpath);
+  String root2 = GetFileRoot(_dstpath);
+  int srctype = GetDriveType(root1.ptr());
+  int dsttype = GetDriveType(root2.ptr());
   if (srctype != dsttype)
     return TRUE;
   if (!root1.icmp(root2))
