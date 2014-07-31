@@ -11,12 +11,11 @@ private:
   String curPath, buffer;
 
 public:
-  FileNameStoreEnum(FileNameStore * _store)
+  FileNameStoreEnum(FileNameStore * _store) : store(_store)
   {
-    store = _store;
     ToFirst();
   }
-  ~FileNameStoreEnum() { ; }
+  ~FileNameStoreEnum() {}
 
   size_t Count() const { return store->Count(); }
   void ToFirst();
