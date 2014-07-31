@@ -121,9 +121,12 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
     TotalTime = ElapsedTime + RemainingTime;
   }
 
-  if (TotalTime     < 0) TotalTime     = 0;
-  if (ElapsedTime   < 0) ElapsedTime   = 0;
-  if (RemainingTime < 0) RemainingTime = 0;
+  if (TotalTime < 0)
+    TotalTime = 0;
+  if (ElapsedTime < 0)
+    ElapsedTime = 0;
+  if (RemainingTime < 0)
+    RemainingTime = 0;
 
   TotalTime     /= TicksPerSec();
   ElapsedTime   /= TicksPerSec();
@@ -161,8 +164,10 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   {
     clastupdate = tm;
     int pc = TotalBytes ? (int)((float)(ReadBytes + WriteBytes) / (TotalBytes * 2) * 100) : 0;
-    if (pc < 0) pc = 0;
-    if (pc > 100) pc = 100;
+    if (pc < 0)
+      pc = 0;
+    if (pc > 100)
+      pc = 100;
     buf = Format(L"{%d%% %2.2d:%2.2d} %s", pc, (int)RemainingTime / 60, (int)RemainingTime % 60,
                  Move ? LOC(L"Engine.Moving").ptr() : LOC(L"Engine.Copying").ptr());
     SetTitle2(buf);
@@ -173,7 +178,8 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
 void CopyProgress::DrawProgress(const String & pfx, int y, int64_t cb, int64_t total,
                                 int64_t time, int64_t n, int64_t totaln)
 {
-  if (cb > total) cb = total;
+  if (cb > total)
+    cb = total;
   Text(X1 + MG, Y1 + y, &clrLabel, pfx);
   String buf;
   buf = FormatWidth(FormatProgress(cb, total), W - MG * 2 - pfx.len());

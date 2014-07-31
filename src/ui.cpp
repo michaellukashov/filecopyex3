@@ -59,7 +59,8 @@ intptr_t ShowMessageExHelp(const String & title, const String & msg,
   size_t nb = 0;
   for (const wchar_t * p = buttons.ptr(); *p; p++)
   {
-    if (*p == '\n') nb++;
+    if (*p == '\n')
+      nb++;
   }
   String msgbuf = title + L"\n" + msg + L"\n\x01\n" + buttons;
   intptr_t res = Info.Message(&MainGuid, &UnkGuid, flags | FMSG_ALLINONE,

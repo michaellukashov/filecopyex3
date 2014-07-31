@@ -45,7 +45,8 @@ void Free(void * ptr)
 
 void Compress(HANDLE handle, int f)
 {
-  if (f == ATTR_INHERIT) return;
+  if (f == ATTR_INHERIT)
+    return;
   USHORT b = f ?
              COMPRESSION_FORMAT_DEFAULT :
              COMPRESSION_FORMAT_NONE;
@@ -68,10 +69,12 @@ int GetCompression(HANDLE handle)
 
 void Encrypt(const String & fn, int f)
 {
-  if (!Win2K || f == ATTR_INHERIT) return;
+  if (!Win2K || f == ATTR_INHERIT)
+    return;
   int res;
   SetFileAttributes(fn.ptr(), 0);
-  if (f) res = EncryptFile(fn.ptr());
+  if (f)
+    res = EncryptFile(fn.ptr());
   else res = DecryptFile(fn.ptr(), 0);
   if (!res)
     Error2(LOC(L"Error.Encrypt"), fn, GetLastError());
@@ -79,7 +82,8 @@ void Encrypt(const String & fn, int f)
 
 void Encrypt(HANDLE handle, int f)
 {
-  if (!Win2K || f == ATTR_INHERIT) return;
+  if (!Win2K || f == ATTR_INHERIT)
+    return;
   DWORD cb;
   ENCRYPTION_BUFFER enc;
   enc.EncryptionOperation = f ?
@@ -144,8 +148,10 @@ HANDLE Open(const String & fn, int mode, int attr)
     dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
 
   int f;
-  if (mode & OPEN_READ) f = OPEN_EXISTING;
-  else if (mode & OPEN_CREATE) f = CREATE_ALWAYS;
+  if (mode & OPEN_READ)
+    f = OPEN_EXISTING;
+  else if (mode & OPEN_CREATE)
+    f = CREATE_ALWAYS;
   else
     f = OPEN_ALWAYS;
   if (!(mode & OPEN_READ))
@@ -164,7 +170,8 @@ HANDLE Open(const String & fn, int mode, int attr)
                  f,
                  (mode & OPEN_BUF ? 0 : FILE_FLAG_NO_BUFFERING) | attr,
                  NULL);
-  if (res == INVALID_HANDLE_VALUE) res = NULL;
+  if (res == INVALID_HANDLE_VALUE)
+    res = NULL;
   if (res && (mode & OPEN_APPEND))
     SetFilePointer(res, 0, NULL, FILE_END);
   return res;
@@ -228,14 +235,16 @@ void setFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, 
 size_t Read(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!ReadFile(h, buf, (DWORD)size, &res, NULL)) return (size_t)-1;
+  if (!ReadFile(h, buf, (DWORD)size, &res, NULL))
+    return (size_t)-1;
   return res;
 }
 
 size_t Write(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!WriteFile(h, buf, (DWORD)size, &res, NULL)) return (size_t)-1;
+  if (!WriteFile(h, buf, (DWORD)size, &res, NULL))
+    return (size_t)-1;
   return res;
 }
 

@@ -79,7 +79,8 @@ int GetPhysDrive(const String & _path, int & res)
     HANDLE hVolume = CreateFile(CutEndSlash(path).ptr(), 0,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING,
                                 0, NULL);
-    if (hVolume == INVALID_HANDLE_VALUE) return FALSE;
+    if (hVolume == INVALID_HANDLE_VALUE)
+      return FALSE;
 
     char outbuf[1024];
     DWORD ret;
@@ -105,12 +106,16 @@ int VolFlags(const String & _path)
   String path = _path;
   size_t sl = path.find_last_of(L"\\/"),
       ml = path.find_first_of("*?");
-  if (ml != (size_t)-1 && ml < sl) return -1;
-  if (path.find_first_of("|<>") != (size_t)-1) return -1;
+  if (ml != (size_t)-1 && ml < sl)
+    return -1;
+  if (path.find_first_of("|<>") != (size_t)-1)
+    return -1;
   size_t cl = path.find(':');
   if (cl != (size_t)-1 && (cl != 1 || cl != path.rfind(':') ||
-                   (cl != path.len() - 1 && path.find_first_of("\\/") != 2))) return -1;
-  if (ml != (size_t)-1) path = ExtractFilePath(path);
+                          (cl != path.len() - 1 && path.find_first_of("\\/") != 2)))
+    return -1;
+  if (ml != (size_t)-1)
+    path = ExtractFilePath(path);
   String root = GetFileRoot(path);
 
   DWORD clen, flg;
@@ -118,15 +123,23 @@ int VolFlags(const String & _path)
   if (GetVolumeInformation(root.ptr(), NULL, 0, NULL, &clen, &flg, sysname, 32))
   {
     int res = 0;
-    if (flg & FILE_FILE_COMPRESSION) res |= VF_COMPRESSION;
-    if (flg & FILE_SUPPORTS_ENCRYPTION) res |= VF_ENCRYPTION;
-    if (flg & FILE_PERSISTENT_ACLS) res |= VF_RIGHTS;
-    if (flg & FILE_NAMED_STREAMS) res |= VF_STREAMS;
+    if (flg & FILE_FILE_COMPRESSION)
+      res |= VF_COMPRESSION;
+    if (flg & FILE_SUPPORTS_ENCRYPTION)
+      res |= VF_ENCRYPTION;
+    if (flg & FILE_PERSISTENT_ACLS)
+      res |= VF_RIGHTS;
+    if (flg & FILE_NAMED_STREAMS)
+      res |= VF_STREAMS;
     // NT4 supports streams, but has no special flag for this fact
-    if (!_wcsicmp(sysname, TEXT("NTFS"))) res |= VF_STREAMS;
-    if (flg & FILE_READ_ONLY_VOLUME) res |= VF_READONLY;
-    if (flg & FILE_UNICODE_ON_DISK) res |= VF_UNICODE;
-    if (GetDriveType(root.ptr()) == DRIVE_CDROM) res |= VF_CDROM;
+    if (!_wcsicmp(sysname, TEXT("NTFS")))
+      res |= VF_STREAMS;
+    if (flg & FILE_READ_ONLY_VOLUME)
+      res |= VF_READONLY;
+    if (flg & FILE_UNICODE_ON_DISK)
+      res |= VF_UNICODE;
+    if (GetDriveType(root.ptr()) == DRIVE_CDROM)
+      res |= VF_CDROM;
     return res;
   }
   return -1;
@@ -138,8 +151,10 @@ int CheckParallel(const String & _srcpath, const String & _dstpath)
          root2 = GetFileRoot(_dstpath);
   int srctype = GetDriveType(root1.ptr()),
       dsttype = GetDriveType(root2.ptr());
-  if (srctype != dsttype) return TRUE;
-  if (!root1.icmp(root2)) return FALSE;
+  if (srctype != dsttype)
+    return TRUE;
+  if (!root1.icmp(root2))
+    return FALSE;
 
   if (srctype == DRIVE_REMOTE)
     return FALSE;
@@ -151,14 +166,16 @@ int CheckParallel(const String & _srcpath, const String & _dstpath)
     if (GetPhysDrive(root1, drv1)
         && GetPhysDrive(root2, drv2))
     {
-      if (drv1 != drv2) return TRUE;
+      if (drv1 != drv2)
+        return TRUE;
       else return FALSE;
     }
     String id1, id2;
     if (GetDriveId(root1, id1)
         && GetDriveId(root2, id2))
     {
-      if (id1.icmp(id2)) return TRUE;
+      if (id1.icmp(id2))
+        return TRUE;
       else return FALSE;
     }
   }

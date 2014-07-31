@@ -173,10 +173,13 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
   BOOL result = FALSE;
   wchar_t VolumeNameForPath[MAX_FILENAME];
 
-  if (!Win2K) return result;
+  if (!Win2K)
+    return result;
   DWORD attr = ::GetFileAttributes(VolumeMountPointForPath.ptr());
-  if (attr == INVALID_FILE_ATTRIBUTES) return result;
-  if (!(attr & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT))) return result;
+  if (attr == INVALID_FILE_ATTRIBUTES)
+    return result;
+  if (!(attr & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT)))
+    return result;
 
   if (GetVolumeNameForVolumeMountPoint(AddEndSlash(VolumeMountPointForPath).ptr(),
                                        VolumeNameForPath,
@@ -380,7 +383,8 @@ String ApplyFileMask(const String & _name, const String & _mask)
     wcscat_s(res, sz, L".");
     for (wchar_t * m = mext; *m; m++)
     {
-      if (*m == '*') wcscat_s(res, sz, next);
+      if (*m == '*')
+        wcscat_s(res, sz, next);
       else if (*m == '?')
         wcscat_s(res, sz, (*sym = m - mext < (int)wcslen(next) ? next[m - mext] : 0, sym));
       else
@@ -398,7 +402,8 @@ String ApplyFileMaskPath(const String & name, const String & mask)
   if (a != INVALID_FILE_ATTRIBUTES && a & FILE_ATTRIBUTE_DIRECTORY)
   {
     String res = mask;
-    if (name.icmp(mask)) res += String(L"\\") + ExtractFileName(name);
+    if (name.icmp(mask))
+      res += String(L"\\") + ExtractFileName(name);
     return res;
   }
   return ExtractFilePath(mask) + L"\\" +
@@ -451,7 +456,8 @@ static int __MoveFile(const wchar_t * src, const wchar_t * dst)
 {
   DWORD attr = ::GetFileAttributes(dst);
   ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
-  if (::MoveFile(src, dst)) return TRUE;
+  if (::MoveFile(src, dst))
+    return TRUE;
   else
   {
     int err = GetLastError();
@@ -465,7 +471,8 @@ static int __MoveFileEx(const wchar_t * src, const wchar_t * dst, int flg)
 {
   DWORD attr = ::GetFileAttributes(dst);
   if (_wcsicmp(src, dst) != 0) ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
-  if (::MoveFileEx(src, dst, flg)) return TRUE;
+  if (::MoveFileEx(src, dst, flg))
+    return TRUE;
   else
   {
     int err = GetLastError();
@@ -481,7 +488,8 @@ int MoveFile(const String & _src, const String & _dst, int replace)
   if (WinNT && replace)
   {
     HANDLE DstFileHandle = Open(_dst, OPEN_READ, 0);
-    if (DstFileHandle == NULL) return FALSE;
+    if (DstFileHandle == NULL)
+      return FALSE;
     BY_HANDLE_FILE_INFORMATION FileInformation;
     if (GetFileInformationByHandle(DstFileHandle, &FileInformation))
     {
@@ -517,7 +525,8 @@ int MoveFile(const String & _src, const String & _dst, int replace)
     {
       String src = GetRealFileName(_src),
              dst = GetRealFileName(_dst);
-      if (!src.icmp(dst)) return TRUE;
+      if (!src.icmp(dst))
+        return TRUE;
       DWORD sa = ::GetFileAttributes(src.ptr());
       if (sa == INVALID_FILE_ATTRIBUTES)
       {
@@ -538,7 +547,8 @@ int MoveFile(const String & _src, const String & _dst, int replace)
           return FALSE;
         }
         String temp = ExtractFilePath(dst) + L"\\" + TempName();
-        if (!__MoveFile(dst.ptr(), temp.ptr())) return FALSE;
+        if (!__MoveFile(dst.ptr(), temp.ptr()))
+          return FALSE;
         if (!__MoveFile(src.ptr(), dst.ptr()))
         {
           int err = GetLastError();

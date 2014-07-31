@@ -81,8 +81,10 @@ void FarDlgNode::ClearDialogItem()
 
 FarDlgNode * FarDlgNode::FindChild(const String & name)
 {
-  if (getName() == name) return this;
-  else return NULL;
+  if (getName() == name)
+    return this;
+  else
+    return NULL;
 }
 
 struct _group
@@ -103,10 +105,12 @@ void FarDlgContainer::DefSize(intptr_t & sumw, intptr_t & sumh, intptr_t & fit)
       intptr_t w, h, f;
       obj.DefSize(w, h, f);
       groupw += w + 2;
-      if (h > grouph) grouph = h;
+      if (h > grouph)
+        grouph = h;
       if (!obj("NoBreak"))
       {
-        if (groupw - 2 > sumw) sumw = groupw - 2;
+        if (groupw - 2 > sumw)
+          sumw = groupw - 2;
         sumh += grouph;
         groupw = grouph = 0;
       }
@@ -133,11 +137,13 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
         w = 0;
       }
       group.w += w + 2;
-      if (h > group.h) group.h = h;
+      if (h > group.h)
+        group.h = h;
       if (!obj("NoBreak"))
       {
         group.w -= 2;
-        if (group.w > sumw) sumw = group.w;
+        if (group.w > sumw)
+          sumw = group.w;
         // sumh+=group.h;
         group.end = i;
         Groups.push_back(group);
@@ -212,11 +218,13 @@ void FarDlgContainer::ClearDialogItems(std::vector<FarDialogItem>& Items)
 
 FarDlgNode * FarDlgContainer::FindChild(const String & name)
 {
-  if (getName() == name) return this;
+  if (getName() == name)
+    return this;
   for (size_t i = 0; i < childs.size(); i++)
   {
     FarDlgNode * obj = child(i).FindChild(name);
-    if (obj) return obj;
+    if (obj)
+      return obj;
   }
   return NULL;
 }

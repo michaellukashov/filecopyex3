@@ -28,7 +28,8 @@ int StringParent::loadFromFile(FILE * f)
         break;
       for (int i = bpos; i < read; i++)
       {
-        if (inv) buffer[i] = ((buffer[i] & 0x00FF) << 8) | ((buffer[i] & 0xFF00) >> 8);
+        if (inv)
+          buffer[i] = ((buffer[i] & 0x00FF) << 8) | ((buffer[i] & 0xFF00) >> 8);
         if (buffer[i] == CR || (buffer[i] == LF && oldc != CR))
         {
           string[spos] = 0;
@@ -57,8 +58,10 @@ int StringParent::loadFromFile(FILE * f)
     const char CR = '\r', LF = '\n';
     char buffer[bsize + 1], string[ssize + 1];
     int bpos = 0, spos = 0;
-    if (read >= 1) buffer[0] = sign.c[0];
-    if (read >= 2) buffer[1] = sign.c[1];
+    if (read >= 1)
+      buffer[0] = sign.c[0];
+    if (read >= 2)
+      buffer[1] = sign.c[1];
     bpos = read;
     while (1)
     {

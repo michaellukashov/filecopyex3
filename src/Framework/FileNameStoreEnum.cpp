@@ -108,7 +108,8 @@ String FileNameStoreEnum::GetByNum(size_t n)
   }
   else
   {
-    while (cur < n) Skip();
+    while (cur < n)
+      Skip();
     return GetNext();
   }
 }
