@@ -469,7 +469,10 @@ void Engine::ProcessDesc(intptr_t fnum)
   }
 }
 
-void Engine::CheckDstFileExists(BuffInfo * bi, intptr_t fnum, FileStruct & info, const String & SrcName, String & DstName)
+void Engine::CheckDstFileExists(BuffInfo * bi, intptr_t fnum, FileStruct & info,
+  const String & SrcName,
+  const bool TryToOpenDstFile,
+  String & DstName)
 {
   if (FileExists(DstName))
   {
@@ -496,6 +499,9 @@ rep:
 
   bi->SrcName = SrcName;
   bi->DstName = DstName;
+
+  if (!TryToOpenDstFile)
+    return;
 
 open_retry:
   int oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
@@ -591,7 +597,7 @@ int Engine::FlushBuff(BuffInfo * bi)
 
     if (!bi->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      CheckDstFileExists(bi, fnum, info, SrcName, DstName);
+      CheckDstFileExists(bi, fnum, info, SrcName, true, DstName);
     }
     if (!(info.Flags & FLG_SKIPPED) && !bi->OutFile)
       info.Flags |= FLG_SKIPPED | FLG_ERROR;
@@ -847,9 +853,9 @@ open_retry:
     ShowReadName(SrcName);
 
     info.SectorSize = SectorSize;
-    if (!Parallel && !bi->OutFile && !(info.Flags & FLG_SKIPPED))
+    if (!bi->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      CheckDstFileExists(bi, i, info, SrcName, DstName);
+      CheckDstFileExists(bi, i, info, SrcName, false, DstName);
     }
 
     if (!InputFile)
