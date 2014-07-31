@@ -77,7 +77,7 @@ template <class T>
 inline const T & Max(const T & a, const T & b) { return a > b ? a : b; }
 
 int ExistsN(const String & fn, int n);
-String DupName(const String & src, int n);
+String DupName(const String & src, intptr_t n);
 int RmDir(const String & fn);
 bool Newer(const FILETIME & ft1, const FILETIME & ft2);
 bool Newer(const String & fn1, const FILETIME & ft2);

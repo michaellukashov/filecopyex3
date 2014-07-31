@@ -1811,12 +1811,12 @@ fin:
   return MRES_NONE;
 }
 
-int Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, int Level, int PanelIndex)
+intptr_t Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex)
 {
   return AddFile(Src, Dst, fd.dwFileAttributes, MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh), fd.ftCreationTime, fd.ftLastAccessTime, fd.ftLastWriteTime, Flags, Level, PanelIndex);
 }
 
-int Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD flags, int Level, int PanelIndex)
+intptr_t Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD flags, intptr_t Level, intptr_t PanelIndex)
 {
   if (CheckEscape(FALSE))
   {
@@ -2122,7 +2122,7 @@ fin:
     DstNames.AddRel(FileName::levelMinus, ExtractFileName(dst));
   }
 
-  return TRUE;
+  return 1;
 }
 
 void Engine::SetOverwriteMode(intptr_t Start)
@@ -2270,7 +2270,7 @@ rep1:
 }
 
 void Engine::RememberFile(const String & Src, const String & Dst,
-                          WIN32_FIND_DATA & fd, DWORD Flags, int Level,
+                          WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level,
                           RememberStruct & Remember)
 {
   Remember.Src = Src;
@@ -2284,7 +2284,7 @@ void Engine::RememberFile(const String & Src, const String & Dst,
   Remember.Level = Level;
 }
 
-int Engine::AddRemembered(RememberStruct & Remember)
+intptr_t Engine::AddRemembered(RememberStruct & Remember)
 {
   return AddFile(Remember.Src, Remember.Dst, Remember.Attr, Remember.Size, Remember.creationTime, Remember.lastAccessTime, Remember.lastWriteTime, Remember.Flags, Remember.Level);
 }

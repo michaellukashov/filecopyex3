@@ -185,7 +185,7 @@ int CheckParallel(const String & _srcpath, const String & _dstpath)
   return -1;
 }
 
-String DupName(const String & src, int n)
+String DupName(const String & src, intptr_t n)
 {
   return ChangeFileExt(src, "") + L"_" + String(n) + ExtractFileExt(src);
 }

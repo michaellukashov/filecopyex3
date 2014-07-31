@@ -32,10 +32,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 struct FileStruct
 {
   DWORD Attr;
-  int RenameNum;
-  int OverMode;
+  intptr_t RenameNum;
+  intptr_t OverMode;
   DWORD Flags;
-  int Level, PanelIndex, SectorSize;
+  intptr_t Level, PanelIndex, SectorSize;
   int64_t Size, Read, Written, ResumePos;
   FILETIME creationTime, lastAccessTime, lastWriteTime;
 };
@@ -64,7 +64,7 @@ struct RememberStruct
   int64_t Size;
   FILETIME creationTime, lastAccessTime, lastWriteTime;
   DWORD Attr, Flags;
-  int Level;
+  intptr_t Level;
 };
 
 PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1);
@@ -142,11 +142,11 @@ private:
   int CheckOverwrite(intptr_t, const String &, const String &, String &);
   int CheckOverwrite2(intptr_t, const String &, const String &, String &);
   void SetOverwriteMode(intptr_t);
-  int AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, int Level, int PanelIndex = -1);
-  int AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, int Level, int PanelIndex = -1);
+  intptr_t AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
+  intptr_t AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
   void AddTopLevelDir(const String & dir, const String & dstmask, DWORD Flags, FileName::Direction d);
-  static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, int Level, RememberStruct &);
-  int AddRemembered(RememberStruct &);
+  static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, RememberStruct &);
+  intptr_t AddRemembered(RememberStruct &);
   int DirStart(const String & dir, const String & dst);
   int DirEnd(const String & dir, const String & dst);
   static String FindDescFile(const String & dir, intptr_t * idx = NULL);
