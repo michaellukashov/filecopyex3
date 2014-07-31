@@ -109,6 +109,8 @@ public:
   inline size_t len() const { return str.length(); }
   inline bool empty() const { return str.empty(); }
 
+  inline void Clear() { str.clear(); }
+
   int AsInt() const { return _wtoi(ptr()); }
   int64_t AsInt64() const { return _wtoi64(ptr()); }
   float AsFloat() const { return (float)_wtof(ptr()); }
