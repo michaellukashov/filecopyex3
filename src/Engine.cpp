@@ -152,7 +152,7 @@ int Engine::InitBuf(BuffInfo * bi)
     bi->BuffSize /= 2;
   bi->BuffSize = (bi->BuffSize / AllocAlign + 1) * AllocAlign;
 
-  bi->Buffer = static_cast<UCHAR *>(Alloc(bi->BuffSize));
+  bi->Buffer = static_cast<uint8_t *>(Alloc(bi->BuffSize));
   if (!bi->Buffer)
   {
     Error(LOC(L"Error.MemAlloc"), GetLastError());
