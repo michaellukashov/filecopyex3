@@ -110,6 +110,7 @@ public:
   inline bool empty() const { return str.empty(); }
 
   inline void Clear() { str.clear(); }
+  inline bool IsEmpty() const { return str.empty(); }
 
   int AsInt() const { return _wtoi(ptr()); }
   int64_t AsInt64() const { return _wtoi64(ptr()); }
