@@ -81,7 +81,7 @@ protected:
 class FarDlgLinePayload : public FarDlgPayload
 {
 public:
-  DEFINE_CLASS("FarDlgLine", FarDlgLinePayload)
+  DEFINE_CLASS(L"FarDlgLine", FarDlgLinePayload)
 
   void realInitItem(FarDialogItem & item)
   {
@@ -94,7 +94,7 @@ public:
 class FarDlgLabelPayload : public FarDlgPayload
 {
 public:
-  DEFINE_CLASS("FarDlgLabel", FarDlgLabelPayload)
+  DEFINE_CLASS(L"FarDlgLabel", FarDlgLabelPayload)
 
 protected:
   virtual void init(const String & _name)
@@ -111,7 +111,7 @@ protected:
 
   static void BeforeAdd(FarDialogItem & item, FarDlgNode & obj)
   {
-//    if (obj("Shorten"))
+//    if (obj(L"Shorten"))
 //      FormatWidth(item.PtrData, __min(item.X2-item.X1+1, 500))
 //      .ToAnsi(item.PtrData, sizeof(item.PtrData));
   }
@@ -121,7 +121,7 @@ protected:
 class FarDlgButtonPayload : public FarDlgPayload
 {
 public:
-  DEFINE_CLASS("FarDlgButton", FarDlgButtonPayload)
+  DEFINE_CLASS(L"FarDlgButton", FarDlgButtonPayload)
 
 protected:
   virtual void init(const String & _name)
@@ -146,7 +146,7 @@ protected:
 class FarDlgPanelPayload: public FarDlgPayload
 {
 public:
-  DEFINE_CLASS("FarDlgPanel", FarDlgPanelPayload)
+  DEFINE_CLASS(L"FarDlgPanel", FarDlgPanelPayload)
 
 };
 
@@ -155,7 +155,7 @@ public:
 class FarDlgCheckboxPayload: public FarDlgPayload
 {
 public:
-  DEFINE_CLASS("FarDlgCheckbox", FarDlgCheckboxPayload)
+  DEFINE_CLASS(L"FarDlgCheckbox", FarDlgCheckboxPayload)
 
 protected:
   virtual void init(const String & _name)
@@ -188,7 +188,7 @@ protected:
 class FarDlgRadioButtonPayload: public FarDlgCheckboxPayload
 {
 public:
-  DEFINE_CLASS("FarDlgRadioButton", FarDlgRadioButtonPayload)
+  DEFINE_CLASS(L"FarDlgRadioButton", FarDlgRadioButtonPayload)
 
 protected:
 
@@ -204,7 +204,7 @@ protected:
 class FarDlgEditPayload: public FarDlgPayload
 {
 public:
-  DEFINE_CLASS("FarDlgEdit", FarDlgEditPayload)
+  DEFINE_CLASS(L"FarDlgEdit", FarDlgEditPayload)
 
 protected:
   wchar_t HistoryId[64];
@@ -241,7 +241,7 @@ protected:
 class FarDlgComboboxPayload: public FarDlgPayload
 {
 public:
-  DEFINE_CLASS("FarDlgCombobox", FarDlgComboboxPayload)
+  DEFINE_CLASS(L"FarDlgCombobox", FarDlgComboboxPayload)
 
   FarDlgComboboxPayload() { list.StructSize = sizeof(list); list.ItemsNumber = 0; list.Items = NULL; }
   virtual ~FarDlgComboboxPayload() { delete list.Items; }
@@ -276,7 +276,7 @@ protected:
 class FarDialogPayload : public FarDlgPayload
 {
 public:
-  DEFINE_CLASS("FarDialog", FarDialogPayload)
+  DEFINE_CLASS(L"FarDialog", FarDialogPayload)
 
 protected:
   virtual void init(const String & _name)

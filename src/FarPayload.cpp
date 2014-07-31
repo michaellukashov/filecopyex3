@@ -270,17 +270,17 @@ size_t lablen(FarDialogItem & item)
 void InitObjMgr()
 {
   objectManager = new ObjectManager;
-  objectManager->regClass("FarDlgLine", &FarDlgLinePayload::create, &FarDlgNode::create);
-  objectManager->regClass("FarDlgLabel", &FarDlgLabelPayload::create, &FarDlgNode::create);
-  objectManager->regClass("FarDlgButton", &FarDlgButtonPayload::create, &FarDlgNode::create);
-  objectManager->regClass("FarDlgCheckbox", &FarDlgCheckboxPayload::create, &FarDlgNode::create);
-  objectManager->regClass("FarDlgRadioButton", &FarDlgRadioButtonPayload::create, &FarDlgNode::create);
-  objectManager->regClass("FarDlgEdit", &FarDlgEditPayload::create, &FarDlgNode::create);
-  objectManager->regClass("FarDlgCombobox", &FarDlgComboboxPayload::create, &FarDlgNode::create);
+  objectManager->regClass(L"FarDlgLine", &FarDlgLinePayload::create, &FarDlgNode::create);
+  objectManager->regClass(L"FarDlgLabel", &FarDlgLabelPayload::create, &FarDlgNode::create);
+  objectManager->regClass(L"FarDlgButton", &FarDlgButtonPayload::create, &FarDlgNode::create);
+  objectManager->regClass(L"FarDlgCheckbox", &FarDlgCheckboxPayload::create, &FarDlgNode::create);
+  objectManager->regClass(L"FarDlgRadioButton", &FarDlgRadioButtonPayload::create, &FarDlgNode::create);
+  objectManager->regClass(L"FarDlgEdit", &FarDlgEditPayload::create, &FarDlgNode::create);
+  objectManager->regClass(L"FarDlgCombobox", &FarDlgComboboxPayload::create, &FarDlgNode::create);
 
-  objectManager->regClass("FarDlgPanel", &FarDlgPanelPayload::create, &FarDlgContainer::create);
+  objectManager->regClass(L"FarDlgPanel", &FarDlgPanelPayload::create, &FarDlgContainer::create);
 
-  objectManager->regClass("FarDialog", &FarDialogPayload::create, &FarDialog::create);
+  objectManager->regClass(L"FarDialog", &FarDialogPayload::create, &FarDialog::create);
 
 }
 

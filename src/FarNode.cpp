@@ -96,18 +96,18 @@ void FarDlgContainer::DefSize(intptr_t & sumw, intptr_t & sumh, intptr_t & fit)
 {
   sumw = sumh = 0;
   intptr_t groupw = 0, grouph = 0;
-  fit = getPayload()("FitWidth").operator int();
+  fit = getPayload()(L"FitWidth").operator int();
   for (size_t i = 0; i < childs.size(); i++)
   {
     FarDlgNode & obj = child(i);
-    if (obj("Visible"))
+    if (obj(L"Visible"))
     {
       intptr_t w, h, f;
       obj.DefSize(w, h, f);
       groupw += w + 2;
       if (h > grouph)
         grouph = h;
-      if (!obj("NoBreak"))
+      if (!obj(L"NoBreak"))
       {
         if (groupw - 2 > sumw)
           sumw = groupw - 2;
@@ -127,7 +127,7 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
   for (size_t i = 0; i < childs.size(); i++)
   {
     FarDlgNode & obj = child(i);
-    if (obj("Visible"))
+    if (obj(L"Visible"))
     {
       intptr_t w, h, f;
       obj.DefSize(w, h, f);
@@ -139,7 +139,7 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
       group.w += w + 2;
       if (h > group.h)
         group.h = h;
-      if (!obj("NoBreak"))
+      if (!obj(L"NoBreak"))
       {
         group.w -= 2;
         if (group.w > sumw)
@@ -158,7 +158,7 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
     for (intptr_t i = Groups[j].start; i <= Groups[j].end; i++)
     {
       FarDlgNode & obj = child(i);
-      if (obj("Visible"))
+      if (obj(L"Visible"))
       {
         intptr_t w, h, f;
         obj.DefSize(w, h, f);
@@ -179,7 +179,7 @@ void FarDlgContainer::LoadState(PropertyMap & state)
 {
   for (size_t i = 0; i < childs.size(); i++)
   {
-    if (child(i).IsContainer() || (bool)child(i)("Persistent"))
+    if (child(i).IsContainer() || (bool)child(i)(L"Persistent"))
     {
       child(i).LoadState(state);
     }
@@ -189,7 +189,7 @@ void FarDlgContainer::LoadState(PropertyMap & state)
 void FarDlgContainer::SaveState(PropertyMap & state)
 {
   for (size_t i = 0; i < childs.size(); i++)
-    if (child(i).IsContainer() || (bool)child(i)("Persistent"))
+    if (child(i).IsContainer() || (bool)child(i)(L"Persistent"))
       child(i).SaveState(state);
 }
 
@@ -250,7 +250,7 @@ intptr_t FarDialog::Execute()
   FarDialogItem frame;
   memset(&frame, 0, sizeof(frame));
   frame.Type = DI_DOUBLEBOX;
-  String p = (*this)("Title");
+  String p = (*this)(L"Title");
   if (p.empty())
   {
     p = LOC(getName());
@@ -268,9 +268,9 @@ intptr_t FarDialog::Execute()
   Items[0].Y2 = h + 2;
 
   HANDLE hnd = Info.DialogInit(&MainGuid, &MainDialog, -1, -1, w + 10, h + 4,
-                               String(Property("HelpTopic").operator const String()).ptr(),
+                               String(Property(L"HelpTopic").operator const String()).ptr(),
                                Items.data(), Items.size(),
-                               0, bool((*this)("Warning")) ? FDLG_WARNING : 0,
+                               0, bool((*this)(L"Warning")) ? FDLG_WARNING : 0,
                                Info.DefDlgProc, 0
                               );  // !!! Need real Dialog GUID, instead of MainDialog
   intptr_t ret = -1;

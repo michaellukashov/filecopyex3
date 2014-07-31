@@ -136,7 +136,7 @@ bool loadOptions(PropertyMap & options, FarSettings & settings)
     if (fse.Items[i].Type == FST_SUBKEY)
       result.push_back(fse.Items[i].Name);
 
-  options.Add("BufPercent", 1);
+  options.Add(L"BufPercent", 1);
   }
   result.shrink_to_fit();
   return true;

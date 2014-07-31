@@ -97,11 +97,11 @@ String GetFileNameRoot(const String & v)
     if (l == L"\\\\" || l == L"//")
     {
       l = v.substr(2);
-      size_t p = l.find_first_of("\\/");
+      size_t p = l.find_first_of(L"\\/");
       if (p != (size_t)-1)
       {
         l = l.substr(p + 1);
-        p = l.find_first_of("\\/");
+        p = l.find_first_of(L"\\/");
         if (p != -1)
         {
           return l.substr(0, p + 1);
@@ -112,11 +112,11 @@ String GetFileNameRoot(const String & v)
   else if (l == L"\\\\")
   {
     l = v.substr(2);
-    size_t p = l.find_first_of("\\/");
+    size_t p = l.find_first_of(L"\\/");
     if (p != (size_t)-1)
     {
       l = l.substr(p + 1);
-      size_t p2 = l.find_first_of("\\/");
+      size_t p2 = l.find_first_of(L"\\/");
       if (p2 != (size_t)-1)
       {
         return v.substr(0, p + p2 + 2 + 2);

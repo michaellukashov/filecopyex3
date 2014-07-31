@@ -1302,11 +1302,11 @@ Engine::MResult Engine::Main(int move, int curOnly)
 
   if (move)
   {
-    dlg("Title") = LOC(L"CopyDialog.Move");
+    dlg(L"Title") = LOC(L"CopyDialog.Move");
   }
   else
   {
-    dlg("Title") = LOC(L"CopyDialog.Copy");
+    dlg(L"Title") = LOC(L"CopyDialog.Copy");
   }
   dlg[L"Label1"](L"Text") = prompt;
   dlg[L"DestPath"](L"Text") = dstPath;
@@ -1421,7 +1421,7 @@ rep:
 
   String dstText = tmpDstText.trim().trimquotes();
 
-  if (!dstText.left(4).icmp("nul\\"))
+  if (!dstText.left(4).icmp(L"nul\\"))
     dstText = L"nul";
 
   dstText = dstText.replace(L"\"", L"");
@@ -1434,7 +1434,7 @@ rep:
     }
     else
     {
-      ShowMessage(dlg("Text"), LOC(L"CopyDialog.InvalidPath"), FMSG_MB_OK);
+      ShowMessage(dlg(L"Text"), LOC(L"CopyDialog.InvalidPath"), FMSG_MB_OK);
       goto rep;
     }
   }
@@ -1450,7 +1450,7 @@ rep:
   // srcpath.ptr() for temporary file panel is empty
   // Current directory is set by Far to file path of selected file
   BOOL SCDResult = SetCurrentDirectory(srcPath.ptr());
-  if (relDstPath.icmp("nul") != 0)
+  if (relDstPath.icmp(L"nul") != 0)
   {
     dstPath = convertPath(CPM_REAL, relDstPath);
   }
@@ -1518,7 +1518,7 @@ rep:
     OverwriteMode = OM_RENAME;
   };
 
-  if (!dstPath.icmp("nul"))
+  if (!dstPath.icmp(L"nul"))
   {
     OverwriteMode = OM_OVERWRITE;
     CompressMode = EncryptMode = ATTR_INHERIT;
@@ -2318,7 +2318,7 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
       dlg.ResetControls();
       CopyProgressBox.SetNeedToRedraw(true);
 
-      dlg("Title") = LOC(L"FreeSpaceErrorDialog.Title");
+      dlg(L"Title") = LOC(L"FreeSpaceErrorDialog.Title");
       String disk_str = dstroot;
       if (disk_str.len() >= 2)
         if (disk_str[1] == ':')
@@ -2386,7 +2386,7 @@ intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint
 
   if (!title.empty())
   {
-    dlg("Title") = title;
+    dlg(L"Title") = title;
   }
 
   if (flg & eeShowReopen)
@@ -2426,8 +2426,8 @@ intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint
       if (i <= 7)
       {
         String name = String(L"Label") + String(i + 3);
-        dlg[name]("Visible") = 1;
-        dlg[name]("Text") = list[i];
+        dlg[name](L"Visible") = 1;
+        dlg[name](L"Text") = list[i];
       }
     }
   }

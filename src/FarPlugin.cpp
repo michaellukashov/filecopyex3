@@ -64,7 +64,7 @@ void FarPlugin::Create()
 
   if (!dialogs.Load(GetDLLPath() + L"\\resource\\dialogs.objd"))
   {
-    FWError("Could not load dialogs.objd");
+    FWError(L"Could not load dialogs.objd");
     exit(0);
   }
   InitOptions();
@@ -146,7 +146,7 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
       FarMenu menu;
       menu.SetFlags(FMENU_WRAPMODE);
       menu.SetTitle(LOC(L"PluginName"));
-      menu.SetHelpTopic("Menu");
+      menu.SetHelpTopic(L"Menu");
       menu.AddLine(LOC(L"Menu.CopyFiles"));
       menu.AddLine(LOC(L"Menu.MoveFiles"));
       menu.AddLine(LOC(L"Menu.CopyFilesUnderCursor"));
@@ -226,10 +226,10 @@ void FarPlugin::KeyConfig()
   FarDialog & dlg = Dialogs()[L"KeysDialog"];
   dlg.ResetControls();
 
-  bool bind = Binded("F5") && Binded("F6") && Binded("ShiftF5") && Binded("ShiftF6");
-  bool altShift = bind && Binded("AltShiftF5") && Binded("AltShiftF6");
-  bool ctrlShift = bind && Binded("CtrlShiftF5") && Binded("CtrlShiftF6");
-  bool ctrlAlt = bind && Binded("CtrlAltF5") && Binded("CtrlAltF6");
+  bool bind = Binded(L"F5") && Binded(L"F6") && Binded(L"ShiftF5") && Binded(L"ShiftF6");
+  bool altShift = bind && Binded(L"AltShiftF5") && Binded(L"AltShiftF6");
+  bool ctrlShift = bind && Binded(L"CtrlShiftF5") && Binded(L"CtrlShiftF6");
+  bool ctrlAlt = bind && Binded(L"CtrlAltF5") && Binded(L"CtrlAltF6");
   if (!altShift && !ctrlShift && !ctrlAlt)
     altShift = true;
 
@@ -249,18 +249,18 @@ void FarPlugin::KeyConfig()
 
   // MacroCommand(MCMD_SAVEALL);
 
-  Unbind("KEY_F5"); Unbind("ShiftF5");
-  Unbind("KEY_F5");     Unbind("ShiftF6");
-  Unbind("AltShiftF5"); Unbind("AltShiftF6");
-  Unbind("CtrlShiftF5");  Unbind("CtrlShiftF6");
-  Unbind("CtrlAltF5");  Unbind("CtrlAltF6");
+  Unbind(L"KEY_F5"); Unbind(L"ShiftF5");
+  Unbind(L"KEY_F5");     Unbind(L"ShiftF6");
+  Unbind(L"AltShiftF5"); Unbind(L"AltShiftF6");
+  Unbind(L"CtrlShiftF5");  Unbind(L"CtrlShiftF6");
+  Unbind(L"CtrlAltF5");  Unbind(L"CtrlAltF6");
 
   if (dlg[L"BindToF5"](L"Selected"))
   {
-    Bind("F5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
-    Bind("F6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
-    Bind("ShiftF5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
-    Bind("ShiftF6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
+    Bind(L"F5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
+    Bind(L"F6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
+    Bind(L"ShiftF5", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
+    Bind(L"ShiftF6", "Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
 
     /*
     String key;

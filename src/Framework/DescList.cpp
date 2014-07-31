@@ -63,7 +63,7 @@ bool DescList::LoadFromList(StringVector & list)
       }
       else
       {
-        size_t lf = s.find_first_of(" \t");
+        size_t lf = s.find_first_of(L" \t");
         if (lf != (size_t)-1)
         {
           fn = s.substr(0, lf).trim();
@@ -191,11 +191,11 @@ void DescList::Rename(int i, const String& dst, int changeName)
 {
   String str=Values[Names.Values(i)].ltrim();
   if (str.substr(0, 1)=="\"")
-    str=str.substr(str.substr(1).find("\"")+2);
+    str=str.substr(str.substr(1).find(L"\"")+2);
   else
-    str=str.substr(str.cfind(" \t\n"));
+    str=str.substr(str.cfind(L" \t\n"));
   Values.Set(Names.Values(i),
-    ((dst.cfind(" ")!=-1)?(String(L"\"")+dst+"\""):(dst))+str);
+    ((dst.cfind(L" ")!=-1)?(String(L"\"")+dst+"\""):(dst))+str);
   if (changeName) Names.Set(i, dst);
 }
 */

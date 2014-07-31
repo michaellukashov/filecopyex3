@@ -159,7 +159,7 @@ HANDLE Open(const String & fn, int mode, int attr)
     SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
 
   HANDLE res = CreateFile(
-                 (!fn.left(4).icmp("nul\\")) ? L"nul" : fn.ptr(),
+                 (!fn.left(4).icmp(L"nul\\")) ? L"nul" : fn.ptr(),
                  // mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
                  // fix #17 is partially rolled back:
                  // Setting "compressed" attribute requires GENERIC_READ | GENERIC_WRITE
@@ -257,7 +257,7 @@ int GetSectorSize(const String & path)
     return bps;
   else
   {
-    //FWError("Warning: GetSectorSize failed");
+    //FWError(L"Warning: GetSectorSize failed");
     return 4096;
   }
 }

@@ -33,20 +33,20 @@ void Bind(const String & key, const String & code, const String & desc)
   INPUT_RECORD ir;
   int resKey = FSF.FarNameToInputRecord(key.c_str(), &ir);
   macro.AKey = ir;
-  //ShowMessage("Bind - key convert", String(resKey), FMSG_MB_OK);
+  //ShowMessage(L"Bind - key convert", String(resKey), FMSG_MB_OK);
   macro.Area = MACROAREA_SHELL;
   macro.Callback = NULL;
   int res = Info.MacroControl(&MainGuid, MCTL_ADDMACRO, 0, &macro);
-  ShowMessage("Bind", key + L": " + String(res), FMSG_MB_OK);
+  ShowMessage(L"Bind", key + L": " + String(res), FMSG_MB_OK);
   */
 
   if (base.empty())
   {
-    base = getEnv("FARPROFILE");
+    base = getEnv(L"FARPROFILE");
   }
   if (base.empty())
   {
-    base = getEnv("APPDATA");
+    base = getEnv(L"APPDATA");
     if (!base.empty())
     {
       base += L"\\Far Manager\\Profile";
@@ -72,7 +72,7 @@ void Bind(const String & key, const String & code, const String & desc)
 int Binded(const String& key)
 {
   //XXX String seq = registry.GetString(regkey + L"\\" + key, "Sequence", "");
-  //XXX return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp("F5") || !seq.icmp("F6"));
+  //XXX return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp(L"F5") || !seq.icmp(L"F6"));
   return true;
 }
 */
