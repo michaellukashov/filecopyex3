@@ -1,4 +1,4 @@
-PluginName=Extended copy
+PluginName=File copy extended
 
 CopyDialog.Copy=Copy
 CopyDialog.Move=Move
@@ -99,7 +99,7 @@ KeysDialog.OK=&OK
 KeysDialog.Cancel=&Cancel
 
 AboutDialog=About
-AboutDialog.Label1=Extended file copy plugin for FAR manager
+AboutDialog.Label1=File copy extended: plugin for FAR manager
 AboutDialog.Label2=<Version will be here>
 AboutDialog.Label3=Idea & core (c) Max Antipin
 AboutDialog.Label4=Implementation (c) Serge Cheperis AKA craZZy
