@@ -500,27 +500,33 @@ rep:
   bi->SrcName = SrcName;
   bi->DstName = DstName;
 
-  if (!TryToOpenDstFile)
-    return;
-
 open_retry:
   int oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
   switch (info.OverMode)
   {
     case OM_OVERWRITE:
     case OM_RENAME:
-      bi->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
+      if (TryToOpenDstFile)
+      {
+        bi->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
+      }
       break;
     case OM_APPEND:
       info.Flags |= FLG_BUFFERED;
-      oflg |= OPEN_BUF;
-      bi->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
+      if (TryToOpenDstFile)
+      {
+        oflg |= OPEN_BUF;
+          bi->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
+      }
       break;
     case OM_RESUME:
-      bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
-      if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN) == -1)
-        FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
-                       (int)GetLastError()));
+      if (TryToOpenDstFile)
+      {
+        bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
+        if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN) == -1)
+          FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
+                         (int)GetLastError()));
+      }
       break;
     case OM_SKIP:
       info.Flags |= FLG_SKIPPED;
@@ -564,7 +570,7 @@ open_retry:
         FSeek(bi->OutFile, bp, FILE_BEGIN);
       }
     }
-    else
+    else if (TryToOpenDstFile)
     {
       ::WaitForSingleObject(UiFree, INFINITE);
       uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
