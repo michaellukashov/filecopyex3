@@ -698,7 +698,8 @@ skip: ;
     PosInStr++;
   }
 
-  if (Parallel) ::SetEvent(FlushEnd);
+  if (Parallel)
+    ::SetEvent(FlushEnd);
   return !Aborted;
 }
 
@@ -1113,7 +1114,8 @@ String Engine::FindDescFile(const String & dir, intptr_t * idx)
   {
     if (FileExists(AddEndSlash(dir) + plugin->Descs()[i]))
     {
-      if (idx) *idx = i;
+      if (idx)
+        *idx = i;
       return plugin->Descs()[i];
     }
   }
@@ -1132,11 +1134,13 @@ String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t *
     if ((hf = ::FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
     {
       ::FindClose(hf);
-      if (idx) *idx = i;
+      if (idx)
+        *idx = i;
       return plugin->Descs()[i];
     }
   }
-  if (idx) *idx = -1;
+  if (idx)
+    *idx = -1;
   return L"";
 }
 

@@ -139,13 +139,17 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
   wchar_t * bp = buf;
   if (!InverseBars)
   {
-    for (int i = 0; i < fn; i++) *bp++ = 0x2588; //'█'
-    for (int i = 0; i < en; i++) *bp++ = 0x2591; //'░'
+    for (int i = 0; i < fn; i++)
+      *bp++ = 0x2588; //'█'
+    for (int i = 0; i < en; i++)
+      *bp++ = 0x2591; //'░'
   }
   else
   {
-    for (int i = 0; i < en; i++) *bp++ = 0x2591; //'░'
-    for (int i = 0; i < fn; i++) *bp++ = 0x2588; //'█'
+    for (int i = 0; i < en; i++)
+      *bp++ = 0x2591; //'░'
+    for (int i = 0; i < fn; i++)
+      *bp++ = 0x2588; //'█'
   }
   *bp = 0;
   Info.Text(x1, y, &clrText, buf);
