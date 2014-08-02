@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 intptr_t ShowMessage(const String & title, const String & msg, int Flags)
 {
-  return ShowMessageHelp(title, msg, Flags, "");
+  return ShowMessageHelp(title, msg, Flags, L"");
 }
 
 intptr_t ShowMessageOK(const String & title, const String & msg)
@@ -50,7 +50,7 @@ intptr_t ShowMessageHelp(const String & title, const String & msg, int Flags, co
 intptr_t ShowMessageEx(const String & title, const String & msg,
                        const String & buttons, int flags)
 {
-  return ShowMessageExHelp(title, msg, buttons, flags, "");
+  return ShowMessageExHelp(title, msg, buttons, flags, L"");
 }
 
 intptr_t ShowMessageExHelp(const String & title, const String & msg,
