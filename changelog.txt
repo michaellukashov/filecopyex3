@@ -1,28 +1,30 @@
 FileCopyEx3 3.0.3.17 ??.08.2014
+* Fix issue #12: Check if destionation file exists
+  (https://code.google.com/p/filecopyex3/issues/detail?id=12)
 
 version 3.0.2.16 01.08.2014
 * Bugfix: "Copy file under cursor", "Move file under cursor" was not working
-* Fix Issue #3: "Scanning directories" dialog is not correctly redrawed
+* Fix issue #3: "Scanning directories" dialog is not correctly redrawed
   (https://github.com/michaellukashov/filecopyex3/issues/3)
-* Fix Issue #4: wrong file mask handling
+* Fix issue #4: Wrong file mask handling
   (https://github.com/michaellukashov/filecopyex3/issues/4)
 
 version 3.0.1.14 28.07.2014
-* Fix Issue #2 scan folders dialog is not redrawed
+* Fix issue #2: Scan folders dialog is not redrawed
   (https://github.com/michaellukashov/filecopyex3/issues/2)
-* Fix Issue #1 Error trying to allocate memory
+* Fix issue #1: Error trying to allocate memory
   (https://github.com/michaellukashov/filecopyex3/issues/1)
 
 version 3.0.0.11 15.07.2014
-* Fix Issue 4: Cursor jumps after copying files
+* Fix issue 4: Cursor jumps after copying files
   (https://code.google.com/p/filecopyex3/issues/detail?id=4)
-* Fix Issue 9: Cannot delete the file
+* Fix issue 9: Cannot delete the file
   (https://code.google.com/p/filecopyex3/issues/detail?id=9)
-* Fix Issue 10: Dialog not redrawed
+* Fix issue 10: Dialog not redrawed
   (https://code.google.com/p/filecopyex3/issues/detail?id=10)
-* Fix Issue 11: Files locked after copy operation is canceled
+* Fix issue 11: Files locked after copy operation is canceled
   (https://code.google.com/p/filecopyex3/issues/detail?id=11)
-* Fix Issue 13: Files locked after copying
+* Fix issue 13: Files locked after copying
   (https://code.google.com/p/filecopyex3/issues/detail?id=13)
 * Fix memory issues
 
