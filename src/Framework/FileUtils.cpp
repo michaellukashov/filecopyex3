@@ -264,7 +264,7 @@ int GetSymLink(const String & _dir, String & res, int flg)
           REPARSE_GUID_DATA_BUFFER * rd = (REPARSE_GUID_DATA_BUFFER *)Data;
           if ((IsReparseTagMicrosoft(rd->ReparseTag)) &&
               (rd->ReparseTag == IO_REPARSE_TAG_MOUNT_POINT) &&
-              (!memcmp(rd->ReparseGuid.Data4, L"\\??\\", 8)))
+              (!memcmp(rd->ReparseGuid.Data4, "\\??\\", 6)))
           {
             String r = (wchar_t *)&rd->GenericReparseBuffer;
             if (r.left(7) != L"Volume{")
