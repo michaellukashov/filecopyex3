@@ -2206,7 +2206,7 @@ int Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String & Dst
   stime = FormatTime(fs.ftLastWriteTime);
   dlg[L"Label3"](L"Text") = Format(L"%14s %s %s", ssz.ptr(), LOC(L"OverwriteDialog.Bytes").ptr(), stime.ptr());
 
-  dlg[L"Source"](L"Text")      = Format(L"%-16s", LOC(L"OverwriteDialog.Source").ptr());
+  dlg[L"Source"](L"Text") = Format(L"%-16s", LOC(L"OverwriteDialog.Source").ptr());
   dlg[L"Destination"](L"Text")  = Format(L"%-16s", LOC(L"OverwriteDialog.Destination").ptr());
 
   dlg[L"AcceptForAll"](L"Selected") = 0;

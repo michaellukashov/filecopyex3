@@ -53,8 +53,8 @@ private:
 class FileNameStore
 {
 public:
-  FileNameStore() { }
-  ~FileNameStore() { }
+  FileNameStore() {}
+  ~FileNameStore() {}
 
   size_t AddRel(FileName::Direction _d, const String & _name) { items.push_back(FileName(_d, _name)); return items.size() - 1; }
   size_t Count() const { return items.size(); }
