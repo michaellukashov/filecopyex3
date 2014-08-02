@@ -1,21 +1,21 @@
 FileCopyEx3 3.0.3.17 ??.08.2014
-* Fix issue #12: Check if destionation file exists
+* Fix issue #12: Check if destination file exists
   (https://code.google.com/p/filecopyex3/issues/detail?id=12)
 
-version 3.0.2.16 01.08.2014
+FileCopyEx3 3.0.2.16 01.08.2014
 * Bugfix: "Copy file under cursor", "Move file under cursor" was not working
 * Fix issue #3: "Scanning directories" dialog is not correctly redrawed
   (https://github.com/michaellukashov/filecopyex3/issues/3)
 * Fix issue #4: Wrong file mask handling
   (https://github.com/michaellukashov/filecopyex3/issues/4)
 
-version 3.0.1.14 28.07.2014
+FileCopyEx3 3.0.1.14 28.07.2014
 * Fix issue #2: Scan folders dialog is not redrawed
   (https://github.com/michaellukashov/filecopyex3/issues/2)
 * Fix issue #1: Error trying to allocate memory
   (https://github.com/michaellukashov/filecopyex3/issues/1)
 
-version 3.0.0.11 15.07.2014
+FileCopyEx3 3.0.0.11 15.07.2014
 * Fix issue 4: Cursor jumps after copying files
   (https://code.google.com/p/filecopyex3/issues/detail?id=4)
 * Fix issue 9: Cannot delete the file
