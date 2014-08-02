@@ -28,5 +28,5 @@ Copyright (C) 2004 - 2014
  Bugfixes: slst, CDK, Ivanych, Alter, Axxie and Nsky
  Special thanks to Vitaliy Tsubin
  Far 2 (32 & 64 bit) full unicode version by djdron
- Far 3 (32 & 64 bit) Ruslan Petrenko (ruslanp@ruslanp.com), Michael Lukashov
+ Far 3 (32 & 64 bit) Ruslan Petrenko (ruslanp@ruslanp.com), Michael Lukashov (michael.lukashov@gmail.com)
  

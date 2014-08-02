@@ -68,8 +68,8 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo * psi)
 /*
 Функция GetPluginInfoW вызывается Far Manager для получения дополнительной информации о плагине.
 */
-static const wchar_t * pluginMenuStrings[1] = { L"Extended copy" };
-static const wchar_t * configMenuStrings[1] = { L"Extended copy" };
+static const wchar_t * pluginMenuStrings[1] = { L"File copy extended" };
+static const wchar_t * configMenuStrings[1] = { L"File copy extended" };
 
 void WINAPI GetPluginInfoW(struct PluginInfo * Info)
 {

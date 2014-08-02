@@ -1,4 +1,4 @@
-PluginName=Extended copy
+PluginName=File copy extended
 
 CopyDialog.Copy=Copy
 CopyDialog.Move=Move
@@ -99,17 +99,17 @@ KeysDialog.OK=&OK
 KeysDialog.Cancel=&Cancel
 
 AboutDialog=About
-AboutDialog.Label1=Extended file copy plugin for FAR manager
+AboutDialog.Label1=File copy extended: plugin for FAR manager
 AboutDialog.Label2=<Version will be here>
 AboutDialog.Label3=Idea & core (c) Max Antipin
 AboutDialog.Label4=Implementation (c) Serge Cheperis AKA craZZy
 AboutDialog.Label5=E-mail: crazzy@magnusoft.com
-AboutDialog.Label6=http://code.google.com/p/filecopyex/
+AboutDialog.Label6=https://github.com/michaellukashov/filecopyex3/
 AboutDialog.Label7=Fixes by slst [slst@mail333.com], Ivanych,
 AboutDialog.Label8=CDK, Nsky, Alter and Axxie [axxie@filecopyex.org.ua]
 AboutDialog.Label9=Support: slst and Axxie
 AboutDialog.Label10=Far2 + x64 version by djdron
-AboutDialog.Label11=Far3 version by Ruslan Petrenko (ruslanp@ruslanp.com)
+AboutDialog.Label11=Far3 version by Ruslan Petrenko (ruslanp@ruslanp.com), Michael Lukashov (michael.lukashov@gmail.com)
 AboutDialog.OK=&OK
 
 OverwriteDialog=Copy/Move
