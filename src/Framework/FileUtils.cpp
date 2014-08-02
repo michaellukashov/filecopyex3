@@ -519,7 +519,7 @@ intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
     String root2 = GetFileRoot(_dst);
     if (root1.IsEmpty() || root2.IsEmpty())
     {
-      SetLastError(ERROR_PATH_NOT_FOUND);
+      ::SetLastError(ERROR_PATH_NOT_FOUND);
       return FALSE;
     }
     if (!root1.icmp(root2))
@@ -531,7 +531,7 @@ intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
       DWORD sa = ::GetFileAttributes(src.ptr());
       if (sa == INVALID_FILE_ATTRIBUTES)
       {
-        SetLastError(ERROR_FILE_NOT_FOUND);
+        ::SetLastError(ERROR_FILE_NOT_FOUND);
         return FALSE;
       }
       DWORD da = ::GetFileAttributes(dst.ptr());
@@ -539,12 +539,12 @@ intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
       {
         if (sa & FILE_ATTRIBUTE_DIRECTORY || da & FILE_ATTRIBUTE_DIRECTORY)
         {
-          SetLastError(ERROR_ACCESS_DENIED);
+          ::SetLastError(ERROR_ACCESS_DENIED);
           return FALSE;
         }
         if (!replace)
         {
-          SetLastError(ERROR_ALREADY_EXISTS);
+          ::SetLastError(ERROR_ALREADY_EXISTS);
           return FALSE;
         }
         String temp = ExtractFilePath(dst) + L"\\" + TempName();
@@ -565,7 +565,7 @@ intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
     }
     else
     {
-      SetLastError(ERROR_NOT_SAME_DEVICE);
+      ::SetLastError(ERROR_NOT_SAME_DEVICE);
       return FALSE;
     }
   }
