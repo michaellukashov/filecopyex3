@@ -114,7 +114,7 @@ set(FILECOPYEX_SOURCES
   src/Framework/DescList.cpp
   src/Framework/FrameworkUtils.cpp
 
-  FileCopyEx.rc
+  FileCopyEx3.rc
 )
 
 if(MSVC)
