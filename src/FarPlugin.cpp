@@ -267,10 +267,10 @@ void FarPlugin::KeyConfig()
   if (dlg.Execute() == -1)
     return;
 
-  if (dlg[L"BindToF5"](L"Selected") == bind
-      && dlg[L"AltShiftF5"](L"Selected") == altShift
-      && dlg[L"CtrlShiftF5"](L"Selected") == ctrlShift
-      && dlg[L"CtrlAltF5"](L"Selected") == ctrlAlt)
+  if (dlg[L"BindToF5"](L"Selected") == bind &&
+      dlg[L"AltShiftF5"](L"Selected") == altShift &&
+      dlg[L"CtrlShiftF5"](L"Selected") == ctrlShift &&
+      dlg[L"CtrlAltF5"](L"Selected") == ctrlAlt)
     return;
 
   // MacroCommand(MCMD_SAVEALL);

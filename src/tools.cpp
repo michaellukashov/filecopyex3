@@ -163,8 +163,8 @@ int CheckParallel(const String & _srcpath, const String & _dstpath)
   else if (srctype == DRIVE_FIXED)
   {
     int drv1, drv2;
-    if (GetPhysDrive(root1, drv1)
-        && GetPhysDrive(root2, drv2))
+    if (GetPhysDrive(root1, drv1) &&
+        GetPhysDrive(root2, drv2))
     {
       if (drv1 != drv2)
         return TRUE;
@@ -172,8 +172,8 @@ int CheckParallel(const String & _srcpath, const String & _dstpath)
         return FALSE;
     }
     String id1, id2;
-    if (GetDriveId(root1, id1)
-        && GetDriveId(root2, id2))
+    if (GetDriveId(root1, id1) &&
+        GetDriveId(root2, id2))
     {
       if (id1.icmp(id2))
         return TRUE;

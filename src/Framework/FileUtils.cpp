@@ -243,9 +243,9 @@ int GetSymLink(const String & _dir, String & res, int flg)
   if (Win2K && (flg & gslExpandReparsePoints) && dir.len() > 2)
   {
     DWORD attr = ::GetFileAttributes(dir.ptr());
-    if (attr != INVALID_FILE_ATTRIBUTES
-        && attr & FILE_ATTRIBUTE_DIRECTORY
-        && attr & FILE_ATTRIBUTE_REPARSE_POINT)
+    if (attr != INVALID_FILE_ATTRIBUTES &&
+        attr & FILE_ATTRIBUTE_DIRECTORY &&
+        attr & FILE_ATTRIBUTE_REPARSE_POINT)
     {
       HANDLE hf = ::CreateFile(dir.ptr(),
                              GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE,

@@ -233,11 +233,11 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
       break;
     ReadConsoleInput(h, &rec, 1, &rc);
     if (rec.EventType == KEY_EVENT)
-      if (rec.Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE
-          && !(rec.Event.KeyEvent.dwControlKeyState &
+      if (rec.Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE &&
+          !(rec.Event.KeyEvent.dwControlKeyState &
                (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED | LEFT_ALT_PRESSED |
-                RIGHT_ALT_PRESSED | SHIFT_PRESSED))
-          && rec.Event.KeyEvent.bKeyDown)
+                RIGHT_ALT_PRESSED | SHIFT_PRESSED)) &&
+          rec.Event.KeyEvent.bKeyDown)
       {
         FlushConsoleInputBuffer(h);
         escape = TRUE;
@@ -398,8 +398,8 @@ void Engine::ProcessDesc(intptr_t fnum)
   DescList SrcList, DstList;
   SrcList.LoadFromFile(SrcName);
   DWORD attr = ::GetFileAttributes(DstName.ptr());
-  if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES
-      && (attr & FILE_ATTRIBUTE_READONLY))
+  if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES &&
+      (attr & FILE_ATTRIBUTE_READONLY))
     return;
   DstList.LoadFromFile(DstName);
 
@@ -429,8 +429,8 @@ void Engine::ProcessDesc(intptr_t fnum)
           Same = 1;
       }
 
-      if (!(Files[j].Flags & FLG_DIR_POST)
-          && ((Files[j].Flags & FLG_COPIED) != 0) == inverse)
+      if (!(Files[j].Flags & FLG_DIR_POST) &&
+          ((Files[j].Flags & FLG_COPIED) != 0) == inverse)
       {
         SrcList.SetMergeFlag(sn, inverse);
       }
@@ -455,8 +455,8 @@ void Engine::ProcessDesc(intptr_t fnum)
     if (Move)
     {
       DWORD attr = ::GetFileAttributes(SrcName.ptr());
-      if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES
-          && (attr & FILE_ATTRIBUTE_READONLY))
+      if (!_UpdateRODescs && attr != INVALID_FILE_ATTRIBUTES &&
+          (attr & FILE_ATTRIBUTE_READONLY))
         return;
       if (!SrcList.SaveToFile(SrcName))
         Error2(LOC(L"Error.WriteDesc"), SrcName, GetLastError());
@@ -555,8 +555,8 @@ open_retry:
           bi->OrgSize = FileSize(bi->OutFile);
 
           int64_t size = info.OverMode == OM_APPEND ? bi->OrgSize + info.Size : info.Size;
-          if (size >= (int64_t)_PreallocMin * 1024
-              && GetCompression(bi->OutFile) == 0)
+          if (size >= (int64_t)_PreallocMin * 1024 &&
+              GetCompression(bi->OutFile) == 0)
           {
             int64_t sp;
             if (!(info.Flags & FLG_BUFFERED))
@@ -1033,8 +1033,8 @@ abort:
       {
         if (Files[i].Flags & FLG_DESCFILE)
           ProcessDesc(i);
-        else if (Move && Files[i].Flags & FLG_DIR_POST
-                 && !(Files[i].Flags & FLG_DIR_NOREMOVE))
+        else if (Move && Files[i].Flags & FLG_DIR_POST &&
+                 !(Files[i].Flags & FLG_DIR_NOREMOVE))
         {
           if (RmDir(Src.GetByNum(i)))
             Files[i].Flags |= FLG_DELETED;
@@ -1302,8 +1302,8 @@ Engine::MResult Engine::Main(int move, int curOnly)
     prompt = Format(fmt.ptr(), fn.ptr());
     if (dstPath.empty())
       dstPath = fn;
-    /*else if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-      && dstpath!="queue:" && dstpath!="plugin:")
+    /*else if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+      dstpath!="queue:" && dstpath!="plugin:")
         dstpath=AddEndSlash(dstpath)+fn;*/
 
   }
@@ -1847,7 +1847,7 @@ intptr_t Engine::AddFile(const String & _src, const String & _dst, DWORD attr, i
   // src path
 //  DWORD _src_attr = ::GetFileAttributes(ExtractFilePath(_src).ptr());
 //  if ((_src_attr != 0xFFFFFFFF) &&
-//          (_src_attr & FILE_ATTRIBUTE_DIRECTORY)  &&
+//          (_src_attr & FILE_ATTRIBUTE_DIRECTORY) &&
 //          (_src_attr & FILE_ATTRIBUTE_REPARSE_POINT))
 //      src = AddEndSlash(GetRealFileName(ExtractFilePath(_src))) + ExtractFileName(_src);
 //  else
@@ -1856,7 +1856,7 @@ intptr_t Engine::AddFile(const String & _src, const String & _dst, DWORD attr, i
 //  // dst path
 //  DWORD _dst_attr = ::GetFileAttributes(ExtractFilePath(_dst).ptr());
 //  if ((_dst_attr != 0xFFFFFFFF) &&
-//      (_dst_attr & FILE_ATTRIBUTE_DIRECTORY)  &&
+//      (_dst_attr & FILE_ATTRIBUTE_DIRECTORY) &&
 //      (_dst_attr & FILE_ATTRIBUTE_REPARSE_POINT))
 //      dst = AddEndSlash(GetRealFileName(ExtractFilePath(_dst))) + ExtractFileName(_dst);
 //  else
@@ -2026,9 +2026,9 @@ retry:
           if (wcscmp(fd.cFileName, L"..") && wcscmp(fd.cFileName, L"."))
           {
             intptr_t idx;
-            if (_CopyDescs && _DescsInDirs
-                && !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
-                && (idx = plugin->Descs().Find(fd.cFileName)) != -1)
+            if (_CopyDescs && _DescsInDirs &&
+                !(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
+                (idx = plugin->Descs().Find(fd.cFileName)) != -1)
             {
               if (descidx == -1 || idx < descidx)
               {
@@ -2093,13 +2093,13 @@ retry:
             break;
           strn[0] = 0;
           if (sid.dwStreamNameSize)
-            if (!BackupRead(hf, (LPBYTE)strn, sid.dwStreamNameSize, &cb2, FALSE, FALSE, &ctx)
-                || !cb2)
+            if (!BackupRead(hf, (LPBYTE)strn, sid.dwStreamNameSize, &cb2, FALSE, FALSE, &ctx) ||
+                !cb2)
               break;
           if ((sid.dwStreamId == BACKUP_DATA ||
                sid.dwStreamId == BACKUP_EA_DATA ||
-               sid.dwStreamId == BACKUP_ALTERNATE_DATA)
-              && sid.dwStreamNameSize)
+               sid.dwStreamId == BACKUP_ALTERNATE_DATA) &&
+              sid.dwStreamNameSize)
           {
             strn[sid.dwStreamNameSize / 2] = 0;
             if (!AddFile(src + strn, dst + strn, attr,

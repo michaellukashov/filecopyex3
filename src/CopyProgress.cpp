@@ -78,7 +78,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
 
   const int64_t MinRWValue = 0x10000;
 
-  if (((ReadBytes > MinRWValue)  && (WriteBytes > MinRWValue)) ||
+  if (((ReadBytes > MinRWValue) && (WriteBytes > MinRWValue)) ||
       ((TotalBytes < (int64_t)BufferSize) && (ReadBytes > MinRWValue))) // if selected files size < buffer size
   {
     double ReadSpeed  = (ReadTime > 0)  ? (double)ReadBytes  / (double)ReadTime  : 0; // bytes per tick
