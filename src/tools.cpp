@@ -120,7 +120,7 @@ int VolFlags(const String & _path)
 
   DWORD clen, flg;
   wchar_t sysname[32];
-  if (GetVolumeInformation(root.ptr(), nullptr, 0, nullptr, &clen, &flg, sysname, 32))
+  if (GetVolumeInformation(root.ptr(), nullptr, 0, nullptr, &clen, &flg, sysname, LENOF(sysname)))
   {
     int res = 0;
     if (flg & FILE_FILE_COMPRESSION)
