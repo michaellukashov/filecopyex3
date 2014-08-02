@@ -103,8 +103,9 @@ private:
   FileNameStoreEnum FlushSrc, FlushDst;
 
   int Parallel, Streams, Rights, Move,
-      CompressMode, EncryptMode, OverwriteMode,
+      CompressMode, EncryptMode,
       SkipNewer, SkippedToTemp;
+  intptr_t OverwriteMode;
   size_t BufSize;
   int64_t ReadSpeedLimit, WriteSpeedLimit;
   int ReadAlign;
@@ -140,8 +141,8 @@ private:
   static void Delay(int64_t, int64_t, int64_t &, int64_t);
   int SectorSize;
 
-  int CheckOverwrite(intptr_t, const String &, const String &, String &);
-  int CheckOverwrite2(intptr_t, const String &, const String &, String &);
+  intptr_t CheckOverwrite(intptr_t, const String &, const String &, String &);
+  intptr_t CheckOverwrite2(intptr_t, const String &, const String &, String &);
   void SetOverwriteMode(intptr_t);
   intptr_t AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
   intptr_t AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);

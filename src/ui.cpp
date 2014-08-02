@@ -69,12 +69,12 @@ intptr_t ShowMessageExHelp(const String & title, const String & msg,
   return res;
 }
 
-int msgw()
+intptr_t msgw()
 {
   return 50;
 }
 
-void Error(const String & s, int code)
+void Error(const String & s, intptr_t code)
 {
   ShowMessageEx(LOC(L"Framework.Error"),
                 s + L"\n" + SplitWidth(GetErrText(code), msgw()),
@@ -83,7 +83,7 @@ void Error(const String & s, int code)
                );
 }
 
-void Error2(const String & s, const String & fn, int code)
+void Error2(const String & s, const String & fn, intptr_t code)
 {
   ShowMessageEx(LOC(L"Framework.Error"),
                 s + L"\n" + FormatWidthNoExt(fn, msgw()) + L"\n" + SplitWidth(GetErrText(code), msgw()),
@@ -92,7 +92,7 @@ void Error2(const String & s, const String & fn, int code)
                );
 }
 
-intptr_t Error2RS(const String & s, const String & fn, int code)
+intptr_t Error2RS(const String & s, const String & fn, intptr_t code)
 {
   intptr_t res = ShowMessageEx(LOC(L"Framework.Error"),
                                s + L"\n" + FormatWidthNoExt(fn, msgw()) + L"\n" + SplitWidth(GetErrText(code), msgw()),
@@ -106,7 +106,7 @@ intptr_t Error2RS(const String & s, const String & fn, int code)
   return RES_SKIP;
 }
 
-String GetErrText(int code)
+String GetErrText(intptr_t code)
 {
   wchar_t buf[1024];
   FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, (DWORD)code, 0, buf, LENOF(buf), nullptr);

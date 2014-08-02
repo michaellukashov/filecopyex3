@@ -1076,10 +1076,10 @@ void Engine::ShowProgress(int64_t read, int64_t write, int64_t total,
   ::SetEvent(UiFree);
 }
 
-int Engine::CheckOverwrite2(intptr_t fnum, const String & src, const String & dst, String & ren)
+intptr_t Engine::CheckOverwrite2(intptr_t fnum, const String & src, const String & dst, String & ren)
 {
   ::WaitForSingleObject(UiFree, INFINITE);
-  int res = CheckOverwrite(fnum, src, dst, ren);
+  intptr_t res = CheckOverwrite(fnum, src, dst, ren);
   ::SetEvent(UiFree);
   return res;
 }
@@ -1327,7 +1327,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
   dlg[L"DestPath"](L"Text") = dstPath;
 
   // axxie: Reset cp in case when user pressed Shift-F6/Shift-F5
-  int cp = (!curOnly && !srcPath.IsEmpty()) ? CheckParallel(srcPath, dstPath) : FALSE;
+  intptr_t cp = (!curOnly && !srcPath.IsEmpty()) ? CheckParallel(srcPath, dstPath) : FALSE;
   if (!Options[L"AllowParallel"])
   {
     dlg[L"ParallelCopy"](L"Selected") = FALSE;
@@ -2186,7 +2186,7 @@ void Engine::SetOverwriteMode(intptr_t Start)
   }
 }
 
-int Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String & Dst, String & ren)
+intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String & Dst, String & ren)
 {
   FarDialog & dlg = plugin->Dialogs()[L"OverwriteDialog"];
   dlg.ResetControls();

@@ -35,11 +35,11 @@ intptr_t ShowMessageExHelp(const String &, const String &, const String &, uint3
 #define RES_RETRY 1
 #define RES_SKIP 0
 
-void Error(const String &, int code);
-void Error2(const String &, const String &, int code);
-intptr_t Error2RS(const String &, const String &, int code);
+void Error(const String &, intptr_t code);
+void Error2(const String &, const String &, intptr_t code);
+intptr_t Error2RS(const String &, const String &, intptr_t code);
 
-String GetErrText(int code);
+String GetErrText(intptr_t code);
 
 String FormatWidth(const String &, intptr_t);
 String FormatWidthNoExt(const String &, intptr_t);

@@ -145,7 +145,7 @@ uint32_t VolFlags(const String & _path)
   return -1;
 }
 
-int CheckParallel(const String & _srcpath, const String & _dstpath)
+intptr_t CheckParallel(const String & _srcpath, const String & _dstpath)
 {
   String root1 = GetFileRoot(_srcpath);
   String root2 = GetFileRoot(_dstpath);
@@ -190,7 +190,7 @@ String DupName(const String & src, intptr_t n)
   return ChangeFileExt(src, "") + L"_" + String(n) + ExtractFileExt(src);
 }
 
-int ExistsN(const String & fn, intptr_t n)
+intptr_t ExistsN(const String & fn, intptr_t n)
 {
   if (!n)
     return FileExists(fn);
@@ -215,7 +215,7 @@ bool Newer(const String & fn1, const FILETIME & ft2)
   return FALSE;
 }
 
-int RmDir(const String & fn)
+intptr_t RmDir(const String & fn)
 {
   DWORD attr = ::GetFileAttributes(fn.ptr());
   ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);

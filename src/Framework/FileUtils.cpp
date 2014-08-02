@@ -411,7 +411,7 @@ String ApplyFileMaskPath(const String & name, const String & mask)
          ApplyFileMask(ExtractFileName(name), ExtractFileName(mask));
 }
 
-int FileExists(const String & name)
+intptr_t FileExists(const String & name)
 {
   return (::GetFileAttributes(name.ptr()) != INVALID_FILE_ATTRIBUTES) ? TRUE : FALSE;
 }
@@ -478,12 +478,12 @@ static intptr_t __MoveFileEx(const wchar_t * src, const wchar_t * dst, uint32_t 
   {
     DWORD err = GetLastError();
     ::SetFileAttributes(dst, attr);
-    SetLastError(err);
+    ::SetLastError(err);
     return FALSE;
   }
 }
 
-int MoveFile(const String & _src, const String & _dst, int replace)
+intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
 {
   // return false if dst is hard link
   if (WinNT && replace)
@@ -612,4 +612,3 @@ int Delete(const String & fn)
   }
   return TRUE;
 }
-
