@@ -461,14 +461,14 @@ static int __MoveFile(const wchar_t * src, const wchar_t * dst)
     return TRUE;
   else
   {
-    int err = GetLastError();
+    DWORD err = GetLastError();
     ::SetFileAttributes(dst, attr);
-    SetLastError(err);
+    ::SetLastError(err);
     return FALSE;
   }
 }
 
-static int __MoveFileEx(const wchar_t * src, const wchar_t * dst, int flg)
+static intptr_t __MoveFileEx(const wchar_t * src, const wchar_t * dst, uint32_t flg)
 {
   DWORD attr = ::GetFileAttributes(dst);
   if (_wcsicmp(src, dst) != 0) ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
@@ -476,7 +476,7 @@ static int __MoveFileEx(const wchar_t * src, const wchar_t * dst, int flg)
     return TRUE;
   else
   {
-    int err = GetLastError();
+    DWORD err = GetLastError();
     ::SetFileAttributes(dst, attr);
     SetLastError(err);
     return FALSE;
@@ -552,9 +552,9 @@ int MoveFile(const String & _src, const String & _dst, int replace)
           return FALSE;
         if (!__MoveFile(src.ptr(), dst.ptr()))
         {
-          int err = GetLastError();
+          DWORD err = GetLastError();
           __MoveFile(temp.ptr(), dst.ptr());
-          SetLastError(err);
+          ::SetLastError(err);
           return FALSE;
         }
         ::SetFileAttributes(temp.ptr(), FILE_ATTRIBUTE_NORMAL);

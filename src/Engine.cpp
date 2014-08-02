@@ -66,7 +66,7 @@ PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, in
 }
 
 
-int warn(const String & s)
+intptr_t warn(const String & s)
 {
   return ShowMessage(LOC(L"CopyDialog.Warning"), s + L"\n" + LOC(L"CopyDialog.WarnPrompt"), FMSG_MB_YESNO) == 0;
 }
@@ -514,7 +514,7 @@ rep:
       bi->DstName = DstName;
 
 open_retry:
-      int oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
+      uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
       switch (info.OverMode)
       {
         case OM_OVERWRITE:
@@ -625,7 +625,7 @@ retry:
                 Pos += info.ResumePos;
               Close(bi->OutFile);
 reopen_retry:
-              int oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
+              uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
               bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
               if (!bi->OutFile)
               {
@@ -729,7 +729,7 @@ int Engine::WaitForFlushEnd()
 
 struct CurDirInfo
 {
-  int SectorSize;
+  uint32_t SectorSize;
 };
 
 void Engine::Copy()
@@ -1541,7 +1541,7 @@ rep:
   }
   else
   {
-    int vf = VolFlags(dstPath);
+    uint32_t vf = VolFlags(dstPath);
     if (vf != -1)
     {
       if (!(vf & VF_STREAMS) && !adv)
@@ -1917,7 +1917,7 @@ intptr_t Engine::AddFile(const String & _src, const String & _dst, DWORD attr, i
     return TRUE;
   }
 
-  int owmode = OM_PROMPT;
+  uint32_t owmode = OM_PROMPT;
   if (!(flags & AF_STREAM))
   {
     if (Move)
@@ -1928,7 +1928,7 @@ retry:
         info->Flags |= FLG_COPIED | FLG_DELETED;
         goto fin;
       }
-      int err = GetLastError();
+      DWORD err = GetLastError();
       if (err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
       {
         if (OverwriteMode == OM_RESUME)
@@ -1942,7 +1942,7 @@ retry:
         else
         {
           String ren;
-          int res, j = 0;
+          intptr_t res, j = 0;
           if (SkipNewer && Newer(dst, lastWriteTime))
           {
             res = OM_SKIP;
@@ -2174,7 +2174,7 @@ void Engine::SetOverwriteMode(intptr_t Start)
           }
           case OM_RENAME:
           {
-            int j = 0;
+            intptr_t j = 0;
             while (ExistsN(fn, j))
               j++;
             info.RenameNum = j;
@@ -2214,7 +2214,7 @@ int Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String & Dst
   dlg[L"SkippedToTemp"](L"Selected") = SkippedToTemp;
   int OldSkipNewer = SkipNewer;
 
-  int res = OM_PROMPT, ores = -1;
+  intptr_t res = OM_PROMPT, ores = -1;
 rep:
   switch (dlg.Execute())
   {
@@ -2277,7 +2277,7 @@ rep1:
       SetOverwriteMode(fnum + 1);
       if (res == OM_RENAME)
       {
-        int j = 0;
+        intptr_t j = 0;
         while (ExistsN(Dst, j))
           j++;
         ren = DupName(Dst, j);

@@ -101,7 +101,7 @@ int GetPhysDrive(const String & _path, int & res)
 #define FILE_READ_ONLY_VOLUME 0x00080000
 #define FILE_NAMED_STREAMS    0x00040000
 
-int VolFlags(const String & _path)
+uint32_t VolFlags(const String & _path)
 {
   String path = _path;
   size_t sl = path.find_last_of(L"\\/");
@@ -122,7 +122,7 @@ int VolFlags(const String & _path)
   wchar_t sysname[32];
   if (GetVolumeInformation(root.ptr(), nullptr, 0, nullptr, &clen, &flg, sysname, LENOF(sysname)))
   {
-    int res = 0;
+    uint32_t res = 0;
     if (flg & FILE_FILE_COMPRESSION)
       res |= VF_COMPRESSION;
     if (flg & FILE_SUPPORTS_ENCRYPTION)
@@ -190,7 +190,7 @@ String DupName(const String & src, intptr_t n)
   return ChangeFileExt(src, "") + L"_" + String(n) + ExtractFileExt(src);
 }
 
-int ExistsN(const String & fn, int n)
+int ExistsN(const String & fn, intptr_t n)
 {
   if (!n)
     return FileExists(fn);

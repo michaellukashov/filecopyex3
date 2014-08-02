@@ -76,13 +76,13 @@ inline const T & Min(const T & a, const T & b) { return a < b ? a : b; }
 template <class T>
 inline const T & Max(const T & a, const T & b) { return a > b ? a : b; }
 
-int ExistsN(const String & fn, int n);
+int ExistsN(const String & fn, intptr_t n);
 String DupName(const String & src, intptr_t n);
 int RmDir(const String & fn);
 bool Newer(const FILETIME & ft1, const FILETIME & ft2);
 bool Newer(const String & fn1, const FILETIME & ft2);
 
-int VolFlags(const String & path);
+uint32_t VolFlags(const String & path);
 int CheckParallel(const String & srcpath, const String & dstpath);
 
 String GetSymLink(const String & dir);

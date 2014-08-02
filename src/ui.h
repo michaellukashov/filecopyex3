@@ -26,11 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Framework/ObjString.h"
 
-intptr_t ShowMessage(const String &, const String &, int);
+intptr_t ShowMessage(const String &, const String &, uint32_t);
 intptr_t ShowMessageOK(const String &, const String &);
-intptr_t ShowMessageHelp(const String &, const String &, int, const String &);
-intptr_t ShowMessageEx(const String &, const String &, const String &, int);
-intptr_t ShowMessageExHelp(const String &, const String &, const String &, int, const String &);
+intptr_t ShowMessageHelp(const String &, const String &, uint32_t, const String &);
+intptr_t ShowMessageEx(const String &, const String &, const String &, uint32_t);
+intptr_t ShowMessageExHelp(const String &, const String &, const String &, uint32_t, const String &);
 
 #define RES_RETRY 1
 #define RES_SKIP 0

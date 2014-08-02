@@ -26,7 +26,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "guid.hpp"
 #include "ui.h"
 
-intptr_t ShowMessage(const String & title, const String & msg, int Flags)
+intptr_t ShowMessage(const String & title, const String & msg, uint32_t Flags)
 {
   return ShowMessageHelp(title, msg, Flags, L"");
 }
@@ -36,7 +36,7 @@ intptr_t ShowMessageOK(const String & title, const String & msg)
   return ShowMessage(title, msg, FMSG_MB_OK);
 }
 
-intptr_t ShowMessageHelp(const String & title, const String & msg, int Flags, const String & help)
+intptr_t ShowMessageHelp(const String & title, const String & msg, uint32_t Flags, const String & help)
 {
   String msgbuf = title + L"\n" + msg + L"\n\x01";
   intptr_t res = Info.Message(&MainGuid, &UnkGuid,
@@ -48,13 +48,13 @@ intptr_t ShowMessageHelp(const String & title, const String & msg, int Flags, co
 }
 
 intptr_t ShowMessageEx(const String & title, const String & msg,
-                       const String & buttons, int flags)
+                       const String & buttons, uint32_t flags)
 {
   return ShowMessageExHelp(title, msg, buttons, flags, L"");
 }
 
 intptr_t ShowMessageExHelp(const String & title, const String & msg,
-                           const String & buttons, int flags, const String & help)
+                           const String & buttons, uint32_t flags, const String & help)
 {
   size_t nb = 0;
   for (const wchar_t * p = buttons.ptr(); *p; p++)
@@ -109,7 +109,7 @@ intptr_t Error2RS(const String & s, const String & fn, int code)
 String GetErrText(int code)
 {
   wchar_t buf[1024];
-  FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, code, 0, buf, LENOF(buf), nullptr);
+  FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, (DWORD)code, 0, buf, LENOF(buf), nullptr);
   return buf;
 }
 

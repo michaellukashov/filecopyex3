@@ -53,7 +53,7 @@ String ChangeFileExt(const String &, const String &);
 
 #define rfnNoNetExpand 1
 
-extern HANDLE Open(const String & fn, int mode, int attr);
+extern HANDLE Open(const String & fn, DWORD mode, DWORD attr);
 void Close(HANDLE h);
 int Delete(const String & fn);
 
