@@ -258,7 +258,7 @@ int GetSymLink(const String & _dir, String & res, int flg)
         uint8_t Data[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
         memset(Data, 0, sizeof(Data));
         DWORD returnedLength = 0;
-        if (DeviceIoControl(hf, FSCTL_GET_REPARSE_POINT, nullptr, 0,
+        if (::DeviceIoControl(hf, FSCTL_GET_REPARSE_POINT, nullptr, 0,
                             Data, sizeof(Data), &returnedLength, nullptr))
         {
           REPARSE_GUID_DATA_BUFFER * rd = (REPARSE_GUID_DATA_BUFFER *)Data;
@@ -471,7 +471,8 @@ static int __MoveFile(const wchar_t * src, const wchar_t * dst)
 static intptr_t __MoveFileEx(const wchar_t * src, const wchar_t * dst, uint32_t flg)
 {
   DWORD attr = ::GetFileAttributes(dst);
-  if (_wcsicmp(src, dst) != 0) ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
+  if (_wcsicmp(src, dst) != 0)
+    ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFileEx(src, dst, flg))
     return TRUE;
   else

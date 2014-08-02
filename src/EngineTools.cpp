@@ -35,12 +35,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void * Alloc(size_t size)
 {
   size = (size / 4096 + 1) * 4096;
-  return VirtualAlloc(nullptr, size, MEM_COMMIT, PAGE_READWRITE);
+  return ::VirtualAlloc(nullptr, size, MEM_COMMIT, PAGE_READWRITE);
 }
 
 void Free(void * ptr)
 {
-  VirtualFree(ptr, 0, MEM_RELEASE);
+  ::VirtualFree(ptr, 0, MEM_RELEASE);
 }
 
 void Compress(HANDLE handle, uint32_t f)
@@ -51,7 +51,7 @@ void Compress(HANDLE handle, uint32_t f)
              COMPRESSION_FORMAT_DEFAULT :
              COMPRESSION_FORMAT_NONE;
   DWORD cb;
-  if (!DeviceIoControl(handle, FSCTL_SET_COMPRESSION,
+  if (!::DeviceIoControl(handle, FSCTL_SET_COMPRESSION,
                        (LPVOID)&b, sizeof(b), nullptr, 0, &cb, nullptr))
     Error(LOC(L"Error.Compress"), GetLastError());
 }
@@ -60,7 +60,7 @@ int GetCompression(HANDLE handle)
 {
   USHORT res;
   DWORD cb;
-  if (!DeviceIoControl(handle, FSCTL_GET_COMPRESSION,
+  if (!::DeviceIoControl(handle, FSCTL_GET_COMPRESSION,
                        nullptr, 0, &res, sizeof(res), &cb, nullptr))
     return -1;
   else
@@ -72,11 +72,11 @@ void Encrypt(const String & fn, int f)
   if (!Win2K || f == ATTR_INHERIT)
     return;
   int res;
-  SetFileAttributes(fn.ptr(), 0);
+  ::SetFileAttributes(fn.ptr(), 0);
   if (f)
-    res = EncryptFile(fn.ptr());
+    res = ::EncryptFile(fn.ptr());
   else
-    res = DecryptFile(fn.ptr(), 0);
+    res = ::DecryptFile(fn.ptr(), 0);
   if (!res)
     Error2(LOC(L"Error.Encrypt"), fn, GetLastError());
 }
@@ -91,7 +91,7 @@ void Encrypt(HANDLE handle, int f)
                             FILE_SET_ENCRYPTION :
                             FILE_CLEAR_ENCRYPTION;
   enc.Private[0] = 0;
-  if (!DeviceIoControl(handle, FSCTL_SET_ENCRYPTION,
+  if (!::DeviceIoControl(handle, FSCTL_SET_ENCRYPTION,
                        (LPVOID)&enc, sizeof(enc), nullptr, 0, &cb, nullptr))
     Error(LOC(L"Error.Encrypt"), GetLastError());
 }
@@ -102,16 +102,16 @@ void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si)
 
   DWORD cb;
   PSECURITY_DESCRIPTOR secbuf = (PSECURITY_DESCRIPTOR)new char[bufSize];
-  int res = GetFileSecurity(src.ptr(), si, secbuf, bufSize, &cb);
+  BOOL res = ::GetFileSecurity(src.ptr(), si, secbuf, bufSize, &cb);
   if (res && cb)
   {
     delete[](char *)secbuf;
     secbuf = (PSECURITY_DESCRIPTOR)new char[cb];
-    res = GetFileSecurity(src.ptr(), si, secbuf, cb, &cb);
+    res = ::GetFileSecurity(src.ptr(), si, secbuf, cb, &cb);
   }
   if (res)
   {
-    SetFileSecurity(dst.ptr(), si, secbuf);
+    ::SetFileSecurity(dst.ptr(), si, secbuf);
   }
   delete[](char *)secbuf;
 }
@@ -125,9 +125,9 @@ void CopyACL(const String & src, const String & dst)
     HANDLE hToken;
     LUID luid;
     TOKEN_PRIVILEGES tkp;
-    OpenProcessToken(GetCurrentProcess(),
+    ::OpenProcessToken(GetCurrentProcess(),
                      TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
-    LookupPrivilegeValue(nullptr, SE_SECURITY_NAME, &luid
+    ::LookupPrivilegeValue(nullptr, SE_SECURITY_NAME, &luid
                         );
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Luid = luid;
@@ -156,9 +156,9 @@ HANDLE Open(const String & fn, DWORD mode, DWORD attr)
   else
     f = OPEN_ALWAYS;
   if (!(mode & OPEN_READ))
-    SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
+    ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
 
-  HANDLE res = CreateFile(
+  HANDLE res = ::CreateFile(
                  (!fn.left(4).icmp(L"nul\\")) ? L"nul" : fn.ptr(),
                  // mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
                  // fix #17 is partially rolled back:
@@ -174,15 +174,16 @@ HANDLE Open(const String & fn, DWORD mode, DWORD attr)
   if (res == INVALID_HANDLE_VALUE)
     res = nullptr;
   if (res && (mode & OPEN_APPEND))
-    SetFilePointer(res, 0, nullptr, FILE_END);
+    ::SetFilePointer(res, 0, nullptr, FILE_END);
   return res;
 }
 
 
 int64_t FSeek(HANDLE h, int64_t pos, int method)
 {
-  LONG hi32 = HI32(pos), lo32 = SetFilePointer(h, LO32(pos), &hi32, method);
-  if (lo32 == INVALID_SET_FILE_POINTER && GetLastError())
+  LONG hi32 = HI32(pos);
+  LONG lo32 = ::SetFilePointer(h, LO32(pos), &hi32, method);
+  if (lo32 == INVALID_SET_FILE_POINTER && ::GetLastError())
     return -1;
   else
     return MAKEINT64(lo32, hi32);
@@ -252,7 +253,7 @@ size_t Write(HANDLE h, void * buf, size_t size)
 int GetSectorSize(const String & path)
 {
   DWORD x1, x2, x3, bps;
-  if (GetDiskFreeSpace(
+  if (::GetDiskFreeSpace(
         AddEndSlash(GetFileRoot(path)).ptr(), &x1, &bps, &x2, &x3))
     return bps;
   else

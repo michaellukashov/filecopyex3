@@ -290,7 +290,7 @@ void Engine::FinalizeBuf(BuffInfo * bi)
     if (Rights)
       CopyACL(SrcName, DstName);
     Encrypt(DstName, EncryptMode);
-    SetFileAttributes(DstName.ptr(), info.Attr);
+    ::SetFileAttributes(DstName.ptr(), info.Attr);
 
     if (Move)
     {
@@ -803,7 +803,7 @@ void Engine::Copy()
       else
       {
         CreateDirectory(DstName.ptr(), nullptr);
-        SetFileAttributes(DstName.ptr(), info.Attr);
+        ::SetFileAttributes(DstName.ptr(), info.Attr);
       }
       if (!(info.Flags & FLG_TOP_DIR))
       {
