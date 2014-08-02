@@ -43,7 +43,7 @@ void Free(void * ptr)
   VirtualFree(ptr, 0, MEM_RELEASE);
 }
 
-void Compress(HANDLE handle, int f)
+void Compress(HANDLE handle, uint32_t f)
 {
   if (f == ATTR_INHERIT)
     return;
@@ -148,7 +148,7 @@ HANDLE Open(const String & fn, DWORD mode, DWORD attr)
   if ((mode & OPEN_READ) && (BOOL)(Options[L"ReadFilesOpenedForWriting"]))
     dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
 
-  int f;
+  uint32_t f;
   if (mode & OPEN_READ)
     f = OPEN_EXISTING;
   else if (mode & OPEN_CREATE)

@@ -48,7 +48,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void * Alloc(size_t size);
 void Free(void * ptr);
-void Compress(HANDLE handle, int f);
+void Compress(HANDLE handle, uint32_t f);
 int GetCompression(HANDLE handle);
 void Encrypt(const String & fn, int f);
 void Encrypt(HANDLE handle, int f);
