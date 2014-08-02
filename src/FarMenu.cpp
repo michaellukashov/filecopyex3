@@ -3,7 +3,8 @@
 #include "Common.h"
 #include "guid.hpp"
 
-FarMenu::FarMenu(): Flags(0), Selection(0)
+FarMenu::FarMenu() :
+  Flags(0), Selection(0)
 {
 }
 

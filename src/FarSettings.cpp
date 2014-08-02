@@ -4,7 +4,8 @@
 
 #include "SDK/plugin.hpp"
 
-FarSettings::FarSettings(): handle(INVALID_HANDLE_VALUE), dirId(0)
+FarSettings::FarSettings() :
+  handle(INVALID_HANDLE_VALUE), dirId(0)
 {
 
 }

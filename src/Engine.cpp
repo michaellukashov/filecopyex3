@@ -90,7 +90,8 @@ static int64_t GetPhysMemorySize()
   return ms.dwTotalPhys;
 }
 
-Engine::Engine(): FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(nullptr), FlushEnd(nullptr), UiFree(nullptr)
+Engine::Engine() :
+  FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(nullptr), FlushEnd(nullptr), UiFree(nullptr)
 {
   _CopyDescs = 0;
   _ClearROFromCD = 0;
