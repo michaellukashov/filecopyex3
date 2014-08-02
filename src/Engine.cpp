@@ -43,7 +43,7 @@ static const size_t AllocAlign = 65536;
 static const size_t ReadBlock = 1024 * 1024; // 0x20000     // 128 KB
 static const size_t WriteBlock = 1024 * 1024; // 0x20000    // 128 KB
 
-PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1)
+static PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1)
 {
   size_t Size = Info.PanelControl(hPlugin, Command, Param1, 0);
   PluginPanelItem * item = reinterpret_cast<PluginPanelItem *>(new char[Size]);
@@ -66,13 +66,13 @@ PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, in
 }
 
 
-intptr_t warn(const String & s)
+static intptr_t warn(const String & s)
 {
   return ShowMessage(LOC(L"CopyDialog.Warning"), s + L"\n" + LOC(L"CopyDialog.WarnPrompt"), FMSG_MB_YESNO) == 0;
 }
 
 
-void ShowErrorMessage(const String & s)
+static void ShowErrorMessage(const String & s)
 {
   //ShowMessage(LOC(L"CopyDialog.Error"), s, FMSG_WARNING | FMSG_MB_OK);
 
@@ -2512,4 +2512,14 @@ intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint
     }
   }
   return -1;
+}
+
+
+TPanelItem::TPanelItem(size_t idx, bool active, bool selected)
+{
+  ppi = GetPanelItem(
+          active ? PANEL_ACTIVE : PANEL_PASSIVE,
+          selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM,
+          idx
+        );
 }

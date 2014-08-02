@@ -72,14 +72,7 @@ PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, in
 struct TPanelItem
 {
 public:
-  TPanelItem(size_t idx, bool active = true, bool selected = false)
-  {
-    ppi = GetPanelItem(
-            active ? PANEL_ACTIVE : PANEL_PASSIVE,
-            selected ? FCTL_GETSELECTEDPANELITEM : FCTL_GETPANELITEM,
-            idx
-          );
-  }
+  TPanelItem(size_t idx, bool active = true, bool selected = false);
   ~TPanelItem()
   {
     delete[] ppi;
