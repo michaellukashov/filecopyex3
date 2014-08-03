@@ -25,6 +25,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "Framework/Node.h"
+#include "Framework/Payload.h"
 #include "SDK/plugin.hpp"
 
 class FarDlgNode;
