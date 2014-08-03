@@ -79,9 +79,9 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String & capt
 
 void FarProgress::GetConSize(int & w, int & h)
 {
-  HANDLE hc = GetStdHandle(STD_OUTPUT_HANDLE);
+  HANDLE hc = ::GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_SCREEN_BUFFER_INFO bi;
-  GetConsoleScreenBufferInfo(hc, &bi);
+  ::GetConsoleScreenBufferInfo(hc, &bi);
   w = bi.srWindow.Right - bi.srWindow.Left + 1;
   h = bi.srWindow.Bottom - bi.srWindow.Top + 1;
 }

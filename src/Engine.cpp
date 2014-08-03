@@ -86,7 +86,7 @@ static void ShowErrorMessage(const String & s)
 static int64_t GetPhysMemorySize()
 {
   MEMORYSTATUS ms;
-  GlobalMemoryStatus(&ms);
+  ::GlobalMemoryStatus(&ms);
   return ms.dwTotalPhys;
 }
 
@@ -125,7 +125,7 @@ Engine::Engine() :
   BufSize = 0;
 
   SYSTEM_INFO si;
-  GetSystemInfo(&si);
+  ::GetSystemInfo(&si);
   ReadAlign = si.dwPageSize;
 
 //  errTypes.SetOptions(slSorted | slIgnoreCase);
@@ -199,8 +199,8 @@ intptr_t Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 
     intptr_t res = EngineError(LOC(L"CopyError.StopPrompt"), L"", 0, flg, LOC(L"CopyError.StopTitle"));
 
-    HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
-    FlushConsoleInputBuffer(h);
+    HANDLE h = ::GetStdHandle(STD_INPUT_HANDLE);
+    ::FlushConsoleInputBuffer(h);
     ::SetEvent(UiFree);
 
     Aborted = (res == 0);
@@ -228,15 +228,15 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
     return FALSE;
 
   int escape = FALSE;
-  HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
+  HANDLE h = ::GetStdHandle(STD_INPUT_HANDLE);
   while (1)
   {
     INPUT_RECORD rec;
     DWORD rc;
-    PeekConsoleInput(h, &rec, 1, &rc);
+    ::PeekConsoleInput(h, &rec, 1, &rc);
     if (!rc)
       break;
-    ReadConsoleInput(h, &rec, 1, &rc);
+    ::ReadConsoleInput(h, &rec, 1, &rc);
     if (rec.EventType == KEY_EVENT)
       if (rec.Event.KeyEvent.wVirtualKeyCode == VK_ESCAPE &&
           !(rec.Event.KeyEvent.dwControlKeyState &
@@ -244,7 +244,7 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
                 RIGHT_ALT_PRESSED | SHIFT_PRESSED)) &&
           rec.Event.KeyEvent.bKeyDown)
       {
-        FlushConsoleInputBuffer(h);
+        ::FlushConsoleInputBuffer(h);
         escape = TRUE;
       }
   }
@@ -744,7 +744,7 @@ int Engine::WaitForFlushEnd()
       return FALSE;
   }
   ::WaitForSingleObject(BGThread, INFINITE);
-  CloseHandle(BGThread);
+  ::CloseHandle(BGThread);
   BGThread = nullptr;
   return TRUE;
 }
@@ -774,13 +774,13 @@ void Engine::Copy()
       UninitBuf(bi);
       return;
     }
-    FlushEnd = CreateEvent(nullptr, FALSE, TRUE, nullptr);
+    FlushEnd = ::CreateEvent(nullptr, FALSE, TRUE, nullptr);
   }
 
   size_t BuffPos = 0;
   size_t FilesInBuff = 0;
 
-  UiFree = CreateEvent(nullptr, FALSE, TRUE, nullptr);
+  UiFree = ::CreateEvent(nullptr, FALSE, TRUE, nullptr);
 
   CopyProgressBox.InverseBars = _InverseBars;
   if (FileCount)
@@ -807,12 +807,12 @@ void Engine::Copy()
         ForceDirectories(AddEndSlash(DstName));
       else
       {
-        CreateDirectory(DstName.ptr(), nullptr);
+        ::CreateDirectory(DstName.ptr(), nullptr);
         ::SetFileAttributes(DstName.ptr(), info.Attr);
       }
       if (!(info.Flags & FLG_TOP_DIR))
       {
-        HANDLE hd = CreateFile(DstName.ptr(), GENERIC_READ | GENERIC_WRITE,
+        HANDLE hd = ::CreateFile(DstName.ptr(), GENERIC_READ | GENERIC_WRITE,
                                FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                                OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, nullptr);
         if (hd != INVALID_HANDLE_VALUE)
@@ -822,7 +822,7 @@ void Engine::Copy()
           {
             setFileTime(hd, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
           }
-          CloseHandle(hd);
+          ::CloseHandle(hd);
         }
         if (EncryptMode != ATTR_INHERIT)
           Encrypt(DstName, EncryptMode);
@@ -1047,7 +1047,7 @@ abort:
   if (Parallel)
   {
     UninitBuf(wbi);
-    CloseHandle(FlushEnd);
+    ::CloseHandle(FlushEnd);
   }
   UninitBuf(bi);
 
@@ -1072,7 +1072,7 @@ abort:
     }
   }
 
-  CloseHandle(UiFree);
+  ::CloseHandle(UiFree);
 }
 
 void Engine::ShowReadName(const String & fn)
@@ -2110,7 +2110,7 @@ retry:
       WIN32_STREAM_ID sid;
       ZeroMemory(&sid, sizeof(sid));
 
-      HANDLE hf = CreateFile(src.ptr(), GENERIC_READ,
+      HANDLE hf = ::CreateFile(src.ptr(), GENERIC_READ,
                              FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                              OPEN_EXISTING, 0, nullptr);
       if (hf != INVALID_HANDLE_VALUE)
@@ -2138,7 +2138,7 @@ retry:
                          sid.Size.QuadPart, creationTime, lastAccessTime, lastWriteTime, flags | AF_STREAM, Level + 1))
             {
               BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
-              CloseHandle(hf);
+              ::CloseHandle(hf);
               return FALSE;
             }
           }
@@ -2146,7 +2146,7 @@ retry:
                      &cb1, &cb2, &ctx);
         }
         BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
-        CloseHandle(hf);
+        ::CloseHandle(hf);
       }
     }
   }
@@ -2354,7 +2354,7 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
   ULARGE_INTEGER TotalNumberOfBytes;
   ULARGE_INTEGER TotalNumberOfFreeBytes;
 
-  if (GetDiskFreeSpaceEx(dstroot.ptr(), &FreeBytesAvailable,
+  if (::GetDiskFreeSpaceEx(dstroot.ptr(), &FreeBytesAvailable,
                          &TotalNumberOfBytes, &TotalNumberOfFreeBytes))
   {
     if (FreeBytesAvailable.QuadPart < (ULONGLONG)TotalBytesToProcess)
@@ -2379,8 +2379,8 @@ BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int Mov
 
       intptr_t dlgres = dlg.Execute();
 
-      HANDLE h = GetStdHandle(STD_INPUT_HANDLE);
-      FlushConsoleInputBuffer(h);
+      HANDLE h = ::GetStdHandle(STD_INPUT_HANDLE);
+      ::FlushConsoleInputBuffer(h);
       ::SetEvent(UiFree);
 
       if (dlgres == RES_YES)

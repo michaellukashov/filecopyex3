@@ -269,13 +269,13 @@ int GetSymLink(const String & _dir, String & res, int flg)
             String r = (wchar_t *)&rd->GenericReparseBuffer;
             if (r.left(7) != L"Volume{")
             {
-              CloseHandle(hf);
+              ::CloseHandle(hf);
               res = CutEndSlash(buf);
               return TRUE;
             }
           }
         }
-        CloseHandle(hf);
+        ::CloseHandle(hf);
       }
     }
   }
@@ -592,7 +592,7 @@ void ForceDirectories(const String & s)
 void Out(const String & s)
 {
   DWORD cb;
-  WriteConsole(GetStdHandle(STD_OUTPUT_HANDLE), (const void *)s.ptr(),
+  ::WriteConsole(::GetStdHandle(STD_OUTPUT_HANDLE), (const void *)s.ptr(),
                (DWORD)s.len(), &cb, nullptr);
 }
 

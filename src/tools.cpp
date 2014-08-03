@@ -76,7 +76,7 @@ int GetPhysDrive(const String & _path, int & res)
         return FALSE;
       path = buf;
     }
-    HANDLE hVolume = CreateFile(CutEndSlash(path).ptr(), 0,
+    HANDLE hVolume = ::CreateFile(CutEndSlash(path).ptr(), 0,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING,
                                 0, nullptr);
     if (hVolume == INVALID_HANDLE_VALUE)
@@ -89,10 +89,10 @@ int GetPhysDrive(const String & _path, int & res)
     {
       VOLUME_DISK_EXTENTS * ext = (VOLUME_DISK_EXTENTS *)outbuf;
       res = ext->Extents[0].DiskNumber;
-      CloseHandle(hVolume);
+      ::CloseHandle(hVolume);
       return TRUE;
     }
-    CloseHandle(hVolume);
+    ::CloseHandle(hVolume);
   }
 
   return FALSE;
