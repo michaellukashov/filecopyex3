@@ -45,7 +45,7 @@ void SetItemText(FarDialogItem & item, const String & text);
 void DestroyItemText(FarDialogItem & item);
 
 // ===== FarDlgPayload =====
-class FarDlgPayload: public Payload
+class FarDlgPayload : public Payload
 {
 public:
   FarDlgPayload();
@@ -143,7 +143,7 @@ protected:
 
 
 // ====== FarDlgPanelPayload ======
-class FarDlgPanelPayload: public FarDlgPayload
+class FarDlgPanelPayload : public FarDlgPayload
 {
 public:
   DEFINE_CLASS(L"FarDlgPanel", FarDlgPanelPayload)
@@ -152,7 +152,7 @@ public:
 
 
 // FarDlgCheckboxPayload
-class FarDlgCheckboxPayload: public FarDlgPayload
+class FarDlgCheckboxPayload : public FarDlgPayload
 {
 public:
   DEFINE_CLASS(L"FarDlgCheckbox", FarDlgCheckboxPayload)
@@ -185,7 +185,7 @@ protected:
 
 
 // FarDlgRadioButtonPayload
-class FarDlgRadioButtonPayload: public FarDlgCheckboxPayload
+class FarDlgRadioButtonPayload : public FarDlgCheckboxPayload
 {
 public:
   DEFINE_CLASS(L"FarDlgRadioButton", FarDlgRadioButtonPayload)
@@ -201,7 +201,7 @@ protected:
 };
 
 // FarDlgEditPayload
-class FarDlgEditPayload: public FarDlgPayload
+class FarDlgEditPayload : public FarDlgPayload
 {
 public:
   DEFINE_CLASS(L"FarDlgEdit", FarDlgEditPayload)
@@ -238,7 +238,7 @@ protected:
 };
 
 // FarDlgComboboxPayload
-class FarDlgComboboxPayload: public FarDlgPayload
+class FarDlgComboboxPayload : public FarDlgPayload
 {
 public:
   DEFINE_CLASS(L"FarDlgCombobox", FarDlgComboboxPayload)

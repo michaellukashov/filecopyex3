@@ -33,7 +33,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define slSorted 1
 #define slIgnoreCase 2
 
-class StringList: public StringParent
+class StringList : public StringParent
 {
 public:
   virtual void Clear() { items.clear(); }

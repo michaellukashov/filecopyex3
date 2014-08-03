@@ -4,7 +4,7 @@
 
 #include "StringParent.h"
 
-class StringVector: public StringParent
+class StringVector : public StringParent
 {
 public:
   StringVector() {}

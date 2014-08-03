@@ -28,7 +28,10 @@ private:
     uint32_t flags;
 
     Data() : flags(0) {}
-    Data(const String & _desc, int _flags = 0): desc(_desc), flags(_flags) {}
+    Data(const String & _desc, int _flags = 0) :
+      desc(_desc),
+      flags(_flags)
+    {}
   };
   typedef std::map<String, Data> DescListMap;
   DescListMap names;

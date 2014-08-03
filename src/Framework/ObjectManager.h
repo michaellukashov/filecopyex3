@@ -22,7 +22,10 @@ private:
     createNodeFunc * nf;
 
     createFuncs() : pf(nullptr), nf(nullptr) {}
-    createFuncs(createPayloadFunc * _pf, createNodeFunc * _nf): pf(_pf), nf(_nf) {}
+    createFuncs(createPayloadFunc * _pf, createNodeFunc * _nf) :
+      pf(_pf),
+      nf(_nf)
+    {}
   };
 
   std::map<String, createFuncs> classes;

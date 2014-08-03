@@ -91,7 +91,11 @@ static int64_t GetPhysMemorySize()
 }
 
 Engine::Engine() :
-  FlushSrc(&SrcNames), FlushDst(&DstNames), BGThread(nullptr), FlushEnd(nullptr), UiFree(nullptr)
+  FlushSrc(&SrcNames),
+  FlushDst(&DstNames),
+  BGThread(nullptr),
+  FlushEnd(nullptr),
+  UiFree(nullptr)
 {
   _CopyDescs = 0;
   _ClearROFromCD = 0;
@@ -179,7 +183,7 @@ void Engine::UninitBuf(BuffInfo * bi)
 void Engine::SwapBufs(BuffInfo * src, BuffInfo * dst)
 {
   memcpy(dst->Buffer, src->Buffer, src->BuffSize);
-  memcpy(dst->BuffInf, src->BuffInf, SrcNames.Count()*sizeof(BuffStruct));
+  memcpy(dst->BuffInf, src->BuffInf, SrcNames.Count() * sizeof(BuffStruct));
 }
 
 // Added parameter with default TRUE value
