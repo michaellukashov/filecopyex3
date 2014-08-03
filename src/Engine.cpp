@@ -23,7 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include <process.h>
-#if !defined(_MSC_VER)
+#if defined(_MSC_VER)
+#include <memory>
+#else
 #include <c++/bits/unique_ptr.h>
 #endif
 #include "Framework/DescList.h"
