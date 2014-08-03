@@ -42,7 +42,7 @@ public:
   virtual size_t Count() const { return items.size(); }
 
   void Set(size_t, const String &);
-  void Add(const String &, int = 0);
+  void Add(const String &, intptr_t = 0);
   //void Delete(int);
   //void Exchange(int, int);
 
@@ -53,7 +53,7 @@ public:
   struct ListItem
   {
     String str;
-    int Data;
+    intptr_t Data;
   };
 
 private:

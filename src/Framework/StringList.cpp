@@ -34,7 +34,7 @@ void StringList::Set(size_t n, const String & v)
   items[n] = item;
 }
 
-void StringList::Add(const String & v, int data)
+void StringList::Add(const String & v, intptr_t data)
 {
   ListItem itm;
   itm.Data = data;
