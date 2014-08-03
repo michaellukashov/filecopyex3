@@ -41,7 +41,6 @@ public:
   virtual void AddString(const String & v) { Add(v); }
   virtual size_t Count() const { return items.size(); }
 
-  int & Values(size_t);
   void Set(size_t, const String &);
   void Add(const String &, int = 0);
   //void Delete(int);
