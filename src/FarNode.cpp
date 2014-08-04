@@ -266,9 +266,10 @@ intptr_t FarDialog::Execute()
   Items[0].Y1 = 1;
   Items[0].X2 = w + 6;
   Items[0].Y2 = h + 2;
+  String HelpTopic = Property((*this)("HelpTopic"));
 
   HANDLE hnd = Info.DialogInit(&MainGuid, &MainDialog, -1, -1, w + 10, h + 4,
-                               String(Property(L"HelpTopic").operator const String()).ptr(),
+                               HelpTopic.c_str(),
                                Items.data(), Items.size(),
                                0, bool((*this)(L"Warning")) ? FDLG_WARNING : 0,
                                Info.DefDlgProc, 0
