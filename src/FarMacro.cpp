@@ -22,7 +22,7 @@ String getEnv(const String & name)
   return L"";
 }
 
-void Bind(const String & key, const String & code, const String & desc)
+void Bind(const String & key, const String & code, const String & desc, int id)
 {
   /*
   MacroAddMacro macro = { sizeof(MacroAddMacro) };
@@ -68,21 +68,21 @@ void Bind(const String & key, const String & code, const String & desc)
   Info.MacroControl(&MainGuid, MCTL_LOADALL, 0, nullptr);
 }
 
-/*
-int Binded(const String& key)
+int Binded(const String & key)
 {
+  FarSettings & settings = plugin->Settings();
   //XXX String seq = registry.GetString(regkey + L"\\" + key, "Sequence", "");
   //XXX return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp(L"F5") || !seq.icmp(L"F6"));
-  return true;
+  String value;
+  return settings.get(key, value) && !value.IsEmpty();
 }
-*/
 
-/*
-void FarPlugin::Unbind(void *id)
+void Unbind(const String & key)
 {
-  Info.MacroControl(&MainGuid, MCTL_DELMACRO, 0, id);
+  FarSettings & settings = plugin->Settings();
+  settings.set(key, L"");
+  //Info.MacroControl(&MainGuid, MCTL_DELMACRO, 0, id);
 }
-*/
 
 /*
 void FarPlugin::MacroCommand(const FARMACROCOMMAND& cmd)

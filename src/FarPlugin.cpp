@@ -37,10 +37,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void BindAll()
 {
-  Bind(L"F5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0)", L"FileCopyEx - Copy file(s)");
-  Bind(L"F6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1)", L"FileCopyEx - Move file(s)");
-  Bind(L"ShiftF5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2)", L"FileCopyEx - Copy current file");
-  Bind(L"ShiftF6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3)", L"FileCopyEx - Move current file");
+  Bind(L"F5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0)", L"FileCopyEx - Copy file(s)", 0);
+  Bind(L"F6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1)", L"FileCopyEx - Move file(s)", 0);
+  Bind(L"ShiftF5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2)", L"FileCopyEx - Copy current file", 0);
+  Bind(L"ShiftF6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3)", L"FileCopyEx - Move current file", 0);
 }
 
 
@@ -265,11 +265,10 @@ void FarPlugin::KeyConfig()
 {
   //int res = Info.MacroControl(&MainGuid, MCTL_SAVEALL, 0, nullptr);
   //
-  BindAll();
-  ShowMessage(L"", L"Hotkeys binded", FMSG_MB_OK);
-  return;
-#if 0
-  FarDialog & dlg = Dialogs()[L"KeysDialog"];
+  //BindAll();
+  //ShowMessage(L"", L"Hotkeys binded", FMSG_MB_OK);
+  //return;
+  FarDialog & dlg = plugin->Dialogs()[L"KeysDialog"];
   dlg.ResetControls();
 
   bool bind = Binded(L"F5") && Binded(L"F6") && Binded(L"ShiftF5") && Binded(L"ShiftF6");
@@ -318,7 +317,6 @@ void FarPlugin::KeyConfig()
     */
   }
   // MacroCommand(MCMD_LOADALL);
-#endif
 }
 
 #define VersionStr0(a,b,c,d, bit) "version " #a "." #b "." #c "." #d " beta (" #bit " Unicode), " __DATE__
