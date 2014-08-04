@@ -91,9 +91,8 @@ public:
     str = buf;
   }
 
-  explicit String(bool v)
+  explicit String(bool v) : str(v ? L"1" : L"0")
   {
-    str = v ? L"1" : L"0";
   }
 
   inline bool operator==(const String & v) const { return cmp(v) == 0; }
