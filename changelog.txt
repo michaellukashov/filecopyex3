@@ -1,4 +1,7 @@
-FileCopyEx3 3.0.3.17 ??.08.2014
+FileCopyEx3 3.0.3.18 ??.08.2014
+* Fix issue #8: Help is not working
+  (https://github.com/michaellukashov/filecopyex3/issues/8)
+  (http://forum.farmanager.com/viewtopic.php?p=120961#p120961)
 * Fix issue #12: Check if destination file exists
   (https://code.google.com/p/filecopyex3/issues/detail?id=12)
 
