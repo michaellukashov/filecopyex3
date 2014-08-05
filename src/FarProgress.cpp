@@ -225,10 +225,8 @@ void FarProgress::ShowScanProgress(const String & msg)
   int ConsoleHeight;
   GetConSize(ConsoleWidth, ConsoleHeight);
   int WindowWidth  = ConsoleWidth / 2;
-  if (WindowWidth > 46)
-    WindowWidth = 46;
-  if (WindowWidth < 40)
-    WindowWidth = 40;
+  if (WindowWidth > 50)
+    WindowWidth = 50;
   int WindowHeight = 7;
   int WindowCoordX1 = (ConsoleWidth  - WindowWidth + 1) / 2;
   int WindowCoordY1 = (ConsoleHeight - WindowHeight - 1) / 2;
