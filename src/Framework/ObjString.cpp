@@ -25,9 +25,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "StdHdr.h"
 #include "ObjString.h"
 
-const bool isbadchar(wchar_t c)
+static bool isbadchar(wchar_t c)
 {
-  return c >= '\0' && c <= ' ';
+  return c == '\0' || c == '\t' || 
+    c == '\n' || c == '\r' ||
+    c == ' ';
 }
 
 String::String(const char * v)
