@@ -31,7 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/DescList.h"
 #include "Framework/ObjString.h"
 #include "Framework/FileUtils.h"
-#include "Framework/StringList.h"
 #include "Framework/StrUtils.h"
 #include "Common.h"
 #include "Engine.h"
