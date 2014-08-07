@@ -36,11 +36,7 @@ class String
 public:
   String() {}
 
-  String(const char * v)
-  {
-    std::string s(v);
-    str.assign(s.begin(), s.end());
-  }
+  explicit String(const char * v);
 
   String(wchar_t ch, intptr_t len)
   {

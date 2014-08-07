@@ -74,7 +74,7 @@ int StringParent::loadFromFile(FILE * f)
         if (buffer[i] == CR || (buffer[i] == LF && oldc != CR))
         {
           string[spos] = 0;
-          AddString(string);
+          AddString(String(string));
           spos = 0;
         }
         else
@@ -91,7 +91,7 @@ int StringParent::loadFromFile(FILE * f)
     if (spos)
     {
       string[spos] = 0;
-      AddString(string);
+      AddString(String(string));
     }
   }
   return 1;
@@ -126,12 +126,12 @@ bool StringParent::saveToFile(FILE * f, TextFormat tf)
   }
   for (size_t i = 0; i < Count(); i++)
   {
-    const wchar_t * s = (*this)[i].c_str();
+    const String s = (*this)[i];
     const int ssize = 4096;
-    if (tf != tfANSI)
+    if (tf != tfOEM)
     {
       wchar_t buf[ssize];
-      wcscpy_s(buf, ssize, s);
+      wcscpy_s(buf, ssize, s.c_str());
       if (tf == tfUnicodeBE)
       {
         for (size_t j = 0; j < wcslen(buf); j++)
@@ -152,9 +152,18 @@ bool StringParent::saveToFile(FILE * f, TextFormat tf)
     }
     else
     {
-      char buf[ssize];
-      _wtoacs(buf, ssize, s);
-      fwrite(buf, sizeof(char), strlen(buf), f);
+      std::string buf;
+
+      int sizeRequired = WideCharToMultiByte(CP_OEMCP, 0, s.c_str(), (int)s.len(),
+        nullptr, 0, nullptr, nullptr);
+      if (sizeRequired > 0) 
+      {
+        buf.resize(sizeRequired);
+        WideCharToMultiByte(CP_OEMCP, 0, s.c_str(), (int)s.len(),
+          &(*buf.begin()), sizeRequired, nullptr, nullptr);
+      }
+
+      fwrite(buf.c_str(), sizeof(char), buf.size(), f);
       fwrite("\r\n", sizeof(char), 2, f);
     }
   }

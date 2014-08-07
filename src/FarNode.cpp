@@ -266,7 +266,7 @@ intptr_t FarDialog::Execute()
   Items[0].Y1 = 1;
   Items[0].X2 = w + 6;
   Items[0].Y2 = h + 2;
-  String HelpTopic = Property((*this)("HelpTopic"));
+  String HelpTopic = Property((*this)(L"HelpTopic"));
 
   HANDLE hnd = Info.DialogInit(&MainGuid, &MainDialog, -1, -1, w + 10, h + 4,
                                HelpTopic.c_str(),
