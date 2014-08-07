@@ -36,7 +36,7 @@ class String
 public:
   String() {}
 
-  String(const char * v)
+  explicit String(const char * v)
   {
     std::string s(v);
     str.assign(s.begin(), s.end());
