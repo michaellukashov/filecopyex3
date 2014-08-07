@@ -30,6 +30,19 @@ const bool isbadchar(wchar_t c)
   return c >= '\0' && c <= ' ';
 }
 
+String::String(const char * v)
+{
+  if (v != nullptr && v[0] != '\0') {
+    size_t len = strlen(v);
+    str.resize(len);
+    if (MultiByteToWideChar(CP_OEMCP, 0, v, (int)len,
+      &(*str.begin()), (int)len) == 0)
+    {
+      str.clear();
+    }
+  }
+}
+
 String String::substr(size_t s, size_t l) const
 {
   if (s >= len())
