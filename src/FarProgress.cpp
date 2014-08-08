@@ -224,7 +224,7 @@ void FarProgress::ShowScanProgress(const String & msg)
   int ConsoleWidth;
   int ConsoleHeight;
   GetConSize(ConsoleWidth, ConsoleHeight);
-  int WindowWidth  = ConsoleWidth / 2;
+  int WindowWidth = ConsoleWidth / 2;
   if (WindowWidth > 50)
     WindowWidth = 50;
   if (WindowWidth < 40)
@@ -239,9 +239,9 @@ void FarProgress::ShowScanProgress(const String & msg)
   DrawWindow(WindowCoordX1, WindowCoordY1, WindowCoordX2, WindowCoordY2, L"");
   Info.Text(WindowCoordX1 + 5, WindowCoordY1 + 2, &clrText,
             FormatWidth(msg, WindowCoordX2 - WindowCoordX1 - 9).ptr());
-  ProgX1  = WindowCoordX1 + 5;
-  ProgX2  = WindowCoordX2 - 5;
-  ProgY   = WindowCoordY1 + 3;
+  ProgX1 = WindowCoordX1 + 5;
+  ProgX2 = WindowCoordX2 - 5;
+  ProgY  = WindowCoordY1 + 3;
   WinType = WIN_SCAN_PROGRESS;
   DrawScanProgress(ProgX1, ProgX2, ProgY, 0, 0);
   Info.Text(0, 0, 0, nullptr);

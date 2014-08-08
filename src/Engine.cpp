@@ -1255,9 +1255,9 @@ Engine::MResult Engine::Main(int move, int curOnly)
   _PreallocMin  = Options[L"PreallocMin"];
   _UnbuffMin    = Options[L"UnbuffMin"];
 
-  _ClearROFromCD  = 1; //YYY Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, nullptr) & FSS_CLEARROATTRIBUTE;
+  _ClearROFromCD = 1; //YYY Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, nullptr) & FSS_CLEARROATTRIBUTE;
   _HideDescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_SETHIDDEN;
-  _UpdateRODescs  = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_UPDATEREADONLY;
+  _UpdateRODescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_UPDATEREADONLY;
 
   FarDialog & dlg = plugin->Dialogs()[L"CopyDialog"];
   dlg.ResetControls();
@@ -2236,7 +2236,7 @@ intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String 
   dlg[L"Label3"](L"Text") = Format(L"%14s %s %s", ssz.ptr(), LOC(L"OverwriteDialog.Bytes").ptr(), stime.ptr());
 
   dlg[L"Source"](L"Text") = Format(L"%-16s", LOC(L"OverwriteDialog.Source").ptr());
-  dlg[L"Destination"](L"Text")  = Format(L"%-16s", LOC(L"OverwriteDialog.Destination").ptr());
+  dlg[L"Destination"](L"Text") = Format(L"%-16s", LOC(L"OverwriteDialog.Destination").ptr());
 
   dlg[L"AcceptForAll"](L"Selected") = 0;
   dlg[L"SkipIfNewer"](L"Selected") = SkipNewer;
