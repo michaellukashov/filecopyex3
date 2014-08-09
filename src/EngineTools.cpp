@@ -71,7 +71,7 @@ void Encrypt(const String & fn, int f)
 {
   if (!Win2K || f == ATTR_INHERIT)
     return;
-  int res;
+  BOOL res;
   ::SetFileAttributes(fn.ptr(), 0);
   if (f)
     res = ::EncryptFile(fn.ptr());
