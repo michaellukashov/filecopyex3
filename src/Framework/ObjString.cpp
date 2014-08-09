@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 static bool isbadchar(wchar_t c)
 {
-  return c == '\0' || c == '\t' || 
+  return c == '\0' || c == '\t' ||
     c == '\n' || c == '\r' ||
     c == ' ';
 }
@@ -37,7 +37,7 @@ String::String(const char * v)
   if (v != nullptr && v[0] != '\0') {
     size_t len = strlen(v);
     str.resize(len);
-    if (MultiByteToWideChar(CP_OEMCP, 0, v, (int)len,
+    if (::MultiByteToWideChar(CP_OEMCP, 0, v, (int)len,
       &(*str.begin()), (int)len) == 0)
     {
       str.clear();
@@ -132,14 +132,14 @@ String String::replace(const String & what, const String & with) const
 String String::toUpper() const
 {
   String res(str);
-  CharUpperBuff((LPTSTR)res.c_str(), (DWORD)len());
+  ::CharUpperBuff((LPTSTR)res.c_str(), (DWORD)len());
   return res;
 }
 
 String String::toLower() const
 {
   String res(str);
-  CharLowerBuff((LPTSTR)res.c_str(), (DWORD)len());
+  ::CharLowerBuff((LPTSTR)res.c_str(), (DWORD)len());
   return res;
 }
 

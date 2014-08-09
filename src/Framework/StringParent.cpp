@@ -154,12 +154,12 @@ bool StringParent::saveToFile(FILE * f, TextFormat tf)
     {
       std::string buf;
 
-      int sizeRequired = WideCharToMultiByte(CP_OEMCP, 0, s.c_str(), (int)s.len(),
+      int sizeRequired = ::WideCharToMultiByte(CP_OEMCP, 0, s.c_str(), (int)s.len(),
         nullptr, 0, nullptr, nullptr);
-      if (sizeRequired > 0) 
+      if (sizeRequired > 0)
       {
         buf.resize(sizeRequired);
-        WideCharToMultiByte(CP_OEMCP, 0, s.c_str(), (int)s.len(),
+        ::WideCharToMultiByte(CP_OEMCP, 0, s.c_str(), (int)s.len(),
           &(*buf.begin()), sizeRequired, nullptr, nullptr);
       }
 
