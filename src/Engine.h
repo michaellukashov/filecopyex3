@@ -109,10 +109,15 @@ private:
   int64_t volatile ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
           ReadN, WriteN, TotalN, FirstWrite, StartTime;
   int64_t _LastCheckEscape, _CheckEscapeInterval;
-  void Copy();
 
   BuffInfo * wbi, * bi;
   HANDLE BGThread, FlushEnd, UiFree;
+
+  CopyProgress CopyProgressBox;
+  FarProgress ScanFoldersProgressBox;
+  int SectorSize;
+
+  void Copy();
   int InitBuf(BuffInfo * bi);
   void UninitBuf(BuffInfo * bi);
   void SwapBufs(BuffInfo * src, BuffInfo * dst);
@@ -132,10 +137,7 @@ private:
   void ShowProgress(int64_t, int64_t, int64_t, int64_t, int64_t,
                     int64_t, int64_t, int64_t);
   int CheckOverwrite(intptr_t fnum, String & ren);
-  CopyProgress CopyProgressBox;
-  FarProgress ScanFoldersProgressBox;
   static void Delay(int64_t, int64_t, volatile int64_t &, int64_t);
-  int SectorSize;
 
   intptr_t CheckOverwrite(intptr_t, const String &, const String &, String &);
   intptr_t CheckOverwrite2(intptr_t, const String &, const String &, String &);
