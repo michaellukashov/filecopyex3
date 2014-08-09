@@ -47,8 +47,9 @@ struct BuffStruct
   size_t EndFlag;
 };
 
-struct BuffInfo
+class TBuffInfo
 {
+public:
   uint8_t * Buffer;
   size_t BuffSize;
   int64_t OrgSize;
@@ -110,7 +111,7 @@ private:
           ReadN, WriteN, TotalN, FirstWrite, StartTime;
   int64_t _LastCheckEscape, _CheckEscapeInterval;
 
-  BuffInfo * wbi, * bi;
+  TBuffInfo * wbi, * bi;
   HANDLE BGThread, FlushEnd, UiFree;
 
   CopyProgress CopyProgressBox;
@@ -118,19 +119,19 @@ private:
   int SectorSize;
 
   void Copy();
-  int InitBuf(BuffInfo * bi);
-  void UninitBuf(BuffInfo * bi);
-  void SwapBufs(BuffInfo * src, BuffInfo * dst);
+  int InitBuf(TBuffInfo * bi);
+  void UninitBuf(TBuffInfo * bi);
+  void SwapBufs(TBuffInfo * src, TBuffInfo * dst);
   int CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
   intptr_t AskAbort(BOOL ShowKeepFilesCheckBox = TRUE);
-  int FlushBuff(BuffInfo * bi);
-  void CheckDstFileExists(BuffInfo * bi, intptr_t fnum, FileStruct & info,
+  int FlushBuff(TBuffInfo * bi);
+  void CheckDstFileExists(TBuffInfo * bi, intptr_t fnum, FileStruct & info,
     const String & SrcName, const bool TryToOpenDstFile,
     String & DstName);
   void BGFlush();
   int WaitForFlushEnd();
   friend uint32_t __stdcall FlushThread(void * p);
-  void FinalizeBuf(BuffInfo * bi);
+  void FinalizeBuf(TBuffInfo * bi);
   void ProcessDesc(intptr_t fnum);
   void ShowReadName(const String &);
   void ShowWriteName(const String &);

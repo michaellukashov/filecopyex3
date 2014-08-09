@@ -148,7 +148,7 @@ Engine::Engine() :
   memset(&DescFindData, 0, sizeof(DescFindData));
 }
 
-int Engine::InitBuf(BuffInfo * bi)
+int Engine::InitBuf(TBuffInfo * bi)
 {
   bi->OutFile = nullptr;
   bi->OutNum = -1;
@@ -175,13 +175,13 @@ int Engine::InitBuf(BuffInfo * bi)
   return TRUE;
 }
 
-void Engine::UninitBuf(BuffInfo * bi)
+void Engine::UninitBuf(TBuffInfo * bi)
 {
   Free(bi->Buffer);
   Free(bi->BuffInf);
 }
 
-void Engine::SwapBufs(BuffInfo * src, BuffInfo * dst)
+void Engine::SwapBufs(TBuffInfo * src, TBuffInfo * dst)
 {
   memcpy(dst->Buffer, src->Buffer, src->BuffSize);
   memcpy(dst->BuffInf, src->BuffInf, SrcNames.Count() * sizeof(BuffStruct));
@@ -258,7 +258,7 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
   return escape;
 }
 
-void Engine::FinalizeBuf(BuffInfo * bi)
+void Engine::FinalizeBuf(TBuffInfo * bi)
 {
   HANDLE Handle = bi->OutFile;
   intptr_t fnum = bi->OutNum;
@@ -475,7 +475,7 @@ void Engine::ProcessDesc(intptr_t fnum)
   }
 }
 
-void Engine::CheckDstFileExists(BuffInfo * bi, intptr_t fnum, FileStruct & info,
+void Engine::CheckDstFileExists(TBuffInfo * bi, intptr_t fnum, FileStruct & info,
   const String & SrcName,
   const bool TryToOpenDstFile,
   String & DstName)
@@ -591,7 +591,7 @@ open_retry:
   }
 }
 
-int Engine::FlushBuff(BuffInfo * bi)
+int Engine::FlushBuff(TBuffInfo * bi)
 {
   size_t Pos = 0;
   size_t PosInStr = 0;
@@ -763,7 +763,7 @@ void Engine::Copy()
   ReadCb = WriteCb = ReadTime = WriteTime = ReadN = WriteN = FirstWrite = 0;
   StartTime = GetTime();
 
-  BuffInfo _bi, _wbi;
+  TBuffInfo _bi, _wbi;
   bi = &_bi;
   wbi = &_wbi;
   if (!InitBuf(bi))
