@@ -111,7 +111,7 @@ private:
           ReadN, WriteN, TotalN, FirstWrite, StartTime;
   int64_t _LastCheckEscape, _CheckEscapeInterval;
 
-  TBuffInfo * wbi, * bi;
+  TBuffInfo * wbuffInfo, * buffInfo;
   HANDLE BGThread, FlushEnd, UiFree;
 
   CopyProgress CopyProgressBox;
@@ -119,19 +119,19 @@ private:
   int SectorSize;
 
   void Copy();
-  int InitBuf(TBuffInfo * bi);
-  void UninitBuf(TBuffInfo * bi);
+  int InitBuf(TBuffInfo * buffInfo);
+  void UninitBuf(TBuffInfo * buffInfo);
   void SwapBufs(TBuffInfo * src, TBuffInfo * dst);
   int CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
   intptr_t AskAbort(BOOL ShowKeepFilesCheckBox = TRUE);
-  int FlushBuff(TBuffInfo * bi);
-  void CheckDstFileExists(TBuffInfo * bi, intptr_t fnum, FileStruct & info,
+  int FlushBuff(TBuffInfo * buffInfo);
+  void CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct & info,
     const String & SrcName, const bool TryToOpenDstFile,
     String & DstName);
   void BGFlush();
   int WaitForFlushEnd();
   friend uint32_t __stdcall FlushThread(void * p);
-  void FinalizeBuf(TBuffInfo * bi);
+  void FinalizeBuf(TBuffInfo * buffInfo);
   void ProcessDesc(intptr_t fnum);
   void ShowReadName(const String &);
   void ShowWriteName(const String &);

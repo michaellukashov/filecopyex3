@@ -117,8 +117,8 @@ Engine::Engine() :
   CopyCount = 0;
   _LastCheckEscape = 0;
   _CheckEscapeInterval = TicksPerSec() / 2;
-  wbi = nullptr;
-  bi = nullptr;
+  wbuffInfo = nullptr;
+  buffInfo = nullptr;
 
   Parallel = Streams = Rights = Move = SkipNewer = SkippedToTemp = 0;
   CompressMode = EncryptMode = ATTR_INHERIT;
@@ -148,26 +148,26 @@ Engine::Engine() :
   memset(&DescFindData, 0, sizeof(DescFindData));
 }
 
-int Engine::InitBuf(TBuffInfo * bi)
+int Engine::InitBuf(TBuffInfo * buffInfo)
 {
-  bi->OutFile = nullptr;
-  bi->OutNum = -1;
+  buffInfo->OutFile = nullptr;
+  buffInfo->OutNum = -1;
 
-  bi->BuffSize = BufSize;
+  buffInfo->BuffSize = BufSize;
   if (Parallel)
-    bi->BuffSize /= 2;
-  bi->BuffSize = (bi->BuffSize / AllocAlign + 1) * AllocAlign;
+    buffInfo->BuffSize /= 2;
+  buffInfo->BuffSize = (buffInfo->BuffSize / AllocAlign + 1) * AllocAlign;
 
-  bi->Buffer = static_cast<uint8_t *>(Alloc(bi->BuffSize));
-  if (!bi->Buffer)
+  buffInfo->Buffer = static_cast<uint8_t *>(Alloc(buffInfo->BuffSize));
+  if (!buffInfo->Buffer)
   {
     Error(LOC(L"Error.MemAlloc"), GetLastError());
     return FALSE;
   }
-  bi->BuffInf = static_cast<BuffStruct *>(Alloc(SrcNames.Count() * sizeof(BuffStruct)));
-  if (!bi->BuffInf)
+  buffInfo->BuffInf = static_cast<BuffStruct *>(Alloc(SrcNames.Count() * sizeof(BuffStruct)));
+  if (!buffInfo->BuffInf)
   {
-    Free(bi->Buffer);
+    Free(buffInfo->Buffer);
     Error(LOC(L"Error.MemAlloc"), GetLastError());
     return FALSE;
   }
@@ -175,10 +175,10 @@ int Engine::InitBuf(TBuffInfo * bi)
   return TRUE;
 }
 
-void Engine::UninitBuf(TBuffInfo * bi)
+void Engine::UninitBuf(TBuffInfo * buffInfo)
 {
-  Free(bi->Buffer);
-  Free(bi->BuffInf);
+  Free(buffInfo->Buffer);
+  Free(buffInfo->BuffInf);
 }
 
 void Engine::SwapBufs(TBuffInfo * src, TBuffInfo * dst)
@@ -258,12 +258,12 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
   return escape;
 }
 
-void Engine::FinalizeBuf(TBuffInfo * bi)
+void Engine::FinalizeBuf(TBuffInfo * buffInfo)
 {
-  HANDLE Handle = bi->OutFile;
-  intptr_t fnum = bi->OutNum;
-  String & DstName = bi->DstName;
-  String & SrcName = bi->SrcName;
+  HANDLE Handle = buffInfo->OutFile;
+  intptr_t fnum = buffInfo->OutNum;
+  String & DstName = buffInfo->DstName;
+  String & SrcName = buffInfo->SrcName;
   FileStruct & info = Files[fnum];
 
   if (!(info.Flags & FLG_SKIPPED))
@@ -285,7 +285,7 @@ void Engine::FinalizeBuf(TBuffInfo * bi)
     {
       if (info.OverMode == OM_APPEND)
       {
-        setFileSizeAndTime(DstName, bi->OrgSize + info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+        setFileSizeAndTime(DstName, buffInfo->OrgSize + info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
       }
       else
       {
@@ -364,11 +364,11 @@ del_retry:
       {
         if (KeepFiles || (info.Flags & FLG_KEEPFILE))
         {
-          setFileSizeAndTime(DstName, bi->OrgSize + info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          setFileSizeAndTime(DstName, buffInfo->OrgSize + info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
         else
         {
-          setFileSizeAndTime(DstName, bi->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          setFileSizeAndTime(DstName, buffInfo->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
       }
       else
@@ -475,7 +475,7 @@ void Engine::ProcessDesc(intptr_t fnum)
   }
 }
 
-void Engine::CheckDstFileExists(TBuffInfo * bi, intptr_t fnum, FileStruct & info,
+void Engine::CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct & info,
   const String & SrcName,
   const bool TryToOpenDstFile,
   String & DstName)
@@ -503,8 +503,8 @@ rep:
   else
     info.Attr &= ~FILE_ATTRIBUTE_ENCRYPTED;
 
-  bi->SrcName = SrcName;
-  bi->DstName = DstName;
+  buffInfo->SrcName = SrcName;
+  buffInfo->DstName = DstName;
 
 open_retry:
   uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
@@ -514,7 +514,7 @@ open_retry:
     case OM_RENAME:
       if (TryToOpenDstFile)
       {
-        bi->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
+        buffInfo->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
       }
       break;
     case OM_APPEND:
@@ -522,14 +522,14 @@ open_retry:
       if (TryToOpenDstFile)
       {
         oflg |= OPEN_BUF;
-          bi->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
+          buffInfo->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
       }
       break;
     case OM_RESUME:
       if (TryToOpenDstFile)
       {
-        bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
-        if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN) == -1)
+        buffInfo->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
+        if (FSeek(buffInfo->OutFile, info.ResumePos, FILE_BEGIN) == -1)
           FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
                          (int)GetLastError()));
       }
@@ -550,15 +550,15 @@ open_retry:
 
   if (!(info.Flags & FLG_SKIPPED))
   {
-    if (bi->OutFile)
+    if (buffInfo->OutFile)
     {
-      Compress(bi->OutFile, CompressMode);
+      Compress(buffInfo->OutFile, CompressMode);
       //Encrypt(bi->OutFile, EncryptMode);
-      bi->OrgSize = FileSize(bi->OutFile);
+      buffInfo->OrgSize = FileSize(buffInfo->OutFile);
 
-      int64_t size = info.OverMode == OM_APPEND ? bi->OrgSize + info.Size : info.Size;
+      int64_t size = info.OverMode == OM_APPEND ? buffInfo->OrgSize + info.Size : info.Size;
       if (size >= (int64_t)_PreallocMin * 1024 &&
-          GetCompression(bi->OutFile) == 0)
+          GetCompression(buffInfo->OutFile) == 0)
       {
         int64_t sp;
         if (!(info.Flags & FLG_BUFFERED))
@@ -570,10 +570,10 @@ open_retry:
         }
         else
           sp = size;
-        int64_t bp = FTell(bi->OutFile);
-        FSeek(bi->OutFile, sp, FILE_BEGIN);
-        SetEndOfFile(bi->OutFile);
-        FSeek(bi->OutFile, bp, FILE_BEGIN);
+        int64_t bp = FTell(buffInfo->OutFile);
+        FSeek(buffInfo->OutFile, sp, FILE_BEGIN);
+        SetEndOfFile(buffInfo->OutFile);
+        FSeek(buffInfo->OutFile, bp, FILE_BEGIN);
       }
     }
     else if (TryToOpenDstFile)
@@ -591,32 +591,32 @@ open_retry:
   }
 }
 
-int Engine::FlushBuff(TBuffInfo * bi)
+int Engine::FlushBuff(TBuffInfo * buffInfo)
 {
   size_t Pos = 0;
   size_t PosInStr = 0;
 
-  while (Pos < bi->BuffSize && bi->BuffInf[PosInStr].FileNumber >= 0)
+  while (Pos < buffInfo->BuffSize && buffInfo->BuffInf[PosInStr].FileNumber >= 0)
   {
-    intptr_t fnum = bi->BuffInf[PosInStr].FileNumber;
+    intptr_t fnum = buffInfo->BuffInf[PosInStr].FileNumber;
     String SrcName = FlushSrc.GetByNum(fnum);
     String DstName = FlushDst.GetByNum(fnum);
     FileStruct & info = Files[fnum];
-    bi->OutNum = fnum;
+    buffInfo->OutNum = fnum;
 
     if (Aborted)
       info.Flags |= FLG_SKIPPED;
 
-    if (!bi->OutFile && !(info.Flags & FLG_SKIPPED))
+    if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      CheckDstFileExists(bi, fnum, info, SrcName, true, DstName);
+      CheckDstFileExists(buffInfo, fnum, info, SrcName, true, DstName);
     }
-    if (!(info.Flags & FLG_SKIPPED) && !bi->OutFile)
+    if (!(info.Flags & FLG_SKIPPED) && !buffInfo->OutFile)
       info.Flags |= FLG_SKIPPED | FLG_ERROR;
 
     if (!(info.Flags & FLG_SKIPPED))
     {
-      while (Pos < bi->BuffInf[PosInStr].WritePos)
+      while (Pos < buffInfo->BuffInf[PosInStr].WritePos)
       {
         if (!Parallel && CheckEscape() || Aborted)
         {
@@ -624,13 +624,13 @@ int Engine::FlushBuff(TBuffInfo * bi)
           goto skip;
         }
 
-        size_t wsz = Min((size_t)(bi->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
+        size_t wsz = Min((size_t)(buffInfo->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
         size_t wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
           wsz = Min(wsz, (size_t)(info.Size - info.Written));
 retry:
         int64_t st = GetTime();
-        size_t k = Write(bi->OutFile, bi->Buffer + Pos, wsz);
+        size_t k = Write(buffInfo->OutFile, buffInfo->Buffer + Pos, wsz);
 
         if (k < wsz)
         {
@@ -646,11 +646,11 @@ retry:
               int64_t Pos = info.Written;
               if (info.OverMode == OM_RESUME)
                 Pos += info.ResumePos;
-              Close(bi->OutFile);
+              Close(buffInfo->OutFile);
 reopen_retry:
               uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-              bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
-              if (!bi->OutFile)
+              buffInfo->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
+              if (!buffInfo->OutFile)
               {
                 ::WaitForSingleObject(UiFree, INFINITE);
                 uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
@@ -664,13 +664,13 @@ reopen_retry:
                   info.Flags |= FLG_SKIPPED | FLG_ERROR;
                   if (flg & eerKeepFiles)
                     info.Flags |= FLG_KEEPFILE;
-                  bi->OutFile = INVALID_HANDLE_VALUE;
+                  buffInfo->OutFile = INVALID_HANDLE_VALUE;
                   if (res == RES_ABORT)
                     Aborted = 1;
                   goto skip;
                 }
               }
-              if (FSeek(bi->OutFile, Pos, FILE_BEGIN) == -1)
+              if (FSeek(buffInfo->OutFile, Pos, FILE_BEGIN) == -1)
                 FWError(Format(L"FSeek to %d failed, code %d", Pos,
                                (int)GetLastError()));
             }
@@ -700,20 +700,20 @@ reopen_retry:
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
 
         if (wsz < wsz1)
-          Pos = bi->BuffInf[PosInStr].WritePos;
+          Pos = buffInfo->BuffInf[PosInStr].WritePos;
       }
 
 skip: ;
     }
-    Pos = bi->BuffInf[PosInStr].NextPos;
+    Pos = buffInfo->BuffInf[PosInStr].NextPos;
 
-    if (bi->BuffInf[PosInStr].EndFlag || info.Flags & FLG_SKIPPED)
+    if (buffInfo->BuffInf[PosInStr].EndFlag || info.Flags & FLG_SKIPPED)
     {
-      FinalizeBuf(bi);
-      bi->OutFile = nullptr;
-      bi->OutNum = -1;
-      bi->SrcName.Clear();
-      bi->DstName.Clear();
+      FinalizeBuf(buffInfo);
+      buffInfo->OutFile = nullptr;
+      buffInfo->OutNum = -1;
+      buffInfo->SrcName.Clear();
+      buffInfo->DstName.Clear();
     }
 
     if (Aborted)
@@ -729,7 +729,7 @@ skip: ;
 uint32_t __stdcall FlushThread(void * p)
 {
   Engine * eng = static_cast<Engine *>(p);
-  return eng->FlushBuff(eng->wbi);
+  return eng->FlushBuff(eng->wbuffInfo);
 }
 
 void Engine::BGFlush()
@@ -764,15 +764,15 @@ void Engine::Copy()
   StartTime = GetTime();
 
   TBuffInfo _bi, _wbi;
-  bi = &_bi;
-  wbi = &_wbi;
-  if (!InitBuf(bi))
+  buffInfo = &_bi;
+  wbuffInfo = &_wbi;
+  if (!InitBuf(buffInfo))
     return;
   if (Parallel)
   {
-    if (!InitBuf(wbi))
+    if (!InitBuf(wbuffInfo))
     {
-      UninitBuf(bi);
+      UninitBuf(buffInfo);
       return;
     }
     FlushEnd = ::CreateEvent(nullptr, FALSE, TRUE, nullptr);
@@ -866,9 +866,9 @@ open_retry:
     ShowReadName(SrcName);
 
     info.SectorSize = SectorSize;
-    if (!bi->OutFile && !(info.Flags & FLG_SKIPPED))
+    if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      CheckDstFileExists(bi, i, info, SrcName, false, DstName);
+      CheckDstFileExists(buffInfo, i, info, SrcName, false, DstName);
     }
 
     if (!InputFile)
@@ -905,14 +905,14 @@ open_retry:
       if (info.Size < _UnbuffMin * 1024)
         info.Flags |= FLG_BUFFERED;
 
-      while (BuffPos < bi->BuffSize)
+      while (BuffPos < buffInfo->BuffSize)
       {
         if (info.Flags & FLG_SKIPPED)
           break;
-        size_t cb = Min(ReadBlock, bi->BuffSize - BuffPos);
+        size_t cb = Min(ReadBlock, buffInfo->BuffSize - BuffPos);
 retry:
         int64_t st = GetTime();
-        size_t j = Read(InputFile, bi->Buffer + BuffPos, cb);
+        size_t j = Read(InputFile, buffInfo->Buffer + BuffPos, cb);
 
         if (j == -1)
         {
@@ -989,24 +989,24 @@ skip:
       size_t abp = BuffPos;
       if (abp % SectorSize)
         abp = (abp / SectorSize + 1) * SectorSize;
-      bi->BuffInf[FilesInBuff].WritePos = abp;
+      buffInfo->BuffInf[FilesInBuff].WritePos = abp;
       if (BuffPos % ReadAlign)
         BuffPos = (BuffPos / ReadAlign + 1) * ReadAlign;
-      bi->BuffInf[FilesInBuff].NextPos = BuffPos;
-      bi->BuffInf[FilesInBuff].FileNumber = (intptr_t)i;
-      if (BuffPos == bi->BuffSize)
+      buffInfo->BuffInf[FilesInBuff].NextPos = BuffPos;
+      buffInfo->BuffInf[FilesInBuff].FileNumber = (intptr_t)i;
+      if (BuffPos == buffInfo->BuffSize)
       {
-        bi->BuffInf[FilesInBuff].EndFlag = 0;
+        buffInfo->BuffInf[FilesInBuff].EndFlag = 0;
         if (!Parallel)
         {
-          if (!FlushBuff(bi))
+          if (!FlushBuff(buffInfo))
             goto abort;
         }
         else
         {
           if (!WaitForFlushEnd())
             goto abort;
-          SwapBufs(bi, wbi);
+          SwapBufs(buffInfo, wbuffInfo);
           BGFlush();
         }
         BuffPos = 0;
@@ -1014,7 +1014,7 @@ skip:
       }
       else
       {
-        bi->BuffInf[FilesInBuff].EndFlag = 1;
+        buffInfo->BuffInf[FilesInBuff].EndFlag = 1;
         FilesInBuff++;
         break;
       }
@@ -1034,23 +1034,23 @@ abort:
   if (Parallel)
   {
     while (!WaitForFlushEnd());
-    bi->OutFile = wbi->OutFile;
-    bi->OutNum = wbi->OutNum;
-    bi->SrcName = wbi->SrcName;
-    bi->DstName = wbi->DstName;
+    buffInfo->OutFile = wbuffInfo->OutFile;
+    buffInfo->OutNum = wbuffInfo->OutNum;
+    buffInfo->SrcName = wbuffInfo->SrcName;
+    buffInfo->DstName = wbuffInfo->DstName;
   }
-  bi->BuffInf[FilesInBuff].FileNumber = -1;
+  buffInfo->BuffInf[FilesInBuff].FileNumber = -1;
   if (!Aborted)
-    FlushBuff(bi);
-  else if (bi->OutNum != -1)
-    FinalizeBuf(bi);
+    FlushBuff(buffInfo);
+  else if (buffInfo->OutNum != -1)
+    FinalizeBuf(buffInfo);
 
   if (Parallel)
   {
-    UninitBuf(wbi);
+    UninitBuf(wbuffInfo);
     ::CloseHandle(FlushEnd);
   }
-  UninitBuf(bi);
+  UninitBuf(buffInfo);
 
   if (FileCount)
     CopyProgressBox.Stop();
