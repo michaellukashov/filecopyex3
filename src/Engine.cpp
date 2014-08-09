@@ -382,7 +382,7 @@ del_retry:
           Delete(DstName);
         }
       }
-      SetFileAttributes(DstName.ptr(), info.Attr);
+      ::SetFileAttributes(DstName.ptr(), info.Attr);
     }
   }
 }
