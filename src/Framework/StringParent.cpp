@@ -1,6 +1,7 @@
 #include "StdHdr.h"
 #include "StringParent.h"
 #include "FrameworkUtils.h"
+#include "FileUtils.h"
 
 int StringParent::loadFromFile(FILE * f)
 {
@@ -13,7 +14,7 @@ int StringParent::loadFromFile(FILE * f)
   int read = (int)fread(&sign, 1, sizeof(sign), f);
   int unicode = (read == 2) && (sign.uc == 0xFEFF || sign.uc == 0xFFFE);
   int inv = (unicode) && (sign.uc == 0xFFFE);
-  const int bsize = 4096, ssize = 4096;
+  const int bsize = DEFAULT_SECTOR_SIZE, ssize = DEFAULT_SECTOR_SIZE;
   if (unicode)
   {
     const wchar_t CR = '\r', LF = '\n';
@@ -127,7 +128,7 @@ bool StringParent::saveToFile(FILE * f, TextFormat tf)
   for (size_t i = 0; i < Count(); i++)
   {
     const String s = (*this)[i];
-    const int ssize = 4096;
+    const int ssize = DEFAULT_SECTOR_SIZE;
     if (tf != tfOEM)
     {
       wchar_t buf[ssize];
@@ -194,7 +195,7 @@ void StringParent::loadFromString(const wchar_t * s, wchar_t delim)
   Clear();
   wchar_t * p = (wchar_t *)s;
   wchar_t * pp = p;
-  wchar_t buf[4096];
+  wchar_t buf[DEFAULT_SECTOR_SIZE];
   do
   {
     if (!*p || *p == delim)

@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void * Alloc(size_t size)
 {
-  size = (size / 4096 + 1) * 4096;
+  size = (size / DEFAULT_SECTOR_SIZE + 1) * DEFAULT_SECTOR_SIZE;
   return ::VirtualAlloc(nullptr, size, MEM_COMMIT, PAGE_READWRITE);
 }
 
@@ -259,6 +259,6 @@ int GetSectorSize(const String & path)
   else
   {
     //FWError(L"Warning: GetSectorSize failed");
-    return 4096;
+    return DEFAULT_SECTOR_SIZE;
   }
 }

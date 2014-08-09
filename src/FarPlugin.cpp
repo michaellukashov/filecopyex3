@@ -235,7 +235,7 @@ void FarPlugin::InitOptions()
   Options[L"BufPercent"] = 1;
   Options[L"BufSize"] = 0;
   Options[L"BufPercentVal"] = 15;
-  Options[L"BufSizeVal"] = 4096;
+  Options[L"BufSizeVal"] = DEFAULT_SECTOR_SIZE;
   Options[L"OverwriteDef"] = 0;
   Options[L"CopyStreamsDef"] = 0;
   Options[L"CopyRightsDef"] = 0;
