@@ -201,23 +201,23 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
   }
   else
   {
-	  switch (command)
-	  {
-	  case 0:
-		  CallCopy(0, 0);
-		  break;
-	  case 1:
-		  CallCopy(1, 0);
-		  break;
-	  case 2:
-		  CallCopy(0, 1);
-		  break;
-	  case 3:
-		  CallCopy(1, 1);
-		  break;
-	  default:
-		  break;
-	  }
+    switch (command)
+    {
+    case 0:
+      CallCopy(0, 0);
+      break;
+    case 1:
+      CallCopy(1, 0);
+      break;
+    case 2:
+      CallCopy(0, 1);
+      break;
+    case 3:
+      CallCopy(1, 1);
+      break;
+    default:
+      break;
+    }
   }
 }
 
