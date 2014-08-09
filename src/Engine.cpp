@@ -358,7 +358,7 @@ del_retry:
       info.Flags |= FLG_DECSIZE;
     }
 
-    if (Handle)
+    if (Handle != INVALID_HANDLE_VALUE)
     {
       if (info.OverMode == OM_APPEND || info.OverMode == OM_RESUME)
       {
