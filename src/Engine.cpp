@@ -1113,7 +1113,7 @@ intptr_t Engine::CheckOverwrite2(intptr_t fnum, const String & src, const String
   return res;
 }
 
-void Engine::Delay(int64_t time, int64_t cb, int64_t & counter, int64_t limit)
+void Engine::Delay(int64_t time, int64_t cb, volatile int64_t & counter, int64_t limit)
 {
   if (limit <= 0)
     return;

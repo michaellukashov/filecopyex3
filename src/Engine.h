@@ -105,7 +105,9 @@ private:
   int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
       _HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
   bool copyCreationTime, copyLastAccessTime, copyLastWriteTime;
-  intptr_t Aborted, LastFile, KeepFiles, FileCount, CopyCount;
+  intptr_t volatile Aborted, LastFile, KeepFiles, FileCount, CopyCount;
+  int64_t volatile ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
+          ReadN, WriteN, TotalN, FirstWrite, StartTime;
   int64_t _LastCheckEscape, _CheckEscapeInterval;
   void Copy();
 
@@ -132,9 +134,7 @@ private:
   int CheckOverwrite(intptr_t fnum, String & ren);
   CopyProgress CopyProgressBox;
   FarProgress ScanFoldersProgressBox;
-  int64_t ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
-          ReadN, WriteN, TotalN, FirstWrite, StartTime;
-  static void Delay(int64_t, int64_t, int64_t &, int64_t);
+  static void Delay(int64_t, int64_t, volatile int64_t &, int64_t);
   int SectorSize;
 
   intptr_t CheckOverwrite(intptr_t, const String &, const String &, String &);
