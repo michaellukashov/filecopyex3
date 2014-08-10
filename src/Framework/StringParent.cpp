@@ -27,11 +27,11 @@ int StringParent::loadFromFile(FILE * f)
       read = (int)fread(buffer + bpos, sizeof(wchar_t), bsize - bpos, f);
       if (read < 1)
         break;
-      for (int i = bpos; i < read; i++)
+      for (int Index = bpos; Index < read; Index++)
       {
         if (inv)
-          buffer[i] = ((buffer[i] & 0x00FF) << 8) | ((buffer[i] & 0xFF00) >> 8);
-        if (buffer[i] == CR || (buffer[i] == LF && oldc != CR))
+          buffer[Index] = ((buffer[Index] & 0x00FF) << 8) | ((buffer[Index] & 0xFF00) >> 8);
+        if (buffer[Index] == CR || (buffer[Index] == LF && oldc != CR))
         {
           string[spos] = 0;
           AddString(string);
@@ -39,12 +39,12 @@ int StringParent::loadFromFile(FILE * f)
         }
         else
         {
-          if (buffer[i] != CR && buffer[i] != LF && spos < ssize)
+          if (buffer[Index] != CR && buffer[Index] != LF && spos < ssize)
           {
-            string[spos++] = buffer[i];
+            string[spos++] = buffer[Index];
           }
         }
-        oldc = buffer[i];
+        oldc = buffer[Index];
       }
       bpos = 0;
     }
@@ -70,9 +70,9 @@ int StringParent::loadFromFile(FILE * f)
       read = (int)fread(buffer + bpos, sizeof(char), bsize - bpos, f);
       if (read < 1)
         break;
-      for (int i = 0; i < read + bpos; i++)
+      for (int Index = 0; Index < read + bpos; Index++)
       {
-        if (buffer[i] == CR || (buffer[i] == LF && oldc != CR))
+        if (buffer[Index] == CR || (buffer[Index] == LF && oldc != CR))
         {
           string[spos] = 0;
           AddString(String(string));
@@ -80,12 +80,12 @@ int StringParent::loadFromFile(FILE * f)
         }
         else
         {
-          if (buffer[i] != CR && buffer[i] != LF && spos < ssize)
+          if (buffer[Index] != CR && buffer[Index] != LF && spos < ssize)
           {
-            string[spos++] = buffer[i];
+            string[spos++] = buffer[Index];
           }
         }
-        oldc = buffer[i];
+        oldc = buffer[Index];
       }
       bpos = 0;
     }
@@ -125,9 +125,9 @@ bool StringParent::saveToFile(FILE * f, TextFormat tf) const
     uint16_t sign = 0xFFFE;
     fwrite(&sign, sizeof(sign), 1, f);
   }
-  for (size_t i = 0; i < Count(); i++)
+  for (size_t Index = 0; Index < Count(); Index++)
   {
-    const String s = (*this)[i];
+    const String s = (*this)[Index];
     const int ssize = DEFAULT_SECTOR_SIZE;
     if (tf != tfOEM)
     {

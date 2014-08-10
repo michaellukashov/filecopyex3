@@ -16,10 +16,10 @@ public:
   virtual size_t Count() const { return data.size(); }
   intptr_t Find(const String & v, intptr_t start = 0) const
   {
-    for (size_t i = start; i < Count(); ++i)
+    for (size_t Index = start; Index < Count(); ++Index)
     {
-      if (data[i].cmp(v) == 0)
-        return i;
+      if (data[Index].cmp(v) == 0)
+        return Index;
     }
     return -1;
   }

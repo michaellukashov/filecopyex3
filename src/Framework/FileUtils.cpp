@@ -304,16 +304,16 @@ String GetRealFileName(const String & _path, int flg)
 {
   String path = AddEndSlash(_path);
 rep:
-  for (intptr_t i = path.len() - 1; i >= 0; i--)
+  for (intptr_t Index = path.len() - 1; Index >= 0; Index--)
   {
-    if (path[i] == '\\')
+    if (path[Index] == '\\')
     {
       String res;
-      if (GetSymLink(path.substr(0, i), res,
+      if (GetSymLink(path.substr(0, Index), res,
                      gslExpandSubst | gslExpandReparsePoints | gslExpandMountPoints |
                      ((flg & rfnNoNetExpand) ? 0 : gslExpandNetMappings)))
       {
-        path = AddEndSlash(res + path.substr(i));
+        path = AddEndSlash(res + path.substr(Index));
         goto rep;
       }
     }

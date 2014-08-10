@@ -10,9 +10,9 @@ FarMenu::FarMenu() :
 
 FarMenu::~FarMenu()
 {
-  for (size_t i = 0; i < items.size(); ++i)
+  for (size_t Index = 0; Index < items.size(); ++Index)
   {
-    delete[] items[i].Text;
+    delete[] items[Index].Text;
   }
 }
 

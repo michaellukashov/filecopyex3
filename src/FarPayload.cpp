@@ -91,9 +91,9 @@ void FarDlgPayload::init(const String & _name)
 {
   Payload::init(_name);
 
-  for (uint32_t i = 0; i < AttribCount(); i++)
+  for (uint32_t Index = 0; Index < AttribCount(); Index++)
   {
-    addProperty(Attrib(i).Name, 0);
+    addProperty(Attrib(Index).Name, 0);
   }
   addProperty(L"FitWidth", 0);
   addProperty(L"Focus", 0);
@@ -116,11 +116,11 @@ void FarDlgPayload::preInitItem(FarDialogItem & item)
   }
   SetItemText(item, p);
 
-  for (uint32_t i = 0; i < AttribCount(); i++)
+  for (uint32_t Index = 0; Index < AttribCount(); Index++)
   {
-    if (getProp(Attrib(i).Name))
+    if (getProp(Attrib(Index).Name))
     {
-      item.Flags |= Attrib(i).Flag;
+      item.Flags |= Attrib(Index).Flag;
     }
   }
   if (getProp(L"Focus"))
@@ -234,11 +234,11 @@ void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
   {
     list.ItemsNumber = items.Count();
     list.Items = new FarListItem[items.Count()];
-    for (size_t i = 0; i < items.Count(); i++)
+    for (size_t Index = 0; Index < items.Count(); Index++)
     {
-      if (getProp(L"Text") == items[i])
+      if (getProp(L"Text") == items[Index])
       {
-        list.Items[i].Flags |= LIF_SELECTED;
+        list.Items[Index].Flags |= LIF_SELECTED;
       }
     }
   }

@@ -144,9 +144,9 @@ String SplitWidth(const String & s, intptr_t w)
   String res;
   res.reserve(s.len());
   intptr_t curW = 0;
-  for (size_t i = 0; i < s.len(); i++)
+  for (size_t Index = 0; Index < s.len(); Index++)
   {
-    wchar_t c = s[i];
+    wchar_t c = s[Index];
 
     if (c == '\n' || c == '\r')
     {

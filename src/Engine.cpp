@@ -791,12 +791,12 @@ void Engine::Copy()
   FileNameStoreEnum Dst(&DstNames);
   std::vector<CurDirInfo> CurDirStack;
 
-  for (size_t i = 0; i < Src.Count(); i++)
+  for (size_t Index = 0; Index < Src.Count(); Index++)
   {
     String SrcName = Src.GetNext();
     String DstName = Dst.GetNext();
 
-    FileStruct & info = Files[i];
+    FileStruct & info = Files[Index];
     if (info.Flags & FLG_SKIPPED ||
         info.Flags & FLG_COPIED ||
         info.Flags & FLG_DESCFILE)
@@ -868,7 +868,7 @@ open_retry:
     info.SectorSize = SectorSize;
     if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      CheckDstFileExists(buffInfo, i, info, SrcName, false, DstName);
+      CheckDstFileExists(buffInfo, Index, info, SrcName, false, DstName);
     }
 
     if (!InputFile)
@@ -993,7 +993,7 @@ skip:
       if (BuffPos % ReadAlign)
         BuffPos = (BuffPos / ReadAlign + 1) * ReadAlign;
       buffInfo->BuffInf[FilesInBuff].NextPos = BuffPos;
-      buffInfo->BuffInf[FilesInBuff].FileNumber = (intptr_t)i;
+      buffInfo->BuffInf[FilesInBuff].FileNumber = (intptr_t)Index;
       if (BuffPos == buffInfo->BuffSize)
       {
         buffInfo->BuffInf[FilesInBuff].EndFlag = 0;
@@ -1057,17 +1057,17 @@ abort:
   else
   {
     FileNameStoreEnum Src(&SrcNames);
-    for (size_t i = 0; i < Src.Count(); i++)
+    for (size_t Index = 0; Index < Src.Count(); Index++)
     {
-      if (!(Files[i].Flags & FLG_COPIED))
+      if (!(Files[Index].Flags & FLG_COPIED))
       {
-        if (Files[i].Flags & FLG_DESCFILE)
-          ProcessDesc(i);
-        else if (Move && Files[i].Flags & FLG_DIR_POST &&
-                 !(Files[i].Flags & FLG_DIR_NOREMOVE))
+        if (Files[Index].Flags & FLG_DESCFILE)
+          ProcessDesc(Index);
+        else if (Move && Files[Index].Flags & FLG_DIR_POST &&
+                 !(Files[Index].Flags & FLG_DIR_NOREMOVE))
         {
-          if (RmDir(Src.GetByNum(i)))
-            Files[i].Flags |= FLG_DELETED;
+          if (RmDir(Src.GetByNum(Index)))
+            Files[Index].Flags |= FLG_DELETED;
         }
       }
     }
@@ -1140,13 +1140,13 @@ void Engine::FarToWin32FindData(const TPanelItem & tpi, WIN32_FIND_DATA & wfd)
 
 String Engine::FindDescFile(const String & dir, intptr_t * idx)
 {
-  for (size_t i = 0; i < plugin->Descs().Count(); i++)
+  for (size_t Index = 0; Index < plugin->Descs().Count(); Index++)
   {
-    if (FileExists(AddEndSlash(dir) + plugin->Descs()[i]))
+    if (FileExists(AddEndSlash(dir) + plugin->Descs()[Index]))
     {
       if (idx)
-        *idx = i;
-      return plugin->Descs()[i];
+        *idx = Index;
+      return plugin->Descs()[Index];
     }
   }
   if (idx)
@@ -1158,15 +1158,15 @@ String Engine::FindDescFile(const String & dir, intptr_t * idx)
 
 String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t * idx)
 {
-  for (size_t i = 0; i < plugin->Descs().Count(); i++)
+  for (size_t Index = 0; Index < plugin->Descs().Count(); Index++)
   {
     HANDLE hf;
-    if ((hf = ::FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
+    if ((hf = ::FindFirstFile((AddEndSlash(dir) + plugin->Descs()[Index]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
     {
       ::FindClose(hf);
       if (idx)
-        *idx = i;
-      return plugin->Descs()[i];
+        *idx = Index;
+      return plugin->Descs()[Index];
     }
   }
   if (idx)
@@ -1647,11 +1647,11 @@ rep:
   }
   else
   {
-    for (size_t i = 0; i < pi.ItemsNumber; i++)
+    for (size_t Index = 0; Index < pi.ItemsNumber; Index++)
     {
-      if (TPanelItem(i)->Flags & PPIF_SELECTED)
+      if (TPanelItem(Index)->Flags & PPIF_SELECTED)
       {
-        sortIndex.push_back(i);
+        sortIndex.push_back(Index);
       }
     }
   }
@@ -1659,10 +1659,10 @@ rep:
   String curPath;
   int haveCurPath = 0;
 
-  for (size_t ii = 0; ii < sortIndex.size(); ii++)
+  for (size_t Index = 0; Index < sortIndex.size(); Index++)
   {
-    size_t i = sortIndex[ii];
-    TPanelItem pit(i);
+    size_t I = sortIndex[Index];
+    TPanelItem pit(I);
     String file = pit->FileName;
     if (file == L"..")
     {
@@ -1704,7 +1704,7 @@ rep:
     String dst = ApplyFileMaskPath(file, dstPath);
     WIN32_FIND_DATA wfd;
     FarToWin32FindData(pit, wfd);
-    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, (int)i))
+    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, (int)I))
     {
       goto fin;
     }
@@ -1718,20 +1718,20 @@ rep:
     FileNameStoreEnum Enum(&DstNames);
     //progress.ShowMessage(LOC(L"Status.ScanningDest"));
     ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
-    for (size_t i = 0; i < Enum.Count(); i++)
+    for (size_t Index = 0; Index < Enum.Count(); Index++)
     {
-      if (!(Files[i].Flags & FLG_SKIPPED) & !(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY))
+      if (!(Files[Index].Flags & FLG_SKIPPED) & !(Files[Index].Attr & FILE_ATTRIBUTE_DIRECTORY))
       {
-        int64_t sz = FileSize((String)Enum.GetByNum(i));
-        if (sz < Files[i].Size)
+        int64_t sz = FileSize((String)Enum.GetByNum(Index));
+        if (sz < Files[Index].Size)
         {
-          Files[i].ResumePos = sz / ReadAlign * ReadAlign;
-          TotalBytes -= Files[i].ResumePos;
+          Files[Index].ResumePos = sz / ReadAlign * ReadAlign;
+          TotalBytes -= Files[Index].ResumePos;
         }
         else
         {
-          Files[i].Flags |= FLG_SKIPPED;
-          TotalBytes -= Files[i].Size;
+          Files[Index].Flags |= FLG_SKIPPED;
+          TotalBytes -= Files[Index].Size;
           TotalN--;
         }
       }
@@ -1781,15 +1781,15 @@ fin:
   if (!Move)
   {
     Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, nullptr);
-    for (size_t i = 0; i < Files.size(); i++)
+    for (size_t Index = 0; Index < Files.size(); Index++)
     {
-      if (Files[i].PanelIndex != -1)
+      if (Files[Index].PanelIndex != -1)
       {
-        if (Files[i].Flags & FLG_DIR_PRE)
+        if (Files[Index].Flags & FLG_DIR_PRE)
         {
           int ok = 1;
-          size_t j = i + 1;
-          while (Files[j].Level > Files[i].Level)
+          size_t j = Index + 1;
+          while (Files[j].Level > Files[Index].Level)
           {
             if (!(Files[j].Flags & (FLG_DIR_PRE | FLG_DIR_POST | FLG_COPIED)))
             {
@@ -1800,15 +1800,15 @@ fin:
           }
           if (ok)
           {
-            Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
+            Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[Index].PanelIndex, FALSE);
           }
-          i = j - 1;
+          Index = j - 1;
         }
         else
         {
-          if (!(Files[i].Flags & FLG_DIR_POST) && Files[i].Flags & FLG_COPIED)
+          if (!(Files[Index].Flags & FLG_DIR_POST) && Files[Index].Flags & FLG_COPIED)
           {
-            Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
+            Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[Index].PanelIndex, FALSE);
           }
         }
       }
@@ -1834,14 +1834,14 @@ fin:
     }
     NewFileName = NewFileName.toLower();
 
-    for (size_t i = 0; i < pi.ItemsNumber; i++)
+    for (size_t Index = 0; Index < pi.ItemsNumber; Index++)
     {
-      TPanelItem pit(i);
+      TPanelItem pit(Index);
       String NewPanelFilename = pit->FileName;
       NewPanelFilename = NewPanelFilename.toLower();
       if (NewFileName == NewPanelFilename)
       {
-        rpi.CurrentItem = i;
+        rpi.CurrentItem = Index;
         Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, &rpi);
         break;
       }
@@ -2173,10 +2173,10 @@ fin:
 void Engine::SetOverwriteMode(intptr_t Start)
 {
   FileNameStoreEnum Enum(&DstNames);
-  for (size_t i = Start; i < Enum.Count(); i++)
+  for (size_t Index = Start; Index < Enum.Count(); Index++)
   {
-    String fn = Enum.GetByNum(i);
-    FileStruct & info = Files[i];
+    String fn = Enum.GetByNum(Index);
+    FileStruct & info = Files[Index];
     if (!SkipNewer && info.Flags & FLG_SKIPNEWER)
     {
       info.Flags &= ~(FLG_SKIPNEWER | FLG_SKIPPED);
@@ -2470,13 +2470,13 @@ intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint
     dlg[L"Label2"](L"Visible") = 1;
     StringVector list;
     list.loadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
-    for (size_t i = 0; i < list.Count(); i++)
+    for (size_t Index = 0; Index < list.Count(); Index++)
     {
-      if (i <= 7)
+      if (Index <= 7)
       {
-        String name = String(L"Label") + String(i + 3);
+        String name = String(L"Label") + String(Index + 3);
         dlg[name](L"Visible") = 1;
-        dlg[name](L"Text") = list[i];
+        dlg[name](L"Text") = list[Index];
       }
     }
   }

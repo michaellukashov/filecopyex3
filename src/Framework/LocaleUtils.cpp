@@ -7,9 +7,9 @@ void LoadLocale(const String & fn, Locale & locale)
   StringVector temp;
   if (temp.loadFromFile(fn))
   {
-    for (size_t i = 0; i < temp.Count(); i++)
+    for (size_t Index = 0; Index < temp.Count(); Index++)
     {
-      const String & it = temp[i];
+      const String & it = temp[Index];
       size_t p = it.find(L"=");
       if (p != (size_t)-1)
       {

@@ -70,7 +70,7 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String & capt
   tpl += L"\n";
   String bkg = String(' ', W - 10);
   bkg += L"\n";
-  for (int i = 0; i < H - 4; ++i)
+  for (int Index = 0; Index < H - 4; ++Index)
   {
     tpl += bkg;
   }
@@ -139,16 +139,16 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
   wchar_t * bp = buf;
   if (!InverseBars)
   {
-    for (int i = 0; i < fn; i++)
+    for (int Index = 0; Index < fn; Index++)
       *bp++ = 0x2588; //'█'
-    for (int i = 0; i < en; i++)
+    for (int Index = 0; Index < en; Index++)
       *bp++ = 0x2591; //'░'
   }
   else
   {
-    for (int i = 0; i < en; i++)
+    for (int Index = 0; Index < en; Index++)
       *bp++ = 0x2591; //'░'
-    for (int i = 0; i < fn; i++)
+    for (int Index = 0; Index < fn; Index++)
       *bp++ = 0x2588; //'█'
   }
   *bp = 0;
