@@ -1072,7 +1072,8 @@ abort:
       }
     }
   }
-
+  buffInfo = nullptr;
+  wbuffInfo = nullptr;
   ::CloseHandle(UiFree);
 }
 
