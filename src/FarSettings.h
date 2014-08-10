@@ -20,6 +20,10 @@ public:
     String name;
     FARSETTINGSTYPES type;
 
+    ParamInfo() :
+      name(),
+      type(FST_UNKNOWN)
+    {}
     ParamInfo(const String & _name, FARSETTINGSTYPES _type) :
       name(_name),
       type(_type)
