@@ -58,6 +58,12 @@ Property & Node::operator()(const String & v)
   return getPayload()(v);
 }
 
+Payload & Node::getPayload() const
+{
+  static Payload nullPayload;
+  return payload ? *payload : nullPayload;
+}
+
 const String Node::getName() const
 {
   return getPayload().getName();
