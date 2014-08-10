@@ -1239,7 +1239,7 @@ String getPanelDir(HANDLE h_panel)
     bufSize = size;
     buf.reset(new uint8_t[bufSize]);
     reinterpret_cast<FarPanelDirectory *>(buf.get())->StructSize = sizeof(FarPanelDirectory);
-    size = Info.PanelControl(h_panel, FCTL_GETPANELDIRECTORY, bufSize, buf.get());
+    Info.PanelControl(h_panel, FCTL_GETPANELDIRECTORY, bufSize, buf.get());
   }
   //CHECK(size >= sizeof(FarPanelDirectory) && size <= buf_size);
   return reinterpret_cast<FarPanelDirectory *>(buf.get())->Name;
