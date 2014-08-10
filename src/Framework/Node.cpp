@@ -110,7 +110,8 @@ Node & Node::child(const String & v)
     }
   }
   FWError(Format(L"Request to undefined object %s", v.ptr()));
-  return *(new Node()); // !!! bad :(
+  static Node nullNode;
+  return nullNode;
 }
 
 void Node::ClearChilds()
