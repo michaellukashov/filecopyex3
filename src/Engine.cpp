@@ -148,26 +148,26 @@ Engine::Engine() :
   memset(&DescFindData, 0, sizeof(DescFindData));
 }
 
-int Engine::InitBuf(TBuffInfo * buffInfo)
+int Engine::InitBuf(TBuffInfo * ABuffInfo)
 {
-  buffInfo->OutFile = nullptr;
-  buffInfo->OutNum = -1;
+  ABuffInfo->OutFile = nullptr;
+  ABuffInfo->OutNum = -1;
 
-  buffInfo->BuffSize = BufSize;
+  ABuffInfo->BuffSize = BufSize;
   if (Parallel)
-    buffInfo->BuffSize /= 2;
-  buffInfo->BuffSize = (buffInfo->BuffSize / AllocAlign + 1) * AllocAlign;
+    ABuffInfo->BuffSize /= 2;
+  ABuffInfo->BuffSize = (ABuffInfo->BuffSize / AllocAlign + 1) * AllocAlign;
 
-  buffInfo->Buffer = static_cast<uint8_t *>(Alloc(buffInfo->BuffSize));
-  if (!buffInfo->Buffer)
+  ABuffInfo->Buffer = static_cast<uint8_t *>(Alloc(ABuffInfo->BuffSize));
+  if (!ABuffInfo->Buffer)
   {
     Error(LOC(L"Error.MemAlloc"), GetLastError());
     return FALSE;
   }
-  buffInfo->BuffInf = static_cast<BuffStruct *>(Alloc(SrcNames.Count() * sizeof(BuffStruct)));
-  if (!buffInfo->BuffInf)
+  ABuffInfo->BuffInf = static_cast<BuffStruct *>(Alloc(SrcNames.Count() * sizeof(BuffStruct)));
+  if (!ABuffInfo->BuffInf)
   {
-    Free(buffInfo->Buffer);
+    Free(ABuffInfo->Buffer);
     Error(LOC(L"Error.MemAlloc"), GetLastError());
     return FALSE;
   }
@@ -258,12 +258,12 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
   return escape;
 }
 
-void Engine::FinalizeBuf(TBuffInfo * buffInfo)
+void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
 {
-  HANDLE Handle = buffInfo->OutFile;
-  intptr_t fnum = buffInfo->OutNum;
-  String & DstName = buffInfo->DstName;
-  String & SrcName = buffInfo->SrcName;
+  HANDLE Handle = ABuffInfo->OutFile;
+  intptr_t fnum = ABuffInfo->OutNum;
+  String & DstName = ABuffInfo->DstName;
+  String & SrcName = ABuffInfo->SrcName;
   FileStruct & info = Files[fnum];
 
   if (!(info.Flags & FLG_SKIPPED))
@@ -285,7 +285,7 @@ void Engine::FinalizeBuf(TBuffInfo * buffInfo)
     {
       if (info.OverMode == OM_APPEND)
       {
-        setFileSizeAndTime(DstName, buffInfo->OrgSize + info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+        setFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
       }
       else
       {
@@ -364,11 +364,11 @@ del_retry:
       {
         if (KeepFiles || (info.Flags & FLG_KEEPFILE))
         {
-          setFileSizeAndTime(DstName, buffInfo->OrgSize + info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          setFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
         else
         {
-          setFileSizeAndTime(DstName, buffInfo->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          setFileSizeAndTime(DstName, ABuffInfo->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
       }
       else
@@ -591,32 +591,32 @@ open_retry:
   }
 }
 
-int Engine::FlushBuff(TBuffInfo * buffInfo)
+int Engine::FlushBuff(TBuffInfo * ABuffInfo)
 {
   size_t Pos = 0;
   size_t PosInStr = 0;
 
-  while (Pos < buffInfo->BuffSize && buffInfo->BuffInf[PosInStr].FileNumber >= 0)
+  while (Pos < ABuffInfo->BuffSize && ABuffInfo->BuffInf[PosInStr].FileNumber >= 0)
   {
-    intptr_t fnum = buffInfo->BuffInf[PosInStr].FileNumber;
+    intptr_t fnum = ABuffInfo->BuffInf[PosInStr].FileNumber;
     String SrcName = FlushSrc.GetByNum(fnum);
     String DstName = FlushDst.GetByNum(fnum);
     FileStruct & info = Files[fnum];
-    buffInfo->OutNum = fnum;
+    ABuffInfo->OutNum = fnum;
 
     if (Aborted)
       info.Flags |= FLG_SKIPPED;
 
-    if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
+    if (!ABuffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      CheckDstFileExists(buffInfo, fnum, info, SrcName, true, DstName);
+      CheckDstFileExists(ABuffInfo, fnum, info, SrcName, true, DstName);
     }
-    if (!(info.Flags & FLG_SKIPPED) && !buffInfo->OutFile)
+    if (!(info.Flags & FLG_SKIPPED) && !ABuffInfo->OutFile)
       info.Flags |= FLG_SKIPPED | FLG_ERROR;
 
     if (!(info.Flags & FLG_SKIPPED))
     {
-      while (Pos < buffInfo->BuffInf[PosInStr].WritePos)
+      while (Pos < ABuffInfo->BuffInf[PosInStr].WritePos)
       {
         if (!Parallel && CheckEscape() || Aborted)
         {
@@ -624,13 +624,13 @@ int Engine::FlushBuff(TBuffInfo * buffInfo)
           goto skip;
         }
 
-        size_t wsz = Min((size_t)(buffInfo->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
+        size_t wsz = Min((size_t)(ABuffInfo->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
         size_t wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
           wsz = Min(wsz, (size_t)(info.Size - info.Written));
 retry:
         int64_t st = GetTime();
-        size_t k = Write(buffInfo->OutFile, buffInfo->Buffer + Pos, wsz);
+        size_t k = Write(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, wsz);
 
         if (k < wsz)
         {
@@ -646,11 +646,11 @@ retry:
               int64_t Pos = info.Written;
               if (info.OverMode == OM_RESUME)
                 Pos += info.ResumePos;
-              Close(buffInfo->OutFile);
+              Close(ABuffInfo->OutFile);
 reopen_retry:
               uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-              buffInfo->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
-              if (!buffInfo->OutFile)
+              ABuffInfo->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
+              if (!ABuffInfo->OutFile)
               {
                 ::WaitForSingleObject(UiFree, INFINITE);
                 uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
@@ -664,13 +664,13 @@ reopen_retry:
                   info.Flags |= FLG_SKIPPED | FLG_ERROR;
                   if (flg & eerKeepFiles)
                     info.Flags |= FLG_KEEPFILE;
-                  buffInfo->OutFile = INVALID_HANDLE_VALUE;
+                  ABuffInfo->OutFile = INVALID_HANDLE_VALUE;
                   if (res == RES_ABORT)
                     Aborted = 1;
                   goto skip;
                 }
               }
-              if (FSeek(buffInfo->OutFile, Pos, FILE_BEGIN) == -1)
+              if (FSeek(ABuffInfo->OutFile, Pos, FILE_BEGIN) == -1)
                 FWError(Format(L"FSeek to %d failed, code %d", Pos,
                                (int)GetLastError()));
             }
@@ -700,20 +700,20 @@ reopen_retry:
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
 
         if (wsz < wsz1)
-          Pos = buffInfo->BuffInf[PosInStr].WritePos;
+          Pos = ABuffInfo->BuffInf[PosInStr].WritePos;
       }
 
 skip: ;
     }
-    Pos = buffInfo->BuffInf[PosInStr].NextPos;
+    Pos = ABuffInfo->BuffInf[PosInStr].NextPos;
 
-    if (buffInfo->BuffInf[PosInStr].EndFlag || info.Flags & FLG_SKIPPED)
+    if (ABuffInfo->BuffInf[PosInStr].EndFlag || info.Flags & FLG_SKIPPED)
     {
-      FinalizeBuf(buffInfo);
-      buffInfo->OutFile = nullptr;
-      buffInfo->OutNum = -1;
-      buffInfo->SrcName.Clear();
-      buffInfo->DstName.Clear();
+      FinalizeBuf(ABuffInfo);
+      ABuffInfo->OutFile = nullptr;
+      ABuffInfo->OutNum = -1;
+      ABuffInfo->SrcName.Clear();
+      ABuffInfo->DstName.Clear();
     }
 
     if (Aborted)
