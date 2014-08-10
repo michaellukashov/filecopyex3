@@ -113,7 +113,7 @@ int StringParent::loadFromFile(const String & fn)
 }
 
 
-bool StringParent::saveToFile(FILE * f, TextFormat tf)
+bool StringParent::saveToFile(FILE * f, TextFormat tf) const
 {
   if (tf == tfUnicode)
   {
