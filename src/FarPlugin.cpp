@@ -37,10 +37,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void BindAll()
 {
-  Bind(L"F5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0)", L"FileCopyEx - Copy file(s)");
-  Bind(L"F6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1)", L"FileCopyEx - Move file(s)");
-  Bind(L"ShiftF5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2)", L"FileCopyEx - Copy current file");
-  Bind(L"ShiftF6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3)", L"FileCopyEx - Move current file");
+  Bind(L"F5", L"if not Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0) then Keys(\\\"F5\\\") end", L"FileCopyEx - Copy file(s)");
+  Bind(L"F6", L"if not Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1) then Keys(\\\"F6\\\") end", L"FileCopyEx - Move file(s)");
+  Bind(L"ShiftF5", L"if not Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2) then Keys(\\\"ShiftF5\\\") end", L"FileCopyEx - Copy current file");
+  Bind(L"ShiftF6", L"if not Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3) then Keys(\\\"ShiftF6\\\") end", L"FileCopyEx - Move current file");
 }
 
 
