@@ -39,6 +39,10 @@ public:
     levelStar,
   };
 
+  FileName() :
+    d(levelPlus),
+    Name()
+  {}
   FileName(const Direction _d, const String & _name) :
     d(_d),
     Name(_name)

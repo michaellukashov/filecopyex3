@@ -1,9 +1,13 @@
-FileCopyEx3 3.0.3.18 ??.08.2014
+FileCopyEx3 3.0.3.19 ??.08.2014
+* Fix for corrupt non-ASCII characters in descript.ion after copying a file
+  Thanks to Igor Yudintsev
+  (https://github.com/michaellukashov/filecopyex3/pull/11)
 * Fix issue #8: Help is not working
   (https://github.com/michaellukashov/filecopyex3/issues/8)
   (http://forum.farmanager.com/viewtopic.php?p=120961#p120961)
-* Fix issue #12: Check if destination file exists
+* Fix googlecode issue #12, github issue #10: Check if destination file exists
   (https://code.google.com/p/filecopyex3/issues/detail?id=12)
+  (https://github.com/michaellukashov/filecopyex3/issues/10)
 
 FileCopyEx3 3.0.2.16 01.08.2014
 * Bugfix: "Copy file under cursor", "Move file under cursor" was not working

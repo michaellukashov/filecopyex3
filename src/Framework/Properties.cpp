@@ -26,12 +26,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "LowLevelStr.h"
 #include "Properties.h"
 
-Property::Property(const Property & other)
+Property::Property(const Property & other) :
+  type(other.type),
+  vInt(other.vInt),
+  vFloat(other.vFloat),
+  vStr(other.vStr)
 {
-  if (this != &other)
-  {
-    (*this) = other;
-  }
 }
 
 Property::Property(int v) : vFloat(0.)

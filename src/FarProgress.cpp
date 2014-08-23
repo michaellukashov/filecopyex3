@@ -70,7 +70,7 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String & capt
   tpl += L"\n";
   String bkg = String(' ', W - 10);
   bkg += L"\n";
-  for (int i = 0; i < H - 4; ++i)
+  for (int Index = 0; Index < H - 4; ++Index)
   {
     tpl += bkg;
   }
@@ -139,16 +139,16 @@ void FarProgress::DrawProgress(int x1, int x2, int y, float pc)
   wchar_t * bp = buf;
   if (!InverseBars)
   {
-    for (int i = 0; i < fn; i++)
+    for (int Index = 0; Index < fn; Index++)
       *bp++ = 0x2588; //'█'
-    for (int i = 0; i < en; i++)
+    for (int Index = 0; Index < en; Index++)
       *bp++ = 0x2591; //'░'
   }
   else
   {
-    for (int i = 0; i < en; i++)
+    for (int Index = 0; Index < en; Index++)
       *bp++ = 0x2591; //'░'
-    for (int i = 0; i < fn; i++)
+    for (int Index = 0; Index < fn; Index++)
       *bp++ = 0x2588; //'█'
   }
   *bp = 0;
@@ -224,9 +224,9 @@ void FarProgress::ShowScanProgress(const String & msg)
   int ConsoleWidth;
   int ConsoleHeight;
   GetConSize(ConsoleWidth, ConsoleHeight);
-  int WindowWidth  = ConsoleWidth / 2;
-  if (WindowWidth > 46)
-    WindowWidth = 46;
+  int WindowWidth = ConsoleWidth / 2;
+  if (WindowWidth > 50)
+    WindowWidth = 50;
   if (WindowWidth < 40)
     WindowWidth = 40;
   int WindowHeight = 7;
@@ -239,9 +239,9 @@ void FarProgress::ShowScanProgress(const String & msg)
   DrawWindow(WindowCoordX1, WindowCoordY1, WindowCoordX2, WindowCoordY2, L"");
   Info.Text(WindowCoordX1 + 5, WindowCoordY1 + 2, &clrText,
             FormatWidth(msg, WindowCoordX2 - WindowCoordX1 - 9).ptr());
-  ProgX1  = WindowCoordX1 + 5;
-  ProgX2  = WindowCoordX2 - 5;
-  ProgY   = WindowCoordY1 + 3;
+  ProgX1 = WindowCoordX1 + 5;
+  ProgX2 = WindowCoordX2 - 5;
+  ProgY  = WindowCoordY1 + 3;
   WinType = WIN_SCAN_PROGRESS;
   DrawScanProgress(ProgX1, ProgX2, ProgY, 0, 0);
   Info.Text(0, 0, 0, nullptr);

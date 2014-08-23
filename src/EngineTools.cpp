@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void * Alloc(size_t size)
 {
-  size = (size / 4096 + 1) * 4096;
+  size = (size / DEFAULT_SECTOR_SIZE + 1) * DEFAULT_SECTOR_SIZE;
   return ::VirtualAlloc(nullptr, size, MEM_COMMIT, PAGE_READWRITE);
 }
 
@@ -71,7 +71,7 @@ void Encrypt(const String & fn, int f)
 {
   if (!Win2K || f == ATTR_INHERIT)
     return;
-  int res;
+  BOOL res;
   ::SetFileAttributes(fn.ptr(), 0);
   if (f)
     res = ::EncryptFile(fn.ptr());
@@ -132,7 +132,7 @@ void CopyACL(const String & src, const String & dst)
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Luid = luid;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
-    AdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), nullptr, nullptr);
+    ::AdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), nullptr, nullptr);
     SACLPriv = 1;
   }
   _CopyACL(src, dst, DACL_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION);
@@ -259,6 +259,6 @@ int GetSectorSize(const String & path)
   else
   {
     //FWError(L"Warning: GetSectorSize failed");
-    return 4096;
+    return DEFAULT_SECTOR_SIZE;
   }
 }

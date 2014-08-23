@@ -97,9 +97,9 @@ void FarDlgContainer::DefSize(intptr_t & sumw, intptr_t & sumh, intptr_t & fit)
   sumw = sumh = 0;
   intptr_t groupw = 0, grouph = 0;
   fit = getPayload()(L"FitWidth").operator int();
-  for (size_t i = 0; i < childs.size(); i++)
+  for (size_t Index = 0; Index < childs.size(); Index++)
   {
-    FarDlgNode & obj = child(i);
+    FarDlgNode & obj = child(Index);
     if (obj(L"Visible"))
     {
       intptr_t w, h, f;
@@ -124,9 +124,9 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
   std::vector<_group> Groups;
   _group group;
   group.start = group.w = group.h = group.nfit = 0;
-  for (size_t i = 0; i < childs.size(); i++)
+  for (size_t Index = 0; Index < childs.size(); Index++)
   {
-    FarDlgNode & obj = child(i);
+    FarDlgNode & obj = child(Index);
     if (obj(L"Visible"))
     {
       intptr_t w, h, f;
@@ -145,19 +145,19 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
         if (group.w > sumw)
           sumw = group.w;
         // sumh+=group.h;
-        group.end = i;
+        group.end = Index;
         Groups.push_back(group);
         group.w = group.h = group.nfit = 0;
-        group.start = i + 1;
+        group.start = Index + 1;
       }
     }
   }
   intptr_t x = curX, y = curY;
   for (size_t j = 0; j < Groups.size(); j++)
   {
-    for (intptr_t i = Groups[j].start; i <= Groups[j].end; i++)
+    for (intptr_t Index = Groups[j].start; Index <= Groups[j].end; Index++)
     {
-      FarDlgNode & obj = child(i);
+      FarDlgNode & obj = child(Index);
       if (obj(L"Visible"))
       {
         intptr_t w, h, f;
@@ -177,28 +177,28 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
 
 void FarDlgContainer::LoadState(PropertyMap & state)
 {
-  for (size_t i = 0; i < childs.size(); i++)
+  for (size_t Index = 0; Index < childs.size(); Index++)
   {
-    if (child(i).IsContainer() || (bool)child(i)(L"Persistent"))
+    if (child(Index).IsContainer() || (bool)child(Index)(L"Persistent"))
     {
-      child(i).LoadState(state);
+      child(Index).LoadState(state);
     }
   }
 }
 
 void FarDlgContainer::SaveState(PropertyMap & state)
 {
-  for (size_t i = 0; i < childs.size(); i++)
-    if (child(i).IsContainer() || (bool)child(i)(L"Persistent"))
-      child(i).SaveState(state);
+  for (size_t Index = 0; Index < childs.size(); Index++)
+    if (child(Index).IsContainer() || (bool)child(Index)(L"Persistent"))
+      child(Index).SaveState(state);
 }
 
 void FarDlgContainer::RetrieveProperties(HANDLE dlg)
 {
   size_t cnt = childs.size();
-  for (size_t i = 0; i < cnt; i++)
+  for (size_t Index = 0; Index < cnt; Index++)
   {
-    FarDlgNode & fdo = child(i);
+    FarDlgNode & fdo = child(Index);
     if (fdo.getPayload().getDialogItem() != -1 || fdo.IsContainer())
       fdo.RetrieveProperties(dlg);
   }
@@ -206,13 +206,13 @@ void FarDlgContainer::RetrieveProperties(HANDLE dlg)
 
 void FarDlgContainer::ClearDialogItems(std::vector<FarDialogItem>& Items)
 {
-  for (size_t i = 0; i < Items.size(); i++)
+  for (size_t Index = 0; Index < Items.size(); Index++)
   {
-    DestroyItemText(Items[i]);
+    DestroyItemText(Items[Index]);
   }
-  for (size_t i = 0; i < childs.size(); i++)
+  for (size_t Index = 0; Index < childs.size(); Index++)
   {
-    child(i).ClearDialogItem();
+    child(Index).ClearDialogItem();
   }
 }
 
@@ -220,9 +220,9 @@ FarDlgNode * FarDlgContainer::FindChild(const String & name)
 {
   if (getName() == name)
     return this;
-  for (size_t i = 0; i < childs.size(); i++)
+  for (size_t Index = 0; Index < childs.size(); Index++)
   {
-    FarDlgNode * obj = child(i).FindChild(name);
+    FarDlgNode * obj = child(Index).FindChild(name);
     if (obj)
       return obj;
   }
@@ -266,7 +266,7 @@ intptr_t FarDialog::Execute()
   Items[0].Y1 = 1;
   Items[0].X2 = w + 6;
   Items[0].Y2 = h + 2;
-  String HelpTopic = Property((*this)("HelpTopic"));
+  String HelpTopic = Property((*this)(L"HelpTopic"));
 
   HANDLE hnd = Info.DialogInit(&MainGuid, &MainDialog, -1, -1, w + 10, h + 4,
                                HelpTopic.c_str(),
@@ -278,15 +278,15 @@ intptr_t FarDialog::Execute()
   if (hnd != INVALID_HANDLE_VALUE)
   {
     intptr_t res = Info.DialogRun(hnd);
-    for (size_t i = 0; i < RetCodes.size(); i++)
+    for (size_t Index = 0; Index < RetCodes.size(); Index++)
     {
-      if (RetCodes[i].itemNo == res)
+      if (RetCodes[Index].itemNo == res)
       {
-        if (RetCodes[i].retCode != -1)
+        if (RetCodes[Index].retCode != -1)
         {
           RetrieveProperties(hnd);
         }
-        ret = RetCodes[i].retCode;
+        ret = RetCodes[Index].retCode;
         break;
       }
     }

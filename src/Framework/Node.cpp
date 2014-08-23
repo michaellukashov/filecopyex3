@@ -58,6 +58,12 @@ Property & Node::operator()(const String & v)
   return getPayload()(v);
 }
 
+Payload & Node::getPayload() const
+{
+  static Payload nullPayload;
+  return payload ? *payload : nullPayload;
+}
+
 const String Node::getName() const
 {
   return getPayload().getName();
@@ -102,22 +108,23 @@ int Node::Save(const String& fn)
 
 Node & Node::child(const String & v)
 {
-  for (size_t i = 0; i < childs.size(); ++i)
+  for (size_t Index = 0; Index < childs.size(); ++Index)
   {
-    if (childs[i]->getName() == v)
+    if (childs[Index]->getName() == v)
     {
-      return child(i);
+      return child(Index);
     }
   }
   FWError(Format(L"Request to undefined object %s", v.ptr()));
-  return *(new Node()); // !!! bad :(
+  static Node nullNode;
+  return nullNode;
 }
 
 void Node::ClearChilds()
 {
-  for (size_t i = 0; i < childs.size(); ++i)
+  for (size_t Index = 0; Index < childs.size(); ++Index)
   {
-    delete childs[i];
+    delete childs[Index];
   }
   childs.clear();
 }
@@ -129,12 +136,12 @@ size_t Node::LoadFromList(StringParent & list, size_t start)
 
   size_t res = list.Count() - 1;
 
-  for (size_t i = start; i < list.Count(); i++)
+  for (size_t Index = start; Index < list.Count(); Index++)
   {
-    String line = list[i].trim();
+    String line = list[Index].trim();
     if (line == L"end")
     {
-      res = i;
+      res = Index;
       break;
     }
     else if (!line.ncmp(L"object", 6))
@@ -148,7 +155,7 @@ size_t Node::LoadFromList(StringParent & list, size_t start)
         Node * obj = objectManager->create(ptype, pname, this);
         if (obj)
         {
-          i = obj->LoadFromList(list, i + 1);
+          Index = obj->LoadFromList(list, Index + 1);
         }
         else
         {
@@ -201,9 +208,9 @@ void Node::ReloadProperties() const
 void Node::ReloadPropertiesRecursive()
 {
   ReloadProperties();
-  for (size_t i = 0; i < childs.size(); i++)
+  for (size_t Index = 0; Index < childs.size(); Index++)
   {
-    childs[i]->ReloadPropertiesRecursive();
+    childs[Index]->ReloadPropertiesRecursive();
   }
 }
 

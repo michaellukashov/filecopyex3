@@ -69,8 +69,8 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
                             int64_t StartTime, size_t BufferSize)
 {
   RedrawWindowIfNeeded();
-  double TotalTime     = 0;
-  double ElapsedTime   = (double)(GetTime() - StartTime);
+  double TotalTime = 0;
+  double ElapsedTime = (double)(GetTime() - StartTime);
   double RemainingTime = 0;
 
   //DebugLog(_T("RBytes: %I64d  WBytes: %I64d  RdTime: %I64d  WrTime: %I64d  StTime: %I64d\n"),
@@ -84,8 +84,8 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
     double ReadSpeed  = (ReadTime > 0)  ? (double)ReadBytes  / (double)ReadTime  : 0; // bytes per tick
     double WriteSpeed = (WriteTime > 0) ? (double)WriteBytes / (double)WriteTime : 0; // bytes per tick
 
-    double ReadTimeRemain   = (ReadSpeed  > 0.001) ? ((double)TotalBytes - (double)ReadBytes)  / ReadSpeed  : 0;
-    double WriteTimeRemain  = (WriteSpeed > 0.001) ? ((double)TotalBytes - (double)WriteBytes) / WriteSpeed : 0;
+    double ReadTimeRemain  = (ReadSpeed  > 0.001) ? ((double)TotalBytes - (double)ReadBytes)  / ReadSpeed  : 0;
+    double WriteTimeRemain = (WriteSpeed > 0.001) ? ((double)TotalBytes - (double)WriteBytes) / WriteSpeed : 0;
 
     //DebugLog(_T("RSpeed: %4.4f  WSpeed: %4.4f  RTRemain: %4.4f  WTRemain: %4.4f\n"),
     //        ReadSpeed, WriteSpeed, ReadTimeRemain, WriteTimeRemain);
@@ -254,7 +254,7 @@ void CopyProgress::RedrawWindow()
   DrawWindow(X1, Y1, X2, Y2, Move ? LOC(L"Engine.Moving") : LOC(L"Engine.Copying"));
   wchar_t buf[512];
   wchar_t * p = buf;
-  for (int i = 0; i < W - MG * 2 + 2; i++)
+  for (int Index = 0; Index < W - MG * 2 + 2; Index++)
     *p++ = 0x2500; //'─'
   *p = 0;
   Info.Text(X1 + MG - 1, Y1 + 5, &clrFrame, buf);

@@ -47,8 +47,9 @@ struct BuffStruct
   size_t EndFlag;
 };
 
-struct BuffInfo
+class TBuffInfo
 {
+public:
   uint8_t * Buffer;
   size_t BuffSize;
   int64_t OrgSize;
@@ -105,37 +106,39 @@ private:
   int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
       _HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
   bool copyCreationTime, copyLastAccessTime, copyLastWriteTime;
-  intptr_t Aborted, LastFile, KeepFiles, FileCount, CopyCount;
+  intptr_t volatile Aborted, LastFile, KeepFiles, FileCount, CopyCount;
+  int64_t volatile ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
+          ReadN, WriteN, TotalN, FirstWrite, StartTime;
   int64_t _LastCheckEscape, _CheckEscapeInterval;
-  void Copy();
 
-  BuffInfo * wbi, * bi;
+  TBuffInfo * wbuffInfo, * buffInfo;
   HANDLE BGThread, FlushEnd, UiFree;
-  int InitBuf(BuffInfo * bi);
-  void UninitBuf(BuffInfo * bi);
-  void SwapBufs(BuffInfo * src, BuffInfo * dst);
+
+  CopyProgress CopyProgressBox;
+  FarProgress ScanFoldersProgressBox;
+  int SectorSize;
+
+  void Copy();
+  int InitBuf(TBuffInfo * buffInfo);
+  void UninitBuf(TBuffInfo * buffInfo);
+  void SwapBufs(TBuffInfo * src, TBuffInfo * dst);
   int CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
   intptr_t AskAbort(BOOL ShowKeepFilesCheckBox = TRUE);
-  int FlushBuff(BuffInfo * bi);
-  void CheckDstFileExists(BuffInfo * bi, intptr_t fnum, FileStruct & info,
+  int FlushBuff(TBuffInfo * buffInfo);
+  void CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct & info,
     const String & SrcName, const bool TryToOpenDstFile,
     String & DstName);
   void BGFlush();
   int WaitForFlushEnd();
   friend uint32_t __stdcall FlushThread(void * p);
-  void FinalizeBuf(BuffInfo * bi);
+  void FinalizeBuf(TBuffInfo * buffInfo);
   void ProcessDesc(intptr_t fnum);
   void ShowReadName(const String &);
   void ShowWriteName(const String &);
   void ShowProgress(int64_t, int64_t, int64_t, int64_t, int64_t,
                     int64_t, int64_t, int64_t);
   int CheckOverwrite(intptr_t fnum, String & ren);
-  CopyProgress CopyProgressBox;
-  FarProgress ScanFoldersProgressBox;
-  int64_t ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
-          ReadN, WriteN, TotalN, FirstWrite, StartTime;
-  static void Delay(int64_t, int64_t, int64_t &, int64_t);
-  int SectorSize;
+  static void Delay(int64_t, int64_t, volatile int64_t &, int64_t);
 
   intptr_t CheckOverwrite(intptr_t, const String &, const String &, String &);
   intptr_t CheckOverwrite2(intptr_t, const String &, const String &, String &);

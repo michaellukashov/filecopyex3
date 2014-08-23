@@ -31,7 +31,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/DescList.h"
 #include "Framework/ObjString.h"
 #include "Framework/FileUtils.h"
-#include "Framework/StringList.h"
 #include "Framework/StrUtils.h"
 #include "Common.h"
 #include "Engine.h"
@@ -118,8 +117,8 @@ Engine::Engine() :
   CopyCount = 0;
   _LastCheckEscape = 0;
   _CheckEscapeInterval = TicksPerSec() / 2;
-  wbi = nullptr;
-  bi = nullptr;
+  wbuffInfo = nullptr;
+  buffInfo = nullptr;
 
   Parallel = Streams = Rights = Move = SkipNewer = SkippedToTemp = 0;
   CompressMode = EncryptMode = ATTR_INHERIT;
@@ -149,26 +148,26 @@ Engine::Engine() :
   memset(&DescFindData, 0, sizeof(DescFindData));
 }
 
-int Engine::InitBuf(BuffInfo * bi)
+int Engine::InitBuf(TBuffInfo * ABuffInfo)
 {
-  bi->OutFile = nullptr;
-  bi->OutNum = -1;
+  ABuffInfo->OutFile = nullptr;
+  ABuffInfo->OutNum = -1;
 
-  bi->BuffSize = BufSize;
+  ABuffInfo->BuffSize = BufSize;
   if (Parallel)
-    bi->BuffSize /= 2;
-  bi->BuffSize = (bi->BuffSize / AllocAlign + 1) * AllocAlign;
+    ABuffInfo->BuffSize /= 2;
+  ABuffInfo->BuffSize = (ABuffInfo->BuffSize / AllocAlign + 1) * AllocAlign;
 
-  bi->Buffer = static_cast<uint8_t *>(Alloc(bi->BuffSize));
-  if (!bi->Buffer)
+  ABuffInfo->Buffer = static_cast<uint8_t *>(Alloc(ABuffInfo->BuffSize));
+  if (!ABuffInfo->Buffer)
   {
     Error(LOC(L"Error.MemAlloc"), GetLastError());
     return FALSE;
   }
-  bi->BuffInf = static_cast<BuffStruct *>(Alloc(SrcNames.Count() * sizeof(BuffStruct)));
-  if (!bi->BuffInf)
+  ABuffInfo->BuffInf = static_cast<BuffStruct *>(Alloc(SrcNames.Count() * sizeof(BuffStruct)));
+  if (!ABuffInfo->BuffInf)
   {
-    Free(bi->Buffer);
+    Free(ABuffInfo->Buffer);
     Error(LOC(L"Error.MemAlloc"), GetLastError());
     return FALSE;
   }
@@ -176,13 +175,13 @@ int Engine::InitBuf(BuffInfo * bi)
   return TRUE;
 }
 
-void Engine::UninitBuf(BuffInfo * bi)
+void Engine::UninitBuf(TBuffInfo * buffInfo)
 {
-  Free(bi->Buffer);
-  Free(bi->BuffInf);
+  Free(buffInfo->Buffer);
+  Free(buffInfo->BuffInf);
 }
 
-void Engine::SwapBufs(BuffInfo * src, BuffInfo * dst)
+void Engine::SwapBufs(TBuffInfo * src, TBuffInfo * dst)
 {
   memcpy(dst->Buffer, src->Buffer, src->BuffSize);
   memcpy(dst->BuffInf, src->BuffInf, SrcNames.Count() * sizeof(BuffStruct));
@@ -259,12 +258,12 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
   return escape;
 }
 
-void Engine::FinalizeBuf(BuffInfo * bi)
+void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
 {
-  HANDLE Handle = bi->OutFile;
-  intptr_t fnum = bi->OutNum;
-  String & DstName = bi->DstName;
-  String & SrcName = bi->SrcName;
+  HANDLE Handle = ABuffInfo->OutFile;
+  intptr_t fnum = ABuffInfo->OutNum;
+  String & DstName = ABuffInfo->DstName;
+  String & SrcName = ABuffInfo->SrcName;
   FileStruct & info = Files[fnum];
 
   if (!(info.Flags & FLG_SKIPPED))
@@ -286,7 +285,7 @@ void Engine::FinalizeBuf(BuffInfo * bi)
     {
       if (info.OverMode == OM_APPEND)
       {
-        setFileSizeAndTime(DstName, bi->OrgSize + info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+        setFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
       }
       else
       {
@@ -359,17 +358,17 @@ del_retry:
       info.Flags |= FLG_DECSIZE;
     }
 
-    if (Handle)
+    if (Handle != INVALID_HANDLE_VALUE)
     {
       if (info.OverMode == OM_APPEND || info.OverMode == OM_RESUME)
       {
         if (KeepFiles || (info.Flags & FLG_KEEPFILE))
         {
-          setFileSizeAndTime(DstName, bi->OrgSize + info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          setFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
         else
         {
-          setFileSizeAndTime(DstName, bi->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          setFileSizeAndTime(DstName, ABuffInfo->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
       }
       else
@@ -383,7 +382,7 @@ del_retry:
           Delete(DstName);
         }
       }
-      SetFileAttributes(DstName.ptr(), info.Attr);
+      ::SetFileAttributes(DstName.ptr(), info.Attr);
     }
   }
 }
@@ -476,7 +475,7 @@ void Engine::ProcessDesc(intptr_t fnum)
   }
 }
 
-void Engine::CheckDstFileExists(BuffInfo * bi, intptr_t fnum, FileStruct & info,
+void Engine::CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct & info,
   const String & SrcName,
   const bool TryToOpenDstFile,
   String & DstName)
@@ -504,8 +503,8 @@ rep:
   else
     info.Attr &= ~FILE_ATTRIBUTE_ENCRYPTED;
 
-  bi->SrcName = SrcName;
-  bi->DstName = DstName;
+  buffInfo->SrcName = SrcName;
+  buffInfo->DstName = DstName;
 
 open_retry:
   uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
@@ -515,7 +514,7 @@ open_retry:
     case OM_RENAME:
       if (TryToOpenDstFile)
       {
-        bi->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
+        buffInfo->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
       }
       break;
     case OM_APPEND:
@@ -523,14 +522,14 @@ open_retry:
       if (TryToOpenDstFile)
       {
         oflg |= OPEN_BUF;
-          bi->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
+          buffInfo->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
       }
       break;
     case OM_RESUME:
       if (TryToOpenDstFile)
       {
-        bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
-        if (FSeek(bi->OutFile, info.ResumePos, FILE_BEGIN) == -1)
+        buffInfo->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
+        if (FSeek(buffInfo->OutFile, info.ResumePos, FILE_BEGIN) == -1)
           FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
                          (int)GetLastError()));
       }
@@ -551,15 +550,15 @@ open_retry:
 
   if (!(info.Flags & FLG_SKIPPED))
   {
-    if (bi->OutFile)
+    if (buffInfo->OutFile)
     {
-      Compress(bi->OutFile, CompressMode);
+      Compress(buffInfo->OutFile, CompressMode);
       //Encrypt(bi->OutFile, EncryptMode);
-      bi->OrgSize = FileSize(bi->OutFile);
+      buffInfo->OrgSize = FileSize(buffInfo->OutFile);
 
-      int64_t size = info.OverMode == OM_APPEND ? bi->OrgSize + info.Size : info.Size;
+      int64_t size = info.OverMode == OM_APPEND ? buffInfo->OrgSize + info.Size : info.Size;
       if (size >= (int64_t)_PreallocMin * 1024 &&
-          GetCompression(bi->OutFile) == 0)
+          GetCompression(buffInfo->OutFile) == 0)
       {
         int64_t sp;
         if (!(info.Flags & FLG_BUFFERED))
@@ -571,10 +570,10 @@ open_retry:
         }
         else
           sp = size;
-        int64_t bp = FTell(bi->OutFile);
-        FSeek(bi->OutFile, sp, FILE_BEGIN);
-        SetEndOfFile(bi->OutFile);
-        FSeek(bi->OutFile, bp, FILE_BEGIN);
+        int64_t bp = FTell(buffInfo->OutFile);
+        FSeek(buffInfo->OutFile, sp, FILE_BEGIN);
+        SetEndOfFile(buffInfo->OutFile);
+        FSeek(buffInfo->OutFile, bp, FILE_BEGIN);
       }
     }
     else if (TryToOpenDstFile)
@@ -592,32 +591,32 @@ open_retry:
   }
 }
 
-int Engine::FlushBuff(BuffInfo * bi)
+int Engine::FlushBuff(TBuffInfo * ABuffInfo)
 {
   size_t Pos = 0;
   size_t PosInStr = 0;
 
-  while (Pos < bi->BuffSize && bi->BuffInf[PosInStr].FileNumber >= 0)
+  while (Pos < ABuffInfo->BuffSize && ABuffInfo->BuffInf[PosInStr].FileNumber >= 0)
   {
-    intptr_t fnum = bi->BuffInf[PosInStr].FileNumber;
+    intptr_t fnum = ABuffInfo->BuffInf[PosInStr].FileNumber;
     String SrcName = FlushSrc.GetByNum(fnum);
     String DstName = FlushDst.GetByNum(fnum);
     FileStruct & info = Files[fnum];
-    bi->OutNum = fnum;
+    ABuffInfo->OutNum = fnum;
 
     if (Aborted)
       info.Flags |= FLG_SKIPPED;
 
-    if (!bi->OutFile && !(info.Flags & FLG_SKIPPED))
+    if (!ABuffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      CheckDstFileExists(bi, fnum, info, SrcName, true, DstName);
+      CheckDstFileExists(ABuffInfo, fnum, info, SrcName, true, DstName);
     }
-    if (!(info.Flags & FLG_SKIPPED) && !bi->OutFile)
+    if (!(info.Flags & FLG_SKIPPED) && !ABuffInfo->OutFile)
       info.Flags |= FLG_SKIPPED | FLG_ERROR;
 
     if (!(info.Flags & FLG_SKIPPED))
     {
-      while (Pos < bi->BuffInf[PosInStr].WritePos)
+      while (Pos < ABuffInfo->BuffInf[PosInStr].WritePos)
       {
         if (!Parallel && CheckEscape() || Aborted)
         {
@@ -625,13 +624,13 @@ int Engine::FlushBuff(BuffInfo * bi)
           goto skip;
         }
 
-        size_t wsz = Min((size_t)(bi->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
+        size_t wsz = Min((size_t)(ABuffInfo->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
         size_t wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
           wsz = Min(wsz, (size_t)(info.Size - info.Written));
 retry:
         int64_t st = GetTime();
-        size_t k = Write(bi->OutFile, bi->Buffer + Pos, wsz);
+        size_t k = Write(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, wsz);
 
         if (k < wsz)
         {
@@ -647,11 +646,11 @@ retry:
               int64_t Pos = info.Written;
               if (info.OverMode == OM_RESUME)
                 Pos += info.ResumePos;
-              Close(bi->OutFile);
+              Close(ABuffInfo->OutFile);
 reopen_retry:
               uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-              bi->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
-              if (!bi->OutFile)
+              ABuffInfo->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
+              if (!ABuffInfo->OutFile)
               {
                 ::WaitForSingleObject(UiFree, INFINITE);
                 uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
@@ -665,13 +664,13 @@ reopen_retry:
                   info.Flags |= FLG_SKIPPED | FLG_ERROR;
                   if (flg & eerKeepFiles)
                     info.Flags |= FLG_KEEPFILE;
-                  bi->OutFile = INVALID_HANDLE_VALUE;
+                  ABuffInfo->OutFile = INVALID_HANDLE_VALUE;
                   if (res == RES_ABORT)
                     Aborted = 1;
                   goto skip;
                 }
               }
-              if (FSeek(bi->OutFile, Pos, FILE_BEGIN) == -1)
+              if (FSeek(ABuffInfo->OutFile, Pos, FILE_BEGIN) == -1)
                 FWError(Format(L"FSeek to %d failed, code %d", Pos,
                                (int)GetLastError()));
             }
@@ -701,20 +700,20 @@ reopen_retry:
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
 
         if (wsz < wsz1)
-          Pos = bi->BuffInf[PosInStr].WritePos;
+          Pos = ABuffInfo->BuffInf[PosInStr].WritePos;
       }
 
 skip: ;
     }
-    Pos = bi->BuffInf[PosInStr].NextPos;
+    Pos = ABuffInfo->BuffInf[PosInStr].NextPos;
 
-    if (bi->BuffInf[PosInStr].EndFlag || info.Flags & FLG_SKIPPED)
+    if (ABuffInfo->BuffInf[PosInStr].EndFlag || info.Flags & FLG_SKIPPED)
     {
-      FinalizeBuf(bi);
-      bi->OutFile = nullptr;
-      bi->OutNum = -1;
-      bi->SrcName.Clear();
-      bi->DstName.Clear();
+      FinalizeBuf(ABuffInfo);
+      ABuffInfo->OutFile = nullptr;
+      ABuffInfo->OutNum = -1;
+      ABuffInfo->SrcName.Clear();
+      ABuffInfo->DstName.Clear();
     }
 
     if (Aborted)
@@ -730,7 +729,7 @@ skip: ;
 uint32_t __stdcall FlushThread(void * p)
 {
   Engine * eng = static_cast<Engine *>(p);
-  return eng->FlushBuff(eng->wbi);
+  return eng->FlushBuff(eng->wbuffInfo);
 }
 
 void Engine::BGFlush()
@@ -764,16 +763,16 @@ void Engine::Copy()
   ReadCb = WriteCb = ReadTime = WriteTime = ReadN = WriteN = FirstWrite = 0;
   StartTime = GetTime();
 
-  BuffInfo _bi, _wbi;
-  bi = &_bi;
-  wbi = &_wbi;
-  if (!InitBuf(bi))
+  TBuffInfo _bi, _wbi;
+  buffInfo = &_bi;
+  wbuffInfo = &_wbi;
+  if (!InitBuf(buffInfo))
     return;
   if (Parallel)
   {
-    if (!InitBuf(wbi))
+    if (!InitBuf(wbuffInfo))
     {
-      UninitBuf(bi);
+      UninitBuf(buffInfo);
       return;
     }
     FlushEnd = ::CreateEvent(nullptr, FALSE, TRUE, nullptr);
@@ -792,12 +791,12 @@ void Engine::Copy()
   FileNameStoreEnum Dst(&DstNames);
   std::vector<CurDirInfo> CurDirStack;
 
-  for (size_t i = 0; i < Src.Count(); i++)
+  for (size_t Index = 0; Index < Src.Count(); Index++)
   {
     String SrcName = Src.GetNext();
     String DstName = Dst.GetNext();
 
-    FileStruct & info = Files[i];
+    FileStruct & info = Files[Index];
     if (info.Flags & FLG_SKIPPED ||
         info.Flags & FLG_COPIED ||
         info.Flags & FLG_DESCFILE)
@@ -867,9 +866,9 @@ open_retry:
     ShowReadName(SrcName);
 
     info.SectorSize = SectorSize;
-    if (!bi->OutFile && !(info.Flags & FLG_SKIPPED))
+    if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
     {
-      CheckDstFileExists(bi, i, info, SrcName, false, DstName);
+      CheckDstFileExists(buffInfo, Index, info, SrcName, false, DstName);
     }
 
     if (!InputFile)
@@ -906,14 +905,14 @@ open_retry:
       if (info.Size < _UnbuffMin * 1024)
         info.Flags |= FLG_BUFFERED;
 
-      while (BuffPos < bi->BuffSize)
+      while (BuffPos < buffInfo->BuffSize)
       {
         if (info.Flags & FLG_SKIPPED)
           break;
-        size_t cb = Min(ReadBlock, bi->BuffSize - BuffPos);
+        size_t cb = Min(ReadBlock, buffInfo->BuffSize - BuffPos);
 retry:
         int64_t st = GetTime();
-        size_t j = Read(InputFile, bi->Buffer + BuffPos, cb);
+        size_t j = Read(InputFile, buffInfo->Buffer + BuffPos, cb);
 
         if (j == -1)
         {
@@ -990,24 +989,24 @@ skip:
       size_t abp = BuffPos;
       if (abp % SectorSize)
         abp = (abp / SectorSize + 1) * SectorSize;
-      bi->BuffInf[FilesInBuff].WritePos = abp;
+      buffInfo->BuffInf[FilesInBuff].WritePos = abp;
       if (BuffPos % ReadAlign)
         BuffPos = (BuffPos / ReadAlign + 1) * ReadAlign;
-      bi->BuffInf[FilesInBuff].NextPos = BuffPos;
-      bi->BuffInf[FilesInBuff].FileNumber = (intptr_t)i;
-      if (BuffPos == bi->BuffSize)
+      buffInfo->BuffInf[FilesInBuff].NextPos = BuffPos;
+      buffInfo->BuffInf[FilesInBuff].FileNumber = (intptr_t)Index;
+      if (BuffPos == buffInfo->BuffSize)
       {
-        bi->BuffInf[FilesInBuff].EndFlag = 0;
+        buffInfo->BuffInf[FilesInBuff].EndFlag = 0;
         if (!Parallel)
         {
-          if (!FlushBuff(bi))
+          if (!FlushBuff(buffInfo))
             goto abort;
         }
         else
         {
           if (!WaitForFlushEnd())
             goto abort;
-          SwapBufs(bi, wbi);
+          SwapBufs(buffInfo, wbuffInfo);
           BGFlush();
         }
         BuffPos = 0;
@@ -1015,7 +1014,7 @@ skip:
       }
       else
       {
-        bi->BuffInf[FilesInBuff].EndFlag = 1;
+        buffInfo->BuffInf[FilesInBuff].EndFlag = 1;
         FilesInBuff++;
         break;
       }
@@ -1035,45 +1034,46 @@ abort:
   if (Parallel)
   {
     while (!WaitForFlushEnd());
-    bi->OutFile = wbi->OutFile;
-    bi->OutNum = wbi->OutNum;
-    bi->SrcName = wbi->SrcName;
-    bi->DstName = wbi->DstName;
+    buffInfo->OutFile = wbuffInfo->OutFile;
+    buffInfo->OutNum = wbuffInfo->OutNum;
+    buffInfo->SrcName = wbuffInfo->SrcName;
+    buffInfo->DstName = wbuffInfo->DstName;
   }
-  bi->BuffInf[FilesInBuff].FileNumber = -1;
+  buffInfo->BuffInf[FilesInBuff].FileNumber = -1;
   if (!Aborted)
-    FlushBuff(bi);
-  else if (bi->OutNum != -1)
-    FinalizeBuf(bi);
+    FlushBuff(buffInfo);
+  else if (buffInfo->OutNum != -1)
+    FinalizeBuf(buffInfo);
 
   if (Parallel)
   {
-    UninitBuf(wbi);
+    UninitBuf(wbuffInfo);
     ::CloseHandle(FlushEnd);
   }
-  UninitBuf(bi);
+  UninitBuf(buffInfo);
 
   if (FileCount)
     CopyProgressBox.Stop();
   else
   {
     FileNameStoreEnum Src(&SrcNames);
-    for (size_t i = 0; i < Src.Count(); i++)
+    for (size_t Index = 0; Index < Src.Count(); Index++)
     {
-      if (!(Files[i].Flags & FLG_COPIED))
+      if (!(Files[Index].Flags & FLG_COPIED))
       {
-        if (Files[i].Flags & FLG_DESCFILE)
-          ProcessDesc(i);
-        else if (Move && Files[i].Flags & FLG_DIR_POST &&
-                 !(Files[i].Flags & FLG_DIR_NOREMOVE))
+        if (Files[Index].Flags & FLG_DESCFILE)
+          ProcessDesc(Index);
+        else if (Move && Files[Index].Flags & FLG_DIR_POST &&
+                 !(Files[Index].Flags & FLG_DIR_NOREMOVE))
         {
-          if (RmDir(Src.GetByNum(i)))
-            Files[i].Flags |= FLG_DELETED;
+          if (RmDir(Src.GetByNum(Index)))
+            Files[Index].Flags |= FLG_DELETED;
         }
       }
     }
   }
-
+  buffInfo = nullptr;
+  wbuffInfo = nullptr;
   ::CloseHandle(UiFree);
 }
 
@@ -1114,7 +1114,7 @@ intptr_t Engine::CheckOverwrite2(intptr_t fnum, const String & src, const String
   return res;
 }
 
-void Engine::Delay(int64_t time, int64_t cb, int64_t & counter, int64_t limit)
+void Engine::Delay(int64_t time, int64_t cb, volatile int64_t & counter, int64_t limit)
 {
   if (limit <= 0)
     return;
@@ -1140,13 +1140,13 @@ void Engine::FarToWin32FindData(const TPanelItem & tpi, WIN32_FIND_DATA & wfd)
 
 String Engine::FindDescFile(const String & dir, intptr_t * idx)
 {
-  for (size_t i = 0; i < plugin->Descs().Count(); i++)
+  for (size_t Index = 0; Index < plugin->Descs().Count(); Index++)
   {
-    if (FileExists(AddEndSlash(dir) + plugin->Descs()[i]))
+    if (FileExists(AddEndSlash(dir) + plugin->Descs()[Index]))
     {
       if (idx)
-        *idx = i;
-      return plugin->Descs()[i];
+        *idx = Index;
+      return plugin->Descs()[Index];
     }
   }
   if (idx)
@@ -1158,15 +1158,15 @@ String Engine::FindDescFile(const String & dir, intptr_t * idx)
 
 String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t * idx)
 {
-  for (size_t i = 0; i < plugin->Descs().Count(); i++)
+  for (size_t Index = 0; Index < plugin->Descs().Count(); Index++)
   {
     HANDLE hf;
-    if ((hf = ::FindFirstFile((AddEndSlash(dir) + plugin->Descs()[i]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
+    if ((hf = ::FindFirstFile((AddEndSlash(dir) + plugin->Descs()[Index]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
     {
       ::FindClose(hf);
       if (idx)
-        *idx = i;
-      return plugin->Descs()[i];
+        *idx = Index;
+      return plugin->Descs()[Index];
     }
   }
   if (idx)
@@ -1240,7 +1240,7 @@ String getPanelDir(HANDLE h_panel)
     bufSize = size;
     buf.reset(new uint8_t[bufSize]);
     reinterpret_cast<FarPanelDirectory *>(buf.get())->StructSize = sizeof(FarPanelDirectory);
-    size = Info.PanelControl(h_panel, FCTL_GETPANELDIRECTORY, bufSize, buf.get());
+    Info.PanelControl(h_panel, FCTL_GETPANELDIRECTORY, bufSize, buf.get());
   }
   //CHECK(size >= sizeof(FarPanelDirectory) && size <= buf_size);
   return reinterpret_cast<FarPanelDirectory *>(buf.get())->Name;
@@ -1256,9 +1256,9 @@ Engine::MResult Engine::Main(int move, int curOnly)
   _PreallocMin  = Options[L"PreallocMin"];
   _UnbuffMin    = Options[L"UnbuffMin"];
 
-  _ClearROFromCD  = 1; //YYY Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, nullptr) & FSS_CLEARROATTRIBUTE;
+  _ClearROFromCD = 1; //YYY Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, nullptr) & FSS_CLEARROATTRIBUTE;
   _HideDescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_SETHIDDEN;
-  _UpdateRODescs  = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_UPDATEREADONLY;
+  _UpdateRODescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_UPDATEREADONLY;
 
   FarDialog & dlg = plugin->Dialogs()[L"CopyDialog"];
   dlg.ResetControls();
@@ -1647,11 +1647,11 @@ rep:
   }
   else
   {
-    for (size_t i = 0; i < pi.ItemsNumber; i++)
+    for (size_t Index = 0; Index < pi.ItemsNumber; Index++)
     {
-      if (TPanelItem(i)->Flags & PPIF_SELECTED)
+      if (TPanelItem(Index)->Flags & PPIF_SELECTED)
       {
-        sortIndex.push_back(i);
+        sortIndex.push_back(Index);
       }
     }
   }
@@ -1659,10 +1659,10 @@ rep:
   String curPath;
   int haveCurPath = 0;
 
-  for (size_t ii = 0; ii < sortIndex.size(); ii++)
+  for (size_t Index = 0; Index < sortIndex.size(); Index++)
   {
-    size_t i = sortIndex[ii];
-    TPanelItem pit(i);
+    size_t I = sortIndex[Index];
+    TPanelItem pit(I);
     String file = pit->FileName;
     if (file == L"..")
     {
@@ -1704,7 +1704,7 @@ rep:
     String dst = ApplyFileMaskPath(file, dstPath);
     WIN32_FIND_DATA wfd;
     FarToWin32FindData(pit, wfd);
-    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, (int)i))
+    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, (int)I))
     {
       goto fin;
     }
@@ -1718,20 +1718,20 @@ rep:
     FileNameStoreEnum Enum(&DstNames);
     //progress.ShowMessage(LOC(L"Status.ScanningDest"));
     ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
-    for (size_t i = 0; i < Enum.Count(); i++)
+    for (size_t Index = 0; Index < Enum.Count(); Index++)
     {
-      if (!(Files[i].Flags & FLG_SKIPPED) & !(Files[i].Attr & FILE_ATTRIBUTE_DIRECTORY))
+      if (!(Files[Index].Flags & FLG_SKIPPED) & !(Files[Index].Attr & FILE_ATTRIBUTE_DIRECTORY))
       {
-        int64_t sz = FileSize((String)Enum.GetByNum(i));
-        if (sz < Files[i].Size)
+        int64_t sz = FileSize((String)Enum.GetByNum(Index));
+        if (sz < Files[Index].Size)
         {
-          Files[i].ResumePos = sz / ReadAlign * ReadAlign;
-          TotalBytes -= Files[i].ResumePos;
+          Files[Index].ResumePos = sz / ReadAlign * ReadAlign;
+          TotalBytes -= Files[Index].ResumePos;
         }
         else
         {
-          Files[i].Flags |= FLG_SKIPPED;
-          TotalBytes -= Files[i].Size;
+          Files[Index].Flags |= FLG_SKIPPED;
+          TotalBytes -= Files[Index].Size;
           TotalN--;
         }
       }
@@ -1781,15 +1781,15 @@ fin:
   if (!Move)
   {
     Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, nullptr);
-    for (size_t i = 0; i < Files.size(); i++)
+    for (size_t Index = 0; Index < Files.size(); Index++)
     {
-      if (Files[i].PanelIndex != -1)
+      if (Files[Index].PanelIndex != -1)
       {
-        if (Files[i].Flags & FLG_DIR_PRE)
+        if (Files[Index].Flags & FLG_DIR_PRE)
         {
           int ok = 1;
-          size_t j = i + 1;
-          while (Files[j].Level > Files[i].Level)
+          size_t j = Index + 1;
+          while (Files[j].Level > Files[Index].Level)
           {
             if (!(Files[j].Flags & (FLG_DIR_PRE | FLG_DIR_POST | FLG_COPIED)))
             {
@@ -1800,15 +1800,15 @@ fin:
           }
           if (ok)
           {
-            Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
+            Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[Index].PanelIndex, FALSE);
           }
-          i = j - 1;
+          Index = j - 1;
         }
         else
         {
-          if (!(Files[i].Flags & FLG_DIR_POST) && Files[i].Flags & FLG_COPIED)
+          if (!(Files[Index].Flags & FLG_DIR_POST) && Files[Index].Flags & FLG_COPIED)
           {
-            Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[i].PanelIndex, FALSE);
+            Info.PanelControl(PANEL_ACTIVE, FCTL_SETSELECTION, Files[Index].PanelIndex, FALSE);
           }
         }
       }
@@ -1834,14 +1834,14 @@ fin:
     }
     NewFileName = NewFileName.toLower();
 
-    for (size_t i = 0; i < pi.ItemsNumber; i++)
+    for (size_t Index = 0; Index < pi.ItemsNumber; Index++)
     {
-      TPanelItem pit(i);
+      TPanelItem pit(Index);
       String NewPanelFilename = pit->FileName;
       NewPanelFilename = NewPanelFilename.toLower();
       if (NewFileName == NewPanelFilename)
       {
-        rpi.CurrentItem = i;
+        rpi.CurrentItem = Index;
         Info.PanelControl(PANEL_ACTIVE, FCTL_REDRAWPANEL, 0, &rpi);
         break;
       }
@@ -2173,10 +2173,10 @@ fin:
 void Engine::SetOverwriteMode(intptr_t Start)
 {
   FileNameStoreEnum Enum(&DstNames);
-  for (size_t i = Start; i < Enum.Count(); i++)
+  for (size_t Index = Start; Index < Enum.Count(); Index++)
   {
-    String fn = Enum.GetByNum(i);
-    FileStruct & info = Files[i];
+    String fn = Enum.GetByNum(Index);
+    FileStruct & info = Files[Index];
     if (!SkipNewer && info.Flags & FLG_SKIPNEWER)
     {
       info.Flags &= ~(FLG_SKIPNEWER | FLG_SKIPPED);
@@ -2237,7 +2237,7 @@ intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String 
   dlg[L"Label3"](L"Text") = Format(L"%14s %s %s", ssz.ptr(), LOC(L"OverwriteDialog.Bytes").ptr(), stime.ptr());
 
   dlg[L"Source"](L"Text") = Format(L"%-16s", LOC(L"OverwriteDialog.Source").ptr());
-  dlg[L"Destination"](L"Text")  = Format(L"%-16s", LOC(L"OverwriteDialog.Destination").ptr());
+  dlg[L"Destination"](L"Text") = Format(L"%-16s", LOC(L"OverwriteDialog.Destination").ptr());
 
   dlg[L"AcceptForAll"](L"Selected") = 0;
   dlg[L"SkipIfNewer"](L"Selected") = SkipNewer;
@@ -2470,13 +2470,13 @@ intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint
     dlg[L"Label2"](L"Visible") = 1;
     StringVector list;
     list.loadFromString(SplitWidth(GetErrText(code), msgw()), '\n');
-    for (size_t i = 0; i < list.Count(); i++)
+    for (size_t Index = 0; Index < list.Count(); Index++)
     {
-      if (i <= 7)
+      if (Index <= 7)
       {
-        String name = String(L"Label") + String(i + 3);
+        String name = String(L"Label") + String(Index + 3);
         dlg[name](L"Visible") = 1;
-        dlg[name](L"Text") = list[i];
+        dlg[name](L"Text") = list[Index];
       }
     }
   }

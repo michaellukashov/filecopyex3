@@ -28,6 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "ObjString.h"
 
 #define MAX_FILENAME 4096
+#define DEFAULT_SECTOR_SIZE 4096
 
 #define OPEN_BUF 128
 #define OPEN_READ 1

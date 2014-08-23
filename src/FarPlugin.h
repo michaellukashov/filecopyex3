@@ -27,7 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/ObjString.h"
 #include "Framework/LocaleUtils.h"
 #include "Framework/Properties.h"
-#include "Framework/StringList.h"
+#include "Framework/StringVector.h"
 #include "FarNode.h"
 #include "FarSettings.h"
 
@@ -50,7 +50,7 @@ public:
   FarDialogList & Dialogs() { return dialogs; }
   FarSettings & Settings() { return settings; }
 
-  const StringList & Descs() const { return descs; }
+  const StringVector & Descs() const { return descs; }
   // void MacroCommand(const FARMACROCOMMAND& cmd);
 
 private:
@@ -61,7 +61,7 @@ private:
   FarSettings settings;
   String CurLocaleFile;
   Locale locale;
-  StringList descs;
+  StringVector descs;
 
   int flags;
 

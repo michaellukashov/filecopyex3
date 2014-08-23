@@ -14,6 +14,15 @@ public:
   virtual const String & operator[](size_t i) const { return data[i]; }
   virtual void AddString(const String & v) { data.push_back(v); }
   virtual size_t Count() const { return data.size(); }
+  intptr_t Find(const String & v, intptr_t start = 0) const
+  {
+    for (size_t Index = start; Index < Count(); ++Index)
+    {
+      if (data[Index].cmp(v) == 0)
+        return Index;
+    }
+    return -1;
+  }
 
 private:
   std::vector<String> data;

@@ -300,7 +300,6 @@
     <ClCompile Include="src\Framework\ObjectManager.cpp" />
     <ClCompile Include="src\Framework\ObjString.cpp" />
     <ClCompile Include="src\Framework\Properties.cpp" />
-    <ClCompile Include="src\Framework\StringList.cpp" />
     <ClCompile Include="src\Framework\StringParent.cpp" />
     <ClCompile Include="src\Framework\StrUtils.cpp" />
     <ClCompile Include="src\FileCopyEx.cpp" />
@@ -333,7 +332,6 @@
     <ClInclude Include="src\Framework\ObjString.h" />
     <ClInclude Include="src\Framework\Properties.h" />
     <ClInclude Include="src\Framework\StdHdr.h" />
-    <ClInclude Include="src\Framework\StringList.h" />
     <ClInclude Include="src\Framework\StringParent.h" />
     <ClInclude Include="src\Framework\StringVector.h" />
     <ClInclude Include="src\Framework\StrUtils.h" />

@@ -77,11 +77,11 @@ bool FarSettings::list(ParamInfoVector & res)
     return false;
   }
   res.clear();
-  for (size_t i = 0; i < fse.Count; i++)
+  for (size_t Index = 0; Index < fse.Count; Index++)
   {
-    if (fse.Items[i].Type == FST_STRING)
+    if (fse.Items[Index].Type == FST_STRING)
     {
-      res.push_back(ParamInfo(fse.Items[i].Name, fse.Items[i].Type));
+      res.push_back(ParamInfo(fse.Items[Index].Name, fse.Items[Index].Type));
     }
   }
   return true;

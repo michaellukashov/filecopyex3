@@ -124,13 +124,13 @@
     <Link>
       <AdditionalOptions>/MACHINE:I386 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalDependencies>mpr.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)\..\filecopyex3-build\Far3_x86\Plugins\FileCopyEx3\$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <LinkDLL>true</LinkDLL>
       <ModuleDefinitionFile>plugin.def</ModuleDefinitionFile>
       <TypeLibraryFile>$(IntDir)$(ProjectName).tlb</TypeLibraryFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(SolutionDir)\..\filecopyex3-build\Far3_x86\Plugins\FileCopyEx3\$(ProjectName).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -138,7 +138,7 @@
       <ImportLibrary>$(IntDir)$(ProjectName).lib</ImportLibrary>
     </Link>
     <BuildLog>
-      <Path>$(SolutionDir)\..\filecopyex3-build\$(MSBuildProjectName).log</Path>
+      <Path>$(IntDir)$(MSBuildProjectName).log</Path>
     </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Unicode|x64'">
@@ -170,13 +170,13 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>mpr.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)\..\filecopyex3-build\Far3_x64\Plugins\FileCopyEx3\$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <LinkDLL>true</LinkDLL>
       <ModuleDefinitionFile>plugin.def</ModuleDefinitionFile>
       <TypeLibraryFile>$(IntDir)$(ProjectName).tlb</TypeLibraryFile>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(SolutionDir)\..\filecopyex3-build\Far3_x64\Plugins\FileCopyEx3\$(ProjectName).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -185,7 +185,7 @@
       <TargetMachine>MachineX64</TargetMachine>
     </Link>
     <BuildLog>
-      <Path>$(SolutionDir)\..\filecopyex3-build\$(MSBuildProjectName).log</Path>
+      <Path>$(IntDir)$(MSBuildProjectName).log</Path>
     </BuildLog>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release Unicode|Win32'">
@@ -258,7 +258,7 @@
     <Link>
       <RegisterOutput>false</RegisterOutput>
       <AdditionalDependencies>mpr.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(SolutionDir)\..\filecopyex3-build\Far3_x64\Plugins\FileCopyEx3\$(ProjectName).dll</OutputFile>
+      <OutputFile>$(OutDir)$(ProjectName).dll</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <LinkDLL>true</LinkDLL>
       <ModuleDefinitionFile>plugin.def</ModuleDefinitionFile>
@@ -270,7 +270,7 @@
       <ImportLibrary>$(IntDir)$(ProjectName).lib</ImportLibrary>
       <TargetMachine>MachineX64</TargetMachine>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(SolutionDir)\..\filecopyex3-build\Far3_x64\Plugins\FileCopyEx3\$(ProjectName).pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>$(OutDir)$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -300,7 +300,6 @@
     <ClCompile Include="src\Framework\ObjectManager.cpp" />
     <ClCompile Include="src\Framework\ObjString.cpp" />
     <ClCompile Include="src\Framework\Properties.cpp" />
-    <ClCompile Include="src\Framework\StringList.cpp" />
     <ClCompile Include="src\Framework\StringParent.cpp" />
     <ClCompile Include="src\Framework\StrUtils.cpp" />
     <ClCompile Include="src\FileCopyEx.cpp" />
@@ -333,7 +332,6 @@
     <ClInclude Include="src\Framework\ObjString.h" />
     <ClInclude Include="src\Framework\Properties.h" />
     <ClInclude Include="src\Framework\StdHdr.h" />
-    <ClInclude Include="src\Framework\StringList.h" />
     <ClInclude Include="src\Framework\StringParent.h" />
     <ClInclude Include="src\Framework\StringVector.h" />
     <ClInclude Include="src\Framework\StrUtils.h" />

@@ -37,10 +37,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void BindAll()
 {
-  Bind(L"F5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0)", L"FileCopyEx - Copy file(s)", 0);
-  Bind(L"F6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1)", L"FileCopyEx - Move file(s)", 0);
-  Bind(L"ShiftF5", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2)", L"FileCopyEx - Copy current file", 0);
-  Bind(L"ShiftF6", L"Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3)", L"FileCopyEx - Move current file", 0);
+  Bind(L"F5", L"if not Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 0) then Keys(\\\"F5\\\") end", L"FileCopyEx - Copy file(s)", 0);
+  Bind(L"F6", L"if not Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 1) then Keys(\\\"F6\\\") end", L"FileCopyEx - Move file(s)", 0);
+  Bind(L"ShiftF5", L"if not Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 2) then Keys(\\\"ShiftF5\\\") end", L"FileCopyEx - Copy current file", 0);
+  Bind(L"ShiftF6", L"if not Plugin.Call(\\\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\\\", 3) then Keys(\\\"ShiftF6\\\") end", L"FileCopyEx - Move current file", 0);
 }
 
 
@@ -201,23 +201,23 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
   }
   else
   {
-	  switch (command)
-	  {
-	  case 0:
-		  CallCopy(0, 0);
-		  break;
-	  case 1:
-		  CallCopy(1, 0);
-		  break;
-	  case 2:
-		  CallCopy(0, 1);
-		  break;
-	  case 3:
-		  CallCopy(1, 1);
-		  break;
-	  default:
-		  break;
-	  }
+    switch (command)
+    {
+    case 0:
+      CallCopy(0, 0);
+      break;
+    case 1:
+      CallCopy(1, 0);
+      break;
+    case 2:
+      CallCopy(0, 1);
+      break;
+    case 3:
+      CallCopy(1, 1);
+      break;
+    default:
+      break;
+    }
   }
 }
 
@@ -235,7 +235,7 @@ void FarPlugin::InitOptions()
   Options[L"BufPercent"] = 1;
   Options[L"BufSize"] = 0;
   Options[L"BufPercentVal"] = 15;
-  Options[L"BufSizeVal"] = 4096;
+  Options[L"BufSizeVal"] = DEFAULT_SECTOR_SIZE;
   Options[L"OverwriteDef"] = 0;
   Options[L"CopyStreamsDef"] = 0;
   Options[L"CopyRightsDef"] = 0;

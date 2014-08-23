@@ -1,6 +1,7 @@
 #include "StdHdr.h"
 #include "StringParent.h"
 #include "FrameworkUtils.h"
+#include "FileUtils.h"
 
 int StringParent::loadFromFile(FILE * f)
 {
@@ -13,7 +14,7 @@ int StringParent::loadFromFile(FILE * f)
   int read = (int)fread(&sign, 1, sizeof(sign), f);
   int unicode = (read == 2) && (sign.uc == 0xFEFF || sign.uc == 0xFFFE);
   int inv = (unicode) && (sign.uc == 0xFFFE);
-  const int bsize = 4096, ssize = 4096;
+  const int bsize = DEFAULT_SECTOR_SIZE, ssize = DEFAULT_SECTOR_SIZE;
   if (unicode)
   {
     const wchar_t CR = '\r', LF = '\n';
@@ -26,11 +27,11 @@ int StringParent::loadFromFile(FILE * f)
       read = (int)fread(buffer + bpos, sizeof(wchar_t), bsize - bpos, f);
       if (read < 1)
         break;
-      for (int i = bpos; i < read; i++)
+      for (int Index = bpos; Index < read; Index++)
       {
         if (inv)
-          buffer[i] = ((buffer[i] & 0x00FF) << 8) | ((buffer[i] & 0xFF00) >> 8);
-        if (buffer[i] == CR || (buffer[i] == LF && oldc != CR))
+          buffer[Index] = ((buffer[Index] & 0x00FF) << 8) | ((buffer[Index] & 0xFF00) >> 8);
+        if (buffer[Index] == CR || (buffer[Index] == LF && oldc != CR))
         {
           string[spos] = 0;
           AddString(string);
@@ -38,12 +39,12 @@ int StringParent::loadFromFile(FILE * f)
         }
         else
         {
-          if (buffer[i] != CR && buffer[i] != LF && spos < ssize)
+          if (buffer[Index] != CR && buffer[Index] != LF && spos < ssize)
           {
-            string[spos++] = buffer[i];
+            string[spos++] = buffer[Index];
           }
         }
-        oldc = buffer[i];
+        oldc = buffer[Index];
       }
       bpos = 0;
     }
@@ -69,29 +70,29 @@ int StringParent::loadFromFile(FILE * f)
       read = (int)fread(buffer + bpos, sizeof(char), bsize - bpos, f);
       if (read < 1)
         break;
-      for (int i = 0; i < read + bpos; i++)
+      for (int Index = 0; Index < read + bpos; Index++)
       {
-        if (buffer[i] == CR || (buffer[i] == LF && oldc != CR))
+        if (buffer[Index] == CR || (buffer[Index] == LF && oldc != CR))
         {
           string[spos] = 0;
-          AddString(string);
+          AddString(String(string));
           spos = 0;
         }
         else
         {
-          if (buffer[i] != CR && buffer[i] != LF && spos < ssize)
+          if (buffer[Index] != CR && buffer[Index] != LF && spos < ssize)
           {
-            string[spos++] = buffer[i];
+            string[spos++] = buffer[Index];
           }
         }
-        oldc = buffer[i];
+        oldc = buffer[Index];
       }
       bpos = 0;
     }
     if (spos)
     {
       string[spos] = 0;
-      AddString(string);
+      AddString(String(string));
     }
   }
   return 1;
@@ -112,7 +113,7 @@ int StringParent::loadFromFile(const String & fn)
 }
 
 
-bool StringParent::saveToFile(FILE * f, TextFormat tf)
+bool StringParent::saveToFile(FILE * f, TextFormat tf) const
 {
   if (tf == tfUnicode)
   {
@@ -124,14 +125,14 @@ bool StringParent::saveToFile(FILE * f, TextFormat tf)
     uint16_t sign = 0xFFFE;
     fwrite(&sign, sizeof(sign), 1, f);
   }
-  for (size_t i = 0; i < Count(); i++)
+  for (size_t Index = 0; Index < Count(); Index++)
   {
-    const wchar_t * s = (*this)[i].c_str();
-    const int ssize = 4096;
-    if (tf != tfANSI)
+    const String s = (*this)[Index];
+    const int ssize = DEFAULT_SECTOR_SIZE;
+    if (tf != tfOEM)
     {
       wchar_t buf[ssize];
-      wcscpy_s(buf, ssize, s);
+      wcscpy_s(buf, ssize, s.c_str());
       if (tf == tfUnicodeBE)
       {
         for (size_t j = 0; j < wcslen(buf); j++)
@@ -152,9 +153,18 @@ bool StringParent::saveToFile(FILE * f, TextFormat tf)
     }
     else
     {
-      char buf[ssize];
-      _wtoacs(buf, ssize, s);
-      fwrite(buf, sizeof(char), strlen(buf), f);
+      std::string buf;
+
+      int sizeRequired = ::WideCharToMultiByte(CP_OEMCP, 0, s.c_str(), (int)s.len(),
+        nullptr, 0, nullptr, nullptr);
+      if (sizeRequired > 0)
+      {
+        buf.resize(sizeRequired);
+        ::WideCharToMultiByte(CP_OEMCP, 0, s.c_str(), (int)s.len(),
+          &(*buf.begin()), sizeRequired, nullptr, nullptr);
+      }
+
+      fwrite(buf.c_str(), sizeof(char), buf.size(), f);
       fwrite("\r\n", sizeof(char), 2, f);
     }
   }
@@ -185,7 +195,7 @@ void StringParent::loadFromString(const wchar_t * s, wchar_t delim)
   Clear();
   wchar_t * p = (wchar_t *)s;
   wchar_t * pp = p;
-  wchar_t buf[4096];
+  wchar_t buf[DEFAULT_SECTOR_SIZE];
   do
   {
     if (!*p || *p == delim)

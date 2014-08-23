@@ -41,7 +41,7 @@ public:
   Node & operator[](const String & v) { return child(v); }
   Property & operator()(const String & name);
 
-  Payload & getPayload() const { return *payload; }
+  Payload & getPayload() const;
   Node * getParent() { return parent; }
   const String getName() const;
   //const String getType() const;

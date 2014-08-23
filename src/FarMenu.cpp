@@ -10,15 +10,16 @@ FarMenu::FarMenu() :
 
 FarMenu::~FarMenu()
 {
-  for (size_t i = 0; i < items.size(); ++i)
+  for (size_t Index = 0; Index < items.size(); ++Index)
   {
-    delete[] items[i].Text;
+    delete[] items[Index].Text;
   }
 }
 
 void FarMenu::SetItemText(FarMenuItem * item, const String & text)
 {
   size_t len = text.len() + 1;
+  delete[] item->Text;
   wchar_t * t = new wchar_t[len];
   text.copyTo(t, len);
   item->Text = t;
@@ -27,6 +28,7 @@ void FarMenu::SetItemText(FarMenuItem * item, const String & text)
 void FarMenu::AddLine(const String & line)
 {
   FarMenuItem item;
+  memset(&item, 0, sizeof(FarMenuItem));
   item.Flags = 0;
   if (Selection == items.size())
   {
@@ -39,6 +41,7 @@ void FarMenu::AddLine(const String & line)
 void FarMenu::AddLineCheck(const String & line, int check)
 {
   FarMenuItem item;
+  memset(&item, 0, sizeof(FarMenuItem));
   item.Flags = 0;
   if (check)
   {
@@ -55,6 +58,7 @@ void FarMenu::AddLineCheck(const String & line, int check)
 void FarMenu::AddSep()
 {
   FarMenuItem item;
+  memset(&item, 0, sizeof(FarMenuItem));
   item.Flags = MIF_SEPARATOR;
   SetItemText(&item, String());
   items.push_back(item);
