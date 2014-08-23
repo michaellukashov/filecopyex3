@@ -48,6 +48,7 @@ public:
   const Locale & getLocale() const { return locale; }
   PropertyMap & Options() { return options; }
   FarDialogList & Dialogs() { return dialogs; }
+  FarSettings & Settings() { return settings; }
 
   const StringVector & Descs() const { return descs; }
   // void MacroCommand(const FARMACROCOMMAND& cmd);
@@ -64,7 +65,7 @@ private:
 
   int flags;
 
-  void  About();
+  void About();
   static void KeyConfig();
 };
 

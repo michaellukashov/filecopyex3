@@ -102,7 +102,14 @@ HANDLE WINAPI OpenW(const struct OpenInfo * OInfo)
   plugin->InitLang();
   plugin->OpenPlugin(OInfo);
   plugin->SaveOptions();
-  return nullptr; // static_cast<HANDLE>(plugin); // INVALID_HANDLE_VALUE; // ok
+  if (OInfo->OpenFrom == OPEN_FROMMACRO)
+  {
+    return reinterpret_cast<HANDLE>(1);
+  }
+  else
+  {
+    return nullptr;
+  }
 }
 
 void WINAPI ExitFARW(const struct ExitInfo * Info)

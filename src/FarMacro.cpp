@@ -4,6 +4,7 @@
 #include "FarMacro.h"
 
 #include "Framework/StringVector.h"
+#include "Framework/FileUtils.h"
 #include "Common.h"
 #include "guid.hpp"
 
@@ -22,7 +23,7 @@ String getEnv(const String & name)
   return L"";
 }
 
-void Bind(const String & key, const String & code, const String & desc)
+void Bind(const String & key, const String & code, const String & desc, int id)
 {
   /*
   MacroAddMacro macro = { sizeof(MacroAddMacro) };
@@ -58,31 +59,41 @@ void Bind(const String & key, const String & code, const String & desc)
   }
   String fname = String(L"Shell_") + key + L".lua";
   StringVector v;
-  v.AddString(L"area=\"Shell\"");
-  v.AddString(String(L"key=\"") + key + L"\"");
-  v.AddString(L"flags=\"NoPluginPanels NoPluginPPanels NoSendKeysToPlugins\"");
-  v.AddString(String(L"description=\"") + desc + L"\"");
-  v.AddString(String(L"code=\"") + code + L"\"");
-  v.saveToFile(base + L"\\Macros\\internal\\" + fname);
+  v.AddString(String(L"Macro {"));
+  v.AddString(String(L"  area=\"Shell\";"));
+  v.AddString(String(L"  key=\"") + key + L"\";");
+  v.AddString(String(L"  flags=\"NoPluginPanels|NoPluginPPanels|NoSendKeysToPlugins|RunAfterFARStart\";"));
+  v.AddString(String(L"  priority=0;"));
+  v.AddString(String(L"  description=\"") + desc + L"\";");
+  v.AddString(String(L"  action = function()"));
+  v.AddString(String(L"    ") + code);
+  v.AddString(String(L"  end;"));
+  v.AddString(String(L"}"));
+  String DirName = base + L"\\Macros\\scripts\\";
+  if (!FileExists(DirName))
+  {
+    ForceDirectories(DirName);
+  }
+  v.saveToFile(DirName + fname);
 
   Info.MacroControl(&MainGuid, MCTL_LOADALL, 0, nullptr);
 }
 
-/*
-int Binded(const String& key)
+int Binded(const String & key)
 {
+  FarSettings & settings = plugin->Settings();
   //XXX String seq = registry.GetString(regkey + L"\\" + key, "Sequence", "");
   //XXX return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp(L"F5") || !seq.icmp(L"F6"));
-  return true;
+  String value;
+  return settings.get(key, value) && !value.IsEmpty();
 }
-*/
 
-/*
-void FarPlugin::Unbind(void *id)
+void Unbind(const String & key)
 {
-  Info.MacroControl(&MainGuid, MCTL_DELMACRO, 0, id);
+  FarSettings & settings = plugin->Settings();
+  settings.set(key, L"");
+  //Info.MacroControl(&MainGuid, MCTL_DELMACRO, 0, id);
 }
-*/
 
 /*
 void FarPlugin::MacroCommand(const FARMACROCOMMAND& cmd)
