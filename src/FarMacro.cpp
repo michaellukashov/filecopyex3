@@ -4,6 +4,7 @@
 #include "FarMacro.h"
 
 #include "Framework/StringVector.h"
+#include "Framework/FileUtils.h"
 #include "Common.h"
 #include "guid.hpp"
 
@@ -58,12 +59,21 @@ void Bind(const String & key, const String & code, const String & desc, int id)
   }
   String fname = String(L"Shell_") + key + L".lua";
   StringVector v;
-  v.AddString(L"area=\"Shell\"");
-  v.AddString(String(L"key=\"") + key + L"\"");
-  v.AddString(L"flags=\"NoPluginPanels NoPluginPPanels NoSendKeysToPlugins\"");
-  v.AddString(String(L"description=\"") + desc + L"\"");
-  v.AddString(String(L"code=\"") + code + L"\"");
-  v.saveToFile(base + L"\\Macros\\internal\\" + fname);
+  v.AddString(String(L"Macro {"));
+  v.AddString(String(L"  area=\"Shell\";"));
+  v.AddString(String(L"  key=\"") + key + L"\";");
+  v.AddString(String(L"  flags=\"NoPluginPanels NoPluginPPanels NoSendKeysToPlugins\";"));
+  v.AddString(String(L"  description=\"") + desc + L"\";");
+  v.AddString(String(L"  action = function()"));
+  v.AddString(String(L"    ") + code);
+  v.AddString(String(L"  end;"));
+  v.AddString(String(L"}"));
+  String DirName = base + L"\\Macros\\scripts\\";
+  if (!FileExists(DirName))
+  {
+    ForceDirectories(DirName);
+  }
+  v.saveToFile(DirName + fname);
 
   Info.MacroControl(&MainGuid, MCTL_LOADALL, 0, nullptr);
 }
