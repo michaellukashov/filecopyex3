@@ -62,7 +62,7 @@ void Bind(const String & key, const String & code, const String & desc, int id)
   v.AddString(String(L"Macro {"));
   v.AddString(String(L"  area=\"Shell\";"));
   v.AddString(String(L"  key=\"") + key + L"\";");
-  v.AddString(String(L"  flags=\"NoPluginPanels|NoPluginPPanels|NoSendKeysToPlugins|RunAfterFARStart\";"));
+  v.AddString(String(L"  flags=\"NoPluginPanels|NoPluginPPanels|NoSendKeysToPlugins\";"));
   v.AddString(String(L"  priority=0;"));
   v.AddString(String(L"  description=\"") + desc + L"\";");
   v.AddString(String(L"  action = function()"));
