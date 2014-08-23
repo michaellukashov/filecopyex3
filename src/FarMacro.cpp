@@ -69,7 +69,7 @@ void Bind(const String & key, const String & code, const String & desc, int id)
   v.AddString(String(L"    ") + code);
   v.AddString(String(L"  end;"));
   v.AddString(String(L"}"));
-  String DirName = base + L"\\Macros\\scripts\\";
+  String DirName = base + L"\\Macros\\internal\\";
   if (!FileExists(DirName))
   {
     ForceDirectories(DirName);
