@@ -38,7 +38,7 @@ void FWError(const wchar_t * s)
   }
   else
   {
-    MessageBox(0, s, L"FileCopyEx plugin error", MB_OK | MB_ICONSTOP | MB_SETFOREGROUND);
+    MessageBox(0, s, L"FileCopyEx3 plugin error", MB_OK | MB_ICONSTOP | MB_SETFOREGROUND);
     DebugBreak();
   }
 }
