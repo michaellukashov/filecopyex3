@@ -1,4 +1,6 @@
-FileCopyEx3 3.0.4.22 ??.08.2014
+FileCopyEx3 3.0.4.23 25.08.2014
+* Fix issue #12: Cannot cancel copy process
+  (https://github.com/michaellukashov/filecopyex3/issues/12)
 * Bugfix: Key bindings settings were not stored
 * Fix issue #7: F5/F6 not working
   (https://github.com/michaellukashov/filecopyex3/issues/7)
