@@ -618,7 +618,7 @@ int Engine::FlushBuff(TBuffInfo * ABuffInfo)
     {
       while (Pos < ABuffInfo->BuffInf[PosInStr].WritePos)
       {
-        if (!Parallel && CheckEscape() || Aborted)
+        if (CheckEscape() || Aborted)
         {
           info.Flags |= FLG_SKIPPED;
           goto skip;
