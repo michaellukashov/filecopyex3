@@ -8,8 +8,6 @@
 #include "Common.h"
 #include "guid.hpp"
 
-String base;
-
 String getEnv(const String & name)
 {
   wchar_t * buf;
@@ -40,6 +38,7 @@ void Bind(const String & key, const String & code, const String & desc, int id)
   int res = Info.MacroControl(&MainGuid, MCTL_ADDMACRO, 0, &macro);
   ShowMessage(L"Bind", key + L": " + String(res), FMSG_MB_OK);
   */
+  static String base;
 
   if (base.empty())
   {
