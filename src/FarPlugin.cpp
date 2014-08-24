@@ -49,7 +49,13 @@ static void RemoveMacroFile(const String & MacrosPath, const String & Key)
   String FullMacroFileName = AddEndSlash(MacrosPath) + MacroFileName;
   if (FileExists(FullMacroFileName))
   {
-    Delete(FullMacroFileName);
+    // check if macros are created by plugin
+    StringVector v;
+    v.loadFromFile(FullMacroFileName);
+    if (v.FindAny(L"FileCopyEx3") != -1)
+    {
+      Delete(FullMacroFileName);
+    }
   }
 }
 
@@ -244,7 +250,6 @@ void FarPlugin::UpdateConfiguration()
 {
   // check if Macros\\internal macros exist
   {
-    // TODO: check if macros are created by plugin
     String MacrosPath = GetMacrosPath(20);
     if (FileExists(MacrosPath))
     {
