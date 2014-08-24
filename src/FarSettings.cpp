@@ -40,6 +40,18 @@ bool FarSettings::create()
     return false;
   }
   handle = fsc.Handle;
+  FarSettingsValue fsv = { sizeof(FarSettingsValue) };
+  fsv.Root = dirId;
+  fsv.Value = L"FileCopyEx3Settings";
+  intptr_t dir_id = control(SCTL_CREATESUBKEY, &fsv);
+  if (dir_id == 0)
+  {
+    return false;
+  }
+  else
+  {
+    dirId = dir_id;
+  }
   return true;
 }
 
