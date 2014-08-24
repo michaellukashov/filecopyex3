@@ -36,6 +36,8 @@ BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID);
 const wchar_t * GetMsg(intptr_t MsgId);
 const String & LOC(const String & l);
 
+String GetFarProfilePath();
+
 extern PluginStartupInfo Info;
 extern FarStandardFunctions FSF;
 extern FarPlugin * plugin;

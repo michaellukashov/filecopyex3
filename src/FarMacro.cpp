@@ -6,20 +6,8 @@
 #include "Framework/StringVector.h"
 #include "Framework/FileUtils.h"
 #include "Common.h"
+#include "version.hpp"
 #include "guid.hpp"
-
-String getEnv(const String & name)
-{
-  wchar_t * buf;
-  size_t len;
-  if (_wdupenv_s(&buf, &len, name.c_str()) == 0)
-  {
-    String v(buf);
-    free(buf);
-    return v;
-  }
-  return L"";
-}
 
 void Bind(const String & key, const String & code, const String & desc, int id)
 {
@@ -38,25 +26,18 @@ void Bind(const String & key, const String & code, const String & desc, int id)
   int res = Info.MacroControl(&MainGuid, MCTL_ADDMACRO, 0, &macro);
   ShowMessage(L"Bind", key + L": " + String(res), FMSG_MB_OK);
   */
-  static String base;
-
-  if (base.empty())
-  {
-    base = getEnv(L"FARPROFILE");
-  }
-  if (base.empty())
-  {
-    base = getEnv(L"APPDATA");
-    if (!base.empty())
-    {
-      base += L"\\Far Manager\\Profile";
-    }
-  }
-  if (base.empty())
+//  String DirName = base + L"\\Macros\\internal\\"; // build 20
+//  String DirName = base + L"\\Macros\\scripts\\";
+  String DirName = GetMacrosPath(PLUGIN_BUILD);
+  if (DirName.empty())
   {
     return; // Cannot find correct path
   }
-  String fname = String(L"Shell_") + key + L".lua";
+  if (!FileExists(DirName))
+  {
+    ForceDirectories(DirName);
+  }
+  String fname = GetMacroFileName(key);
   StringVector v;
   v.AddString(String(L"Macro {"));
   v.AddString(String(L"  area=\"Shell\";"));
@@ -68,11 +49,7 @@ void Bind(const String & key, const String & code, const String & desc, int id)
   v.AddString(String(L"    ") + code);
   v.AddString(String(L"  end;"));
   v.AddString(String(L"}"));
-  String DirName = base + L"\\Macros\\internal\\";
-  if (!FileExists(DirName))
-  {
-    ForceDirectories(DirName);
-  }
+
   v.saveToFile(DirName + fname);
 
   Info.MacroControl(&MainGuid, MCTL_LOADALL, 0, nullptr);
@@ -103,3 +80,27 @@ void FarPlugin::MacroCommand(const FARMACROCOMMAND& cmd)
   Info.AdvControl(Info.ModuleNumber, ACTL_KEYMACRO, &prm);
 }
 */
+
+String GetMacrosPath(uintptr_t PluginBuildNumber)
+{
+  String ProfilePath = GetFarProfilePath();
+  if (ProfilePath.empty())
+  {
+    return L""; // Cannot find correct path
+  }
+  String DirName;
+  if (PluginBuildNumber <= 20)
+  {
+    DirName = AddEndSlash(AddEndSlash(ProfilePath) + L"Macros\\internal");
+  }
+  else
+  {
+    DirName = AddEndSlash(AddEndSlash(ProfilePath) + L"Macros\\scripts");
+  }
+  return DirName;
+}
+
+String GetMacroFileName(const String & Key)
+{
+  return String(L"Shell_") + Key + L".lua";
+}

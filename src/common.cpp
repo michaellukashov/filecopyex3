@@ -56,3 +56,36 @@ const String & LOC(const String & l)
     return l;
   }
 }
+
+static String getEnv(const String & name)
+{
+  wchar_t * buf;
+  size_t len;
+  if (_wdupenv_s(&buf, &len, name.c_str()) == 0)
+  {
+    String v(buf);
+    free(buf);
+    return v;
+  }
+  return L"";
+}
+
+String GetFarProfilePath()
+{
+  static String base;
+
+  if (base.empty())
+  {
+    base = getEnv(L"FARPROFILE");
+  }
+  if (base.empty())
+  {
+    base = getEnv(L"APPDATA");
+    if (!base.empty())
+    {
+      base += L"\\Far Manager\\Profile";
+    }
+  }
+  return base;
+}
+
