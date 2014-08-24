@@ -113,8 +113,8 @@ public:
   bool AsBool() const { return (*this) == L"1"; }
   void copyTo(wchar_t * buf, size_t sz) const { wcscpy_s(buf, sz, ptr()); }
 
-  int cmp(const String & v) const { return ncmp(v, 0x7FFFFFFF); }
-  int icmp(const String & v) const { return nicmp(v, 0x7FFFFFFF); }
+  int cmp(const String & v) const { return ncmp(v, size_t(-1)); }
+  int icmp(const String & v) const { return nicmp(v, size_t(-1)); }
   int ncmp(const String & v, size_t sz) const { return wcsncmp(ptr(), v.ptr(), sz); }
   int nicmp(const String & v, size_t sz) const { return _wcsnicmp(ptr(), v.ptr(), sz); }
 
