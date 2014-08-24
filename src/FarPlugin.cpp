@@ -35,7 +35,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ui.h"
 
-void BindAll()
+static void BindAll()
 {
   Bind(L"F5", L"if not Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0) then Keys(\"F5\") end", L"FileCopyEx3 - Copy file(s)", 0);
   Bind(L"F6", L"if not Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1) then Keys(\"F6\") end", L"FileCopyEx3 - Move file(s)", 0);
