@@ -26,8 +26,6 @@ void Bind(const String & key, const String & code, const String & desc, int id)
   int res = Info.MacroControl(&MainGuid, MCTL_ADDMACRO, 0, &macro);
   ShowMessage(L"Bind", key + L": " + String(res), FMSG_MB_OK);
   */
-//  String DirName = base + L"\\Macros\\internal\\"; // build 20
-//  String DirName = base + L"\\Macros\\scripts\\";
   String DirName = GetMacrosPath(PLUGIN_BUILD);
   if (DirName.empty())
   {
