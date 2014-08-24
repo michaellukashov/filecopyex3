@@ -74,7 +74,8 @@ void FarProgress::DrawWindow(int X1, int Y1, int X2, int Y2, const String & capt
   {
     tpl += bkg;
   }
-  Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN | FMSG_ALLINONE, nullptr, (const wchar_t **)tpl.ptr(), 0, 0);
+  Info.Message(&MainGuid, &ProgressDlg, FMSG_LEFTALIGN | FMSG_ALLINONE, nullptr,
+               reinterpret_cast<const wchar_t * const *>(tpl.ptr()), 0, 0);
 }
 
 void FarProgress::GetConSize(int & w, int & h)

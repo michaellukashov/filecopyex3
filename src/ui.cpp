@@ -42,7 +42,8 @@ intptr_t ShowMessageHelp(const String & title, const String & msg, uint32_t Flag
   intptr_t res = Info.Message(&MainGuid, &UnkGuid,
                               Flags | FMSG_ALLINONE,
                               help.ptr(),
-                              (const wchar_t **)(const wchar_t *)msgbuf.ptr(), 0, 0
+                              reinterpret_cast<const wchar_t * const *>(msgbuf.ptr()),
+                              0, 0
                              );
   return res;
 }
@@ -64,7 +65,9 @@ intptr_t ShowMessageExHelp(const String & title, const String & msg,
   }
   String msgbuf = title + L"\n" + msg + L"\n\x01\n" + buttons;
   intptr_t res = Info.Message(&MainGuid, &UnkGuid, flags | FMSG_ALLINONE,
-                              help.ptr(), (const wchar_t **)(const wchar_t *)msgbuf.ptr(), 0, nb + 1
+                              help.ptr(),
+                              reinterpret_cast<const wchar_t * const *>(msgbuf.ptr()),
+                              0, nb + 1
                              );
   return res;
 }
