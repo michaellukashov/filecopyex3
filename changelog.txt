@@ -1,10 +1,9 @@
-FileCopyEx3 3.0.4.21 ??.08.2014
+FileCopyEx3 3.0.4.22 ??.08.2014
+* Bugfix: Key bindings settings were not stored
 * Fix issue #7: F5/F6 not working
   (https://github.com/michaellukashov/filecopyex3/issues/7)
 
 FileCopyEx3 3.0.3.20 23.08.2014
-* Fix issue #7: F5/F6 not working
-  (https://github.com/michaellukashov/filecopyex3/issues/7)
 * Fix for corrupt non-ASCII characters in descript.ion after copying a file
   Thanks to Igor Yudintsev
   (https://github.com/michaellukashov/filecopyex3/pull/11)

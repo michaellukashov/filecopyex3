@@ -3,11 +3,11 @@
 #include "sdk/farversion.hpp"
 
 #define PLUGIN_MIN_FAR_VERSION MAKEFARVERSION(3, 0, 0, 3677, VS_RELEASE) // http://api.farmanager.com/ru/whatsnew.html
-#define PLUGIN_VERSION_TXT "3.0.4.21"
+#define PLUGIN_VERSION_TXT "3.0.4.22"
 #define PLUGIN_MAJOR 3
 #define PLUGIN_MINOR 0
 #define PLUGIN_SUBMINOR 4
-#define PLUGIN_BUILD 21
+#define PLUGIN_BUILD 22
 #define PLUGIN_VERSION MAKEFARVERSION(PLUGIN_MAJOR, PLUGIN_MINOR, PLUGIN_SUBMINOR, PLUGIN_BUILD, VS_BETA)
 #define PLUGIN_DESC L"File Copy Extended plugin for Far 3 file manager main executable"
 #define PLUGIN_NAME L"FileCopyEx3"
