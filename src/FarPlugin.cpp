@@ -309,8 +309,8 @@ void FarPlugin::KeyConfig()
 
   // MacroCommand(MCMD_SAVEALL);
 
-  Unbind(L"KEY_F5"); Unbind(L"ShiftF5");
-  Unbind(L"KEY_F5");     Unbind(L"ShiftF6");
+  Unbind(L"F5"); Unbind(L"ShiftF5");
+  Unbind(L"F6");     Unbind(L"ShiftF6");
   Unbind(L"AltShiftF5"); Unbind(L"AltShiftF6");
   Unbind(L"CtrlShiftF5");  Unbind(L"CtrlShiftF6");
   Unbind(L"CtrlAltF5");  Unbind(L"CtrlAltF6");
