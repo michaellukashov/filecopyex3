@@ -323,14 +323,15 @@ void FarPlugin::KeyConfig()
 //    Bind(L"ShiftF6", L"Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
     BindAll();
 
-    /*
     String key;
-    if (dlg[L"AltShiftF5"](L"Selected")) key = "AltShift";
-    else if (dlg[L"CtrlShiftF5"](L"Selected")) key = "CtrlShift";
-    else if (dlg[L"CtrlAltF5"](L"Selected")) key = "CtrlAlt";
-    Bind(key + L"F5", "F5");
-    Bind(key + L"F6", "F6");
-    */
+    if (dlg[L"AltShiftF5"](L"Selected"))
+      key = L"AltShift";
+    else if (dlg[L"CtrlShiftF5"](L"Selected"))
+      key = L"CtrlShift";
+    else if (dlg[L"CtrlAltF5"](L"Selected"))
+      key = L"CtrlAlt";
+    Bind(key + L"F5", L"Keys(\"F5\")", L"FileCopyEx3 - standard copy dialog", 0);
+    Bind(key + L"F6", L"Keys(\"F6\")", L"FileCopyEx3 - standard move dialog", 0);
   }
   // MacroCommand(MCMD_LOADALL);
 }
