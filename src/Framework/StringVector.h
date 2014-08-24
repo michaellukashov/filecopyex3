@@ -24,6 +24,16 @@ public:
     return -1;
   }
 
+  intptr_t FindAny(const String & v, intptr_t start = 0) const
+  {
+    for (size_t Index = start; Index < Count(); ++Index)
+    {
+      if (data[Index].find(v) != size_t(-1))
+        return Index;
+    }
+    return -1;
+  }
+
 private:
   std::vector<String> data;
 };
