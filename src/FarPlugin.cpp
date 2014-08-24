@@ -326,8 +326,8 @@ void FarPlugin::KeyConfig()
       key = L"CtrlShift";
     else if (dlg[L"CtrlAltF5"](L"Selected"))
       key = L"CtrlAlt";
-    Bind(key + L"F5", L"Keys(\"F5\")", L"FileCopyEx3 - standard copy dialog", 0);
-    Bind(key + L"F6", L"Keys(\"F6\")", L"FileCopyEx3 - standard move dialog", 0);
+    Bind(key + L"F5", L"Keys(\"F5\")", L"FileCopyEx3 - Standard copy dialog", 0);
+    Bind(key + L"F6", L"Keys(\"F6\")", L"FileCopyEx3 - Standard move dialog", 0);
   }
   // MacroCommand(MCMD_LOADALL);
 }
