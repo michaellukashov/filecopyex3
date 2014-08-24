@@ -43,6 +43,16 @@ static void BindAll()
   Bind(L"ShiftF6", L"if not Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 3) then Keys(\"ShiftF6\") end", L"FileCopyEx3 - Move current file", 0);
 }
 
+static void RemoveMacroFile(const String & MacrosPath, const String & Key)
+{
+  String MacroFileName = GetMacroFileName(Key);
+  String FullMacroFileName = AddEndSlash(MacrosPath) + MacroFileName;
+  if (FileExists(FullMacroFileName))
+  {
+    Delete(FullMacroFileName);
+  }
+}
+
 
 FarPlugin::~FarPlugin()
 {
@@ -234,9 +244,14 @@ void FarPlugin::UpdateConfiguration()
 {
   // check if Macros\\internal macros exist
   {
-    if (FileExists(GetFarProfilePath()))
+    // TODO: check if macros are created by plugin
+    String MacrosPath = GetMacrosPath(20);
+    if (FileExists(MacrosPath))
     {
-
+      RemoveMacroFile(MacrosPath, L"F5");
+      RemoveMacroFile(MacrosPath, L"F6");
+      RemoveMacroFile(MacrosPath, L"ShiftF5");
+      RemoveMacroFile(MacrosPath, L"ShiftF6");
     }
   }
 }
