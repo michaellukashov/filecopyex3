@@ -317,10 +317,6 @@ void FarPlugin::KeyConfig()
 
   if (dlg[L"BindToF5"](L"Selected"))
   {
-//    Bind(L"F5", L"Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
-//    Bind(L"F6", L"Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
-//    Bind(L"ShiftF5", L"Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 0)", "", 0);
-//    Bind(L"ShiftF6", L"Plugin.Call(\"16990c75-cb7a-43df-8d7e-d6bf3683c3f1\", 1)", "", 0);
     BindAll();
 
     String key;
