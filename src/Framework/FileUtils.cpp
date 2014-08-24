@@ -411,7 +411,7 @@ String ApplyFileMaskPath(const String & name, const String & mask)
       res += String(L"\\") + ExtractFileName(name);
     return res;
   }
-  return ExtractFilePath(mask) + L"\\" +
+  return AddEndSlash(ExtractFilePath(mask)) +
          ApplyFileMask(ExtractFileName(name), ExtractFileName(mask));
 }
 
@@ -454,7 +454,7 @@ String TempPath()
 
 String TempPathName()
 {
-  return TempPath() + L"\\" + TempName();
+  return AddEndSlash(TempPath()) + TempName();
 }
 
 static int __MoveFile(const wchar_t * src, const wchar_t * dst)
@@ -552,7 +552,7 @@ intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
           ::SetLastError(ERROR_ALREADY_EXISTS);
           return FALSE;
         }
-        String temp = ExtractFilePath(dst) + L"\\" + TempName();
+        String temp = AddEndSlash(ExtractFilePath(dst)) + TempName();
         if (!__MoveFile(dst.ptr(), temp.ptr()))
           return FALSE;
         if (!__MoveFile(src.ptr(), dst.ptr()))

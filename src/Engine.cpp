@@ -1217,8 +1217,8 @@ int Engine::DirEnd(const String & dir, const String & dstMask)
 {
   if (_CopyDescs && !CurPathDesc.IsEmpty())
   {
-    if (!AddFile(dir + L"\\" + CurPathDesc,
-                 AddEndSlash(ExtractFilePath(ApplyFileMaskPath(dir + L"\\" + CurPathDesc, dstMask))) + CurPathDesc, DescFindData, AF_DESCFILE | AF_DESC_INVERSE | CurPathAddFlags, 1)
+    if (!AddFile(AddEndSlash(dir) + CurPathDesc,
+                 AddEndSlash(ExtractFilePath(ApplyFileMaskPath(AddEndSlash(dir) + CurPathDesc, dstMask))) + CurPathDesc, DescFindData, AF_DESCFILE | AF_DESC_INVERSE | CurPathAddFlags, 1)
        )
     {
       return FALSE;
@@ -2066,7 +2066,7 @@ retry:
             {
               if (descidx == -1 || idx < descidx)
               {
-                RememberFile(src + L"\\" + fd.cFileName, dst + L"\\" + fd.cFileName,
+                RememberFile(AddEndSlash(src) + fd.cFileName, AddEndSlash(dst) + fd.cFileName,
                              fd, flags | AF_DESCFILE, Level + 1, Remember);
                 descidx = idx;
               }
@@ -2079,9 +2079,9 @@ retry:
                   (fd.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))
               {
                 // compare current folder & unfolded symlink name in current folder
-                if (GetRealFileName(src) != GetRealFileName(src + L"\\" + fd.cFileName))
+                if (GetRealFileName(src) != GetRealFileName(AddEndSlash(src) + fd.cFileName))
                 {
-                  if (!AddFile(src + L"\\" + fd.cFileName, dst + L"\\" + fd.cFileName, fd, flags, Level + 1))
+                  if (!AddFile(AddEndSlash(src) + fd.cFileName, AddEndSlash(dst) + fd.cFileName, fd, flags, Level + 1))
                   {
                     ::FindClose(hf);
                     return FALSE;
@@ -2090,7 +2090,7 @@ retry:
               }
               else
               {
-                if (!AddFile(src + L"\\" + fd.cFileName, dst + L"\\" + fd.cFileName, fd, flags, Level + 1))
+                if (!AddFile(AddEndSlash(src) + fd.cFileName, AddEndSlash(dst) + fd.cFileName, fd, flags, Level + 1))
                 {
                   ::FindClose(hf);
                   return FALSE;
@@ -2284,7 +2284,7 @@ rep:
 rep1:
     if (dlg.Execute() == 0)
     {
-      ren = ExtractFilePath(Dst) + L"\\" + dlg[L"Edit"](L"Text");
+      ren = AddEndSlash(ExtractFilePath(Dst)) + dlg[L"Edit"](L"Text");
       if (ExistsN(ren, 0))
         goto rep1;
     }
