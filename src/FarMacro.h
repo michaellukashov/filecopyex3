@@ -8,3 +8,4 @@ void Unbind(const String & key);
 
 String GetMacrosPath(uintptr_t PluginBuildNumber);
 String GetMacroFileName(const String & Key);
+void RemoveMacroFile(const String & MacrosPath, const String & Key);

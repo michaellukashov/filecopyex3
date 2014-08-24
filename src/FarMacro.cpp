@@ -51,6 +51,9 @@ void Bind(const String & key, const String & code, const String & desc, int id)
   v.saveToFile(DirName + fname);
 
   Info.MacroControl(&MainGuid, MCTL_LOADALL, 0, nullptr);
+
+  FarSettings & settings = plugin->Settings();
+  settings.set(key, L"true");
 }
 
 int Binded(const String & key)
@@ -64,6 +67,12 @@ int Binded(const String & key)
 
 void Unbind(const String & key)
 {
+  String MacrosPath = GetMacrosPath(PLUGIN_BUILD);
+  if (FileExists(MacrosPath))
+  {
+    RemoveMacroFile(MacrosPath, key);
+  }
+
   FarSettings & settings = plugin->Settings();
   settings.set(key, L"");
   //Info.MacroControl(&MainGuid, MCTL_DELMACRO, 0, id);
@@ -101,4 +110,20 @@ String GetMacrosPath(uintptr_t PluginBuildNumber)
 String GetMacroFileName(const String & Key)
 {
   return String(L"Shell_") + Key + L".lua";
+}
+
+void RemoveMacroFile(const String & MacrosPath, const String & Key)
+{
+  String MacroFileName = GetMacroFileName(Key);
+  String FullMacroFileName = AddEndSlash(MacrosPath) + MacroFileName;
+  if (FileExists(FullMacroFileName))
+  {
+    // check if macros are created by plugin
+    StringVector v;
+    v.loadFromFile(FullMacroFileName);
+    if (v.FindAny(L"FileCopyEx3") != -1)
+    {
+      Delete(FullMacroFileName);
+    }
+  }
 }
