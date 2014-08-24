@@ -73,6 +73,7 @@ void FarPlugin::Create()
 
   descs.AddString(L"Descript.ion");
   descs.AddString(L"Files.bbs");
+  UpdateConfiguration();
 }
 
 void FarPlugin::LoadOptions()
@@ -227,6 +228,17 @@ String FarPlugin::GetDLLPath()
   GetModuleFileName((HMODULE)hInstance, buf, LENOF(buf));
   String dlln = buf;
   return dlln.substr(0, dlln.rfind('\\'));
+}
+
+void FarPlugin::UpdateConfiguration()
+{
+  // check if Macros\\internal macros exist
+  {
+    if (FileExists(GetFarProfilePath()))
+    {
+
+    }
+  }
 }
 
 void FarPlugin::InitOptions()

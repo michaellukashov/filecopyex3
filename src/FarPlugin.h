@@ -55,6 +55,7 @@ public:
 
 private:
   static String GetDLLPath();
+  void UpdateConfiguration();
 
   FarDialogList dialogs;
   PropertyMap options;
