@@ -75,6 +75,8 @@ void Unbind(const String & key)
 
   FarSettings & settings = plugin->Settings();
   settings.set(key, L"");
+  PropertyMap & options = plugin->Options();
+  options[key] = Property(L"");
   //Info.MacroControl(&MainGuid, MCTL_DELMACRO, 0, id);
 }
 
