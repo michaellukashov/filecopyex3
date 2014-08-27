@@ -1,4 +1,6 @@
-FileCopyEx3 3.0.5.24 27.08.2014
+FileCopyEx3 3.0.5.25 28.08.2014
+* Bugfix: Settings --> Hotkeys --> "[] Bind Extended copy to F5/F6" option cannot be unset
+  (http://forum.farmanager.com/viewtopic.php?f=5&t=583&p=121873#p121838)
 * Bugfix: Prevent locking source directory
   (http://forum.farmanager.com/viewtopic.php?f=5&t=583&p=121873#p121815)
 
