@@ -1493,8 +1493,6 @@ rep:
   // Get absolute path for relative dstpath
   FSF.GetCurrentDirectory(LENOF(CurrentDir), CurrentDir);
   // srcpath.ptr() for temporary file panel is empty
-  // Current directory is set by Far to file path of selected file
-  // BOOL SCDResult = ::SetCurrentDirectory(srcPath.ptr());
   if (relDstPath.icmp(L"nul") != 0)
   {
     dstPath = convertPath(CPM_REAL, relDstPath);
@@ -1503,10 +1501,6 @@ rep:
   {
     dstPath = relDstPath;
   }
-  //if (SCDResult)
-  //{
-  //  ::SetCurrentDirectory(CurrentDir);
-  //}
 
   CompressMode = EncryptMode = ATTR_INHERIT;
   Streams = Rights = FALSE;
