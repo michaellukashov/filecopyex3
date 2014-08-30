@@ -56,7 +56,7 @@ String ChangeFileExt(const String &, const String &);
 
 extern HANDLE Open(const String & fn, DWORD mode, DWORD attr);
 void Close(HANDLE h);
-int Delete(const String & fn);
+bool Delete(const String & fn);
 
 String GetFileRoot(const String &);
 String GetRealFileName(const String &, int flg = 0);
