@@ -1,4 +1,4 @@
-FileCopyEx3 3.0.5.27 30.08.2014
+FileCopyEx3 3.0.5.28 31.08.2014
 
 * Improvement: ShiftF5/F6 handling
   (http://forum.farmanager.com/viewtopic.php?f=5&t=583&p=121935#p121838)
