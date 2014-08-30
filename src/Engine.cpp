@@ -1202,7 +1202,7 @@ int Engine::DirStart(const String & dir, const String & dstMask)
   return TRUE;
 }
 
-int Engine::DirEnd(const String & dir, const String & dstMask)
+bool Engine::DirEnd(const String & dir, const String & dstMask)
 {
   if (_CopyDescs && !CurPathDesc.IsEmpty())
   {
@@ -1210,11 +1210,11 @@ int Engine::DirEnd(const String & dir, const String & dstMask)
                  AddEndSlash(ExtractFilePath(ApplyFileMaskPath(AddEndSlash(dir) + CurPathDesc, dstMask))) + CurPathDesc, DescFindData, AF_DESCFILE | AF_DESC_INVERSE | CurPathAddFlags, 1)
        )
     {
-      return FALSE;
+      return false;
     }
   }
   AddTopLevelDir(dir, dstMask, FLG_DIR_POST | FLG_DIR_NOREMOVE | CurPathFlags, FileName::levelStar);
-  return TRUE;
+  return true;
 }
 
 String getPanelDir(HANDLE h_panel)

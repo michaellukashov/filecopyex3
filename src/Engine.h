@@ -150,7 +150,7 @@ private:
   static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, RememberStruct &);
   intptr_t AddRemembered(RememberStruct &);
   int DirStart(const String & dir, const String & dst);
-  int DirEnd(const String & dir, const String & dst);
+  bool DirEnd(const String & dir, const String & dst);
   static String FindDescFile(const String & dir, intptr_t * idx = nullptr);
   static String FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t * idx = nullptr);
 
