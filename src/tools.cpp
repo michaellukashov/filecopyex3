@@ -62,7 +62,7 @@ int GetDriveId(const String & path, String & res)
   return FALSE;
 }
 
-int GetPhysDrive(const String & _path, int & res)
+static int GetPhysDrive(const String & _path, int & res)
 {
   String path = _path;
   if (Win2K || WinXP)
