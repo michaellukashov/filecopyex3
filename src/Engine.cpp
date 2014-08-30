@@ -1258,6 +1258,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
   Move = move;
   int allowPlug = 0, adv = 0;
 
+  String activePanelDir = getPanelDir(PANEL_ACTIVE);
   String passivePanelDir = getPanelDir(PANEL_PASSIVE);
 
   PanelInfo pi;
@@ -1308,8 +1309,8 @@ Engine::MResult Engine::Main(int move, int curOnly)
     TPanelItem pit(pit_sel ? 0 : pi.CurrentItem, true, pit_sel);
 
     wcsncpy_s(buf, LENOF(buf), pit->FileName, LENOF(buf));
-    String fn = ExtractFileName(buf);
-    if (fn == L"..")
+    String currentFileName = ExtractFileName(buf);
+    if (currentFileName == L"..")
       return MRES_NONE;
     String fmt;
     if (!move)
@@ -1320,9 +1321,9 @@ Engine::MResult Engine::Main(int move, int curOnly)
     {
       fmt = LOC(L"CopyDialog.MoveTo");
     }
-    prompt = Format(fmt.ptr(), fn.ptr());
+    prompt = Format(fmt.ptr(), currentFileName.ptr());
     if (dstPath.empty())
-      dstPath = fn;
+      dstPath = currentFileName;
 
   }
   srcPath = CutEndSlash(passivePanelDir);
