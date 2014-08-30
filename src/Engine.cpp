@@ -740,7 +740,7 @@ int Engine::WaitForFlushEnd()
 
 struct CurDirInfo
 {
-  uint32_t SectorSize;
+  size_t SectorSize;
 };
 
 void Engine::Copy()

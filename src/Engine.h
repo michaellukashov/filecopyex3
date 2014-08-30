@@ -116,7 +116,7 @@ private:
 
   CopyProgress CopyProgressBox;
   FarProgress ScanFoldersProgressBox;
-  int SectorSize;
+  size_t SectorSize;
 
   void Copy();
   int InitBuf(TBuffInfo * buffInfo);
