@@ -1265,6 +1265,10 @@ Engine::MResult Engine::Main(int move, int curOnly)
   panel_info_passive.StructSize = sizeof(PanelInfo);
   Info.PanelControl(PANEL_PASSIVE, FCTL_GETPANELINFO, 0, &panel_info_passive); // !!! check result!
 
+  PanelInfo panel_info_active;
+  panel_info_active.StructSize = sizeof(PanelInfo);
+  Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &panel_info_active); // !!! check result!
+
   if ((panel_info_passive.Flags & PFLAGS_PLUGIN) == PFLAGS_PLUGIN)
   {
     dstPath = L"plugin:";
@@ -1309,15 +1313,13 @@ Engine::MResult Engine::Main(int move, int curOnly)
     }
   }
 
-  Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &panel_info_passive); // !!! check result!
-
-  if (panel_info_passive.PanelType == PTYPE_QVIEWPANEL || panel_info_passive.PanelType == PTYPE_INFOPANEL || !panel_info_passive.ItemsNumber)
+  if (panel_info_active.PanelType == PTYPE_QVIEWPANEL || panel_info_active.PanelType == PTYPE_INFOPANEL || !panel_info_active.ItemsNumber)
   {
     return MRES_NONE;
   }
-  if ((panel_info_passive.Flags & PFLAGS_REALNAMES) == 0)
+  if ((panel_info_active.Flags & PFLAGS_REALNAMES) == 0)
     return MRES_STDCOPY;
-  if (panel_info_passive.SelectedItemsNumber > 1 && !curOnly)
+  if (panel_info_active.SelectedItemsNumber > 1 && !curOnly)
   {
     if (move)
     {
@@ -1331,8 +1333,8 @@ Engine::MResult Engine::Main(int move, int curOnly)
   else
   {
     wchar_t buf[MAX_FILENAME];
-    bool pit_sel = panel_info_passive.SelectedItemsNumber && !curOnly;
-    TPanelItem pit(pit_sel ? 0 : panel_info_passive.CurrentItem, true, pit_sel);
+    bool pit_sel = panel_info_active.SelectedItemsNumber && !curOnly;
+    TPanelItem pit(pit_sel ? 0 : panel_info_active.CurrentItem, true, pit_sel);
 
     wcsncpy_s(buf, LENOF(buf), pit->FileName, LENOF(buf));
     String currentFileName = ExtractFileName(buf);
@@ -1354,7 +1356,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
   }
   srcPath = CutEndSlash(activePanelDir);
 
-  _InverseBars = (bool)Options[L"ConnectLikeBars"] && panel_info_passive.PanelRect.left > 0;
+  _InverseBars = (bool)Options[L"ConnectLikeBars"] && panel_info_active.PanelRect.left > 0;
 
   if (move)
   {
@@ -1648,11 +1650,11 @@ rep:
   std::vector<size_t> sortIndex;
   if (curItem)
   {
-    sortIndex.push_back(panel_info_passive.CurrentItem);
+    sortIndex.push_back(panel_info_active.CurrentItem);
   }
   else
   {
-    for (size_t Index = 0; Index < panel_info_passive.ItemsNumber; Index++)
+    for (size_t Index = 0; Index < panel_info_active.ItemsNumber; Index++)
     {
       if (TPanelItem(Index)->Flags & PPIF_SELECTED)
       {
@@ -1823,15 +1825,15 @@ fin:
   else
   {
     Info.PanelControl(PANEL_ACTIVE, FCTL_UPDATEPANEL, 1, nullptr);
-    Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &panel_info_passive);
+    Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &panel_info_active);
 
     PanelRedrawInfo rpi;
-    rpi.TopPanelItem = panel_info_passive.TopPanelItem;
+    rpi.TopPanelItem = panel_info_active.TopPanelItem;
 
     String NewFileName;
     for (size_t idx = 0; idx < Files.size(); idx++)
     {
-      if (Files[idx].PanelIndex == panel_info_passive.CurrentItem)
+      if (Files[idx].PanelIndex == panel_info_active.CurrentItem)
       {
         NewFileName = DstNames.GetNameByNum(idx);
         break;
@@ -1839,7 +1841,7 @@ fin:
     }
     NewFileName = NewFileName.toLower();
 
-    for (size_t Index = 0; Index < panel_info_passive.ItemsNumber; Index++)
+    for (size_t Index = 0; Index < panel_info_active.ItemsNumber; Index++)
     {
       TPanelItem pit(Index);
       String NewPanelFilename = pit->FileName;
