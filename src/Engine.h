@@ -123,7 +123,7 @@ private:
   bool InitBuf(TBuffInfo * buffInfo);
   void UninitBuf(TBuffInfo * buffInfo);
   void SwapBufs(TBuffInfo * src, TBuffInfo * dst);
-  int CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
+  bool CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
   intptr_t AskAbort(BOOL ShowKeepFilesCheckBox = TRUE);
   int FlushBuff(TBuffInfo * buffInfo);
   void CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct & info,

@@ -206,7 +206,7 @@ intptr_t Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 }
 
 // Added parameter with default TRUE value
-int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
+bool Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
 {
   //int64_t tm = GetTime();
   //if (tm - _LastCheckEscape < _CheckEscapeInterval)
@@ -215,9 +215,9 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
   //}
   //_LastCheckEscape = tm;
   if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT)
-    return FALSE;
+    return false;
 
-  int escape = FALSE;
+  bool escape = false;
   HANDLE h = ::GetStdHandle(STD_INPUT_HANDLE);
   while (1)
   {
@@ -235,14 +235,14 @@ int Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
           rec.Event.KeyEvent.bKeyDown)
       {
         ::FlushConsoleInputBuffer(h);
-        escape = TRUE;
+        escape = true;
       }
   }
 
   ::SetEvent(UiFree);
 
   if (escape && !AskAbort(ShowKeepFilesCheckBox))
-    escape = 0;
+    escape = false;
 
   return escape;
 }
