@@ -11,23 +11,23 @@ bool StringParent::loadFromFile(FILE * f)
     char c[2];
     wchar_t uc;
   } sign;
-  int read = (int)fread(&sign, 1, sizeof(sign), f);
-  int unicode = (read == 2) && (sign.uc == 0xFEFF || sign.uc == 0xFFFE);
-  int inv = (unicode) && (sign.uc == 0xFFFE);
-  const int bsize = DEFAULT_SECTOR_SIZE, ssize = DEFAULT_SECTOR_SIZE;
+  size_t read = fread(&sign, 1, sizeof(sign), f);
+  bool unicode = (read == 2) && (sign.uc == 0xFEFF || sign.uc == 0xFFFE);
+  bool inv = (unicode) && (sign.uc == 0xFFFE);
+  const size_t bsize = DEFAULT_SECTOR_SIZE, ssize = DEFAULT_SECTOR_SIZE;
   if (unicode)
   {
     const wchar_t CR = '\r', LF = '\n';
     wchar_t buffer[bsize], string[ssize];
     buffer[0] = sign.uc;
-    int bpos = 1, spos = 0;
+    size_t bpos = 1, spos = 0;
     while (1)
     {
       wchar_t oldc = 0;
-      read = (int)fread(buffer + bpos, sizeof(wchar_t), bsize - bpos, f);
-      if (read < 1)
+      read = fread(buffer + bpos, sizeof(wchar_t), bsize - bpos, f);
+      if (read == 0)
         break;
-      for (int Index = bpos; Index < read; Index++)
+      for (size_t Index = bpos; Index < read; Index++)
       {
         if (inv)
           buffer[Index] = ((buffer[Index] & 0x00FF) << 8) | ((buffer[Index] & 0xFF00) >> 8);
@@ -58,7 +58,7 @@ bool StringParent::loadFromFile(FILE * f)
   {
     const char CR = '\r', LF = '\n';
     char buffer[bsize + 1], string[ssize + 1];
-    int bpos = 0, spos = 0;
+    size_t bpos = 0, spos = 0;
     if (read >= 1)
       buffer[0] = sign.c[0];
     if (read >= 2)
@@ -67,10 +67,10 @@ bool StringParent::loadFromFile(FILE * f)
     while (1)
     {
       char oldc = 0;
-      read = (int)fread(buffer + bpos, sizeof(char), bsize - bpos, f);
-      if (read < 1)
+      read = fread(buffer + bpos, sizeof(char), bsize - bpos, f);
+      if (read == 0)
         break;
-      for (int Index = 0; Index < read + bpos; Index++)
+      for (size_t Index = 0; Index < read + bpos; Index++)
       {
         if (buffer[Index] == CR || (buffer[Index] == LF && oldc != CR))
         {

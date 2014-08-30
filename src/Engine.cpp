@@ -1712,7 +1712,7 @@ rep:
     String dst = ApplyFileMaskPath(file, dstPath);
     WIN32_FIND_DATA wfd;
     FarToWin32FindData(pit, wfd);
-    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, (int)I))
+    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, I))
     {
       goto fin;
     }

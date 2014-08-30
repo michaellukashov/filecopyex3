@@ -85,7 +85,7 @@ void FarPlugin::SaveOptions()
   saveOptions(options, settings);
 }
 
-int FarPlugin::Configure(const struct ConfigureInfo * Info)
+intptr_t FarPlugin::Configure(const struct ConfigureInfo * Info)
 {
   Config();
   return TRUE;
