@@ -39,6 +39,8 @@ void Bind(const String & key, const String & code, const String & desc, int id)
 
   FarSettings & settings = plugin->Settings();
   settings.set(key, L"true");
+  PropertyMap & options = plugin->Options();
+  options[key] = Property(L"true");
 }
 
 int Binded(const String & key)
