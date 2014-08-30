@@ -38,7 +38,7 @@ public:
 
   explicit String(const char * v);
 
-  String(wchar_t ch, intptr_t len)
+  String(wchar_t ch, size_t len)
   {
     str.resize(len, ch);
   }
