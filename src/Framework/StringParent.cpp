@@ -127,7 +127,7 @@ bool StringParent::saveToFile(FILE * f, TextFormat tf) const
   }
   for (size_t Index = 0; Index < Count(); Index++)
   {
-    const String s = (*this)[Index];
+    const String &s = (*this)[Index];
     const int ssize = DEFAULT_SECTOR_SIZE;
     if (tf != tfOEM)
     {
