@@ -100,7 +100,6 @@ set(FILECOPYEX_SOURCES
   src/Engine.cpp
   src/CopyProgress.cpp
   src/Framework/StrUtils.cpp
-  src/Framework/LowLevelStr.cpp
   src/Framework/ObjString.cpp
   src/Framework/FileUtils.cpp
   src/Framework/LocaleUtils.cpp

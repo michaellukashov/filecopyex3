@@ -294,7 +294,6 @@
     <ClCompile Include="src\Framework\FileUtils.cpp" />
     <ClCompile Include="src\Framework\FrameworkUtils.cpp" />
     <ClCompile Include="src\Framework\LocaleUtils.cpp" />
-    <ClCompile Include="src\Framework\LowLevelStr.cpp" />
     <ClCompile Include="src\Framework\Node.cpp" />
     <ClCompile Include="src\Framework\Payload.cpp" />
     <ClCompile Include="src\Framework\ObjectManager.cpp" />
@@ -325,7 +324,6 @@
     <ClInclude Include="src\framework\FileNameStoreEnum.h" />
     <ClInclude Include="src\Framework\FileUtils.h" />
     <ClInclude Include="src\framework\LocaleUtils.h" />
-    <ClInclude Include="src\Framework\LowLevelStr.h" />
     <ClInclude Include="src\Framework\Node.h" />
     <ClInclude Include="src\Framework\Payload.h" />
     <ClInclude Include="src\Framework\ObjectManager.h" />
