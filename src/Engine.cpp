@@ -2125,7 +2125,7 @@ retry:
                              OPEN_EXISTING, 0, nullptr);
       if (hf != INVALID_HANDLE_VALUE)
       {
-        DWORD hsz = (DWORD)((LPBYTE)&sid.cStreamName - (LPBYTE)&sid);
+        DWORD hsz = offsetof(WIN32_STREAM_ID, cStreamName);
         LPVOID ctx = nullptr;
         while (1)
         {
