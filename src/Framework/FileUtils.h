@@ -80,5 +80,5 @@ String TempPathName();
 
 void Out(const String & s);
 
-BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath, String & PrimaryVolumeMountPoint);
+bool GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath, String & PrimaryVolumeMountPoint);
 

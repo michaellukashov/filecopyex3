@@ -2347,7 +2347,7 @@ intptr_t Engine::AddRemembered(RememberStruct & Remember)
 }
 
 // Returns TRUE if there is enough space on target disk
-BOOL Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
+bool Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
                                 const String & srcpathstr, const String & dstpathstr)
 {
   //if (ReplaceMode == OM_OVERWRITE) return TRUE;
@@ -2356,9 +2356,9 @@ BOOL Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
   String dstroot = GetFileRoot(dstpathstr);
 
   if ((MoveMode) && (srcroot == dstroot))
-    return TRUE;
+    return true;
 
-  BOOL result = FALSE;
+  bool result = false;
 
   ULARGE_INTEGER FreeBytesAvailable;
   ULARGE_INTEGER TotalNumberOfBytes;
@@ -2394,15 +2394,15 @@ BOOL Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
       ::SetEvent(UiFree);
 
       if (dlgres == RES_YES)
-        result = FALSE;
+        result = false;
       else
-        result = TRUE;
+        result = true;
     }
     else
-      result = TRUE;
+      result = true;
   }
   else
-    result = TRUE;
+    result = true;
 
   return result;
 }

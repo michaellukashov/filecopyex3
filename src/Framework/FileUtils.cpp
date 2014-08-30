@@ -171,10 +171,10 @@ String GetFileNameRoot(const String & v)
 // Returns primary volume mount point for other volume mount points
 // E.g.: E:\ is mounted D:\mnt\drive_e\ and
 // function returns "E:\" for "D:\mnt\drive_e\"
-BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
+bool GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
                                 String & PrimaryVolumeMountPoint)
 {
-  BOOL result = FALSE;
+  bool result = false;
   wchar_t VolumeNameForPath[MAX_FILENAME];
 
   if (!Win2K)
@@ -205,7 +205,7 @@ BOOL GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
           if (tmp != CutEndSlash(VolumeMountPointForPath))
           {
             PrimaryVolumeMountPoint = tmp;
-            result = TRUE;
+            result = true;
           }
           break;
         }
@@ -360,7 +360,7 @@ String ApplyFileMask(const String & _name, const String & _mask)
   {
     strName = _name;
   }
-  else 
+  else
   {
     strName = String(name, next - name);
     strNameExt = String(++next);
@@ -391,7 +391,7 @@ String ApplyFileMask(const String & _name, const String & _mask)
     {
       res += (sym == L'\0') ? strName : strNameExt;
     }
-    else 
+    else
     {
       if (strMask[i] == L'?')
         sym = (i < strName.len()) ? strName[i] : L'\0';

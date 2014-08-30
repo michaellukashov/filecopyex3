@@ -170,7 +170,7 @@ private:
                   const String & title = L"", const String & type_id = L"");
 
 
-  BOOL CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
+  bool CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
                           const String & srcpathstr, const String & dstpathstr);
 };
 
