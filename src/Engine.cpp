@@ -1309,7 +1309,6 @@ Engine::MResult Engine::Main(int move, int curOnly)
     }
   }
 
-  passivePanelDir = getPanelDir(PANEL_ACTIVE);
   Info.PanelControl(PANEL_ACTIVE, FCTL_GETPANELINFO, 0, &pi); // !!! check result!
 
   if (pi.PanelType == PTYPE_QVIEWPANEL || pi.PanelType == PTYPE_INFOPANEL || !pi.ItemsNumber)
@@ -1353,7 +1352,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
       dstPath = currentFileName;
 
   }
-  srcPath = CutEndSlash(passivePanelDir);
+  srcPath = CutEndSlash(activePanelDir);
 
   _InverseBars = (bool)Options[L"ConnectLikeBars"] && pi.PanelRect.left > 0;
 
