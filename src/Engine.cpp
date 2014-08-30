@@ -1278,7 +1278,34 @@ Engine::MResult Engine::Main(int move, int curOnly)
     }
     else
     {
-      dstPath = AddEndSlash(passivePanelDir);
+      if (Move)
+      {
+        if (activePanelDir == passivePanelDir)
+        {
+          if (panel_info_active.SelectedItemsNumber > 1 && !curOnly)
+          {
+            dstPath = AddEndSlash(passivePanelDir);
+          }
+          else
+          {
+            dstPath = L"";
+          }          
+        }
+        else
+        {
+          if (!curOnly)
+          {
+            dstPath = AddEndSlash(passivePanelDir);
+          }
+        }
+      }
+      else
+      {
+        if (!curOnly)
+        {
+          dstPath = AddEndSlash(passivePanelDir);
+        }
+      }
     }
   }
 
