@@ -177,7 +177,7 @@ void Engine::SwapBufs(TBuffInfo * src, TBuffInfo * dst)
 }
 
 // Added parameter with default TRUE value
-intptr_t Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
+intptr_t Engine::AskAbort(bool ShowKeepFilesCheckBox)
 {
   if (_ConfirmBreak)
   {
@@ -206,7 +206,7 @@ intptr_t Engine::AskAbort(BOOL ShowKeepFilesCheckBox)
 }
 
 // Added parameter with default TRUE value
-bool Engine::CheckEscape(BOOL ShowKeepFilesCheckBox)
+bool Engine::CheckEscape(bool ShowKeepFilesCheckBox)
 {
   //int64_t tm = GetTime();
   //if (tm - _LastCheckEscape < _CheckEscapeInterval)
@@ -1871,7 +1871,7 @@ bool Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & f
 
 bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD flags, intptr_t Level, intptr_t PanelIndex)
 {
-  if (CheckEscape(FALSE))
+  if (CheckEscape(false))
   {
     return false;
   }
