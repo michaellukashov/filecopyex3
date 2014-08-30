@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HARDDISK_CONST_PART         _T("\\Device\\Harddisk")
 #define HARDDISK_CONST_PART_LEN     (LENOF(HARDDISK_CONST_PART)-1)
 
-static int GetDriveId(const String & path, String & res)
+static bool GetDriveId(const String & path, String & res)
 {
   wchar_t buf[MAX_FILENAME];
   if (WinNT4)
@@ -44,7 +44,7 @@ static int GetDriveId(const String & path, String & res)
       if (!s.nicmp(tmp, tmp.len()))
       {
         res = s.substr(tmp.len(), 1);
-        return TRUE;
+        return true;
       }
     }
   }
@@ -56,10 +56,10 @@ static int GetDriveId(const String & path, String & res)
     {
       s = s.substr(tmp.len());
       res = s.left(s.find('\\'));
-      return TRUE;
+      return true;
     }
   }
-  return FALSE;
+  return false;
 }
 
 static bool GetPhysDrive(const String & _path, int & res)
