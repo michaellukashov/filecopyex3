@@ -89,14 +89,14 @@ public:
   Engine();
 
   enum MResult { MRES_NONE, MRES_OK, MRES_STDCOPY, MRES_STDCOPY_RET };
-  MResult Main(int move, int curonly);
+  MResult Main(bool move, bool curonly);
 
 private:
   FileNameStore SrcNames, DstNames;
   std::vector<FileStruct> Files;
   FileNameStoreEnum FlushSrc, FlushDst;
 
-  int Parallel, Streams, Rights, Move,
+  int Parallel, Streams, Rights,
       CompressMode, EncryptMode,
       SkipNewer, SkippedToTemp;
   intptr_t OverwriteMode;
@@ -117,6 +117,7 @@ private:
   CopyProgress CopyProgressBox;
   FarProgress ScanFoldersProgressBox;
   size_t SectorSize;
+  bool Move;
 
   void Copy();
   int InitBuf(TBuffInfo * buffInfo);
@@ -169,7 +170,7 @@ private:
                   const String & title = L"", const String & type_id = L"");
 
 
-  BOOL CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,
+  BOOL CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
                           const String & srcpathstr, const String & dstpathstr);
 };
 

@@ -91,7 +91,7 @@ int FarPlugin::Configure(const struct ConfigureInfo * Info)
   return TRUE;
 }
 
-static bool CallCopy(int move, int curOnly)
+static bool CallCopy(bool move, bool curOnly)
 {
   Engine engine;
   Engine::MResult res = engine.Main(move, curOnly);
@@ -137,43 +137,44 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
       menu.SetSelection(selectedMenuItem);
       command = menu.Execute();
 
-      int move = 0, curOnly = 0;
+      bool move, curOnly;
+      bool copy = true;
       switch (command)
       {
       case 0:
-        move = 0;
-        curOnly = 0;
+        move = false;
+        curOnly = false;
         selectedMenuItem = 0;
         repeat = false;
         break;
       case 1:
-        move = 1;
-        curOnly = 0;
+        move = true;
+        curOnly = false;
         selectedMenuItem = 1;
         repeat = false;
         break;
       case 2:
-        move = 0;
-        curOnly = 1;
+        move = false;
+        curOnly = true;
         selectedMenuItem = 2;
         repeat = false;
         break;
       case 3:
-        move = 1;
-        curOnly = 1;
+        move = true;
+        curOnly = true;
         selectedMenuItem = 3;
         repeat = false;
         break;
       case 5:
         Config();
-        move = -1;
-        curOnly = -1;
+        copy = false;
         selectedMenuItem = 5;
         repeat = true;
         break;
-      default: return;
+      default: 
+        return;
       }
-      if (move != -1 && curOnly != -1)
+      if (copy)
       {
         if (!CallCopy(move, curOnly))
           repeat = true;
@@ -185,16 +186,16 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
     switch (command)
     {
     case 0:
-      CallCopy(0, 0);
+      CallCopy(false, false);
       break;
     case 1:
-      CallCopy(1, 0);
+      CallCopy(true, false);
       break;
     case 2:
-      CallCopy(0, 1);
+      CallCopy(false, true);
       break;
     case 3:
-      CallCopy(1, 1);
+      CallCopy(true, true);
       break;
     default:
       break;
