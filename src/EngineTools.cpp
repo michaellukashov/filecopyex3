@@ -142,7 +142,7 @@ void CopyACL(const String & src, const String & dst)
 
 HANDLE Open(const String & fn, DWORD mode, DWORD attr)
 {
-  // new feature by slst: ReadFilesOpenedForWriting checking (bug #17)
+  // new feature: ReadFilesOpenedForWriting checking (bug #17)
   DWORD dwShareMode = FILE_SHARE_READ;
   PropertyMap & Options = plugin->Options();
   if ((mode & OPEN_READ) && (BOOL)(Options[L"ReadFilesOpenedForWriting"]))

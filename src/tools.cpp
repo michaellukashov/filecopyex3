@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Common.h"
 #include "tools.h"
 
-// axxie: special HDD ID implementation for NT4
+// special HDD ID implementation for NT4
 #define HARDDISK_CONST_PART         _T("\\Device\\Harddisk")
 #define HARDDISK_CONST_PART_LEN     (LENOF(HARDDISK_CONST_PART)-1)
 
@@ -37,7 +37,7 @@ int GetDriveId(const String & path, String & res)
   wchar_t buf[MAX_FILENAME];
   if (WinNT4)
   {
-    // axxie: special HDD ID implementation for NT4
+    // special HDD ID implementation for NT4
     if (QueryDosDevice(path.left(2).ptr(), buf, LENOF(buf)) > 0)
     {
       String s = buf;

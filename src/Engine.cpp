@@ -1293,7 +1293,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
           else
           {
             dstPath = L"";
-          }          
+          }
         }
         else
         {
@@ -1369,7 +1369,7 @@ Engine::MResult Engine::Main(int move, int curOnly)
   dlg[L"Label1"](L"Text") = prompt;
   dlg[L"DestPath"](L"Text") = dstPath;
 
-  // axxie: Reset cp in case when user pressed Shift-F6/Shift-F5
+  // Reset cp in case when user pressed Shift-F6/Shift-F5
   intptr_t cp = (!curOnly && !srcPath.IsEmpty()) ? CheckParallel(srcPath, dstPath) : FALSE;
   if (!Options[L"AllowParallel"])
   {
