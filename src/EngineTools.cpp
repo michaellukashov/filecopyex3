@@ -250,7 +250,7 @@ size_t Write(HANDLE h, void * buf, size_t size)
   return res;
 }
 
-int GetSectorSize(const String & path)
+size_t GetSectorSize(const String & path)
 {
   DWORD x1, x2, x3, bps;
   if (::GetDiskFreeSpace(
