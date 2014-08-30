@@ -288,8 +288,6 @@ void FarPlugin::KeyConfig()
       dlg[L"CtrlAltF5"](L"Selected") == ctrlAlt)
     return;
 
-  // MacroCommand(MCMD_SAVEALL);
-
   Unbind(L"F5"); Unbind(L"ShiftF5");
   Unbind(L"F6");     Unbind(L"ShiftF6");
   Unbind(L"AltShiftF5"); Unbind(L"AltShiftF6");
@@ -310,7 +308,6 @@ void FarPlugin::KeyConfig()
     Bind(key + L"F5", L"Keys(\"F5\")", L"FileCopyEx3 - Standard copy dialog", 0);
     Bind(key + L"F6", L"Keys(\"F6\")", L"FileCopyEx3 - Standard move dialog", 0);
   }
-  // MacroCommand(MCMD_LOADALL);
 }
 
 #define VersionStr0(a,b,c,d, bit) "version " #a "." #b "." #c "." #d " beta (" #bit " Unicode), " __DATE__

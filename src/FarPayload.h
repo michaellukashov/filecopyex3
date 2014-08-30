@@ -112,9 +112,6 @@ protected:
 
   static void BeforeAdd(FarDialogItem & item, FarDlgNode & obj)
   {
-//    if (obj(L"Shorten"))
-//      FormatWidth(item.PtrData, __min(item.X2-item.X1+1, 500))
-//      .ToAnsi(item.PtrData, sizeof(item.PtrData));
   }
 };
 

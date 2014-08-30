@@ -44,8 +44,6 @@ void Bind(const String & key, const String & code, const String & desc, int id)
 int Binded(const String & key)
 {
   FarSettings & settings = plugin->Settings();
-  //XXX String seq = registry.GetString(regkey + L"\\" + key, "Sequence", "");
-  //XXX return (!seq.nicmp(menu_plug, menu_plug.len()) || !seq.icmp(L"F5") || !seq.icmp(L"F6"));
   String value;
   return settings.get(key, value) && !value.IsEmpty();
 }

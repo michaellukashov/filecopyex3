@@ -51,7 +51,6 @@ public:
   FarSettings & Settings() { return settings; }
 
   const StringVector & Descs() const { return descs; }
-  // void MacroCommand(const FARMACROCOMMAND& cmd);
 
 private:
   static String GetDLLPath();
@@ -69,5 +68,3 @@ private:
   void About();
   static void KeyConfig();
 };
-
-// FileCopyExPlugin* Plugin();

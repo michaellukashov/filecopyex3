@@ -66,8 +66,7 @@ int GetDriveId(const String & path, String & res)
 int GetPhysDrive(const String & _path, int & res)
 {
   String path = _path;
-  // if (WinXP)
-  if (Win2K || WinXP)  // this also works OK under w2k/sp4
+  if (Win2K || WinXP)
   {
     if (path.left(11) != L"\\\\?\\Volume{")
     {

@@ -151,7 +151,6 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   l += buf.len();
   buf = Format(L" %2.2d:%2.2d  ", (int)ElapsedTime / 60, (int)ElapsedTime % 60);
   Text(l, Y1 + 10, &clrText, buf);
-  // l += buf.len();
 
   String buf1;
   buf = String(L"        ") + LOC(L"Engine.Remaining");
