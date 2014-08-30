@@ -71,13 +71,13 @@ const String Node::getName() const
 int Node::LoadFrom(FILE * f)
 {
   StringVector temp;
-  return temp.loadFromFile(f) && LoadFromList(temp);
+  return temp.loadFromFile(f) && LoadFromList(temp) != 0;
 }
 
-int Node::Load(const String & fn)
+bool Node::Load(const String & fn)
 {
   StringVector temp;
-  return temp.loadFromFile(fn) && LoadFromList(temp);
+  return temp.loadFromFile(fn) && LoadFromList(temp) != 0;
 }
 
 Node & Node::child(const String & v)

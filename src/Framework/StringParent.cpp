@@ -3,7 +3,7 @@
 #include "FrameworkUtils.h"
 #include "FileUtils.h"
 
-int StringParent::loadFromFile(FILE * f)
+bool StringParent::loadFromFile(FILE * f)
 {
   Clear();
   union
@@ -95,19 +95,19 @@ int StringParent::loadFromFile(FILE * f)
       AddString(String(string));
     }
   }
-  return 1;
+  return true;
 }
 
 
-int StringParent::loadFromFile(const String & fn)
+bool StringParent::loadFromFile(const String & fn)
 {
   FILE * f = nullptr;
   _wfopen_s(&f, fn.ptr(), L"rb");
   if (!f)
   {
-    return 0;
+    return false;
   }
-  int res = loadFromFile(f);
+  bool res = loadFromFile(f);
   fclose(f);
   return res;
 }
