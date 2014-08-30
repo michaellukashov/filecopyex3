@@ -70,11 +70,15 @@ String FormatNum(int64_t n)
   }
 
   String strSrc(n);
+  String strDest;
   int size = GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, nullptr, 0);
-  wchar_t * lpwszDest = new wchar_t[size];
-  GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, lpwszDest, size);
-  String strDest(lpwszDest);
-  delete[] lpwszDest;
+  if (size != 0)
+  {
+    wchar_t * lpwszDest = new wchar_t[size];
+    GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, lpwszDest, size);
+    strDest = lpwszDest;
+    delete[] lpwszDest;
+  }
 
   return strDest;
 }
