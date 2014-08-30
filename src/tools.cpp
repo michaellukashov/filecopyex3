@@ -188,7 +188,7 @@ String DupName(const String & src, intptr_t n)
   return ChangeFileExt(src, L"") + L"_" + String(n) + ExtractFileExt(src);
 }
 
-intptr_t ExistsN(const String & fn, intptr_t n)
+bool ExistsN(const String & fn, intptr_t n)
 {
   if (!n)
     return FileExists(fn);
