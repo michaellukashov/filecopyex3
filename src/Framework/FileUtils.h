@@ -60,7 +60,7 @@ int Delete(const String & fn);
 
 String GetFileRoot(const String &);
 String GetRealFileName(const String &, int flg = 0);
-int GetSymLink(const String & dir, String & res, int flg);
+bool GetSymLink(const String & dir, String & res, int flg);
 String GetFileNameRoot(const String &);
 String ExpandEnv(const String &);
 

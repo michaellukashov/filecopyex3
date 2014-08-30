@@ -217,7 +217,7 @@ bool GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
 }
 
 
-int GetSymLink(const String & _dir, String & res, int flg)
+bool GetSymLink(const String & _dir, String & res, int flg)
 {
   res.Clear();
   String dir = CutEndSlash(_dir);
@@ -232,12 +232,12 @@ int GetSymLink(const String & _dir, String & res, int flg)
     if (r.left(8) == L"\\??\\UNC\\")
     {
       res = CutEndSlash(String(L"\\\\") + r.substr(8));
-      return TRUE;
+      return true;
     }
     if (r.left(4) == L"\\??\\")
     {
       res = CutEndSlash(r.substr(4));
-      return TRUE;
+      return true;
     }
   }
 
@@ -275,7 +275,7 @@ int GetSymLink(const String & _dir, String & res, int flg)
             {
               ::CloseHandle(hf);
               res = CutEndSlash(buf);
-              return TRUE;
+              return true;
             }
           }
         }
@@ -289,7 +289,7 @@ int GetSymLink(const String & _dir, String & res, int flg)
     //if (pGetVolumeNameForVolumeMountPoint(AddEndSlash(dir).ptr(), buf, LENOF(buf)))
     if (GetPrimaryVolumeMountPoint(dir, res))
     {
-      return TRUE;
+      return true;
     }
   }
 
@@ -297,10 +297,10 @@ int GetSymLink(const String & _dir, String & res, int flg)
       WNetGetConnection(dir.ptr(), buf, &sz) == 0)
   {
     res = CutEndSlash(buf);
-    return TRUE;
+    return true;
   }
 
-  return FALSE;
+  return false;
 }
 
 
