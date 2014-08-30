@@ -441,9 +441,9 @@ String ApplyFileMaskPath(const String & name, const String & mask)
          ApplyFileMask(ExtractFileName(name), ExtractFileName(mask));
 }
 
-intptr_t FileExists(const String & name)
+bool FileExists(const String & name)
 {
-  return (::GetFileAttributes(name.ptr()) != INVALID_FILE_ATTRIBUTES) ? TRUE : FALSE;
+  return (::GetFileAttributes(name.ptr()) != INVALID_FILE_ATTRIBUTES);
 }
 
 int64_t FileSize(HANDLE h)

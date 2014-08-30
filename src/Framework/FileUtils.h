@@ -67,7 +67,7 @@ String ExpandEnv(const String &);
 String ApplyFileMask(const String & name, const String & mask);
 String ApplyFileMaskPath(const String & name, const String & mask);
 
-intptr_t FileExists(const String & name);
+bool FileExists(const String & name);
 intptr_t MoveFile(const String & src, const String & dst, intptr_t replace);
 void ForceDirectories(const String & s);
 
