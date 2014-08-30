@@ -1308,7 +1308,6 @@ Engine::MResult Engine::Main(int move, int curOnly)
     TPanelItem pit(pit_sel ? 0 : pi.CurrentItem, true, pit_sel);
 
     wcsncpy_s(buf, LENOF(buf), pit->FileName, LENOF(buf));
-    // _toansi(buf);
     String fn = ExtractFileName(buf);
     if (fn == L"..")
       return MRES_NONE;
