@@ -213,16 +213,16 @@ bool Newer(const String & fn1, const FILETIME & ft2)
   return FALSE;
 }
 
-intptr_t RmDir(const String & fn)
+bool RmDir(const String & fn)
 {
   DWORD attr = ::GetFileAttributes(fn.ptr());
   ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
   if (!::RemoveDirectory(fn.ptr()))
   {
     ::SetFileAttributes(fn.ptr(), attr);
-    return FALSE;
+    return false;
   }
-  return TRUE;
+  return true;
 }
 
 void DebugLog(const wchar_t * DebugMsg, ...)
