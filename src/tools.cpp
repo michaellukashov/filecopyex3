@@ -62,7 +62,7 @@ int GetDriveId(const String & path, String & res)
   return FALSE;
 }
 
-static int GetPhysDrive(const String & _path, int & res)
+static bool GetPhysDrive(const String & _path, int & res)
 {
   String path = _path;
   if (Win2K || WinXP)
@@ -71,14 +71,14 @@ static int GetPhysDrive(const String & _path, int & res)
     {
       wchar_t buf[MAX_FILENAME];
       if (!GetVolumeNameForVolumeMountPoint(path.ptr(), buf, LENOF(buf)))
-        return FALSE;
+        return false;
       path = buf;
     }
     HANDLE hVolume = ::CreateFile(CutEndSlash(path).ptr(), 0,
                                 FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING,
                                 0, nullptr);
     if (hVolume == INVALID_HANDLE_VALUE)
-      return FALSE;
+      return false;
 
     char outbuf[1024];
     DWORD ret;
@@ -88,12 +88,12 @@ static int GetPhysDrive(const String & _path, int & res)
       VOLUME_DISK_EXTENTS * ext = (VOLUME_DISK_EXTENTS *)outbuf;
       res = ext->Extents[0].DiskNumber;
       ::CloseHandle(hVolume);
-      return TRUE;
+      return true;
     }
     ::CloseHandle(hVolume);
   }
 
-  return FALSE;
+  return false;
 }
 
 #define FILE_READ_ONLY_VOLUME 0x00080000
