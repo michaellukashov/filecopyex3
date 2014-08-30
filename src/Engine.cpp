@@ -137,7 +137,7 @@ Engine::Engine() :
   memset(&DescFindData, 0, sizeof(DescFindData));
 }
 
-int Engine::InitBuf(TBuffInfo * ABuffInfo)
+bool Engine::InitBuf(TBuffInfo * ABuffInfo)
 {
   ABuffInfo->OutFile = nullptr;
   ABuffInfo->OutNum = -1;
@@ -158,10 +158,10 @@ int Engine::InitBuf(TBuffInfo * ABuffInfo)
   {
     Free(ABuffInfo->Buffer);
     Error(LOC(L"Error.MemAlloc"), GetLastError());
-    return FALSE;
+    return false;
   }
 
-  return TRUE;
+  return true;
 }
 
 void Engine::UninitBuf(TBuffInfo * buffInfo)

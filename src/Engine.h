@@ -120,7 +120,7 @@ private:
   bool Move;
 
   void Copy();
-  int InitBuf(TBuffInfo * buffInfo);
+  bool InitBuf(TBuffInfo * buffInfo);
   void UninitBuf(TBuffInfo * buffInfo);
   void SwapBufs(TBuffInfo * src, TBuffInfo * dst);
   int CheckEscape(BOOL ShowKeepFilesCheckBox = TRUE);
