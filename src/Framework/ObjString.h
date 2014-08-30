@@ -27,8 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <stdint.h>
 
-#include "LowLevelStr.h"
-
 size_t npos_minus1(size_t pos);
 
 class String
