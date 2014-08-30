@@ -47,6 +47,10 @@ public:
   {
   }
 
+  String(const wchar_t * v, size_t len) : str(v, len)
+  {
+  }
+
   String(const std::wstring & v) : str(v)
   {
   }
