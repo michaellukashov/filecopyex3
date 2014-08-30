@@ -325,6 +325,8 @@ object AboutDialog: FarDialog
   end  
   object Label11: FarDlgLabel
   end  
+  object Label12: FarDlgLabel
+  end  
   object Sep1: FarDlgLine
   end
   object OK: FarDlgButton
