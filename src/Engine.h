@@ -144,8 +144,8 @@ private:
   intptr_t CheckOverwrite(intptr_t, const String &, const String &, String &);
   intptr_t CheckOverwrite2(intptr_t, const String &, const String &, String &);
   void SetOverwriteMode(intptr_t);
-  intptr_t AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
-  intptr_t AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
+  bool AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
+  bool AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
   void AddTopLevelDir(const String & dir, const String & dstmask, DWORD Flags, FileName::Direction d);
   static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, RememberStruct &);
   intptr_t AddRemembered(RememberStruct &);

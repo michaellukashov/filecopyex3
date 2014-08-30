@@ -1864,21 +1864,21 @@ fin:
   return MRES_OK;
 }
 
-intptr_t Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex)
+bool Engine::AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex)
 {
   return AddFile(Src, Dst, fd.dwFileAttributes, MAKEINT64(fd.nFileSizeLow, fd.nFileSizeHigh), fd.ftCreationTime, fd.ftLastAccessTime, fd.ftLastWriteTime, Flags, Level, PanelIndex);
 }
 
-intptr_t Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD flags, intptr_t Level, intptr_t PanelIndex)
+bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64_t size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD flags, intptr_t Level, intptr_t PanelIndex)
 {
   if (CheckEscape(FALSE))
   {
-    return FALSE;
+    return false;
   }
 
   if (attr == INVALID_FILE_ATTRIBUTES)
   {
-    return TRUE;
+    return true;
   }
 
   String src(_src);
@@ -1907,7 +1907,7 @@ intptr_t Engine::AddFile(const String & _src, const String & _dst, DWORD attr, i
 
   if (src == dst && !(flags & AF_DESCFILE))
   {
-    return TRUE;
+    return true;
   }
 
   if (flags & AF_CLEAR_RO)
@@ -1952,7 +1952,7 @@ intptr_t Engine::AddFile(const String & _src, const String & _dst, DWORD attr, i
       info->Flags |= FLG_DESC_INVERSE;
     }
     CopyCount++;
-    return TRUE;
+    return true;
   }
 
   uint32_t owmode = OM_PROMPT;
@@ -2028,7 +2028,7 @@ retry:
               break;
 
             case OM_CANCEL:
-              return FALSE;
+              return false;
               break;
           } // switch (res)
         }
@@ -2092,7 +2092,7 @@ retry:
                   if (!AddFile(AddEndSlash(src) + fd.cFileName, AddEndSlash(dst) + fd.cFileName, fd, flags, Level + 1))
                   {
                     ::FindClose(hf);
-                    return FALSE;
+                    return false;
                   }
                 }
               }
@@ -2101,7 +2101,7 @@ retry:
                 if (!AddFile(AddEndSlash(src) + fd.cFileName, AddEndSlash(dst) + fd.cFileName, fd, flags, Level + 1))
                 {
                   ::FindClose(hf);
-                  return FALSE;
+                  return false;
                 }
               }
             }
@@ -2112,7 +2112,7 @@ retry:
         ::FindClose(hf);
         if (descidx != -1)
           if (!AddRemembered(Remember))
-            return FALSE;
+            return false;
       }
     }
     else if (Streams)
@@ -2149,7 +2149,7 @@ retry:
             {
               BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
               ::CloseHandle(hf);
-              return FALSE;
+              return false;
             }
           }
           BackupSeek(hf, sid.Size.LowPart, sid.Size.HighPart,
@@ -2175,7 +2175,7 @@ fin:
     DstNames.AddRel(FileName::levelMinus, ExtractFileName(dst));
   }
 
-  return 1;
+  return true;
 }
 
 void Engine::SetOverwriteMode(intptr_t Start)
