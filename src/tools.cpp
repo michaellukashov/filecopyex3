@@ -31,7 +31,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define HARDDISK_CONST_PART         _T("\\Device\\Harddisk")
 #define HARDDISK_CONST_PART_LEN     (LENOF(HARDDISK_CONST_PART)-1)
 
-int GetDriveId(const String & path, String & res)
+static int GetDriveId(const String & path, String & res)
 {
   wchar_t buf[MAX_FILENAME];
   if (WinNT4)
