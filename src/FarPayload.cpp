@@ -257,7 +257,7 @@ size_t lablen(FarDialogItem & item)
   }
   else
   {
-    int res = 0;
+    size_t res = 0;
     for (const wchar_t * p = item.Data; *p; p++)
     {
       if (*p != '&')

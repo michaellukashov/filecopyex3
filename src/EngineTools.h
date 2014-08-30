@@ -63,4 +63,4 @@ void setFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAcc
 void setFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
 size_t Read(HANDLE h, void * buf, size_t size);
 size_t Write(HANDLE h, void * buf, size_t size);
-int GetSectorSize(const String & path);
+size_t GetSectorSize(const String & path);

@@ -33,7 +33,7 @@ class CopyProgress : public FarProgress
 public:
   CopyProgress(void);
   virtual ~CopyProgress(void);
-  void Start(int move);
+  void Start(bool move);
   void Stop();
   void ShowReadName(const String &);
   void ShowWriteName(const String &);
@@ -58,5 +58,6 @@ private:
 
   int64_t lastupdate, lastupdate_read, lastupdate_write, interval, clastupdate, cinterval;
 
-  int X1, Y1, X2, Y2, Move;
+  int X1, Y1, X2, Y2;
+  bool Move;
 };

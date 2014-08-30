@@ -37,7 +37,7 @@ public:
   FarPlugin() : flags(0) {}
   ~FarPlugin();
   void Create();
-  int Configure(const struct ConfigureInfo * Info);
+  intptr_t Configure(const struct ConfigureInfo * Info);
   void OpenPlugin(const struct OpenInfo * OInfo);
   void InitLang();
   void LoadOptions();

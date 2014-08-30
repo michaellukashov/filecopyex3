@@ -350,50 +350,76 @@ String ExpandEnv(const String & v)
 
 String ApplyFileMask(const String & _name, const String & _mask)
 {
-  wchar_t * name = (wchar_t *)_name.ptr();
-  wchar_t * mask = (wchar_t *)_mask.ptr();
-  wchar_t res[MAX_FILENAME] = L"";
-  size_t sz = LENOF(res);
-  wchar_t * next = (wchar_t *)_tcsend(name) - 1;
-  wchar_t * mext = (wchar_t *)_tcsend(mask) - 1;
+  const wchar_t * name = _name.c_str();
+  const wchar_t * next = name + _name.len() - 1;
+  String strName;
+  String strNameExt;
   while (next >= name && *next != '.')
     next--;
   if (next < name)
-    next = name + wcslen(name);
-  else
-    *next++ = 0;
+  {
+    strName = _name;
+  }
+  else 
+  {
+    strName = String(name, next - name);
+    strNameExt = String(++next);
+  }
+
+  const wchar_t * mask = _mask.c_str();
+  const wchar_t * mext = mask + _mask.len() - 1;
+  String strMask;
+  String strMaskExt;
   while (mext >= mask && *mext != '.')
     mext--;
   if (mext < mask)
-    mext = mask + wcslen(mask);
-  else
-    *mext++ = 0;
-  wchar_t sym[2] = { 0, 0 };
-  for (wchar_t * m = mask; *m; m++)
   {
-    if (*m == '*')
-    {
-      if (!*sym)
-        wcscat_s(res, sz, name);
-      else
-        wcscat_s(res, sz, next);
-    }
-    else if (*m == '?')
-      wcscat_s(res, sz, (*sym = m - mask < (int)wcslen(name) ? name[m - mask] : 0, sym));
-    else
-      wcscat_s(res, sz, (*sym = *m, sym));
+    strMask = _mask;
   }
-  if (mext[0])
+  else
   {
-    wcscat_s(res, sz, L".");
-    for (wchar_t * m = mext; *m; m++)
+    strMask = String(mask, mext - mask);
+    strMaskExt = String(++mext);
+  }
+
+  wchar_t sym = L'\0';
+  String res;
+
+  for (size_t i = 0; i < strMask.len(); i++)
+  {
+    if (strMask[i] == L'*')
     {
-      if (*m == '*')
-        wcscat_s(res, sz, next);
-      else if (*m == '?')
-        wcscat_s(res, sz, (*sym = m - mext < (int)wcslen(next) ? next[m - mext] : 0, sym));
+      res += (sym == L'\0') ? strName : strNameExt;
+    }
+    else 
+    {
+      if (strMask[i] == L'?')
+        sym = (i < strName.len()) ? strName[i] : L'\0';
       else
-        wcscat_s(res, sz, (*sym = *m, sym));
+        sym = strMask[i];
+      if (sym != L'\0')
+        res += sym;
+    }
+  }
+
+  if (!strMaskExt.empty())
+  {
+    res += L'.';
+    for (size_t i = 0; i < strMaskExt.len(); i++)
+    {
+      if (strMaskExt[i] == L'*')
+      {
+        res += strNameExt;
+      }
+      else if (strMaskExt[i] == L'?')
+      {
+        if (i < strNameExt.len())
+          res += strNameExt[i];
+      }
+      else
+      {
+        res += strMaskExt[i];
+      }
     }
   }
   return res;

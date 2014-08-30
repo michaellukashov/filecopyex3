@@ -108,7 +108,8 @@ Engine::Engine() :
   wbuffInfo = nullptr;
   buffInfo = nullptr;
 
-  Parallel = Streams = Rights = Move = SkipNewer = SkippedToTemp = 0;
+  Parallel = Streams = Rights = SkipNewer = SkippedToTemp = 0;
+  Move = false;
   CompressMode = EncryptMode = ATTR_INHERIT;
   OverwriteMode = OM_PROMPT;
   BufSize = 0;
@@ -740,7 +741,7 @@ int Engine::WaitForFlushEnd()
 
 struct CurDirInfo
 {
-  uint32_t SectorSize;
+  size_t SectorSize;
 };
 
 void Engine::Copy()
@@ -1234,7 +1235,7 @@ String getPanelDir(HANDLE h_panel)
   return reinterpret_cast<FarPanelDirectory *>(buf.get())->Name;
 }
 
-Engine::MResult Engine::Main(int move, int curOnly)
+Engine::MResult Engine::Main(bool move, bool curOnly)
 {
   PropertyMap & Options = plugin->Options();
 
@@ -1641,7 +1642,7 @@ rep:
   //progress.ShowMessage(LOC(L"Status.CreatingList"));
   ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
 
-  size_t curItem = curOnly;
+  bool curItem = curOnly;
   if (!curItem)
   {
     curItem = !(TPanelItem(0, true, true)->Flags & PPIF_SELECTED);
@@ -1711,7 +1712,7 @@ rep:
     String dst = ApplyFileMaskPath(file, dstPath);
     WIN32_FIND_DATA wfd;
     FarToWin32FindData(pit, wfd);
-    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, (int)I))
+    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, I))
     {
       goto fin;
     }
@@ -2124,7 +2125,7 @@ retry:
                              OPEN_EXISTING, 0, nullptr);
       if (hf != INVALID_HANDLE_VALUE)
       {
-        DWORD hsz = (DWORD)((LPBYTE)&sid.cStreamName - (LPBYTE)&sid);
+        DWORD hsz = offsetof(WIN32_STREAM_ID, cStreamName);
         LPVOID ctx = nullptr;
         while (1)
         {
@@ -2346,7 +2347,7 @@ intptr_t Engine::AddRemembered(RememberStruct & Remember)
 }
 
 // Returns TRUE if there is enough space on target disk
-BOOL Engine::CheckFreeDiskSpace(const int64_t TotalBytesToProcess, const int MoveMode,
+BOOL Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
                                 const String & srcpathstr, const String & dstpathstr)
 {
   //if (ReplaceMode == OM_OVERWRITE) return TRUE;

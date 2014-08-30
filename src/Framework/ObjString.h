@@ -27,8 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <string>
 #include <stdint.h>
 
-#include "LowLevelStr.h"
-
 size_t npos_minus1(size_t pos);
 
 class String
@@ -38,12 +36,16 @@ public:
 
   explicit String(const char * v);
 
-  String(wchar_t ch, intptr_t len)
+  String(wchar_t ch, size_t len)
   {
     str.resize(len, ch);
   }
 
   String(const wchar_t * v) : str(v)
+  {
+  }
+
+  String(const wchar_t * v, size_t len) : str(v, len)
   {
   }
 

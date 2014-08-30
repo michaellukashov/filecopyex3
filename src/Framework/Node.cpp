@@ -25,7 +25,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "StdHdr.h"
 #include "Node.h"
 #include "FrameworkUtils.h"
-#include "LowLevelStr.h"
 #include "StrUtils.h"
 #include "ObjectManager.h"
 
@@ -72,13 +71,13 @@ const String Node::getName() const
 int Node::LoadFrom(FILE * f)
 {
   StringVector temp;
-  return temp.loadFromFile(f) && LoadFromList(temp);
+  return temp.loadFromFile(f) && LoadFromList(temp) != 0;
 }
 
-int Node::Load(const String & fn)
+bool Node::Load(const String & fn)
 {
   StringVector temp;
-  return temp.loadFromFile(fn) && LoadFromList(temp);
+  return temp.loadFromFile(fn) && LoadFromList(temp) != 0;
 }
 
 Node & Node::child(const String & v)

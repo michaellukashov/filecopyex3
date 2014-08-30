@@ -47,9 +47,7 @@ public:
   //const String getType() const;
 
   int LoadFrom(FILE *);
-  //int SaveTo(FILE*);
-  int Load(const String &);
-  //int Save(const String&);
+  bool Load(const String &);
   void ReloadProperties() const;
   void ReloadPropertiesRecursive();
 
