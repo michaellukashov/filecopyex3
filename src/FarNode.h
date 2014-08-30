@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/CastNode.h"
 #include "Framework/ObjectManager.h"
 
-#include "sdk/plugin.hpp"
+#include "SDK/plugin.hpp"
 
 class FarDlgPayload;
 class FarDialogClass;

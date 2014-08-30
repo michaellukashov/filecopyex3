@@ -1,6 +1,6 @@
 #pragma once
 
-#include "sdk/farversion.hpp"
+#include "SDK/farversion.hpp"
 
 #define PLUGIN_MIN_FAR_VERSION MAKEFARVERSION(3, 0, 0, 3677, VS_RELEASE) // http://api.farmanager.com/ru/whatsnew.html
 #define PLUGIN_VERSION_TXT "3.0.5.26"
