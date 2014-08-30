@@ -726,17 +726,17 @@ void Engine::BGFlush()
   BGThread = (HANDLE)_beginthreadex(nullptr, 0, FlushThread, this, 0, nullptr);
 }
 
-int Engine::WaitForFlushEnd()
+bool Engine::WaitForFlushEnd()
 {
   while (::WaitForSingleObject(FlushEnd, 200) == WAIT_TIMEOUT)
   {
     if (CheckEscape())
-      return FALSE;
+      return false;
   }
   ::WaitForSingleObject(BGThread, INFINITE);
   ::CloseHandle(BGThread);
   BGThread = nullptr;
-  return TRUE;
+  return true;
 }
 
 struct CurDirInfo

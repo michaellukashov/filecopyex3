@@ -130,7 +130,7 @@ private:
     const String & SrcName, const bool TryToOpenDstFile,
     String & DstName);
   void BGFlush();
-  int WaitForFlushEnd();
+  bool WaitForFlushEnd();
   friend uint32_t __stdcall FlushThread(void * p);
   void FinalizeBuf(TBuffInfo * buffInfo);
   void ProcessDesc(intptr_t fnum);
