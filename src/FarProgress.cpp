@@ -37,15 +37,6 @@ FarProgress::FarProgress(void)
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGBOXTITLE, &clrTitle);
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrBar);
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrText);
-  /* switch (clrFrame >> 4)
-  {
-    // [exp] color changed by CDK
-    case 7: case 15: clrLabel=1; break;
-    case 10: case 11: clrLabel=15; break;
-    default: clrLabel=14; break;
-  }
-  clrLabel=clrLabel | clrFrame & 0xF0;
-  */
   Info.AdvControl(&MainGuid, ACTL_GETCOLOR, COL_DIALOGTEXT, &clrLabel); // !!! not sure
 
   ProgX1 = 0;

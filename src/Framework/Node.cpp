@@ -69,42 +69,17 @@ const String Node::getName() const
   return getPayload().getName();
 }
 
-/*
-const String Node::getType() const
-{
-  return getPayload().getType();
-}
-*/
-
 int Node::LoadFrom(FILE * f)
 {
   StringVector temp;
   return temp.loadFromFile(f) && LoadFromList(temp);
 }
 
-/*
-int Node::SaveTo(FILE *f)
-{
-  StringVector temp;
-  SaveToList(temp);
-  return temp.saveToFile(f);
-}
-*/
-
 int Node::Load(const String & fn)
 {
   StringVector temp;
   return temp.loadFromFile(fn) && LoadFromList(temp);
 }
-
-/*
-int Node::Save(const String& fn)
-{
-  StringVector temp;
-  SaveToList(temp);
-  return temp.saveToFile(fn);
-}
-*/
 
 Node & Node::child(const String & v)
 {
@@ -213,16 +188,3 @@ void Node::ReloadPropertiesRecursive()
     childs[Index]->ReloadPropertiesRecursive();
   }
 }
-
-/*
-void Node::init(const String &name, const String &type, ObjectClass* cl, Object* parent) {
-  _class = cl;
-  //!!! _type = type;
-  //!!! _name = name;
-  _parent = parent;
-  //!!! prop = cl->getProps();
-  if (parent) {
-    parent->childs.Add(this);
-  }
-};
-*/

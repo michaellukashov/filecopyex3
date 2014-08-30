@@ -186,20 +186,6 @@ void DescList::SetAllSaveFlags(int v)
   setAllFlags(dlNoSave, v);
 }
 
-/*
-void DescList::Rename(int i, const String& dst, int changeName)
-{
-  String str=Values[Names.Values(i)].ltrim();
-  if (str.substr(0, 1)=="\"")
-    str=str.substr(str.substr(1).find(L"\"")+2);
-  else
-    str=str.substr(str.cfind(L" \t\n"));
-  Values.Set(Names.Values(i),
-    ((dst.cfind(L" ")!=-1)?(String(L"\"")+dst+"\""):(dst))+str);
-  if (changeName) Names.Set(i, dst);
-}
-*/
-
 void DescList::Rename(const String & src, const String & dst, int changeName)
 {
   if (src != dst)

@@ -98,25 +98,6 @@ static bool CallCopy(int move, int curOnly)
   bool Result = res == Engine::MRES_OK;
   if (res == Engine::MRES_STDCOPY || res == Engine::MRES_STDCOPY_RET)
   {
-    /* svs 09.02.2011 18:51:58 +0300 - build 1844                                                                                                                                                     ░
-                                                                                                                                                                                               ░
-    2. Удален ACTL_POSTKEYSEQUENCE (есть аналог в лице ACTL_KEYMACRO).                                                                                                                             ░
-    FARKEYSEQUENCEFLAGS переименован в FARKEYMACROFLAGS (и KSFLAGS_* -> KMFLAGS_* ).                                                                                                            ░
-    Удалена структура KeySequence.                                                                                                                                                              ░
-    */
-    /* XXX KeySequence seq;
-    DWORD keys[8];
-    seq.Flags=KSFLAGS_DISABLEOUTPUT;
-    seq.Sequence=keys;
-    seq.Count=1;
-    keys[0]=move ? KEY_F6 : KEY_F5;
-    if (res == Engine::MRES_STDCOPY_RET)
-    {
-      seq.Count=2;
-      keys[1]=KEY_ENTER;
-    }
-    Info.AdvControl(Info.ModuleNumber, ACTL_POSTKEYSEQUENCE, (void*)&seq);
-    */
   }
   return Result;
 }

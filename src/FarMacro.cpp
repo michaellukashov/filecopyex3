@@ -11,21 +11,6 @@
 
 void Bind(const String & key, const String & code, const String & desc, int id)
 {
-  /*
-  MacroAddMacro macro = { sizeof(MacroAddMacro) };
-  macro.Id = id;
-  macro.SequenceText = seq.c_str();
-  macro.Description = desc.c_str(); // !!! put something
-  macro.Flags = KMFLAGS_DISABLEOUTPUT;
-  INPUT_RECORD ir;
-  int resKey = FSF.FarNameToInputRecord(key.c_str(), &ir);
-  macro.AKey = ir;
-  //ShowMessage(L"Bind - key convert", String(resKey), FMSG_MB_OK);
-  macro.Area = MACROAREA_SHELL;
-  macro.Callback = nullptr;
-  int res = Info.MacroControl(&MainGuid, MCTL_ADDMACRO, 0, &macro);
-  ShowMessage(L"Bind", key + L": " + String(res), FMSG_MB_OK);
-  */
   String DirName = GetMacrosPath(PLUGIN_BUILD);
   if (DirName.empty())
   {
@@ -79,16 +64,6 @@ void Unbind(const String & key)
   options[key] = Property(L"");
   //Info.MacroControl(&MainGuid, MCTL_DELMACRO, 0, id);
 }
-
-/*
-void FarPlugin::MacroCommand(const FARMACROCOMMAND& cmd)
-{
-  ActlKeyMacro prm;
-  memset(&prm, 0, sizeof(prm));
-  prm.Command = cmd;
-  Info.AdvControl(Info.ModuleNumber, ACTL_KEYMACRO, &prm);
-}
-*/
 
 String GetMacrosPath(uintptr_t PluginBuildNumber)
 {

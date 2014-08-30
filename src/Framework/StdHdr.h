@@ -32,16 +32,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define _WINNT
 #endif
 
-/*
-#if defined(_WINXP)
-#define _WIN32_WINNT 0x0501
-#elif defined(_WIN2K)
-#define _WIN32_WINNT 0x0500
-#elif defined(_WINNT)
-#define _WIN32_WINNT 0x0400
-#endif
-*/
-
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>

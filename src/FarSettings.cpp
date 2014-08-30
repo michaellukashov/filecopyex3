@@ -138,24 +138,6 @@ bool loadOptions(PropertyMap & options, FarSettings & settings)
 }
 
 /*
-  FarSettingsEnum fse = { sizeof(FarSettingsEnum) };
-  fse.Root = dirId;
-  if (!control(SCTL_ENUM, &fse)) {
-    return false;
-  }
-  options.clear();
-  result.reserve(fse.Count);
-  for (size_t i = 0; i < fse.Count; i++) {
-    if (fse.Items[i].Type == FST_SUBKEY)
-      result.push_back(fse.Items[i].Name);
-
-  options.Add(L"BufPercent", 1);
-  }
-  result.shrink_to_fit();
-  return true;
-*/
-
-/*
 bool Settings::set_dir(const wstring& path) {
   FarSettingsValue fsv = { sizeof(FarSettingsValue) };
   size_t dir_id = 0;

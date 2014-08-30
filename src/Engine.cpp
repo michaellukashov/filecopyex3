@@ -51,18 +51,6 @@ static PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Comm
 
   FarGetPluginPanelItem gpi = {sizeof(FarGetPluginPanelItem), Size, item};
   Info.PanelControl(hPlugin, Command, Param1, &gpi);
-  /*
-  *Param2=*item;
-  Param2->FileName=wcsdup(item->FileName);
-  Param2->AlternateFileName=wcsdup(item->AlternateFileName);
-  Param2->Description=nullptr;
-  Param2->Owner=nullptr;
-  Param2->CustomColumnData=nullptr;
-  Param2->CustomColumnNumber=0;
-  Param2->UserData.Data=nullptr;
-  Param2->UserData.FreeData=nullptr;
-  free(item);
-  */
   return item;
 }
 
@@ -1336,9 +1324,6 @@ Engine::MResult Engine::Main(int move, int curOnly)
     prompt = Format(fmt.ptr(), fn.ptr());
     if (dstPath.empty())
       dstPath = fn;
-    /*else if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
-      dstpath!="queue:" && dstpath!="plugin:")
-        dstpath=AddEndSlash(dstpath)+fn;*/
 
   }
   srcPath = CutEndSlash(curDir);
