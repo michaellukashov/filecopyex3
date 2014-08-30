@@ -483,45 +483,45 @@ String TempPathName()
   return AddEndSlash(TempPath()) + TempName();
 }
 
-static int __MoveFile(const wchar_t * src, const wchar_t * dst)
+static bool __MoveFile(const wchar_t * src, const wchar_t * dst)
 {
   DWORD attr = ::GetFileAttributes(dst);
   ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFile(src, dst))
-    return TRUE;
+    return true;
   else
   {
     DWORD err = GetLastError();
     ::SetFileAttributes(dst, attr);
     ::SetLastError(err);
-    return FALSE;
+    return false;
   }
 }
 
-static intptr_t __MoveFileEx(const wchar_t * src, const wchar_t * dst, uint32_t flg)
+static bool __MoveFileEx(const wchar_t * src, const wchar_t * dst, uint32_t flg)
 {
   DWORD attr = ::GetFileAttributes(dst);
   if (_wcsicmp(src, dst) != 0)
     ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
   if (::MoveFileEx(src, dst, flg))
-    return TRUE;
+    return true;
   else
   {
     DWORD err = GetLastError();
     ::SetFileAttributes(dst, attr);
     ::SetLastError(err);
-    return FALSE;
+    return false;
   }
 }
 
-intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
+bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
 {
   // return false if dst is hard link
   if (WinNT && replace)
   {
     HANDLE DstFileHandle = Open(_dst, OPEN_READ, 0);
     if (DstFileHandle == nullptr)
-      return FALSE;
+      return false;
     BY_HANDLE_FILE_INFORMATION FileInformation;
     if (GetFileInformationByHandle(DstFileHandle, &FileInformation))
     {
@@ -529,13 +529,13 @@ intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
       if (!(FileInformation.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
           (FileInformation.nNumberOfLinks > 1))
       {
-        return FALSE; // Hardlinks are replaced by FileCopyEx engine
+        return false; // Hardlinks are replaced by FileCopyEx engine
       }
     }
     else
     {
       Close(DstFileHandle);
-      return FALSE; // cannot get info by handle
+      return false; // cannot get info by handle
     }
   }
 
@@ -551,19 +551,19 @@ intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
     if (root1.IsEmpty() || root2.IsEmpty())
     {
       ::SetLastError(ERROR_PATH_NOT_FOUND);
-      return FALSE;
+      return false;
     }
     if (!root1.icmp(root2))
     {
       String src = GetRealFileName(_src);
       String dst = GetRealFileName(_dst);
       if (!src.icmp(dst))
-        return TRUE;
+        return true;
       DWORD sa = ::GetFileAttributes(src.ptr());
       if (sa == INVALID_FILE_ATTRIBUTES)
       {
         ::SetLastError(ERROR_FILE_NOT_FOUND);
-        return FALSE;
+        return false;
       }
       DWORD da = ::GetFileAttributes(dst.ptr());
       if (da != INVALID_FILE_ATTRIBUTES)
@@ -571,33 +571,33 @@ intptr_t MoveFile(const String & _src, const String & _dst, intptr_t replace)
         if (sa & FILE_ATTRIBUTE_DIRECTORY || da & FILE_ATTRIBUTE_DIRECTORY)
         {
           ::SetLastError(ERROR_ACCESS_DENIED);
-          return FALSE;
+          return false;
         }
         if (!replace)
         {
           ::SetLastError(ERROR_ALREADY_EXISTS);
-          return FALSE;
+          return false;
         }
         String temp = AddEndSlash(ExtractFilePath(dst)) + TempName();
         if (!__MoveFile(dst.ptr(), temp.ptr()))
-          return FALSE;
+          return false;
         if (!__MoveFile(src.ptr(), dst.ptr()))
         {
           DWORD err = GetLastError();
           __MoveFile(temp.ptr(), dst.ptr());
           ::SetLastError(err);
-          return FALSE;
+          return false;
         }
         ::SetFileAttributes(temp.ptr(), FILE_ATTRIBUTE_NORMAL);
         ::DeleteFile(temp.ptr());
-        return TRUE;
+        return true;
       }
       return __MoveFile(src.ptr(), dst.ptr());
     }
     else
     {
       ::SetLastError(ERROR_NOT_SAME_DEVICE);
-      return FALSE;
+      return false;
     }
   }
 }
