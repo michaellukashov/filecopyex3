@@ -18,16 +18,15 @@ bool StringParent::loadFromFile(FILE * f)
   if (unicode)
   {
     const wchar_t CR = '\r', LF = '\n';
-    wchar_t buffer[bsize], string[ssize];
-    buffer[0] = sign.uc;
-    size_t bpos = 1, spos = 0;
+    wchar_t buffer[bsize + 1], string[ssize + 1];
+    size_t bpos = 0, spos = 0;
     while (1)
     {
       wchar_t oldc = 0;
       read = fread(buffer + bpos, sizeof(wchar_t), bsize - bpos, f);
       if (read == 0)
         break;
-      for (size_t Index = bpos; Index < read; Index++)
+      for (size_t Index = 0; Index < read + bpos; Index++)
       {
         if (inv)
           buffer[Index] = ((buffer[Index] & 0x00FF) << 8) | ((buffer[Index] & 0xFF00) >> 8);
