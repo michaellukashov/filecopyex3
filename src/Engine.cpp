@@ -1639,7 +1639,6 @@ rep:
   FileCount = CopyCount = 0;
   int64_t Start = GetTime();
 
-  //progress.ShowMessage(LOC(L"Status.CreatingList"));
   ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
 
   bool curItem = curOnly;
@@ -1724,7 +1723,6 @@ rep:
   if (OverwriteMode == OM_RESUME)
   {
     FileNameStoreEnum Enum(&DstNames);
-    //progress.ShowMessage(LOC(L"Status.ScanningDest"));
     ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
     for (size_t Index = 0; Index < Enum.Count(); Index++)
     {
@@ -1747,7 +1745,6 @@ rep:
   }
   else if (OverwriteMode == OM_SKIP || OverwriteMode == OM_RENAME || SkipNewer)
   {
-    //progress.ShowMessage(LOC(L"Status.ScanningDest"));
     ScanFoldersProgressBox.ShowScanProgress(LOC(L"Status.ScanningFolders"));
     SetOverwriteMode(0);
   }
@@ -2309,9 +2306,6 @@ rep1:
         OverwriteMode = ores;
     if (fnum != -1)
     {
-      //FarProgress progress;
-      //progress.ShowMessage(LOC(L"Status.ScanningDest"));
-
       SetOverwriteMode(fnum + 1);
       if (res == OM_RENAME)
       {
