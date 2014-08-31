@@ -535,6 +535,7 @@ open_retry:
       break;
   }
 
+  ShowReadName(SrcName);
   ShowWriteName(DstName);
 
   if (!(info.Flags & FLG_SKIPPED))
@@ -685,6 +686,7 @@ reopen_retry:
           FirstWrite = GetTime() - StartTime;
 
         Delay(wt, k, WriteTime, WriteSpeedLimit);
+        ShowReadName(SrcName);
         ShowWriteName(DstName);
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
 
