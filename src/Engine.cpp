@@ -1728,7 +1728,7 @@ rep:
     {
       if (!(Files[Index].Flags & FLG_SKIPPED) & !(Files[Index].Attr & FILE_ATTRIBUTE_DIRECTORY))
       {
-        int64_t sz = FileSize((String)Enum.GetByNum(Index));
+        int64_t sz = FileSize(Enum.GetByNum(Index));
         if (sz < Files[Index].Size)
         {
           Files[Index].ResumePos = sz / ReadAlign * ReadAlign;
