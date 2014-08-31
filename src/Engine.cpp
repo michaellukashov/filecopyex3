@@ -1187,7 +1187,7 @@ void Engine::AddTopLevelDir(const String & dir, const String & dstMask, DWORD fl
   Files.push_back(info);
 }
 
-int Engine::DirStart(const String & dir, const String & dstMask)
+bool Engine::DirStart(const String & dir, const String & dstMask)
 {
   if (_CopyDescs)
   {
@@ -1199,7 +1199,7 @@ int Engine::DirStart(const String & dir, const String & dstMask)
     CurPathAddFlags |= AF_CLEAR_RO;
   }
   AddTopLevelDir(dir, dstMask, FLG_DIR_PRE | FLG_DIR_FORCE | FLG_TOP_DIR | CurPathFlags, FileName::levelPlus);
-  return TRUE;
+  return true;
 }
 
 bool Engine::DirEnd(const String & dir, const String & dstMask)
