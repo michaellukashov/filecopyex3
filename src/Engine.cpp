@@ -1715,7 +1715,7 @@ rep:
     {
       goto fin;
     }
-  } // for (int ii=0; ii<c; ii++)
+  }
 
   if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath))
     goto fin;
