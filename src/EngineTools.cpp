@@ -194,7 +194,7 @@ int64_t FTell(HANDLE h)
   return FSeek(h, 0, FILE_CURRENT);
 }
 
-void setFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
   HANDLE h = Open(fn, OPEN_WRITE_BUF, 0);
   if (!h)
@@ -203,19 +203,19 @@ void setFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTim
   }
   else
   {
-    setFileSizeAndTime2(h, size, creationTime, lastAccessTime, lastWriteTime);
+    SetFileSizeAndTime2(h, size, creationTime, lastAccessTime, lastWriteTime);
     Close(h);
   }
 }
 
-void setFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void SetFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
   FSeek(h, size, FILE_BEGIN);
   SetEndOfFile(h);
-  setFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
+  SetFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
 }
 
-void setFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void SetFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
   HANDLE h = Open(fn, OPEN_WRITE_BUF, 0);
   if (!h)
@@ -224,12 +224,12 @@ void setFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAcc
   }
   else
   {
-    setFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
+    SetFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
     Close(h);
   }
 }
 
-void setFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void SetFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
   SetFileTime(h, creationTime, lastAccessTime, lastWriteTime);
 }

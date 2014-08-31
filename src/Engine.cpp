@@ -259,7 +259,7 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
   {
     if (info.Flags & FLG_BUFFERED)
     {
-      setFileTime(Handle, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+      SetFileTime(Handle, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
     }
   }
 
@@ -274,11 +274,11 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
     {
       if (info.OverMode == OM_APPEND)
       {
-        setFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+        SetFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
       }
       else
       {
-        setFileSizeAndTime(DstName, info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+        SetFileSizeAndTime(DstName, info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
       }
     }
 
@@ -353,18 +353,18 @@ del_retry:
       {
         if (KeepFiles || (info.Flags & FLG_KEEPFILE))
         {
-          setFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          SetFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
         else
         {
-          setFileSizeAndTime(DstName, ABuffInfo->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          SetFileSizeAndTime(DstName, ABuffInfo->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
       }
       else
       {
         if (KeepFiles || (info.Flags & FLG_KEEPFILE))
         {
-          setFileSizeAndTime(DstName, info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          SetFileSizeAndTime(DstName, info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
         }
         else
         {
@@ -810,7 +810,7 @@ void Engine::Copy()
           Compress(hd, CompressMode);
           if (!(info.Flags & FLG_DIR_FORCE))
           {
-            setFileTime(hd, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+            SetFileTime(hd, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
           }
           ::CloseHandle(hd);
         }
@@ -2400,14 +2400,14 @@ bool Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
 
 #define check(a, b) a ? b : nullptr
 
-void Engine::setFileTime(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void Engine::SetFileTime(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
-  setFileTime2(h, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
+  SetFileTime2(h, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
 }
 
-void Engine::setFileSizeAndTime(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void Engine::SetFileSizeAndTime(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
-  setFileSizeAndTime2(fn, size, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
+  SetFileSizeAndTime2(fn, size, check(copyCreationTime, creationTime), check(copyLastAccessTime, lastAccessTime), check(copyLastWriteTime, lastWriteTime));
 }
 
 intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint32_t & flg, const String & title, const String & type_id)
