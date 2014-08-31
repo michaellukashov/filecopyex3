@@ -1913,21 +1913,21 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
 
   FileStruct fs;
   memset(&fs, 0, sizeof(fs));
-  std::vector<FileStruct>::iterator info = Files.insert(Files.end(), fs);
+  std::vector<FileStruct>::iterator it = Files.insert(Files.end(), fs);
 
-  info->Size = sz1;
-  info->Attr = attr;
-  info->creationTime = creationTime;
-  info->lastAccessTime = lastAccessTime;
-  info->lastWriteTime = lastWriteTime;
+  it->Size = sz1;
+  it->Attr = attr;
+  it->creationTime = creationTime;
+  it->lastAccessTime = lastAccessTime;
+  it->lastWriteTime = lastWriteTime;
 
-  info->Level = Level;
-  info->PanelIndex = PanelIndex;
+  it->Level = Level;
+  it->PanelIndex = PanelIndex;
 
   FileName::Direction d;
   if (attr & FILE_ATTRIBUTE_DIRECTORY)
   {
-    info->Flags |= FLG_DIR_PRE;
+    it->Flags |= FLG_DIR_PRE;
     d = FileName::levelPlus;
   }
   else
@@ -1940,10 +1940,10 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
 
   if (flags & AF_DESCFILE)
   {
-    info->Flags |= FLG_DESCFILE;
+    it->Flags |= FLG_DESCFILE;
     if (flags & AF_DESC_INVERSE)
     {
-      info->Flags |= FLG_DESC_INVERSE;
+      it->Flags |= FLG_DESC_INVERSE;
     }
     CopyCount++;
     return true;
@@ -1957,7 +1957,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
 retry:
       if (MoveFile(src, dst, FALSE))
       {
-        info->Flags |= FLG_COPIED | FLG_DELETED;
+        it->Flags |= FLG_COPIED | FLG_DELETED;
         goto fin;
       }
       DWORD err = GetLastError();
@@ -1965,9 +1965,9 @@ retry:
       {
         if (OverwriteMode == OM_RESUME)
         {
-          if (FileSize(dst) >= info->Size)
+          if (FileSize(dst) >= it->Size)
           {
-            info->Flags |= FLG_SKIPPED;
+            it->Flags |= FLG_SKIPPED;
             goto fin;
           }
         }
@@ -1990,7 +1990,7 @@ retry:
           switch (res)
           {
             case OM_SKIP:
-              info->Flags |= FLG_SKIPPED;
+              it->Flags |= FLG_SKIPPED;
               goto fin;
               break;
 
@@ -1998,7 +1998,7 @@ retry:
               owmode = OM_OVERWRITE;
               if (MoveFile(src, dst, TRUE))
               {
-                info->Flags |= FLG_COPIED | FLG_DELETED;
+                it->Flags |= FLG_COPIED | FLG_DELETED;
                 goto fin;
               }
               break;
@@ -2037,7 +2037,7 @@ retry:
     FileCount++;
   }
   TotalBytes += sz1;
-  info->OverMode = owmode;
+  it->OverMode = owmode;
 
   // Updates folder scan progress dialog
   ScanFoldersProgressBox.SetScanProgressInfo(TotalN, TotalBytes);
