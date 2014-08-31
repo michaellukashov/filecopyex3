@@ -1502,8 +1502,6 @@ rep:
   dstPath.Clear();
 
   wchar_t CurrentDir[MAX_FILENAME];
-  wchar_t dstbuf[MAX_FILENAME];
-  memset(dstbuf, 0, sizeof(dstbuf));
   // Get absolute path for relative dstpath
   FSF.GetCurrentDirectory(LENOF(CurrentDir), CurrentDir);
   // srcpath.ptr() for temporary file panel is empty
