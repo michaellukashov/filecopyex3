@@ -1333,12 +1333,11 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
   }
   else
   {
-    wchar_t buf[MAX_FILENAME];
     bool pit_sel = panel_info_active.SelectedItemsNumber && !curOnly;
     TPanelItem pit(pit_sel ? 0 : panel_info_active.CurrentItem, true, pit_sel);
 
-    wcsncpy_s(buf, LENOF(buf), pit->FileName, LENOF(buf));
-    String currentFileName = ExtractFileName(buf);
+    String fileName = pit->FileName;
+    String currentFileName = ExtractFileName(fileName);
     if (currentFileName == L"..")
       return MRES_NONE;
     String fmt;
