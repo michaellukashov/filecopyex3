@@ -1668,8 +1668,8 @@ rep:
 
   for (size_t Index = 0; Index < sortIndex.size(); Index++)
   {
-    size_t I = sortIndex[Index];
-    TPanelItem pit(I);
+    size_t Idx = sortIndex[Index];
+    TPanelItem pit(Idx);
     String file = pit->FileName;
     if (file == L"..")
     {
@@ -1711,7 +1711,7 @@ rep:
     String dst = ApplyFileMaskPath(file, dstPath);
     WIN32_FIND_DATA wfd;
     FarToWin32FindData(pit, wfd);
-    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, I))
+    if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, Idx))
     {
       goto fin;
     }
