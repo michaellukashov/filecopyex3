@@ -243,7 +243,6 @@ void FarProgress::ShowScanProgress(const String & msg)
   Info.RestoreScreen(nullptr);
 }
 
-// New class member function
 void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
 {
   if (WinType == WIN_SCAN_PROGRESS)
@@ -252,7 +251,6 @@ void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
     {
       DrawScanProgress(ProgX1, ProgX2, ProgY, NumberOfFiles, TotalSize);
       Info.Text(0, 0, 0, nullptr);
-      //SetTitle2(ProgTitle+" {"+String((int)(pc*100))+"%}");
       LastUpdate = GetTime();
     }
   }
