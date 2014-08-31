@@ -148,7 +148,7 @@ private:
   bool AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
   void AddTopLevelDir(const String & dir, const String & dstmask, DWORD Flags, FileName::Direction d);
   static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, RememberStruct &);
-  intptr_t AddRemembered(RememberStruct &);
+  bool AddRemembered(RememberStruct &);
   bool DirStart(const String & dir, const String & dst);
   bool DirEnd(const String & dir, const String & dst);
   static String FindDescFile(const String & dir, intptr_t * idx = nullptr);

@@ -2332,7 +2332,7 @@ void Engine::RememberFile(const String & Src, const String & Dst,
   Remember.Level = Level;
 }
 
-intptr_t Engine::AddRemembered(RememberStruct & Remember)
+bool Engine::AddRemembered(RememberStruct & Remember)
 {
   return AddFile(Remember.Src, Remember.Dst, Remember.Attr, Remember.Size, Remember.creationTime, Remember.lastAccessTime, Remember.lastWriteTime, Remember.Flags, Remember.Level);
 }
