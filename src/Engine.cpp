@@ -176,7 +176,6 @@ void Engine::SwapBufs(TBuffInfo * src, TBuffInfo * dst)
   memcpy(dst->BuffInf, src->BuffInf, SrcNames.Count() * sizeof(BuffStruct));
 }
 
-// Added parameter with default TRUE value
 intptr_t Engine::AskAbort(bool ShowKeepFilesCheckBox)
 {
   if (_ConfirmBreak)
@@ -205,7 +204,6 @@ intptr_t Engine::AskAbort(bool ShowKeepFilesCheckBox)
   }
 }
 
-// Added parameter with default TRUE value
 bool Engine::CheckEscape(bool ShowKeepFilesCheckBox)
 {
   //int64_t tm = GetTime();

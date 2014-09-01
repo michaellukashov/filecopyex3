@@ -167,7 +167,6 @@ String GetFileNameRoot(const String & v)
 //#endif
 
 
-// Added new function
 // Returns primary volume mount point for other volume mount points
 // E.g.: E:\ is mounted D:\mnt\drive_e\ and
 // function returns "E:\" for "D:\mnt\drive_e\"
