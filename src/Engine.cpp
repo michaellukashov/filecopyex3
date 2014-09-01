@@ -902,9 +902,9 @@ open_retry:
         size_t cb = Min(ReadBlock, buffInfo->BuffSize - BuffPos);
 retry:
         int64_t st = GetTime();
-        size_t j = Read(InputFile, buffInfo->Buffer + BuffPos, cb);
+        size_t read = Read(InputFile, buffInfo->Buffer + BuffPos, cb);
 
-        if (j == -1)
+        if (read == -1)
         {
           ::WaitForSingleObject(UiFree, INFINITE);
           uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
@@ -961,17 +961,17 @@ reopen_retry:
 
         int64_t rt = GetTime() - st;
         ReadTime += rt;
-        info.Read += j;
-        ReadCb += j;
-        BuffPos += j;
+        info.Read += read;
+        ReadCb += read;
+        BuffPos += read;
 
-        Delay(rt, j, ReadTime, ReadSpeedLimit);
+        Delay(rt, read, ReadTime, ReadSpeedLimit);
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, CopyCount);
         ShowReadName(SrcName);
 
         if (CheckEscape())
           goto abort;
-        if (j < cb)
+        if (read < cb)
           break;
       } // while (BuffPos < bi->BuffSize)
 
