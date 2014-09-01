@@ -185,7 +185,7 @@ bool GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
   if (!(attr & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_REPARSE_POINT)))
     return result;
 
-  if (GetVolumeNameForVolumeMountPoint(AddEndSlash(VolumeMountPointForPath).ptr(),
+  if (::GetVolumeNameForVolumeMountPoint(AddEndSlash(VolumeMountPointForPath).ptr(),
                                        VolumeNameForPath,
                                        LENOF(VolumeNameForPath)))
   {
@@ -195,7 +195,7 @@ bool GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
     for (char drive = 'A'; drive < 'Z'; drive++)
     {
       VolumeMountPoint[0] = drive;
-      if (GetVolumeNameForVolumeMountPoint(VolumeMountPoint,
+      if (::GetVolumeNameForVolumeMountPoint(VolumeMountPoint,
                                            VolumeName,
                                            LENOF(VolumeName)))
       {
@@ -226,7 +226,7 @@ bool GetSymLink(const String & _dir, String & res, int flg)
   res = dir;
 
   if (flg & gslExpandSubst && (dir.len() == 2) && (dir[1] == ':') &&
-      QueryDosDevice(dir.ptr(), buf, LENOF(buf)) > 0)
+      ::QueryDosDevice(dir.ptr(), buf, LENOF(buf)) > 0)
   {
     String r = buf;
     if (r.left(8) == L"\\??\\UNC\\")

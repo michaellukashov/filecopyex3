@@ -71,11 +71,11 @@ String FormatNum(int64_t n)
 
   String strSrc(n);
   String strDest;
-  int size = GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, nullptr, 0);
+  int size = ::GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, nullptr, 0);
   if (size != 0)
   {
     wchar_t * lpwszDest = new wchar_t[size];
-    GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, lpwszDest, size);
+    ::GetNumberFormat(LOCALE_USER_DEFAULT, 0, strSrc.c_str(), &fmt, lpwszDest, size);
     strDest = lpwszDest;
     delete[] lpwszDest;
   }
@@ -87,8 +87,8 @@ String FormatTime(const FILETIME & ft)
 {
   FILETIME ft1;
   SYSTEMTIME st;
-  FileTimeToLocalFileTime(&ft, &ft1);
-  FileTimeToSystemTime(&ft1, &st);
+  ::FileTimeToLocalFileTime(&ft, &ft1);
+  ::FileTimeToSystemTime(&ft1, &st);
   return Format(L"%02d.%02d.%04d %02d:%02d:%02d",
                 (int)st.wDay, (int)st.wMonth, (int)st.wYear,
                 (int)st.wHour, (int)st.wMinute, (int)st.wSecond);
