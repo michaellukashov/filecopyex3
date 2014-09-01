@@ -40,7 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Tools.h"
 #include "ui.h"
 
-static const size_t AllocAlign = 65536;
+static const size_t AllocAlign = 64 * 1024;
 static const size_t ReadBlock = 1024 * 1024;
 static const size_t WriteBlock = 1024 * 1024;
 
