@@ -115,7 +115,7 @@ bool DescList::SaveToFile(const String & fn)
   {
     return temp.saveToFile(fn);
   }
-  if (Delete(fn) || GetLastError() == ERROR_FILE_NOT_FOUND)
+  if (Delete(fn) || ::GetLastError() == ERROR_FILE_NOT_FOUND)
   {
     return true;
   }

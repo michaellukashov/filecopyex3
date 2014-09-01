@@ -96,13 +96,13 @@ String convertPath(enum CONVERTPATHMODES mode, const String & src);
 inline int64_t GetTime()
 {
   LARGE_INTEGER res;
-  QueryPerformanceCounter(&res);
+  ::QueryPerformanceCounter(&res);
   return res.QuadPart;
 }
 
 inline int64_t TicksPerSec()
 {
   LARGE_INTEGER res;
-  QueryPerformanceFrequency(&res);
+  ::QueryPerformanceFrequency(&res);
   return res.QuadPart;
 }

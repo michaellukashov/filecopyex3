@@ -53,7 +53,7 @@ void Compress(HANDLE handle, uint32_t f)
   DWORD cb;
   if (!::DeviceIoControl(handle, FSCTL_SET_COMPRESSION,
                        (LPVOID)&b, sizeof(b), nullptr, 0, &cb, nullptr))
-    Error(LOC(L"Error.Compress"), GetLastError());
+    Error(LOC(L"Error.Compress"), ::GetLastError());
 }
 
 int GetCompression(HANDLE handle)
@@ -78,7 +78,7 @@ void Encrypt(const String & fn, int f)
   else
     res = ::DecryptFile(fn.ptr(), 0);
   if (!res)
-    Error2(LOC(L"Error.Encrypt"), fn, GetLastError());
+    Error2(LOC(L"Error.Encrypt"), fn, ::GetLastError());
 }
 
 void Encrypt(HANDLE handle, int f)
@@ -93,7 +93,7 @@ void Encrypt(HANDLE handle, int f)
   enc.Private[0] = 0;
   if (!::DeviceIoControl(handle, FSCTL_SET_ENCRYPTION,
                        (LPVOID)&enc, sizeof(enc), nullptr, 0, &cb, nullptr))
-    Error(LOC(L"Error.Encrypt"), GetLastError());
+    Error(LOC(L"Error.Encrypt"), ::GetLastError());
 }
 
 void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si)
@@ -199,7 +199,7 @@ void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTim
   HANDLE h = Open(fn, OPEN_WRITE_BUF, 0);
   if (!h)
   {
-    Error2(LOC(L"Error.FileOpen"), fn, GetLastError());
+    Error2(LOC(L"Error.FileOpen"), fn, ::GetLastError());
   }
   else
   {
@@ -211,7 +211,7 @@ void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTim
 void SetFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
   FSeek(h, size, FILE_BEGIN);
-  SetEndOfFile(h);
+  ::SetEndOfFile(h);
   SetFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
 }
 
@@ -220,7 +220,7 @@ void SetFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAcc
   HANDLE h = Open(fn, OPEN_WRITE_BUF, 0);
   if (!h)
   {
-    Error2(LOC(L"Error.FileOpen"), fn, GetLastError());
+    Error2(LOC(L"Error.FileOpen"), fn, ::GetLastError());
   }
   else
   {
@@ -231,13 +231,13 @@ void SetFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAcc
 
 void SetFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
-  SetFileTime(h, creationTime, lastAccessTime, lastWriteTime);
+  ::SetFileTime(h, creationTime, lastAccessTime, lastWriteTime);
 }
 
 size_t Read(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!ReadFile(h, buf, (DWORD)size, &res, nullptr))
+  if (!::ReadFile(h, buf, (DWORD)size, &res, nullptr))
     return (size_t)-1;
   return res;
 }
@@ -245,7 +245,7 @@ size_t Read(HANDLE h, void * buf, size_t size)
 size_t Write(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
-  if (!WriteFile(h, buf, (DWORD)size, &res, nullptr))
+  if (!::WriteFile(h, buf, (DWORD)size, &res, nullptr))
     return (size_t)-1;
   return res;
 }

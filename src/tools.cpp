@@ -232,7 +232,7 @@ void DebugLog(const wchar_t * DebugMsg, ...)
   va_start(ArgPtr, DebugMsg);
   _vsnwprintf_s(MsgBuf, LENOF(MsgBuf), LENOF(MsgBuf), DebugMsg, ArgPtr);
   va_end(ArgPtr);
-  OutputDebugString(MsgBuf);
+  ::OutputDebugString(MsgBuf);
 }
 
 String convertPath(enum CONVERTPATHMODES mode, const String & src)

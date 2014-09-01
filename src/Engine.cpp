@@ -150,14 +150,14 @@ bool Engine::InitBuf(TBuffInfo * ABuffInfo)
   ABuffInfo->Buffer = static_cast<uint8_t *>(Alloc(ABuffInfo->BuffSize));
   if (!ABuffInfo->Buffer)
   {
-    Error(LOC(L"Error.MemAlloc"), GetLastError());
+    Error(LOC(L"Error.MemAlloc"), ::GetLastError());
     return FALSE;
   }
   ABuffInfo->BuffInf = static_cast<BuffStruct *>(Alloc(SrcNames.Count() * sizeof(BuffStruct)));
   if (!ABuffInfo->BuffInf)
   {
     Free(ABuffInfo->Buffer);
-    Error(LOC(L"Error.MemAlloc"), GetLastError());
+    Error(LOC(L"Error.MemAlloc"), ::GetLastError());
     return false;
   }
 
@@ -259,7 +259,7 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
   {
     if (info.Flags & FLG_BUFFERED)
     {
-      SetFileTime(Handle, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+      this->SetFileTime(Handle, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
     }
   }
 
@@ -294,7 +294,7 @@ del_retry:
       {
         ::WaitForSingleObject(UiFree, INFINITE);
         uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-        intptr_t res = EngineError(LOC(L"Error.FileDelete"), SrcName, GetLastError(), flg, L"", L"Error.FileDelete");
+        intptr_t res = EngineError(LOC(L"Error.FileDelete"), SrcName, ::GetLastError(), flg, L"", L"Error.FileDelete");
         ::SetEvent(UiFree);
         if (res == RES_RETRY)
         {
@@ -454,12 +454,12 @@ void Engine::ProcessDesc(intptr_t fnum)
           (attr & FILE_ATTRIBUTE_READONLY))
         return;
       if (!SrcList.SaveToFile(SrcName))
-        Error2(LOC(L"Error.WriteDesc"), SrcName, GetLastError());
+        Error2(LOC(L"Error.WriteDesc"), SrcName, ::GetLastError());
     }
   }
   else
   {
-    Error2(LOC(L"Error.WriteDesc"), DstName, GetLastError());
+    Error2(LOC(L"Error.WriteDesc"), DstName, ::GetLastError());
     info.Flags |= FLG_SKIPPED | FLG_ERROR;
   }
 }
@@ -520,7 +520,7 @@ open_retry:
         buffInfo->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
         if (FSeek(buffInfo->OutFile, info.ResumePos, FILE_BEGIN) == -1)
           FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
-                         (int)GetLastError()));
+                         (int)::GetLastError()));
       }
       break;
     case OM_SKIP:
@@ -570,7 +570,7 @@ open_retry:
     {
       ::WaitForSingleObject(UiFree, INFINITE);
       uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-      intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, GetLastError(),
+      intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, ::GetLastError(),
                             flg, L"", L"Error.OutputFileCreate");
       ::SetEvent(UiFree);
       if (res == RES_RETRY)
@@ -626,7 +626,7 @@ retry:
         {
           ::WaitForSingleObject(UiFree, INFINITE);
           uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
-          intptr_t res = EngineError(LOC(L"Error.Write"), DstName, GetLastError(), flg,
+          intptr_t res = EngineError(LOC(L"Error.Write"), DstName, ::GetLastError(), flg,
                                 L"", L"Error.Write");
           ::SetEvent(UiFree);
           if (res == RES_RETRY)
@@ -645,7 +645,7 @@ reopen_retry:
                 ::WaitForSingleObject(UiFree, INFINITE);
                 uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
                 intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
-                                      DstName, GetLastError(), flg, L"", L"Error.OutputFileCreate");
+                                      DstName, ::GetLastError(), flg, L"", L"Error.OutputFileCreate");
                 ::SetEvent(UiFree);
                 if (res == RES_RETRY)
                   goto reopen_retry;
@@ -662,7 +662,7 @@ reopen_retry:
               }
               if (FSeek(ABuffInfo->OutFile, Pos, FILE_BEGIN) == -1)
                 FWError(Format(L"FSeek to %d failed, code %d", Pos,
-                               (int)GetLastError()));
+                               (int)::GetLastError()));
             }
             goto retry;
           }
@@ -812,7 +812,7 @@ void Engine::Copy()
           Compress(hd, CompressMode);
           if (!(info.Flags & FLG_DIR_FORCE))
           {
-            SetFileTime(hd, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+            this->SetFileTime(hd, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
           }
           ::CloseHandle(hd);
         }
@@ -866,7 +866,7 @@ open_retry:
     {
       ::WaitForSingleObject(UiFree, INFINITE);
       uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-      intptr_t res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, GetLastError(),
+      intptr_t res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, ::GetLastError(),
                             flg, L"", L"Error.InputFileOpen");
       ::SetEvent(UiFree);
       if (res == RES_RETRY)
@@ -885,7 +885,7 @@ open_retry:
     {
       if (FSeek(InputFile, info.ResumePos, FILE_BEGIN) == -1)
         FWError(Format(L"FSeek to %d failed, code %d", info.ResumePos,
-                       (int)GetLastError()));
+                       (int)::GetLastError()));
     }
 
     while (1)
@@ -908,7 +908,7 @@ retry:
         {
           ::WaitForSingleObject(UiFree, INFINITE);
           uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
-          intptr_t res = EngineError(LOC(L"Error.Read"), SrcName, GetLastError(), flg,
+          intptr_t res = EngineError(LOC(L"Error.Read"), SrcName, ::GetLastError(), flg,
                                 L"", L"Error.Read");
           ::SetEvent(UiFree);
           if (res == RES_RETRY)
@@ -926,7 +926,7 @@ reopen_retry:
                 ::WaitForSingleObject(UiFree, INFINITE);
                 uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
                 intptr_t res = EngineError(LOC(L"Error.InputFileOpen"), SrcName,
-                                      GetLastError(), flg, L"", L"Error.InputFileOpen");
+                                      ::GetLastError(), flg, L"", L"Error.InputFileOpen");
                 ::SetEvent(UiFree);
                 if (res == RES_RETRY)
                   goto reopen_retry;
@@ -943,7 +943,7 @@ reopen_retry:
               }
               if (FSeek(InputFile, Pos, FILE_BEGIN) == -1)
                 FWError(Format(L"FSeek to %d failed, code %d", Pos,
-                               (int)GetLastError()));
+                               (int)::GetLastError()));
             }
             goto retry;
           }
@@ -1961,7 +1961,7 @@ retry:
         it->Flags |= FLG_COPIED | FLG_DELETED;
         goto fin;
       }
-      DWORD err = GetLastError();
+      DWORD err = ::GetLastError();
       if (err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
       {
         if (OverwriteMode == OM_RESUME)
@@ -2101,7 +2101,7 @@ retry:
               }
             }
           }
-          if (!FindNextFile(hf, &fd))
+          if (!::FindNextFile(hf, &fd))
             break;
         }
         ::FindClose(hf);

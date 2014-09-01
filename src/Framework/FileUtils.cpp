@@ -491,7 +491,7 @@ static bool __MoveFile(const wchar_t * src, const wchar_t * dst)
     return true;
   else
   {
-    DWORD err = GetLastError();
+    DWORD err = ::GetLastError();
     ::SetFileAttributes(dst, attr);
     ::SetLastError(err);
     return false;
@@ -507,7 +507,7 @@ static bool __MoveFileEx(const wchar_t * src, const wchar_t * dst, uint32_t flg)
     return true;
   else
   {
-    DWORD err = GetLastError();
+    DWORD err = ::GetLastError();
     ::SetFileAttributes(dst, attr);
     ::SetLastError(err);
     return false;
@@ -523,7 +523,7 @@ bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
     if (DstFileHandle == nullptr)
       return false;
     BY_HANDLE_FILE_INFORMATION FileInformation;
-    if (GetFileInformationByHandle(DstFileHandle, &FileInformation))
+    if (::GetFileInformationByHandle(DstFileHandle, &FileInformation))
     {
       Close(DstFileHandle);
       if (!(FileInformation.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
@@ -583,7 +583,7 @@ bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
           return false;
         if (!__MoveFile(src.ptr(), dst.ptr()))
         {
-          DWORD err = GetLastError();
+          DWORD err = ::GetLastError();
           __MoveFile(temp.ptr(), dst.ptr());
           ::SetLastError(err);
           return false;
