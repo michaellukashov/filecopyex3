@@ -581,7 +581,7 @@ open_retry:
   }
 }
 
-int Engine::FlushBuff(TBuffInfo * ABuffInfo)
+bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
 {
   size_t Pos = 0;
   size_t PosInStr = 0;
