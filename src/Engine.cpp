@@ -2114,7 +2114,7 @@ retry:
     else if (Streams)
     {
       WIN32_STREAM_ID sid;
-      ZeroMemory(&sid, sizeof(sid));
+      ::ZeroMemory(&sid, sizeof(sid));
 
       HANDLE hf = ::CreateFile(src.ptr(), GENERIC_READ,
                              FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
@@ -2127,11 +2127,11 @@ retry:
         {
           wchar_t strn[1024];
           DWORD cb1, cb2;
-          if (!BackupRead(hf, (LPBYTE)&sid, hsz, &cb1, FALSE, FALSE, &ctx) || !cb1)
+          if (!::BackupRead(hf, (LPBYTE)&sid, hsz, &cb1, FALSE, FALSE, &ctx) || !cb1)
             break;
           strn[0] = 0;
           if (sid.dwStreamNameSize)
-            if (!BackupRead(hf, (LPBYTE)strn, sid.dwStreamNameSize, &cb2, FALSE, FALSE, &ctx) ||
+            if (!::BackupRead(hf, (LPBYTE)strn, sid.dwStreamNameSize, &cb2, FALSE, FALSE, &ctx) ||
                 !cb2)
               break;
           if ((sid.dwStreamId == BACKUP_DATA ||
@@ -2143,15 +2143,15 @@ retry:
             if (!AddFile(src + strn, dst + strn, attr,
                          sid.Size.QuadPart, creationTime, lastAccessTime, lastWriteTime, flags | AF_STREAM, Level + 1))
             {
-              BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
+              ::BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
               ::CloseHandle(hf);
               return false;
             }
           }
-          BackupSeek(hf, sid.Size.LowPart, sid.Size.HighPart,
+          ::BackupSeek(hf, sid.Size.LowPart, sid.Size.HighPart,
                      &cb1, &cb2, &ctx);
         }
-        BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
+        ::BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
         ::CloseHandle(hf);
       }
     }
