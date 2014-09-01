@@ -1,5 +1,9 @@
-FileCopyEx3 3.0.5.28 31.08.2014
+FileCopyEx3 3.0.5.29 01.09.2014
 
+* Bugfix: Unicode resource files were not correctly loaded
+  Thanks to Igor Yudintsev
+  (http://forum.farmanager.com/viewtopic.php?f=5&t=583&p=122045#p122045)
+  (https://github.com/michaellukashov/filecopyex3/pull/16)
 * Improvement: ShiftF5/F6 handling
   (http://forum.farmanager.com/viewtopic.php?f=5&t=583&p=121935#p121838)
 * Bugfix: Settings --> Hotkeys --> "[] Bind Extended copy to F5/F6" option cannot be unset
