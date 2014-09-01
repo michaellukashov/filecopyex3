@@ -134,7 +134,7 @@ Engine::Engine() :
   TotalN = 0;
   FirstWrite = 0;
   StartTime = 0;
-  memset(&DescFindData, 0, sizeof(DescFindData));
+  ::ZeroMemory(&DescFindData, sizeof(DescFindData));
 }
 
 bool Engine::InitBuf(TBuffInfo * ABuffInfo)
@@ -1174,7 +1174,7 @@ void Engine::AddTopLevelDir(const String & dir, const String & dstMask, DWORD fl
   DstNames.AddRel(d, ExtractFilePath(ApplyFileMaskPath(dir + L"\\somefile.txt", dstMask)));
 
   FileStruct info;
-  memset(&info, 0, sizeof(info));
+  ::ZeroMemory(&info, sizeof(info));
   info.Flags = flags;
   info.Level = 0;
   info.PanelIndex = -1;
@@ -1914,7 +1914,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
   int64_t sz1 = (attr & FILE_ATTRIBUTE_DIRECTORY) ? 0 : size;
 
   FileStruct fs;
-  memset(&fs, 0, sizeof(fs));
+  ::ZeroMemory(&fs, sizeof(fs));
   std::vector<FileStruct>::iterator it = Files.insert(Files.end(), fs);
 
   it->Size = sz1;
@@ -2161,7 +2161,7 @@ fin:
   if (attr & FILE_ATTRIBUTE_DIRECTORY)
   {
     FileStruct info;
-    memset(&info, 0, sizeof(info));
+    ::ZeroMemory(&info, sizeof(info));
     info.Flags |= FLG_DIR_POST | info.Flags & (FLG_COPIED | FLG_DELETED);
     info.Level = Level;
     info.PanelIndex = -1;

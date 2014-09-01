@@ -28,7 +28,7 @@ void FarMenu::SetItemText(FarMenuItem * item, const String & text)
 void FarMenu::AddLine(const String & line)
 {
   FarMenuItem item;
-  memset(&item, 0, sizeof(FarMenuItem));
+  ::ZeroMemory(&item, sizeof(item));
   item.Flags = 0;
   if (Selection == items.size())
   {
@@ -41,7 +41,7 @@ void FarMenu::AddLine(const String & line)
 void FarMenu::AddLineCheck(const String & line, int check)
 {
   FarMenuItem item;
-  memset(&item, 0, sizeof(FarMenuItem));
+  ::ZeroMemory(&item, sizeof(item));
   item.Flags = 0;
   if (check)
   {
@@ -58,7 +58,7 @@ void FarMenu::AddLineCheck(const String & line, int check)
 void FarMenu::AddSep()
 {
   FarMenuItem item;
-  memset(&item, 0, sizeof(FarMenuItem));
+  ::ZeroMemory(&item, sizeof(item));
   item.Flags = MIF_SEPARATOR;
   SetItemText(&item, String());
   items.push_back(item);

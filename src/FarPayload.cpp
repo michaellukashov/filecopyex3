@@ -142,7 +142,7 @@ void FarDlgPayload::InitItem(FarDialogItem & item)
 void FarDlgPayload::DefSize(intptr_t & w, intptr_t & h, intptr_t & fit)
 {
   FarDialogItem item;
-  memset(&item, 0, sizeof(item));
+  ::ZeroMemory(&item, sizeof(item));
   InitItem(item);
   fit = getProp(L"FitWidth").operator int();
   w = item.X2 - item.X1 + 1;
@@ -153,7 +153,7 @@ void FarDlgPayload::DefSize(intptr_t & w, intptr_t & h, intptr_t & fit)
 void FarDlgPayload::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, intptr_t curX, intptr_t curY, intptr_t curW)
 {
   FarDialogItem item;
-  memset(&item, 0, sizeof(item));
+  ::ZeroMemory(&item, sizeof(item));
   item.X1 = curX;
   item.Y1 = curY;
   item.Y2 = curY;

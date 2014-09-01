@@ -248,7 +248,7 @@ intptr_t FarDialog::Execute()
   std::vector<FarDialogItem> Items;
   std::vector<RetCode> RetCodes;
   FarDialogItem frame;
-  memset(&frame, 0, sizeof(frame));
+  ::ZeroMemory(&frame, sizeof(frame));
   frame.Type = DI_DOUBLEBOX;
   String p = (*this)(L"Title");
   if (p.empty())

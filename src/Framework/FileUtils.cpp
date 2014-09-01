@@ -260,7 +260,7 @@ bool GetSymLink(const String & _dir, String & res, int flg)
       if (hf != INVALID_HANDLE_VALUE)
       {
         uint8_t Data[MAXIMUM_REPARSE_DATA_BUFFER_SIZE];
-        memset(Data, 0, sizeof(Data));
+        ::ZeroMemory(Data, sizeof(Data));
         DWORD returnedLength = 0;
         if (::DeviceIoControl(hf, FSCTL_GET_REPARSE_POINT, nullptr, 0,
                             Data, sizeof(Data), &returnedLength, nullptr))
