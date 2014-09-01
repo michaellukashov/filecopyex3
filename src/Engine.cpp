@@ -675,15 +675,15 @@ reopen_retry:
           }
         }
 
-        int64_t wt = GetTime() - start_time;
-        WriteTime += wt;
+        int64_t write_time = GetTime() - start_time;
+        WriteTime += write_time;
         info.Written += written;
         WriteCb += written;
         Pos += written;
         if (!FirstWrite)
           FirstWrite = GetTime() - StartTime;
 
-        Delay(wt, written, WriteTime, WriteSpeedLimit);
+        Delay(write_time, written, WriteTime, WriteSpeedLimit);
         ShowReadName(SrcName);
         ShowWriteName(DstName);
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
