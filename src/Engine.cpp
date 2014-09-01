@@ -612,7 +612,7 @@ bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
           goto skip;
         }
 
-        size_t wsz = Min((size_t)(ABuffInfo->BuffInf[PosInStr].WritePos - Pos), WriteBlock);
+        size_t wsz = Min(ABuffInfo->BuffInf[PosInStr].WritePos - Pos, WriteBlock);
         size_t wsz1 = wsz;
         if (info.Flags & FLG_BUFFERED)
           wsz = Min(wsz, (size_t)(info.Size - info.Written));
