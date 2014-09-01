@@ -483,7 +483,7 @@ String TempPathName()
   return AddEndSlash(TempPath()) + TempName();
 }
 
-static bool __MoveFile(const wchar_t * src, const wchar_t * dst)
+static bool MoveFile2(const wchar_t * src, const wchar_t * dst)
 {
   DWORD attr = ::GetFileAttributes(dst);
   ::SetFileAttributes(dst, FILE_ATTRIBUTE_NORMAL);
@@ -579,12 +579,12 @@ bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
           return false;
         }
         String temp = AddEndSlash(ExtractFilePath(dst)) + TempName();
-        if (!__MoveFile(dst.ptr(), temp.ptr()))
+        if (!MoveFile2(dst.ptr(), temp.ptr()))
           return false;
-        if (!__MoveFile(src.ptr(), dst.ptr()))
+        if (!MoveFile2(src.ptr(), dst.ptr()))
         {
           DWORD err = ::GetLastError();
-          __MoveFile(temp.ptr(), dst.ptr());
+          MoveFile2(temp.ptr(), dst.ptr());
           ::SetLastError(err);
           return false;
         }
@@ -592,7 +592,7 @@ bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
         ::DeleteFile(temp.ptr());
         return true;
       }
-      return __MoveFile(src.ptr(), dst.ptr());
+      return MoveFile2(src.ptr(), dst.ptr());
     }
     else
     {
