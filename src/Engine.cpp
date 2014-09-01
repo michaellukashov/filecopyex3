@@ -901,7 +901,7 @@ open_retry:
           break;
         size_t cb = Min(ReadBlock, buffInfo->BuffSize - BuffPos);
 retry:
-        int64_t st = GetTime();
+        int64_t start_time = GetTime();
         size_t read = Read(InputFile, buffInfo->Buffer + BuffPos, cb);
 
         if (read == -1)
@@ -959,7 +959,7 @@ reopen_retry:
           }
         } // if (j==-1)
 
-        int64_t rt = GetTime() - st;
+        int64_t rt = GetTime() - start_time;
         ReadTime += rt;
         info.Read += read;
         ReadCb += read;
