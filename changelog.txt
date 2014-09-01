@@ -1,3 +1,5 @@
+FileCopyEx3 3.0.6.30 02.09.2014
+
 FileCopyEx3 3.0.5.29 01.09.2014
 
 * Bugfix: Unicode resource files were not correctly loaded
