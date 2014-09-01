@@ -217,7 +217,7 @@ bool GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
 }
 
 
-bool GetSymLink(const String & _dir, String & res, int flg)
+bool GetSymLink(const String & _dir, String & res, uint32_t flags)
 {
   res.Clear();
   String dir = CutEndSlash(_dir);
@@ -225,7 +225,7 @@ bool GetSymLink(const String & _dir, String & res, int flg)
   DWORD sz = LENOF(buf);
   res = dir;
 
-  if (flg & gslExpandSubst && (dir.len() == 2) && (dir[1] == ':') &&
+  if (flags & gslExpandSubst && (dir.len() == 2) && (dir[1] == ':') &&
       ::QueryDosDevice(dir.ptr(), buf, LENOF(buf)) > 0)
   {
     String r = buf;
@@ -244,7 +244,7 @@ bool GetSymLink(const String & _dir, String & res, int flg)
   // ::GetFileAttributes returns FILE_ATTRIBUTE_REPARSE_POINT
   // for drives names e.g. "E:"
   // Symlinks should have length > 2
-  if (Win2K && (flg & gslExpandReparsePoints) && dir.len() > 2)
+  if (Win2K && (flags & gslExpandReparsePoints) && dir.len() > 2)
   {
     DWORD attr = ::GetFileAttributes(dir.ptr());
     if (attr != INVALID_FILE_ATTRIBUTES &&
@@ -284,7 +284,7 @@ bool GetSymLink(const String & _dir, String & res, int flg)
     }
   }
 
-  if (Win2K && (flg & gslExpandMountPoints))
+  if (Win2K && (flags & gslExpandMountPoints))
   {
     //if (pGetVolumeNameForVolumeMountPoint(AddEndSlash(dir).ptr(), buf, LENOF(buf)))
     if (GetPrimaryVolumeMountPoint(dir, res))
@@ -293,7 +293,7 @@ bool GetSymLink(const String & _dir, String & res, int flg)
     }
   }
 
-  if (flg & gslExpandNetMappings && (dir.len() == 2) && (dir[1] == ':') &&
+  if (flags & gslExpandNetMappings && (dir.len() == 2) && (dir[1] == ':') &&
       WNetGetConnection(dir.ptr(), buf, &sz) == 0)
   {
     res = CutEndSlash(buf);
@@ -304,7 +304,7 @@ bool GetSymLink(const String & _dir, String & res, int flg)
 }
 
 
-String GetRealFileName(const String & _path, int flg)
+String GetRealFileName(const String & _path, uint32_t flags)
 {
   String path = AddEndSlash(_path);
 rep:
@@ -315,7 +315,7 @@ rep:
       String res;
       if (GetSymLink(path.substr(0, Index), res,
                      gslExpandSubst | gslExpandReparsePoints | gslExpandMountPoints |
-                     ((flg & rfnNoNetExpand) ? 0 : gslExpandNetMappings)))
+                     ((flags & rfnNoNetExpand) ? 0 : gslExpandNetMappings)))
       {
         path = AddEndSlash(res + path.substr(Index));
         goto rep;

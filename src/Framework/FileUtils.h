@@ -59,8 +59,8 @@ void Close(HANDLE h);
 bool Delete(const String & fn);
 
 String GetFileRoot(const String &);
-String GetRealFileName(const String &, int flg = 0);
-bool GetSymLink(const String & dir, String & res, int flg);
+String GetRealFileName(const String &, uint32_t flags = 0);
+bool GetSymLink(const String & dir, String & res, uint32_t flags);
 String GetFileNameRoot(const String &);
 String ExpandEnv(const String &);
 
