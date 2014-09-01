@@ -2521,6 +2521,13 @@ intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint
   return -1;
 }
 
+void Engine::FWError2(const String & Msg)
+{
+  ::WaitForSingleObject(UiFree, INFINITE);
+  FWError(Msg);
+  ::SetEvent(UiFree);
+}
+
 
 TPanelItem::TPanelItem(size_t idx, bool active, bool selected)
 {
