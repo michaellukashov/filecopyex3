@@ -854,7 +854,7 @@ void Engine::Copy()
     info.SectorSize = SectorSize;
 
 open_retry:
-    HANDLE InputFile = Open(SrcName, OPEN_READ, 0);
+    HANDLE InputFileHandle = Open(SrcName, OPEN_READ, 0);
     ShowReadName(SrcName);
 
     if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
@@ -862,7 +862,7 @@ open_retry:
       CheckDstFileExists(buffInfo, Index, info, SrcName, false, DstName);
     }
 
-    if (!InputFile)
+    if (!InputFileHandle)
     {
       ::WaitForSingleObject(UiFree, INFINITE);
       uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
@@ -883,7 +883,7 @@ open_retry:
 
     if (OverwriteMode == OM_RESUME)
     {
-      if (FSeek(InputFile, info.ResumePos, FILE_BEGIN) == -1)
+      if (FSeek(InputFileHandle, info.ResumePos, FILE_BEGIN) == -1)
         FWError2(Format(L"FSeek to %d failed, code %d", info.ResumePos,
                        (int)::GetLastError()));
     }
@@ -902,7 +902,7 @@ open_retry:
         size_t cb = Min(ReadBlock, buffInfo->BuffSize - BuffPos);
 retry:
         int64_t start_time = GetTime();
-        size_t read = Read(InputFile, buffInfo->Buffer + BuffPos, cb);
+        size_t read = Read(InputFileHandle, buffInfo->Buffer + BuffPos, cb);
 
         if (read == -1)
         {
@@ -918,10 +918,10 @@ retry:
               int64_t Pos = info.Read;
               if (info.OverMode == OM_RESUME)
                 Pos += info.ResumePos;
-              Close(InputFile);
+              Close(InputFileHandle);
 reopen_retry:
-              InputFile = Open(SrcName, OPEN_READ, 0);
-              if (!InputFile)
+              InputFileHandle = Open(SrcName, OPEN_READ, 0);
+              if (!InputFileHandle)
               {
                 ::WaitForSingleObject(UiFree, INFINITE);
                 uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
@@ -941,7 +941,7 @@ reopen_retry:
                     goto skip;
                 }
               }
-              if (FSeek(InputFile, Pos, FILE_BEGIN) == -1)
+              if (FSeek(InputFileHandle, Pos, FILE_BEGIN) == -1)
                 FWError2(Format(L"FSeek to %d failed, code %d", Pos,
                                (int)::GetLastError()));
             }
@@ -1010,13 +1010,13 @@ skip:
       }
     } // while (1)
 
-    Close(InputFile);
+    Close(InputFileHandle);
     ReadN++;
     continue;
 
 abort:
     info.Flags |= FLG_SKIPPED;
-    Close(InputFile);
+    Close(InputFileHandle);
     Aborted = 1;
     break;
   } // for (int i=0; i<Src.Count(); i++)
