@@ -851,12 +851,12 @@ void Engine::Copy()
       }
       continue;
     }
+    info.SectorSize = SectorSize;
 
 open_retry:
     HANDLE InputFile = Open(SrcName, OPEN_READ, 0);
     ShowReadName(SrcName);
 
-    info.SectorSize = SectorSize;
     if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
     {
       CheckDstFileExists(buffInfo, Index, info, SrcName, false, DstName);
@@ -892,7 +892,6 @@ open_retry:
     {
       if (info.Flags & FLG_SKIPPED)
         break;
-      info.SectorSize = SectorSize;
       if (info.Size < _UnbuffMin * 1024)
         info.Flags |= FLG_BUFFERED;
 
