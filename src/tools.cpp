@@ -227,7 +227,7 @@ bool RmDir(const String & fn)
 
 void DebugLog(const wchar_t * DebugMsg, ...)
 {
-  wchar_t MsgBuf[0x400];
+  wchar_t MsgBuf[1024];
   va_list ArgPtr;
   va_start(ArgPtr, DebugMsg);
   _vsnwprintf_s(MsgBuf, LENOF(MsgBuf), LENOF(MsgBuf), DebugMsg, ArgPtr);
