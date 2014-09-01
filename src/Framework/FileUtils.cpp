@@ -498,7 +498,7 @@ static bool MoveFile2(const wchar_t * src, const wchar_t * dst)
   }
 }
 
-static bool __MoveFileEx(const wchar_t * src, const wchar_t * dst, uint32_t flg)
+static bool MoveFileEx2(const wchar_t * src, const wchar_t * dst, uint32_t flg)
 {
   DWORD attr = ::GetFileAttributes(dst);
   if (_wcsicmp(src, dst) != 0)
@@ -542,7 +542,7 @@ bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
   ForceDirectories(_dst);
   if (WinNT)
   {
-    return __MoveFileEx(_src.ptr(), _dst.ptr(), replace ? MOVEFILE_REPLACE_EXISTING : 0);
+    return MoveFileEx2(_src.ptr(), _dst.ptr(), replace ? MOVEFILE_REPLACE_EXISTING : 0);
   }
   else
   {
