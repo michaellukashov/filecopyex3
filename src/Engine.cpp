@@ -618,9 +618,9 @@ bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
           wsz = Min(wsz, (size_t)(info.Size - info.Written));
 retry:
         int64_t st = GetTime();
-        size_t k = Write(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, wsz);
+        size_t written = Write(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, wsz);
 
-        if (k < wsz)
+        if (written < wsz)
         {
           ::WaitForSingleObject(UiFree, INFINITE);
           uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
@@ -677,13 +677,13 @@ reopen_retry:
 
         int64_t wt = GetTime() - st;
         WriteTime += wt;
-        info.Written += k;
-        WriteCb += k;
-        Pos += k;
+        info.Written += written;
+        WriteCb += written;
+        Pos += written;
         if (!FirstWrite)
           FirstWrite = GetTime() - StartTime;
 
-        Delay(wt, k, WriteTime, WriteSpeedLimit);
+        Delay(wt, written, WriteTime, WriteSpeedLimit);
         ShowReadName(SrcName);
         ShowWriteName(DstName);
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
