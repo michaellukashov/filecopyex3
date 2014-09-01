@@ -612,15 +612,15 @@ bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
           goto skip;
         }
 
-        size_t wsz = Min(ABuffInfo->BuffInf[PosInStr].WritePos - Pos, WriteBlock);
-        size_t wsz1 = wsz;
+        size_t write_block_size = Min(ABuffInfo->BuffInf[PosInStr].WritePos - Pos, WriteBlock);
+        size_t write_block_size1 = write_block_size;
         if (info.Flags & FLG_BUFFERED)
-          wsz = Min(wsz, (size_t)(info.Size - info.Written));
+          write_block_size = Min(write_block_size, (size_t)(info.Size - info.Written));
 retry:
         int64_t start_time = GetTime();
-        size_t written = Write(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, wsz);
+        size_t written = Write(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, write_block_size);
 
-        if (written < wsz)
+        if (written < write_block_size)
         {
           ::WaitForSingleObject(UiFree, INFINITE);
           uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
@@ -688,7 +688,7 @@ reopen_retry:
         ShowWriteName(DstName);
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
 
-        if (wsz < wsz1)
+        if (write_block_size < write_block_size1)
           Pos = ABuffInfo->BuffInf[PosInStr].WritePos;
       }
 
@@ -897,10 +897,10 @@ open_retry:
       {
         if (info.Flags & FLG_SKIPPED)
           break;
-        size_t cb = Min(ReadBlock, buffInfo->BuffSize - BuffPos);
+        size_t read_block_size = Min(ReadBlock, buffInfo->BuffSize - BuffPos);
 retry:
         int64_t start_time = GetTime();
-        size_t read = Read(InputFileHandle, buffInfo->Buffer + BuffPos, cb);
+        size_t read = Read(InputFileHandle, buffInfo->Buffer + BuffPos, read_block_size);
 
         if (read == -1)
         {
@@ -969,7 +969,7 @@ reopen_retry:
 
         if (CheckEscape())
           goto abort;
-        if (read < cb)
+        if (read < read_block_size)
           break;
       } // while (BuffPos < bi->BuffSize)
 
