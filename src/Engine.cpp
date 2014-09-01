@@ -617,7 +617,7 @@ bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
         if (info.Flags & FLG_BUFFERED)
           wsz = Min(wsz, (size_t)(info.Size - info.Written));
 retry:
-        int64_t st = GetTime();
+        int64_t start_time = GetTime();
         size_t written = Write(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, wsz);
 
         if (written < wsz)
@@ -675,7 +675,7 @@ reopen_retry:
           }
         }
 
-        int64_t wt = GetTime() - st;
+        int64_t wt = GetTime() - start_time;
         WriteTime += wt;
         info.Written += written;
         WriteCb += written;
