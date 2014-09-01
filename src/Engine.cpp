@@ -1150,10 +1150,10 @@ String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t *
 {
   for (size_t Index = 0; Index < plugin->Descs().Count(); Index++)
   {
-    HANDLE hf;
-    if ((hf = ::FindFirstFile((AddEndSlash(dir) + plugin->Descs()[Index]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
+    HANDLE DescFileHandle;
+    if ((DescFileHandle = ::FindFirstFile((AddEndSlash(dir) + plugin->Descs()[Index]).ptr(), &fd)) != INVALID_HANDLE_VALUE)
     {
-      ::FindClose(hf);
+      ::FindClose(DescFileHandle);
       if (idx)
         *idx = Index;
       return plugin->Descs()[Index];
@@ -1166,7 +1166,7 @@ String Engine::FindDescFile(const String & dir, WIN32_FIND_DATA & fd, intptr_t *
 
 void Engine::AddTopLevelDir(const String & dir, const String & dstMask, DWORD flags, FileName::Direction d)
 {
-  HANDLE hf;
+  HANDLE Handle;
   WIN32_FIND_DATA fd;
 
   SrcNames.AddRel(d, dir);
@@ -1177,9 +1177,9 @@ void Engine::AddTopLevelDir(const String & dir, const String & dstMask, DWORD fl
   info.Flags = flags;
   info.Level = 0;
   info.PanelIndex = -1;
-  if ((hf = ::FindFirstFile(dir.ptr(), &fd)) != INVALID_HANDLE_VALUE)
+  if ((Handle = ::FindFirstFile(dir.ptr(), &fd)) != INVALID_HANDLE_VALUE)
   {
-    ::FindClose(hf);
+    ::FindClose(Handle);
     info.Attr = fd.dwFileAttributes;
     info.creationTime = fd.ftCreationTime;
     info.lastAccessTime = fd.ftLastAccessTime;
@@ -2053,8 +2053,8 @@ retry:
           flags |= AF_CLEAR_RO;
       }
       WIN32_FIND_DATA fd;
-      HANDLE hf;
-      if ((hf = ::FindFirstFile((src + L"\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
+      HANDLE Handle;
+      if ((Handle = ::FindFirstFile((src + L"\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
       {
         intptr_t descidx = -1;
         RememberStruct Remember;
@@ -2086,7 +2086,7 @@ retry:
                 {
                   if (!AddFile(AddEndSlash(src) + fd.cFileName, AddEndSlash(dst) + fd.cFileName, fd, flags, Level + 1))
                   {
-                    ::FindClose(hf);
+                    ::FindClose(Handle);
                     return false;
                   }
                 }
@@ -2095,16 +2095,16 @@ retry:
               {
                 if (!AddFile(AddEndSlash(src) + fd.cFileName, AddEndSlash(dst) + fd.cFileName, fd, flags, Level + 1))
                 {
-                  ::FindClose(hf);
+                  ::FindClose(Handle);
                   return false;
                 }
               }
             }
           }
-          if (!::FindNextFile(hf, &fd))
+          if (!::FindNextFile(Handle, &fd))
             break;
         }
-        ::FindClose(hf);
+        ::FindClose(Handle);
         if (descidx != -1)
           if (!AddRemembered(Remember))
             return false;
@@ -2115,10 +2115,10 @@ retry:
       WIN32_STREAM_ID sid;
       ::ZeroMemory(&sid, sizeof(sid));
 
-      HANDLE hf = ::CreateFile(src.ptr(), GENERIC_READ,
+      HANDLE Handle = ::CreateFile(src.ptr(), GENERIC_READ,
                              FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr,
                              OPEN_EXISTING, 0, nullptr);
-      if (hf != INVALID_HANDLE_VALUE)
+      if (Handle != INVALID_HANDLE_VALUE)
       {
         DWORD hsz = offsetof(WIN32_STREAM_ID, cStreamName);
         LPVOID ctx = nullptr;
@@ -2126,11 +2126,11 @@ retry:
         {
           wchar_t strn[1024];
           DWORD cb1, cb2;
-          if (!::BackupRead(hf, (LPBYTE)&sid, hsz, &cb1, FALSE, FALSE, &ctx) || !cb1)
+          if (!::BackupRead(Handle, (LPBYTE)&sid, hsz, &cb1, FALSE, FALSE, &ctx) || !cb1)
             break;
           strn[0] = 0;
           if (sid.dwStreamNameSize)
-            if (!::BackupRead(hf, (LPBYTE)strn, sid.dwStreamNameSize, &cb2, FALSE, FALSE, &ctx) ||
+            if (!::BackupRead(Handle, (LPBYTE)strn, sid.dwStreamNameSize, &cb2, FALSE, FALSE, &ctx) ||
                 !cb2)
               break;
           if ((sid.dwStreamId == BACKUP_DATA ||
@@ -2143,15 +2143,15 @@ retry:
                          sid.Size.QuadPart, creationTime, lastAccessTime, lastWriteTime, flags | AF_STREAM, Level + 1))
             {
               ::BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
-              ::CloseHandle(hf);
+              ::CloseHandle(Handle);
               return false;
             }
           }
-          ::BackupSeek(hf, sid.Size.LowPart, sid.Size.HighPart,
+          ::BackupSeek(Handle, sid.Size.LowPart, sid.Size.HighPart,
                      &cb1, &cb2, &ctx);
         }
         ::BackupRead(nullptr, nullptr, 0, nullptr, TRUE, FALSE, &ctx);
-        ::CloseHandle(hf);
+        ::CloseHandle(Handle);
       }
     }
   }
