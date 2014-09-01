@@ -109,7 +109,7 @@ private:
   intptr_t volatile Aborted, LastFile, KeepFiles, FileCount, CopyCount;
   int64_t volatile ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
           ReadN, WriteN, TotalN, FirstWrite, StartTime;
-  int64_t _LastCheckEscape, _CheckEscapeInterval;
+//  int64_t _LastCheckEscape, _CheckEscapeInterval;
 
   TBuffInfo * wbuffInfo, * buffInfo;
   HANDLE BGThread, FlushEnd, UiFree;

@@ -103,8 +103,8 @@ Engine::Engine() :
   KeepFiles = 0;
   FileCount = 0;
   CopyCount = 0;
-  _LastCheckEscape = 0;
-  _CheckEscapeInterval = TicksPerSec() / 2;
+//  _LastCheckEscape = 0;
+//  _CheckEscapeInterval = TicksPerSec() / 2;
   wbuffInfo = nullptr;
   buffInfo = nullptr;
 
