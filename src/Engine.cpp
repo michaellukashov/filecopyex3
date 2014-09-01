@@ -959,13 +959,13 @@ reopen_retry:
           }
         } // if (j==-1)
 
-        int64_t rt = GetTime() - start_time;
-        ReadTime += rt;
+        int64_t read_time = GetTime() - start_time;
+        ReadTime += read_time;
         info.Read += read;
         ReadCb += read;
         BuffPos += read;
 
-        Delay(rt, read, ReadTime, ReadSpeedLimit);
+        Delay(read_time, read, ReadTime, ReadSpeedLimit);
         ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, CopyCount);
         ShowReadName(SrcName);
 
