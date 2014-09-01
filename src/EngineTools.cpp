@@ -43,11 +43,11 @@ void Free(void * ptr)
   ::VirtualFree(ptr, 0, MEM_RELEASE);
 }
 
-void Compress(HANDLE handle, uint32_t f)
+void Compress(HANDLE handle, uint32_t flags)
 {
-  if (f == ATTR_INHERIT)
+  if (flags == ATTR_INHERIT)
     return;
-  USHORT b = f ?
+  USHORT b = flags ?
              COMPRESSION_FORMAT_DEFAULT :
              COMPRESSION_FORMAT_NONE;
   DWORD cb;
@@ -67,13 +67,13 @@ int GetCompression(HANDLE handle)
     return res != COMPRESSION_FORMAT_NONE;
 }
 
-void Encrypt(const String & fn, int f)
+void Encrypt(const String & fn, uint32_t flags)
 {
-  if (!Win2K || f == ATTR_INHERIT)
+  if (!Win2K || flags == ATTR_INHERIT)
     return;
   BOOL res;
   ::SetFileAttributes(fn.ptr(), 0);
-  if (f)
+  if (flags)
     res = ::EncryptFile(fn.ptr());
   else
     res = ::DecryptFile(fn.ptr(), 0);
@@ -81,13 +81,13 @@ void Encrypt(const String & fn, int f)
     Error2(LOC(L"Error.Encrypt"), fn, ::GetLastError());
 }
 
-void Encrypt(HANDLE handle, int f)
+void Encrypt(HANDLE handle, uint32_t flags)
 {
-  if (!Win2K || f == ATTR_INHERIT)
+  if (!Win2K || flags == ATTR_INHERIT)
     return;
   DWORD cb;
   ENCRYPTION_BUFFER enc;
-  enc.EncryptionOperation = f ?
+  enc.EncryptionOperation = flags ?
                             FILE_SET_ENCRYPTION :
                             FILE_CLEAR_ENCRYPTION;
   enc.Private[0] = 0;

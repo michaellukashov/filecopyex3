@@ -48,10 +48,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 void * Alloc(size_t size);
 void Free(void * ptr);
-void Compress(HANDLE handle, uint32_t f);
+void Compress(HANDLE handle, uint32_t flags);
 int GetCompression(HANDLE handle);
-void Encrypt(const String & fn, int f);
-void Encrypt(HANDLE handle, int f);
+void Encrypt(const String & fn, uint32_t flags);
+void Encrypt(HANDLE handle, uint32_t flags);
 void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si);
 void CopyACL(const String & src, const String & dst);
 HANDLE Open(const String & fn, DWORD mode, DWORD attr);
