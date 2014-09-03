@@ -124,7 +124,7 @@ private:
   void UninitBuf(TBuffInfo * buffInfo);
   void SwapBufs(TBuffInfo * src, TBuffInfo * dst);
   bool CheckEscape(bool ShowKeepFilesCheckBox = true);
-  intptr_t AskAbort(bool ShowKeepFilesCheckBox = true);
+  bool AskAbort(bool ShowKeepFilesCheckBox = true);
   bool FlushBuff(TBuffInfo * buffInfo);
   void CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct & info,
     const String & SrcName, const bool TryToOpenDstFile,

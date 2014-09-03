@@ -175,7 +175,7 @@ void Engine::SwapBufs(TBuffInfo * src, TBuffInfo * dst)
   memcpy(dst->BuffInf, src->BuffInf, SrcNames.Count() * sizeof(BuffStruct));
 }
 
-intptr_t Engine::AskAbort(bool ShowKeepFilesCheckBox)
+bool Engine::AskAbort(bool ShowKeepFilesCheckBox)
 {
   if (_ConfirmBreak)
   {
@@ -199,7 +199,7 @@ intptr_t Engine::AskAbort(bool ShowKeepFilesCheckBox)
   else
   {
     KeepFiles = 0;
-    return 1;
+    return true;
   }
 }
 
