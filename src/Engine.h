@@ -95,10 +95,9 @@ private:
   FileNameStore SrcNames, DstNames;
   std::vector<FileStruct> Files;
   FileNameStoreEnum FlushSrc, FlushDst;
-  bool Parallel, SkipNewer;
+  bool Parallel, SkipNewer, SkippedToTemp;
   int Streams, Rights,
-      CompressMode, EncryptMode,
-      SkippedToTemp;
+      CompressMode, EncryptMode;
   intptr_t OverwriteMode;
   size_t BufSize;
   int64_t ReadSpeedLimit, WriteSpeedLimit;
