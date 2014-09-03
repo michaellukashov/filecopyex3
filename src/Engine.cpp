@@ -98,7 +98,7 @@ Engine::Engine() :
   copyCreationTime = false;
   copyLastAccessTime = false;
   copyLastWriteTime = false;
-  Aborted = 0;
+  Aborted = false;
   LastFile = 0;
   KeepFiles = 0;
   FileCount = 0;
@@ -301,7 +301,7 @@ del_retry:
         {
           if (res == RES_ABORT)
           {
-            Aborted = 1;
+            Aborted = true;
           }
         }
       }
@@ -573,7 +573,7 @@ open_retry:
       if (res == RES_RETRY)
         goto open_retry;
       else if (res == RES_ABORT)
-        Aborted = 1;
+        Aborted = true;
     }
   }
 }
@@ -653,7 +653,7 @@ reopen_retry:
                     info.Flags |= FLG_KEEPFILE;
                   ABuffInfo->OutFile = INVALID_HANDLE_VALUE;
                   if (res == RES_ABORT)
-                    Aborted = 1;
+                    Aborted = true;
                   goto skip;
                 }
               }
@@ -669,7 +669,7 @@ reopen_retry:
             if (flg & eerKeepFiles)
               info.Flags |= FLG_KEEPFILE;
             if (res == RES_ABORT)
-              Aborted = 1;
+              Aborted = true;
             goto skip;
           }
         }
@@ -1014,7 +1014,7 @@ skip:
 abort:
     info.Flags |= FLG_SKIPPED;
     Close(InputFileHandle);
-    Aborted = 1;
+    Aborted = true;
     break;
   }
 
