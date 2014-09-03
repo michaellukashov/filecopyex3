@@ -108,8 +108,8 @@ Engine::Engine() :
   wbuffInfo = nullptr;
   buffInfo = nullptr;
 
-  Parallel = false;
-  Streams = Rights = SkipNewer = SkippedToTemp = 0;
+  Parallel = SkipNewer = false;
+  Streams = Rights = SkippedToTemp = 0;
   Move = false;
   CompressMode = EncryptMode = ATTR_INHERIT;
   OverwriteMode = OM_PROMPT;
@@ -2242,7 +2242,7 @@ intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String 
   dlg[L"AcceptForAll"](L"Selected") = 0;
   dlg[L"SkipIfNewer"](L"Selected") = SkipNewer;
   dlg[L"SkippedToTemp"](L"Selected") = SkippedToTemp;
-  int OldSkipNewer = SkipNewer;
+  bool OldSkipNewer = SkipNewer;
 
   intptr_t res = OM_PROMPT, ores = -1;
 rep:
