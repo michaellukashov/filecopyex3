@@ -95,8 +95,8 @@ private:
   FileNameStore SrcNames, DstNames;
   std::vector<FileStruct> Files;
   FileNameStoreEnum FlushSrc, FlushDst;
-
-  int Parallel, Streams, Rights,
+  bool Parallel;
+  int Streams, Rights,
       CompressMode, EncryptMode,
       SkipNewer, SkippedToTemp;
   intptr_t OverwriteMode;

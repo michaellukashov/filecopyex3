@@ -108,7 +108,8 @@ Engine::Engine() :
   wbuffInfo = nullptr;
   buffInfo = nullptr;
 
-  Parallel = Streams = Rights = SkipNewer = SkippedToTemp = 0;
+  Parallel = false;
+  Streams = Rights = SkipNewer = SkippedToTemp = 0;
   Move = false;
   CompressMode = EncryptMode = ATTR_INHERIT;
   OverwriteMode = OM_PROMPT;

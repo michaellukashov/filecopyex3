@@ -41,7 +41,7 @@ public:
   void ShowProgress(int64_t read, int64_t write, int64_t total,
                     int64_t readTime, int64_t writeTime,
                     int64_t readN, int64_t writeN,
-                    int64_t totalN, int parallel,
+                    int64_t totalN, bool parallel,
                     int64_t FirstWrite, int64_t StartTime, size_t BufferSize);
 private:
   void RedrawWindowIfNeeded();
@@ -53,7 +53,7 @@ private:
   void DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t TotalBytes,
                 int64_t ReadTime, int64_t WriteTime,
                 int64_t ReadN, int64_t WriteN, int64_t TotalN,
-                int ParallelMode, int64_t FirstWriteTime,
+                bool ParallelMode, int64_t FirstWriteTime,
                 int64_t StartTime, size_t BufferSize);
 
   int64_t lastupdate, lastupdate_read, lastupdate_write, interval, clastupdate, cinterval;
