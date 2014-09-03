@@ -106,8 +106,8 @@ private:
   int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
       _HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
   bool copyCreationTime, copyLastAccessTime, copyLastWriteTime;
-  bool Aborted;
-  intptr_t volatile LastFile, KeepFiles, FileCount, CopyCount;
+  bool Aborted, KeepFiles;
+  intptr_t volatile LastFile, FileCount, CopyCount;
   int64_t volatile ReadCb, WriteCb, ReadTime, WriteTime, TotalBytes,
           ReadN, WriteN, TotalN, FirstWrite, StartTime;
 //  int64_t _LastCheckEscape, _CheckEscapeInterval;

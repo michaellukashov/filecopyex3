@@ -99,8 +99,8 @@ Engine::Engine() :
   copyLastAccessTime = false;
   copyLastWriteTime = false;
   Aborted = false;
+  KeepFiles = false;
   LastFile = 0;
-  KeepFiles = 0;
   FileCount = 0;
   CopyCount = 0;
 //  _LastCheckEscape = 0;
@@ -198,7 +198,7 @@ bool Engine::AskAbort(bool ShowKeepFilesCheckBox)
   }
   else
   {
-    KeepFiles = 0;
+    KeepFiles = false;
     return true;
   }
 }
@@ -746,8 +746,8 @@ struct CurDirInfo
 void Engine::Copy()
 {
   LastFile = -1;
-  Aborted = 0;
-  KeepFiles = 0;
+  Aborted = false;
+  KeepFiles = false;
   ReadCb = WriteCb = ReadTime = WriteTime = ReadN = WriteN = FirstWrite = 0;
   StartTime = GetTime();
 
