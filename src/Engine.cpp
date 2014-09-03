@@ -983,7 +983,7 @@ skip:
       buffInfo->BuffInf[FilesInBuff].FileNumber = (intptr_t)Index;
       if (BuffPos == buffInfo->BuffSize)
       {
-        buffInfo->BuffInf[FilesInBuff].EndFlag = 0;
+        buffInfo->BuffInf[FilesInBuff].EndFlag = false;
         if (!Parallel)
         {
           if (!FlushBuff(buffInfo))
@@ -1001,7 +1001,7 @@ skip:
       }
       else
       {
-        buffInfo->BuffInf[FilesInBuff].EndFlag = 1;
+        buffInfo->BuffInf[FilesInBuff].EndFlag = true;
         FilesInBuff++;
         break;
       }

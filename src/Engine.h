@@ -44,7 +44,7 @@ struct BuffStruct
 {
   size_t NextPos, WritePos;
   intptr_t FileNumber;
-  size_t EndFlag;
+  bool EndFlag;
 };
 
 class TBuffInfo
