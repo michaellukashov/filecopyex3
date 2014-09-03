@@ -193,7 +193,7 @@ bool Engine::AskAbort(bool ShowKeepFilesCheckBox)
 
     Aborted = (res == 0);
     if (Aborted)
-      KeepFiles = flg & eerKeepFiles;
+      KeepFiles = (flg & eerKeepFiles) != 0;
     return Aborted;
   }
   else
