@@ -23,7 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 DescList::DescList()
 {
-//  Names.SetOptions(slSorted | slIgnoreCase);
 }
 
 bool DescList::LoadFromFile(const String & lfn)

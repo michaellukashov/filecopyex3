@@ -100,7 +100,6 @@ bool FarSettings::list(ParamInfoVector & res)
 }
 
 
-// =======================
 bool saveOptions(const PropertyMap & options, FarSettings & settings)
 {
   bool ok = true;

@@ -79,7 +79,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   const int64_t MinRWValue = 0x10000;
 
   if (((ReadBytes > MinRWValue) && (WriteBytes > MinRWValue)) ||
-      ((TotalBytes < (int64_t)BufferSize) && (ReadBytes > MinRWValue))) // if selected files size < buffer size
+      ((TotalBytes < (int64_t)BufferSize) && (ReadBytes > MinRWValue)))
   {
     double ReadSpeed  = (ReadTime > 0)  ? (double)ReadBytes  / (double)ReadTime  : 0; // bytes per tick
     double WriteSpeed = (WriteTime > 0) ? (double)WriteBytes / (double)WriteTime : 0; // bytes per tick
@@ -92,7 +92,6 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
 
     if (ParallelMode)
     {
-      // parallel mode
       double BufferWriteTime = 0;
       if (ReadBytes == TotalBytes)
         BufferWriteTime = WriteTimeRemain;
@@ -100,7 +99,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
         BufferWriteTime = (WriteSpeed > 0.001) ? ((double)BufferSize / WriteSpeed) : 0;
       //DebugLog(_T("BufferWriteTime: %3.2f\n"), BufferWriteTime / TicksPerSec());
 
-      if (WriteSpeed > 0)  // writing is started
+      if (WriteSpeed > 0)
       {
         if (ReadSpeed < WriteSpeed)
           RemainingTime = ReadTimeRemain + BufferWriteTime;
@@ -132,7 +131,6 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   ElapsedTime   /= TicksPerSec();
   RemainingTime /= TicksPerSec();
 
-  // debug
   //DebugLog(_T("Total: %4.1f  Elapsed: %4.1f  Remain: %4.1f\n"), TotalTime, ElapsedTime, RemainingTime);
   //DebugLog(_T("---------------------------------------------------------------------------\n"));
 

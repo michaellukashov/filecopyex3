@@ -118,7 +118,6 @@ Engine::Engine() :
   ::GetSystemInfo(&si);
   ReadAlign = si.dwPageSize;
 
-//  errTypes.SetOptions(slSorted | slIgnoreCase);
   SectorSize = 0;
   CurPathFlags = 0;
   CurPathAddFlags = 0;
@@ -310,7 +309,7 @@ del_retry:
       {
         info.Flags |= FLG_DELETED;
       }
-    } // if (Move)
+    }
 
     WriteN++;
 
@@ -835,7 +834,7 @@ void Engine::Copy()
       CurDirStack.push_back(cdi);
       SectorSize = cdi.SectorSize;
       continue;
-    } // if (info.Flags & FLG_DIR_PRE)
+    }
 
     if (info.Flags & FLG_DIR_POST)
     {
@@ -955,7 +954,7 @@ reopen_retry:
             else
               goto skip;
           }
-        } // if (j==-1)
+        }
 
         int64_t read_time = GetTime() - start_time;
         ReadTime += read_time;
@@ -971,7 +970,7 @@ reopen_retry:
           goto abort;
         if (read < read_block_size)
           break;
-      } // while (BuffPos < bi->BuffSize)
+      }
 
 skip:
       size_t abp = BuffPos;
@@ -1006,7 +1005,7 @@ skip:
         FilesInBuff++;
         break;
       }
-    } // while (1)
+    }
 
     Close(InputFileHandle);
     ReadN++;
@@ -1017,7 +1016,7 @@ abort:
     Close(InputFileHandle);
     Aborted = 1;
     break;
-  } // for (int i=0; i<Src.Count(); i++)
+  }
 
   if (Parallel)
   {
@@ -1756,7 +1755,6 @@ rep:
     BufSize = (size_t)((int64_t)Options[L"BufSizeVal"] * 1024);
   }
 
-  // CheckFreeDiskSpace feature added
   if (Options[L"CheckFreeDiskSpace"])
   {
     if (!CheckFreeDiskSpace(TotalBytes, Move, srcPath, dstPath))
@@ -2023,11 +2021,11 @@ retry:
             case OM_CANCEL:
               return false;
               break;
-          } // switch (res)
+          }
         }
-      } // if (err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
-    } // if (Move)
-  } // if (!(flags & AF_STREAM))
+      }
+    }
+  }
 
   CopyCount++;
   TotalN++;
@@ -2336,12 +2334,9 @@ bool Engine::AddRemembered(RememberStruct & Remember)
   return AddFile(Remember.Src, Remember.Dst, Remember.Attr, Remember.Size, Remember.creationTime, Remember.lastAccessTime, Remember.lastWriteTime, Remember.Flags, Remember.Level);
 }
 
-// Returns TRUE if there is enough space on target disk
 bool Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
                                 const String & srcpathstr, const String & dstpathstr)
 {
-  //if (ReplaceMode == OM_OVERWRITE) return TRUE;
-
   String srcroot = GetFileRoot(srcpathstr);
   String dstroot = GetFileRoot(dstpathstr);
 

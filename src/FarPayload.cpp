@@ -76,7 +76,6 @@ void SetItemText(FarDialogItem & item, const String & text)
   item.MaxLength = 0;
 }
 
-// ===== FarDlgPayload =====
 FarDlgPayload::FarDlgPayload()
 {
   dialog = nullptr;
@@ -105,8 +104,6 @@ void FarDlgPayload::init(const String & _name)
 
 void FarDlgPayload::preInitItem(FarDialogItem & item)
 {
-  //  SetItemText(&item, Name());
-
   String p = getProp(L"Text");
   if (p.empty())
   {
@@ -175,13 +172,11 @@ void FarDlgPayload::AddToItems(std::vector<FarDialogItem>& Items, std::vector<Re
   }
 }
 
-// FarDlgCheckboxPayload
 void FarDlgCheckboxPayload::RetrieveProperties(HANDLE dlg)
 {
   getProp(L"Selected") = (int)Info.SendDlgMessage(dlg, DM_GETCHECK, dialogItem, 0);
 }
 
-// FarDlgEditPayload
 void FarDlgEditPayload::realInitItem(FarDialogItem & item)
 {
   item.Type = DI_EDIT;
@@ -214,7 +209,6 @@ void FarDlgEditPayload::RetrieveProperties(HANDLE dlg)
   getProp(L"Text") = GetDlgText(dlg, dialogItem);
 }
 
-// FarDlgComboboxPayload
 void FarDlgComboboxPayload::realInitItem(FarDialogItem & item)
 {
   item.Type = DI_COMBOBOX;

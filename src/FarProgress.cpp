@@ -209,7 +209,6 @@ String FarProgress::GetTitle()
 }
 
 
-// New class member function
 void FarProgress::ShowScanProgress(const String & msg)
 {
   Hide();
@@ -256,7 +255,6 @@ void FarProgress::SetScanProgressInfo(int64_t NumberOfFiles, int64_t TotalSize)
   }
 }
 
-// New class member function
 void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles, int64_t TotalSize)
 {
   String FilesFmtStr = LOC(L"Status.FilesString") + L" %-6I64d";

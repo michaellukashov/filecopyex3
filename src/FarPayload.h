@@ -45,7 +45,6 @@ String FormatWidth(const String & v, int len);
 void SetItemText(FarDialogItem & item, const String & text);
 void DestroyItemText(FarDialogItem & item);
 
-// ===== FarDlgPayload =====
 class FarDlgPayload : public Payload
 {
 public:
@@ -78,7 +77,6 @@ protected:
   intptr_t dialogItem; // should be int, we are using -1
 };
 
-// ===== FarDlgLinePayload =====
 class FarDlgLinePayload : public FarDlgPayload
 {
 public:
@@ -91,7 +89,6 @@ public:
   }
 };
 
-// ===== FarDlgLabelPayload =====
 class FarDlgLabelPayload : public FarDlgPayload
 {
 public:
@@ -115,7 +112,6 @@ protected:
   }
 };
 
-// ===== FarDlgButtonPayload =====
 class FarDlgButtonPayload : public FarDlgPayload
 {
 public:
@@ -140,7 +136,6 @@ protected:
 };
 
 
-// ====== FarDlgPanelPayload ======
 class FarDlgPanelPayload : public FarDlgPayload
 {
 public:
@@ -149,7 +144,6 @@ public:
 };
 
 
-// FarDlgCheckboxPayload
 class FarDlgCheckboxPayload : public FarDlgPayload
 {
 public:
@@ -182,7 +176,6 @@ protected:
 };
 
 
-// FarDlgRadioButtonPayload
 class FarDlgRadioButtonPayload : public FarDlgCheckboxPayload
 {
 public:
@@ -198,7 +191,6 @@ protected:
   }
 };
 
-// FarDlgEditPayload
 class FarDlgEditPayload : public FarDlgPayload
 {
 public:
@@ -235,7 +227,6 @@ protected:
   }
 };
 
-// FarDlgComboboxPayload
 class FarDlgComboboxPayload : public FarDlgPayload
 {
 public:
@@ -270,7 +261,6 @@ protected:
   }
 };
 
-// FarDialogPayload
 class FarDialogPayload : public FarDlgPayload
 {
 public:
