@@ -31,13 +31,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 struct FileStruct
 {
-  DWORD Attr;
-  intptr_t RenameNum;
-  intptr_t OverMode;
-  DWORD Flags;
-  intptr_t Level, PanelIndex, SectorSize;
   int64_t Size, Read, Written, ResumePos;
   FILETIME creationTime, lastAccessTime, lastWriteTime;
+  intptr_t RenameNum;
+  intptr_t OverMode;
+  intptr_t Level, PanelIndex, SectorSize;
+  DWORD Attr;
+  DWORD Flags;
 };
 
 struct BuffStruct
