@@ -1230,7 +1230,6 @@ String getPanelDir(HANDLE h_panel)
     reinterpret_cast<FarPanelDirectory *>(buf.get())->StructSize = sizeof(FarPanelDirectory);
     Info.PanelControl(h_panel, FCTL_GETPANELDIRECTORY, bufSize, buf.get());
   }
-  //CHECK(size >= sizeof(FarPanelDirectory) && size <= buf_size);
   return reinterpret_cast<FarPanelDirectory *>(buf.get())->Name;
 }
 
@@ -1244,9 +1243,9 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
   _PreallocMin  = Options[L"PreallocMin"];
   _UnbuffMin    = Options[L"UnbuffMin"];
 
-  _ClearROFromCD = 1; //YYY Info.AdvControl(&MainGuid, ACTL_GETSYSTEMSETTINGS, nullptr) & FSS_CLEARROATTRIBUTE;
-  _HideDescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_SETHIDDEN;
-  _UpdateRODescs = 0; //YYY Info.AdvControl(Info.ModuleNumber, ACTL_GETDESCSETTINGS, nullptr) & FDS_UPDATEREADONLY;
+  _ClearROFromCD = 1;
+  _HideDescs = 0;
+  _UpdateRODescs = 0;
 
   FarDialog & dlg = plugin->Dialogs()[L"CopyDialog"];
   dlg.ResetControls();
