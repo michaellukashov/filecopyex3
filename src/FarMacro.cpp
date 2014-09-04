@@ -100,7 +100,7 @@ void RemoveMacroFile(const String & MacrosPath, const String & Key)
     v.loadFromFile(FullMacroFileName);
     if (v.FindAny(L"FileCopyEx3") != -1)
     {
-      Delete(FullMacroFileName);
+      FDelete(FullMacroFileName);
     }
   }
 }

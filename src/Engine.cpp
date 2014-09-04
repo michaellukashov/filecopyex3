@@ -288,7 +288,7 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
     if (Move)
     {
 del_retry:
-      if (FileExists(SrcName) && !Delete(SrcName))
+      if (FileExists(SrcName) && !FDelete(SrcName))
       {
         ::WaitForSingleObject(UiFree, INFINITE);
         uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
@@ -366,7 +366,7 @@ del_retry:
         }
         else
         {
-          Delete(DstName);
+          FDelete(DstName);
         }
       }
       ::SetFileAttributes(DstName.ptr(), info.Attr);

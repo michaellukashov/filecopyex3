@@ -631,7 +631,7 @@ void Close(HANDLE h)
   ::CloseHandle(h);
 }
 
-bool Delete(const String & fn)
+bool FDelete(const String & fn)
 {
   DWORD attr = ::GetFileAttributes(fn.ptr());
   ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
