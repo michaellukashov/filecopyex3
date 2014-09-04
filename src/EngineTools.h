@@ -54,7 +54,7 @@ void Encrypt(const String & fn, uint32_t flags);
 void Encrypt(HANDLE handle, uint32_t flags);
 void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si);
 void CopyACL(const String & src, const String & dst);
-HANDLE Open(const String & fn, DWORD mode, DWORD attr);
+HANDLE FOpen(const String & fn, DWORD mode, DWORD attr);
 int64_t FSeek(HANDLE h, int64_t pos, int method);
 int64_t FTell(HANDLE h);
 void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);

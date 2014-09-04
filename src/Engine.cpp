@@ -501,7 +501,7 @@ open_retry:
     case OM_RENAME:
       if (TryToOpenDstFile)
       {
-        buffInfo->OutFile = Open(DstName, OPEN_CREATE | oflg, info.Attr);
+        buffInfo->OutFile = FOpen(DstName, OPEN_CREATE | oflg, info.Attr);
       }
       break;
     case OM_APPEND:
@@ -509,13 +509,13 @@ open_retry:
       if (TryToOpenDstFile)
       {
         oflg |= OPEN_BUF;
-          buffInfo->OutFile = Open(DstName, OPEN_APPEND | oflg, 0);
+          buffInfo->OutFile = FOpen(DstName, OPEN_APPEND | oflg, 0);
       }
       break;
     case OM_RESUME:
       if (TryToOpenDstFile)
       {
-        buffInfo->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
+        buffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
         if (FSeek(buffInfo->OutFile, info.ResumePos, FILE_BEGIN) == -1)
           FWError2(Format(L"FSeek to %d failed, code %d", info.ResumePos,
                          (int)::GetLastError()));
@@ -637,7 +637,7 @@ retry:
               Close(ABuffInfo->OutFile);
 reopen_retry:
               uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-              ABuffInfo->OutFile = Open(DstName, OPEN_WRITE | oflg, 0);
+              ABuffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
               if (!ABuffInfo->OutFile)
               {
                 ::WaitForSingleObject(UiFree, INFINITE);
@@ -852,7 +852,7 @@ void Engine::Copy()
     info.SectorSize = SectorSize;
 
 open_retry:
-    HANDLE InputFileHandle = Open(SrcName, OPEN_READ, 0);
+    HANDLE InputFileHandle = FOpen(SrcName, OPEN_READ, 0);
     ShowReadName(SrcName);
 
     if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
@@ -918,7 +918,7 @@ retry:
                 Pos += info.ResumePos;
               Close(InputFileHandle);
 reopen_retry:
-              InputFileHandle = Open(SrcName, OPEN_READ, 0);
+              InputFileHandle = FOpen(SrcName, OPEN_READ, 0);
               if (!InputFileHandle)
               {
                 ::WaitForSingleObject(UiFree, INFINITE);

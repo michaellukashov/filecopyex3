@@ -518,7 +518,7 @@ bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
   // return false if dst is hard link
   if (WinNT && replace)
   {
-    HANDLE DstFileHandle = Open(_dst, OPEN_READ, 0);
+    HANDLE DstFileHandle = FOpen(_dst, OPEN_READ, 0);
     if (DstFileHandle == nullptr)
       return false;
     BY_HANDLE_FILE_INFORMATION FileInformation;

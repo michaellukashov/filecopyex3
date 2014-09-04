@@ -139,7 +139,7 @@ void CopyACL(const String & src, const String & dst)
 }
 
 
-HANDLE Open(const String & fn, DWORD mode, DWORD attr)
+HANDLE FOpen(const String & fn, DWORD mode, DWORD attr)
 {
   // new feature: ReadFilesOpenedForWriting checking (bug #17)
   DWORD dwShareMode = FILE_SHARE_READ;
@@ -195,7 +195,7 @@ int64_t FTell(HANDLE h)
 
 void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
-  HANDLE h = Open(fn, OPEN_WRITE_BUF, 0);
+  HANDLE h = FOpen(fn, OPEN_WRITE_BUF, 0);
   if (!h)
   {
     Error2(LOC(L"Error.FileOpen"), fn, ::GetLastError());
@@ -216,7 +216,7 @@ void SetFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETI
 
 void SetFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
-  HANDLE h = Open(fn, OPEN_WRITE_BUF, 0);
+  HANDLE h = FOpen(fn, OPEN_WRITE_BUF, 0);
   if (!h)
   {
     Error2(LOC(L"Error.FileOpen"), fn, ::GetLastError());
