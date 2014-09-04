@@ -1216,7 +1216,7 @@ bool Engine::DirEnd(const String & dir, const String & dstMask)
   return true;
 }
 
-String getPanelDir(HANDLE h_panel)
+static String getPanelDir(HANDLE h_panel)
 {
   size_t bufSize = 512; // initial size
 
