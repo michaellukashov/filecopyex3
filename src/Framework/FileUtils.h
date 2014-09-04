@@ -68,7 +68,7 @@ String ApplyFileMask(const String & name, const String & mask);
 String ApplyFileMaskPath(const String & name, const String & mask);
 
 bool FileExists(const String & name);
-bool FMoveFile(const String & src, const String & dst, intptr_t replace);
+bool FMoveFile(const String & src, const String & dst, bool Replace);
 void ForceDirectories(const String & s);
 
 int64_t FileSize(HANDLE h);

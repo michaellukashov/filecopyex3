@@ -513,10 +513,10 @@ static bool MoveFileEx2(const wchar_t * src, const wchar_t * dst, uint32_t flg)
   }
 }
 
-bool FMoveFile(const String & _src, const String & _dst, intptr_t replace)
+bool FMoveFile(const String & _src, const String & _dst, bool Replace)
 {
   // return false if dst is hard link
-  if (WinNT && replace)
+  if (WinNT && Replace)
   {
     HANDLE DstFileHandle = FOpen(_dst, OPEN_READ, 0);
     if (DstFileHandle == nullptr)
@@ -541,7 +541,7 @@ bool FMoveFile(const String & _src, const String & _dst, intptr_t replace)
   ForceDirectories(_dst);
   if (WinNT)
   {
-    return MoveFileEx2(_src.ptr(), _dst.ptr(), replace ? MOVEFILE_REPLACE_EXISTING : 0);
+    return MoveFileEx2(_src.ptr(), _dst.ptr(), Replace ? MOVEFILE_REPLACE_EXISTING : 0);
   }
   else
   {
@@ -572,7 +572,7 @@ bool FMoveFile(const String & _src, const String & _dst, intptr_t replace)
           ::SetLastError(ERROR_ACCESS_DENIED);
           return false;
         }
-        if (!replace)
+        if (!Replace)
         {
           ::SetLastError(ERROR_ALREADY_EXISTS);
           return false;

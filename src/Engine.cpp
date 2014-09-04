@@ -1952,7 +1952,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
     if (Move)
     {
 retry:
-      if (FMoveFile(src, dst, FALSE))
+      if (FMoveFile(src, dst, false))
       {
         it->Flags |= FLG_COPIED | FLG_DELETED;
         goto fin;
@@ -1993,7 +1993,7 @@ retry:
 
             case OM_OVERWRITE:
               owmode = OM_OVERWRITE;
-              if (FMoveFile(src, dst, TRUE))
+              if (FMoveFile(src, dst, true))
               {
                 it->Flags |= FLG_COPIED | FLG_DELETED;
                 goto fin;
