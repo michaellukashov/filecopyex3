@@ -233,7 +233,7 @@ void SetFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, 
   ::SetFileTime(h, creationTime, lastAccessTime, lastWriteTime);
 }
 
-size_t Read(HANDLE h, void * buf, size_t size)
+size_t FRead(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
   if (!::ReadFile(h, buf, (DWORD)size, &res, nullptr))

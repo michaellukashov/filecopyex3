@@ -900,7 +900,7 @@ open_retry:
         size_t read_block_size = Min(ReadBlock, buffInfo->BuffSize - BuffPos);
 retry:
         int64_t start_time = GetTime();
-        size_t read = Read(InputFileHandle, buffInfo->Buffer + BuffPos, read_block_size);
+        size_t read = FRead(InputFileHandle, buffInfo->Buffer + BuffPos, read_block_size);
 
         if (read == -1)
         {
