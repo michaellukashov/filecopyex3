@@ -203,7 +203,7 @@ void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTim
   else
   {
     SetFileSizeAndTime2(h, size, creationTime, lastAccessTime, lastWriteTime);
-    Close(h);
+    FClose(h);
   }
 }
 
@@ -224,7 +224,7 @@ void SetFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAcc
   else
   {
     SetFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
-    Close(h);
+    FClose(h);
   }
 }
 

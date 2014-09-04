@@ -261,7 +261,7 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
     }
   }
 
-  Close(Handle);
+  FClose(Handle);
 
   if (!(info.Flags & FLG_SKIPPED))
   {
@@ -634,7 +634,7 @@ retry:
               int64_t Pos = info.Written;
               if (info.OverMode == OM_RESUME)
                 Pos += info.ResumePos;
-              Close(ABuffInfo->OutFile);
+              FClose(ABuffInfo->OutFile);
 reopen_retry:
               uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
               ABuffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
@@ -916,7 +916,7 @@ retry:
               int64_t Pos = info.Read;
               if (info.OverMode == OM_RESUME)
                 Pos += info.ResumePos;
-              Close(InputFileHandle);
+              FClose(InputFileHandle);
 reopen_retry:
               InputFileHandle = FOpen(SrcName, OPEN_READ, 0);
               if (!InputFileHandle)
@@ -1008,13 +1008,13 @@ skip:
       }
     }
 
-    Close(InputFileHandle);
+    FClose(InputFileHandle);
     ReadN++;
     continue;
 
 abort:
     info.Flags |= FLG_SKIPPED;
-    Close(InputFileHandle);
+    FClose(InputFileHandle);
     Aborted = true;
     break;
   }

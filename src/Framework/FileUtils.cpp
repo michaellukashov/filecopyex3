@@ -524,7 +524,7 @@ bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
     BY_HANDLE_FILE_INFORMATION FileInformation;
     if (::GetFileInformationByHandle(DstFileHandle, &FileInformation))
     {
-      Close(DstFileHandle);
+      FClose(DstFileHandle);
       if (!(FileInformation.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) &&
           (FileInformation.nNumberOfLinks > 1))
       {
@@ -533,7 +533,7 @@ bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
     }
     else
     {
-      Close(DstFileHandle);
+      FClose(DstFileHandle);
       return false; // cannot get info by handle
     }
   }
@@ -626,7 +626,7 @@ void Out(const String & s)
 }
 
 
-void Close(HANDLE h)
+void FClose(HANDLE h)
 {
   ::CloseHandle(h);
 }

@@ -55,7 +55,7 @@ String ChangeFileExt(const String &, const String &);
 #define rfnNoNetExpand 1
 
 extern HANDLE FOpen(const String & fn, DWORD mode, DWORD attr);
-void Close(HANDLE h);
+void FClose(HANDLE h);
 bool FDelete(const String & fn);
 
 String GetFileRoot(const String &);
