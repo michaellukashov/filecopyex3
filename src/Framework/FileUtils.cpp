@@ -513,7 +513,7 @@ static bool MoveFileEx2(const wchar_t * src, const wchar_t * dst, uint32_t flg)
   }
 }
 
-bool MoveFile(const String & _src, const String & _dst, intptr_t replace)
+bool FMoveFile(const String & _src, const String & _dst, intptr_t replace)
 {
   // return false if dst is hard link
   if (WinNT && replace)
