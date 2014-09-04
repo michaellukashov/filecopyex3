@@ -241,7 +241,7 @@ size_t FRead(HANDLE h, void * buf, size_t size)
   return res;
 }
 
-size_t Write(HANDLE h, void * buf, size_t size)
+size_t FWrite(HANDLE h, void * buf, size_t size)
 {
   ULONG res;
   if (!::WriteFile(h, buf, (DWORD)size, &res, nullptr))

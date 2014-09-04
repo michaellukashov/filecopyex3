@@ -62,5 +62,5 @@ void SetFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETI
 void SetFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
 void SetFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
 size_t FRead(HANDLE h, void * buf, size_t size);
-size_t Write(HANDLE h, void * buf, size_t size);
+size_t FWrite(HANDLE h, void * buf, size_t size);
 size_t GetSectorSize(const String & path);
