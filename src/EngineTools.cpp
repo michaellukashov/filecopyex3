@@ -126,9 +126,8 @@ void CopyACL(const String & src, const String & dst)
     LUID luid;
     TOKEN_PRIVILEGES tkp;
     ::OpenProcessToken(GetCurrentProcess(),
-                     TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
-    ::LookupPrivilegeValue(nullptr, SE_SECURITY_NAME, &luid
-                        );
+        TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &hToken);
+    ::LookupPrivilegeValue(nullptr, SE_SECURITY_NAME, &luid);
     tkp.PrivilegeCount = 1;
     tkp.Privileges[0].Luid = luid;
     tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED;
