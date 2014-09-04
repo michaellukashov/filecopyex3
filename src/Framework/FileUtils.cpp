@@ -293,7 +293,7 @@ bool GetSymLink(const String & _dir, String & res, uint32_t flags)
   }
 
   if (flags & gslExpandNetMappings && (dir.len() == 2) && (dir[1] == ':') &&
-      WNetGetConnection(dir.ptr(), buf, &sz) == 0)
+      ::WNetGetConnection(dir.ptr(), buf, &sz) == 0)
   {
     res = CutEndSlash(buf);
     return true;
@@ -330,7 +330,7 @@ String GetFileRoot(const String & _path)
   if (Win2K)
   {
     wchar_t buf[MAX_FILENAME];
-    if (GetVolumePathName(path.ptr(), buf, LENOF(buf)))
+    if (::GetVolumePathName(path.ptr(), buf, LENOF(buf)))
       res = AddEndSlash(buf);
     else
       res = GetFileNameRoot(path);
@@ -343,7 +343,7 @@ String GetFileRoot(const String & _path)
 String ExpandEnv(const String & v)
 {
   wchar_t buf[MAX_FILENAME];
-  ExpandEnvironmentStrings(v.ptr(), buf, LENOF(buf));
+  ::ExpandEnvironmentStrings(v.ptr(), buf, LENOF(buf));
   return buf;
 }
 
