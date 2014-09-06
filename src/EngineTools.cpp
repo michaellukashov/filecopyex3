@@ -146,6 +146,11 @@ HANDLE FOpen(const String & fn, DWORD mode, DWORD attr)
   PropertyMap & Options = plugin->Options();
   if ((mode & OPEN_READ) && (BOOL)(Options[L"ReadFilesOpenedForWriting"]))
     dwShareMode = FILE_SHARE_READ | FILE_SHARE_WRITE;
+  String FileName = fn;
+  if (!FileName.left(4).icmp(L"nul\\"))
+    FileName = L"nul";
+  if (FileName.left(4).icmp(L"\\\\?\\"))
+    FileName = String(L"\\\\?\\") + fn;
 
   uint32_t f;
   if (mode & OPEN_READ)
@@ -157,24 +162,24 @@ HANDLE FOpen(const String & fn, DWORD mode, DWORD attr)
   if (!(mode & OPEN_READ))
     ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
 
-  HANDLE res = ::CreateFile(
-                 (!fn.left(4).icmp(L"nul\\")) ? L"nul" : fn.ptr(),
-                 // mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
-                 // fix #17 is partially rolled back:
-                 // Setting "compressed" attribute requires GENERIC_READ | GENERIC_WRITE
-                 // access mode during file write.
-                 mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
-                 // FILE_SHARE_READ | FILE_SHARE_WRITE | (WinNT ? FILE_SHARE_DELETE : 0),
-                 dwShareMode,
-                 nullptr,
-                 f,
-                 (mode & OPEN_BUF ? 0 : FILE_FLAG_NO_BUFFERING) | attr,
-                 nullptr);
-  if (res == INVALID_HANDLE_VALUE)
-    res = nullptr;
-  if (res && (mode & OPEN_APPEND))
-    ::SetFilePointer(res, 0, nullptr, FILE_END);
-  return res;
+  HANDLE Handle = ::CreateFile(
+    FileName.ptr(),
+    // mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
+    // fix #17 is partially rolled back:
+    // Setting "compressed" attribute requires GENERIC_READ | GENERIC_WRITE
+    // access mode during file write.
+    mode & OPEN_READ ? (GENERIC_READ) : (GENERIC_READ | GENERIC_WRITE),
+    // FILE_SHARE_READ | FILE_SHARE_WRITE | (WinNT ? FILE_SHARE_DELETE : 0),
+    dwShareMode,
+    nullptr,
+    f,
+    (mode & OPEN_BUF ? 0 : FILE_FLAG_NO_BUFFERING) | attr,
+    nullptr);
+  if (Handle == INVALID_HANDLE_VALUE)
+    Handle = nullptr;
+  if (Handle && (mode & OPEN_APPEND))
+    ::SetFilePointer(Handle, 0, nullptr, FILE_END);
+  return Handle;
 }
 
 
