@@ -2050,7 +2050,7 @@ retry:
       }
       WIN32_FIND_DATA fd;
       HANDLE Handle;
-      String SrcDir = String("\\\\?\\") + src + L"\\*.*";
+      String SrcDir = GetLongFileName(src) + L"\\*.*";
       if ((Handle = ::FindFirstFile(SrcDir.ptr(), &fd)) != INVALID_HANDLE_VALUE)
       {
         intptr_t descidx = -1;

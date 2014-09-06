@@ -149,8 +149,7 @@ HANDLE FOpen(const String & fn, DWORD mode, DWORD attr)
   String FileName = fn;
   if (!FileName.left(4).icmp(L"nul\\"))
     FileName = L"nul";
-  if (FileName.left(4).icmp(L"\\\\?\\"))
-    FileName = String(L"\\\\?\\") + fn;
+  FileName = GetLongFileName(FileName);
 
   uint32_t f;
   if (mode & OPEN_READ)
