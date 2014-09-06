@@ -198,6 +198,17 @@ int64_t FTell(HANDLE h)
   return FSeek(h, 0, FILE_CURRENT);
 }
 
+String GetLongFileName(const String & FileName)
+{
+  String Result = FileName;
+  if (WinNT)
+  {
+    if (Result.left(4).icmp(L"\\\\?\\"))
+      Result = String(L"\\\\?\\") + Result;
+  }
+  return Result;
+}
+
 void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
 {
   HANDLE h = FOpen(fn, OPEN_WRITE_BUF, 0);
