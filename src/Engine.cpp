@@ -797,7 +797,7 @@ void Engine::Copy()
         ForceDirectories(AddEndSlash(DstName));
       else
       {
-        ::CreateDirectory(DstName.ptr(), nullptr);
+        ::CreateDirectory(GetLongFileName(DstName).ptr(), nullptr);
         ::SetFileAttributes(DstName.ptr(), info.Attr);
       }
       if (!(info.Flags & FLG_TOP_DIR))
