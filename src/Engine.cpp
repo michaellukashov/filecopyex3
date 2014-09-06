@@ -1575,7 +1575,7 @@ rep:
   else
   {
     uint32_t vf = VolFlags(dstPath);
-    if (vf != -1)
+    if (vf != (uint32_t)-1)
     {
       if (!(vf & VF_STREAMS) && !adv)
         Streams = 0;

@@ -106,13 +106,13 @@ uint32_t VolFlags(const String & _path)
   size_t sl = path.find_last_of(L"\\/");
   size_t ml = path.find_first_of(L"*?");
   if (ml != (size_t)-1 && ml < sl)
-    return -1;
+    return (uint32_t)-1;
   if (path.find_first_of(L"|<>") != (size_t)-1)
-    return -1;
+    return (uint32_t)-1;
   size_t cl = path.find(':');
   if (cl != (size_t)-1 && (cl != 1 || cl != path.rfind(':') ||
                           (cl != path.len() - 1 && path.find_first_of(L"\\/") != 2)))
-    return -1;
+    return (uint32_t)-1;
   if (ml != (size_t)-1)
     path = ExtractFilePath(path);
   String root = GetFileRoot(path);
@@ -141,7 +141,7 @@ uint32_t VolFlags(const String & _path)
       res |= VF_CDROM;
     return res;
   }
-  return -1;
+  return (uint32_t)-1;
 }
 
 intptr_t CheckParallel(const String & _srcpath, const String & _dstpath)
