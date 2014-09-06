@@ -204,7 +204,7 @@ void FarProgress::SetTitle2(const String & v) const
 String FarProgress::GetTitle()
 {
   wchar_t buf[512];
-  GetConsoleTitle(buf, _countof(buf));
+  ::GetConsoleTitle(buf, _countof(buf));
   return buf;
 }
 

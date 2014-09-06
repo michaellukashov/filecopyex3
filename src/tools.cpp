@@ -118,7 +118,7 @@ uint32_t VolFlags(const String & _path)
 
   DWORD clen, flg;
   wchar_t sysname[32];
-  if (GetVolumeInformation(root.ptr(), nullptr, 0, nullptr, &clen, &flg, sysname, _countof(sysname)))
+  if (::GetVolumeInformation(root.ptr(), nullptr, 0, nullptr, &clen, &flg, sysname, _countof(sysname)))
   {
     uint32_t res = 0;
     if (flg & FILE_FILE_COMPRESSION)

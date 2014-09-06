@@ -206,7 +206,7 @@ void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
 String FarPlugin::GetDLLPath()
 {
   wchar_t buf[MAX_FILENAME];
-  GetModuleFileName((HMODULE)hInstance, buf, _countof(buf));
+  ::GetModuleFileName((HMODULE)hInstance, buf, _countof(buf));
   String dlln = buf;
   return dlln.substr(0, dlln.rfind('\\'));
 }

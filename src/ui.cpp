@@ -112,7 +112,7 @@ intptr_t Error2RS(const String & s, const String & fn, intptr_t code)
 String GetErrText(intptr_t code)
 {
   wchar_t buf[1024];
-  FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, (DWORD)code, 0, buf, _countof(buf), nullptr);
+  ::FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, (DWORD)code, 0, buf, _countof(buf), nullptr);
   return buf;
 }
 
