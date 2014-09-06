@@ -2050,7 +2050,8 @@ retry:
       }
       WIN32_FIND_DATA fd;
       HANDLE Handle;
-      if ((Handle = ::FindFirstFile((src + L"\\*.*").ptr(), &fd)) != INVALID_HANDLE_VALUE)
+      String SrcDir = String("\\\\?\\") + src + L"\\*.*";
+      if ((Handle = ::FindFirstFile(SrcDir.ptr(), &fd)) != INVALID_HANDLE_VALUE)
       {
         intptr_t descidx = -1;
         RememberStruct Remember;
