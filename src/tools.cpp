@@ -239,7 +239,7 @@ void DebugLog(const wchar_t * DebugMsg, ...)
 String convertPath(enum CONVERTPATHMODES mode, const String & src)
 {
   wchar_t fullName[MAX_PATH];
-  size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, sizeof(fullName));
+  size_t size = FSF.ConvertPath(mode, src.c_str(), fullName, _countof(fullName));
   if (size <= MAX_PATH)
   {
     String res(fullName);
