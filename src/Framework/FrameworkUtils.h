@@ -26,11 +26,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "ObjString.h"
 
-#ifdef LENOF
-#undef LENOF
-#endif
-#define LENOF(x) ( (sizeof((x))) / (sizeof(*(x))))
-
 typedef void (*ErrorHandler)(const wchar_t *);
 
 void FWError(const String &);

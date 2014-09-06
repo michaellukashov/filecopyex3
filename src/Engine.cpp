@@ -1500,7 +1500,7 @@ rep:
 
   wchar_t CurrentDir[MAX_FILENAME];
   // Get absolute path for relative dstpath
-  FSF.GetCurrentDirectory(LENOF(CurrentDir), CurrentDir);
+  FSF.GetCurrentDirectory(_countof(CurrentDir), CurrentDir);
   // srcpath.ptr() for temporary file panel is empty
   if (relDstPath.icmp(L"nul") != 0)
   {

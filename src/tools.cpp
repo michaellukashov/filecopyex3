@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 // special HDD ID implementation for NT4
 #define HARDDISK_CONST_PART         _T("\\Device\\Harddisk")
-#define HARDDISK_CONST_PART_LEN     (LENOF(HARDDISK_CONST_PART)-1)
+#define HARDDISK_CONST_PART_LEN     (_countof(HARDDISK_CONST_PART)-1)
 
 static bool GetDriveId(const String & path, String & res)
 {
@@ -37,7 +37,7 @@ static bool GetDriveId(const String & path, String & res)
   if (WinNT4)
   {
     // special HDD ID implementation for NT4
-    if (::QueryDosDevice(path.left(2).ptr(), buf, LENOF(buf)) > 0)
+    if (::QueryDosDevice(path.left(2).ptr(), buf, _countof(buf)) > 0)
     {
       String s = buf;
       String tmp = L"\\Device\\Harddisk";
@@ -48,7 +48,7 @@ static bool GetDriveId(const String & path, String & res)
       }
     }
   }
-  else if (::QueryDosDevice(path.left(2).ptr(), buf, LENOF(buf)) > 0)
+  else if (::QueryDosDevice(path.left(2).ptr(), buf, _countof(buf)) > 0)
   {
     String s = buf;
     String tmp = L"\\Device\\HarddiskDmVolumes\\";
@@ -70,7 +70,7 @@ static bool GetPhysDrive(const String & _path, int & res)
     if (path.left(11) != L"\\\\?\\Volume{")
     {
       wchar_t buf[MAX_FILENAME];
-      if (!::GetVolumeNameForVolumeMountPoint(path.ptr(), buf, LENOF(buf)))
+      if (!::GetVolumeNameForVolumeMountPoint(path.ptr(), buf, _countof(buf)))
         return false;
       path = buf;
     }
@@ -83,7 +83,7 @@ static bool GetPhysDrive(const String & _path, int & res)
     char outbuf[1024];
     DWORD ret;
     if (::DeviceIoControl(hVolume, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, nullptr, 0,
-                        outbuf, LENOF(outbuf), &ret, nullptr))
+                        outbuf, _countof(outbuf), &ret, nullptr))
     {
       VOLUME_DISK_EXTENTS * ext = (VOLUME_DISK_EXTENTS *)outbuf;
       res = ext->Extents[0].DiskNumber;
@@ -118,7 +118,7 @@ uint32_t VolFlags(const String & _path)
 
   DWORD clen, flg;
   wchar_t sysname[32];
-  if (GetVolumeInformation(root.ptr(), nullptr, 0, nullptr, &clen, &flg, sysname, LENOF(sysname)))
+  if (GetVolumeInformation(root.ptr(), nullptr, 0, nullptr, &clen, &flg, sysname, _countof(sysname)))
   {
     uint32_t res = 0;
     if (flg & FILE_FILE_COMPRESSION)
@@ -230,7 +230,7 @@ void DebugLog(const wchar_t * DebugMsg, ...)
   wchar_t MsgBuf[1024];
   va_list ArgPtr;
   va_start(ArgPtr, DebugMsg);
-  _vsnwprintf_s(MsgBuf, LENOF(MsgBuf), LENOF(MsgBuf), DebugMsg, ArgPtr);
+  _vsnwprintf_s(MsgBuf, _countof(MsgBuf), _countof(MsgBuf), DebugMsg, ArgPtr);
   va_end(ArgPtr);
   ::OutputDebugString(MsgBuf);
 }

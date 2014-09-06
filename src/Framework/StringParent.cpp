@@ -199,8 +199,8 @@ void StringParent::loadFromString(const wchar_t * s, wchar_t delim)
   {
     if (!*p || *p == delim)
     {
-      size_t len = __min((size_t)(p - pp), LENOF(buf) - 1);
-      wcsncpy_s(buf, LENOF(buf), pp, len);
+      size_t len = __min((size_t)(p - pp), _countof(buf) - 1);
+      wcsncpy_s(buf, _countof(buf), pp, len);
       buf[len] = 0;
       pp = p + 1;
       AddString(buf);

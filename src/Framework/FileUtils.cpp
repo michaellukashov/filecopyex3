@@ -186,7 +186,7 @@ bool GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
 
   if (::GetVolumeNameForVolumeMountPoint(AddEndSlash(VolumeMountPointForPath).ptr(),
                                        VolumeNameForPath,
-                                       LENOF(VolumeNameForPath)))
+                                       _countof(VolumeNameForPath)))
   {
     wchar_t VolumeMountPoint[] = L"?:\\";
     wchar_t VolumeName[MAX_FILENAME];
@@ -196,7 +196,7 @@ bool GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
       VolumeMountPoint[0] = drive;
       if (::GetVolumeNameForVolumeMountPoint(VolumeMountPoint,
                                            VolumeName,
-                                           LENOF(VolumeName)))
+                                           _countof(VolumeName)))
       {
         if (wcscmp(VolumeNameForPath, VolumeName) == 0)
         {
@@ -221,11 +221,11 @@ bool GetSymLink(const String & _dir, String & res, uint32_t flags)
   res.Clear();
   String dir = CutEndSlash(_dir);
   wchar_t buf[MAX_FILENAME];
-  DWORD sz = LENOF(buf);
+  DWORD sz = _countof(buf);
   res = dir;
 
   if (flags & gslExpandSubst && (dir.len() == 2) && (dir[1] == ':') &&
-      ::QueryDosDevice(dir.ptr(), buf, LENOF(buf)) > 0)
+      ::QueryDosDevice(dir.ptr(), buf, _countof(buf)) > 0)
   {
     String r = buf;
     if (r.left(8) == L"\\??\\UNC\\")
@@ -285,7 +285,7 @@ bool GetSymLink(const String & _dir, String & res, uint32_t flags)
 
   if (Win2K && (flags & gslExpandMountPoints))
   {
-    //if (pGetVolumeNameForVolumeMountPoint(AddEndSlash(dir).ptr(), buf, LENOF(buf)))
+    //if (pGetVolumeNameForVolumeMountPoint(AddEndSlash(dir).ptr(), buf, _countof(buf)))
     if (GetPrimaryVolumeMountPoint(dir, res))
     {
       return true;
@@ -330,7 +330,7 @@ String GetFileRoot(const String & _path)
   if (Win2K)
   {
     wchar_t buf[MAX_FILENAME];
-    if (::GetVolumePathName(path.ptr(), buf, LENOF(buf)))
+    if (::GetVolumePathName(path.ptr(), buf, _countof(buf)))
       res = AddEndSlash(buf);
     else
       res = GetFileNameRoot(path);
@@ -343,7 +343,7 @@ String GetFileRoot(const String & _path)
 String ExpandEnv(const String & v)
 {
   wchar_t buf[MAX_FILENAME];
-  ::ExpandEnvironmentStrings(v.ptr(), buf, LENOF(buf));
+  ::ExpandEnvironmentStrings(v.ptr(), buf, _countof(buf));
   return buf;
 }
 
@@ -473,7 +473,7 @@ inline String TempName()
 String TempPath()
 {
   wchar_t buf[MAX_FILENAME];
-  ::GetTempPath(LENOF(buf), buf);
+  ::GetTempPath(_countof(buf), buf);
   return CutEndSlash(buf);
 }
 
