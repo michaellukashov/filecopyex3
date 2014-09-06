@@ -81,6 +81,7 @@ static bool GetPhysDrive(const String & _path, int & res)
       return false;
 
     char outbuf[1024];
+    ::ZeroMemory(outbuf, sizeof(outbuf));
     DWORD ret;
     if (::DeviceIoControl(hVolume, IOCTL_VOLUME_GET_VOLUME_DISK_EXTENTS, nullptr, 0,
                         outbuf, _countof(outbuf), &ret, nullptr))
