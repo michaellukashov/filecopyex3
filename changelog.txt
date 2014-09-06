@@ -1,4 +1,6 @@
-FileCopyEx3 3.0.6.31 05.09.2014
+FileCopyEx3 3.0.6.32 06.09.2014
+
+* Improvement: copy long (> 255 symbols) nested paths
 
 FileCopyEx3 3.0.5.29 01.09.2014
 
