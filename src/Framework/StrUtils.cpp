@@ -171,8 +171,11 @@ String FormatSpeed(int64_t cb)
 String FormatValue(int64_t Value)
 {
   int pw = 0;
-  int64_t div = 1;
-  while (Value >= 100000) { div *= 1024; Value /= 1024; pw++; }
+  while (Value >= 100000)
+  {
+    Value /= 1024;
+    pw++;
+  }
   String UnitStr;
   switch (pw)
   {
