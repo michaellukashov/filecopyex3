@@ -174,7 +174,3 @@ private:
   bool CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
                           const String & srcpathstr, const String & dstpathstr);
 };
-
-void FCompress(HANDLE handle, uint32_t f);
-void FEncrypt(const String & fn, uint32_t f);
-void CopyACL(const String & src, const String & dst);
