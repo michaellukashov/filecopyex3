@@ -95,7 +95,7 @@ void Encrypt(HANDLE handle, uint32_t flags)
     Error(LOC(L"Error.Encrypt"), ::GetLastError());
 }
 
-void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si)
+static void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si)
 {
   const int bufSize = 16384;
 
