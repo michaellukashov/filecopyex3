@@ -27,7 +27,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #include "Common.h"
 #include "FarPlugin.h"
-#include "Engine.h"
 #include "EngineTools.h"
 #include "tools.h"
 #include "ui.h"
