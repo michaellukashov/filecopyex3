@@ -50,12 +50,12 @@ struct BuffStruct
 class TBuffInfo
 {
 public:
-  uint8_t * Buffer;
-  size_t BuffSize;
   int64_t OrgSize;
+  size_t BuffSize;
+  uint8_t * Buffer;
+  BuffStruct * BuffInf;
   HANDLE OutFile;
   intptr_t OutNum;
-  BuffStruct * BuffInf;
   String SrcName, DstName;
 };
 
