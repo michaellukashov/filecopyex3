@@ -84,33 +84,34 @@ include_directories(
 # target FileCopyEx3
 
 set(FILECOPYEX_SOURCES
-  src/ui.cpp
-  src/tools.cpp
-  src/taskbarIcon.cpp
-  src/common.cpp
-  src/FarSettings.cpp
-  src/FarProgress.cpp
-  src/FarPayload.cpp
-  src/FarNode.cpp
-  src/FarMenu.cpp
-  src/FarMacro.cpp
-  src/FarPlugin.cpp
-  src/FileCopyEx.cpp
-  src/EngineTools.cpp
-  src/Engine.cpp
-  src/CopyProgress.cpp
-  src/Framework/StrUtils.cpp
-  src/Framework/ObjString.cpp
-  src/Framework/FileUtils.cpp
-  src/Framework/LocaleUtils.cpp
-  src/Framework/Properties.cpp
-  src/Framework/StringParent.cpp
-  src/Framework/Payload.cpp
-  src/Framework/ObjectManager.cpp
-  src/Framework/Node.cpp
-  src/Framework/FileNameStoreEnum.cpp
-  src/Framework/DescList.cpp
-  src/Framework/FrameworkUtils.cpp
+#  src/ui.cpp
+#  src/tools.cpp
+#  src/taskbarIcon.cpp
+#  src/common.cpp
+#  src/FarSettings.cpp
+#  src/FarProgress.cpp
+#  src/FarPayload.cpp
+#  src/FarNode.cpp
+#  src/FarMenu.cpp
+#  src/FarMacro.cpp
+#  src/FarPlugin.cpp
+#  src/FileCopyEx.cpp
+#  src/EngineTools.cpp
+#  src/Engine.cpp
+#  src/CopyProgress.cpp
+#  src/Framework/StrUtils.cpp
+#  src/Framework/ObjString.cpp
+#  src/Framework/FileUtils.cpp
+#  src/Framework/LocaleUtils.cpp
+#  src/Framework/Properties.cpp
+#  src/Framework/StringParent.cpp
+#  src/Framework/Payload.cpp
+#  src/Framework/ObjectManager.cpp
+#  src/Framework/Node.cpp
+#  src/Framework/FileNameStoreEnum.cpp
+#  src/Framework/DescList.cpp
+#  src/Framework/FrameworkUtils.cpp
+  src/UnityBuildFileCopyEx3.cpp
 
   FileCopyEx3.rc
 )
