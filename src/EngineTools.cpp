@@ -42,7 +42,7 @@ void Free(void * ptr)
   ::VirtualFree(ptr, 0, MEM_RELEASE);
 }
 
-void Compress(HANDLE handle, uint32_t flags)
+void FCompress(HANDLE handle, uint32_t flags)
 {
   if (flags == ATTR_INHERIT)
     return;

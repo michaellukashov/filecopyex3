@@ -540,7 +540,7 @@ open_retry:
   {
     if (buffInfo->OutFile)
     {
-      Compress(buffInfo->OutFile, CompressMode);
+      FCompress(buffInfo->OutFile, CompressMode);
       //Encrypt(bi->OutFile, EncryptMode);
       buffInfo->OrgSize = FileSize(buffInfo->OutFile);
 
@@ -807,7 +807,7 @@ void Engine::Copy()
                                OPEN_EXISTING, FILE_FLAG_BACKUP_SEMANTICS, nullptr);
         if (hd != INVALID_HANDLE_VALUE)
         {
-          Compress(hd, CompressMode);
+          FCompress(hd, CompressMode);
           if (!(info.Flags & FLG_DIR_FORCE))
           {
             this->SetFileTime(hd, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);

@@ -175,6 +175,6 @@ private:
                           const String & srcpathstr, const String & dstpathstr);
 };
 
-void Compress(HANDLE handle, uint32_t f);
+void FCompress(HANDLE handle, uint32_t f);
 void Encrypt(const String & fn, uint32_t f);
 void CopyACL(const String & src, const String & dst);
