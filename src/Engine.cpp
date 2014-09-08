@@ -34,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/StrUtils.h"
 #include "Common.h"
 #include "Engine.h"
-#include "Guid.hpp"
+#include "guid.hpp"
 #include "FarPlugin.h"
 #include "EngineTools.h"
 #include "Tools.h"
