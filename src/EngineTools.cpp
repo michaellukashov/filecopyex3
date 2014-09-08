@@ -66,7 +66,7 @@ int FGetCompression(HANDLE handle)
     return res != COMPRESSION_FORMAT_NONE;
 }
 
-void Encrypt(const String & fn, uint32_t flags)
+void FEncrypt(const String & fn, uint32_t flags)
 {
   if (!Win2K || flags == ATTR_INHERIT)
     return;
@@ -80,7 +80,7 @@ void Encrypt(const String & fn, uint32_t flags)
     Error2(LOC(L"Error.Encrypt"), fn, ::GetLastError());
 }
 
-void Encrypt(HANDLE handle, uint32_t flags)
+void FEncrypt(HANDLE handle, uint32_t flags)
 {
   if (!Win2K || flags == ATTR_INHERIT)
     return;

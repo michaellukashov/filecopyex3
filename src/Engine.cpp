@@ -282,7 +282,7 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
 
     if (Rights)
       CopyACL(SrcName, DstName);
-    Encrypt(DstName, EncryptMode);
+    FEncrypt(DstName, EncryptMode);
     ::SetFileAttributes(DstName.ptr(), info.Attr);
 
     if (Move)
@@ -815,7 +815,7 @@ void Engine::Copy()
           ::CloseHandle(hd);
         }
         if (EncryptMode != ATTR_INHERIT)
-          Encrypt(DstName, EncryptMode);
+          FEncrypt(DstName, EncryptMode);
         if (Rights && !(info.Flags & FLG_DIR_FORCE))
           CopyACL(SrcName, DstName);
       }
