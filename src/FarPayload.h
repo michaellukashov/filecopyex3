@@ -40,7 +40,6 @@ const Attribute & Attrib(uint32_t i);
 uint32_t AttribCount();
 
 size_t lablen(FarDialogItem & item);
-String FormatWidth(const String & v, int len);
 
 void SetItemText(FarDialogItem & item, const String & text);
 void DestroyItemText(FarDialogItem & item);
