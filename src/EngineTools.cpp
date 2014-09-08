@@ -95,7 +95,7 @@ void FEncrypt(HANDLE handle, uint32_t flags)
     Error(LOC(L"Error.Encrypt"), ::GetLastError());
 }
 
-static void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATION si)
+static void CopyACL2(const String & src, const String & dst, SECURITY_INFORMATION si)
 {
   const int bufSize = 16384;
 
@@ -133,8 +133,8 @@ void FCopyACL(const String & src, const String & dst)
     ::AdjustTokenPrivileges(hToken, FALSE, &tkp, sizeof(tkp), nullptr, nullptr);
     SACLPriv = 1;
   }
-  _CopyACL(src, dst, DACL_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION);
-  _CopyACL(src, dst, SACL_SECURITY_INFORMATION);
+  CopyACL2(src, dst, DACL_SECURITY_INFORMATION | GROUP_SECURITY_INFORMATION | OWNER_SECURITY_INFORMATION);
+  CopyACL2(src, dst, SACL_SECURITY_INFORMATION);
 }
 
 
