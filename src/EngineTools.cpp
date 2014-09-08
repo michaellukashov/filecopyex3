@@ -55,7 +55,7 @@ void FCompress(HANDLE handle, uint32_t flags)
     Error(LOC(L"Error.Compress"), ::GetLastError());
 }
 
-int GetCompression(HANDLE handle)
+int FGetCompression(HANDLE handle)
 {
   USHORT res;
   DWORD cb;

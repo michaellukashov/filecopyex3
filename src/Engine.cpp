@@ -546,7 +546,7 @@ open_retry:
 
       int64_t size = info.OverMode == OM_APPEND ? buffInfo->OrgSize + info.Size : info.Size;
       if (size >= (int64_t)_PreallocMin * 1024 &&
-          GetCompression(buffInfo->OutFile) == 0)
+          FGetCompression(buffInfo->OutFile) == 0)
       {
         int64_t sp;
         if (!(info.Flags & FLG_BUFFERED))

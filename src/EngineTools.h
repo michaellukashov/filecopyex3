@@ -49,7 +49,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 void * Alloc(size_t size);
 void Free(void * ptr);
 void FCompress(HANDLE handle, uint32_t flags);
-int GetCompression(HANDLE handle);
+int FGetCompression(HANDLE handle);
 void Encrypt(const String & fn, uint32_t flags);
 void Encrypt(HANDLE handle, uint32_t flags);
 void CopyACL(const String & src, const String & dst);
