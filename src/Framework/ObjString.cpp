@@ -34,7 +34,8 @@ static bool isbadchar(wchar_t c)
 
 String::String(const char * v)
 {
-  if (v != nullptr && v[0] != '\0') {
+  if (v != nullptr && v[0] != '\0')
+  {
     size_t len = strlen(v);
     str.resize(len);
     if (::MultiByteToWideChar(CP_OEMCP, 0, v, (int)len,
