@@ -109,22 +109,22 @@ String FormatProgress(int64_t cb, int64_t total)
   switch (pw)
   {
     case 0:
-      un=LOC(L"Engine.Bytes");
+      un = LOC(L"Engine.Bytes");
       break;
     case 1:
-      un=LOC(L"Engine.Kb");
+      un = LOC(L"Engine.Kb");
       break;
     case 2:
-      un=LOC(L"Engine.Mb");
+      un = LOC(L"Engine.Mb");
       break;
     case 3:
-      un=LOC(L"Engine.Gb");
+      un = LOC(L"Engine.Gb");
       break;
     case 4:
-      un=LOC(L"Engine.Tb");
+      un = LOC(L"Engine.Tb");
       break;
     case 5:
-      un=LOC(L"Engine.Pb");
+      un = LOC(L"Engine.Pb");
       break;
   }
   return Format(L"%s %s %s %s [%d%%]", FormatNum(cb / div).ptr(), LOC(L"Engine.Of").ptr(),
@@ -146,22 +146,22 @@ String FormatSpeed(int64_t cb)
   switch (pw)
   {
     case 0:
-      un=LOC(L"Engine.Bytes");
+      un = LOC(L"Engine.Bytes");
       break;
     case 1:
-      un=LOC(L"Engine.Kb");
+      un = LOC(L"Engine.Kb");
       break;
     case 2:
-      un=LOC(L"Engine.Mb");
+      un = LOC(L"Engine.Mb");
       break;
     case 3:
-      un=LOC(L"Engine.Gb");
+      un = LOC(L"Engine.Gb");
       break;
     case 4:
-      un=LOC(L"Engine.Tb");
+      un = LOC(L"Engine.Tb");
       break;
     case 5:
-      un=LOC(L"Engine.Pb");
+      un = LOC(L"Engine.Pb");
       break;
   }
 
