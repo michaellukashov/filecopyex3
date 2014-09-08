@@ -61,11 +61,11 @@ public:
 
 struct RememberStruct
 {
-  String Src, Dst;
   int64_t Size;
   FILETIME creationTime, lastAccessTime, lastWriteTime;
-  DWORD Attr, Flags;
   intptr_t Level;
+  DWORD Attr, Flags;
+  String Src, Dst;
 };
 
 PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Command, intptr_t Param1);
