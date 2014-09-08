@@ -52,7 +52,7 @@ void FCompress(HANDLE handle, uint32_t flags);
 int FGetCompression(HANDLE handle);
 void FEncrypt(const String & fn, uint32_t flags);
 void FEncrypt(HANDLE handle, uint32_t flags);
-void CopyACL(const String & src, const String & dst);
+void FCopyACL(const String & src, const String & dst);
 HANDLE FOpen(const String & fn, DWORD mode, DWORD attr);
 int64_t FSeek(HANDLE h, int64_t pos, int method);
 int64_t FTell(HANDLE h);

@@ -117,7 +117,7 @@ static void _CopyACL(const String & src, const String & dst, SECURITY_INFORMATIO
 
 int SACLPriv = 0;
 
-void CopyACL(const String & src, const String & dst)
+void FCopyACL(const String & src, const String & dst)
 {
   if (!SACLPriv)
   {
