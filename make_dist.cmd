@@ -4,7 +4,7 @@ REM @setlocal
 set PLUGINNAME=FileCopyEx3
 
 set FARVER=%1
-if "%FARVER%" equ "" set FARVER=Far2
+if "%FARVER%" equ "" set FARVER=Far3
 set PLUGINARCH=%2
 if "%PLUGINARCH%" equ "" set PLUGINARCH=x86
 
