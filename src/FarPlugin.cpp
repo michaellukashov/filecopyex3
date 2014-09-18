@@ -105,20 +105,21 @@ static bool CallCopy(bool move, bool curOnly)
 void beep(int b, bool useBASS)
 {
   PropertyMap & Options = plugin->Options();
-  if (useBASS)
+  String audioFile = Options[L"AudioFile"];
+  if (useBASS && !audioFile.IsEmpty())
   {
+    audioFile = audioFile.replace(L"\\", L"\\\\");
     String start = L"local function LoadBASS() "
       L"require('LuaBASS')"
       L"end;"
       L"if pcall(LoadBASS) then "
       L"LuaBASS.Init(1,44100,0);"
       L"local Handle = LuaBASS.StreamCreateFile('";
-    start += (const String)Options[L"AudioFile"];
+    start += audioFile;
     start += L"',0,0,LuaBASS.Flags(LuaBASS.STREAM.BASS_STREAM_PRESCAN,LuaBASS.SAMPLE.BASS_SAMPLE_LOOP));"
       L"LuaBASS.ChannelPlay(Handle,false) "
       L"end";
-    MacroExecuteString mes = { 0 };
-    mes.StructSize = sizeof(mes);
+    MacroExecuteString mes = { sizeof(mes) };
     mes.Flags = KMFLAGS_LUA;
     mes.SequenceText = start.c_str();
     Info.MacroControl(&MainGuid, MCTL_EXECSTRING, 0, &mes);
