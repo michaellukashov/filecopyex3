@@ -163,8 +163,6 @@ object SetupDialog: FarDialog
       Persistent=1
     end
   end
-;  object Sep1: FarDlgLine
-;  end
   object OverwriteDef: FarDlgCheckbox
     Persistent=1
   end
@@ -189,16 +187,6 @@ object SetupDialog: FarDialog
   object CheckFreeDiskSpace: FarDlgCheckbox
     Persistent=1
   end
-;  object Sep2: FarDlgLine
-;  end
-;  object Label3: FarDlgLabel
-;    NoBreak=1
-;  end
-;  object Label6: FarDlgLabel
-;    NoBreak=1
-;  end
-;  object Sep6: FarDlgLine
-;  end
   object CopyDescs: FarDlgCheckbox
     Persistent=1
     NoBreak=0
@@ -206,18 +194,8 @@ object SetupDialog: FarDialog
   object DescsInSubdirs: FarDlgCheckbox
     Persistent=1
   end
-;  object Sep3: FarDlgLine
-;  end
   object ConnectLikeBars: FarDlgCheckbox
     Persistent=1
-  end
-  object Sound: FarDlgCheckbox
-    FitWidth=1
-    NoBreak=1
-    Persistent=1
-  end
-  object TestSound: FarDlgButton
-    Result=3
   end
   object Label2: FarDlgLabel
     NoBreak=1
@@ -243,8 +221,6 @@ object SetupDialog: FarDialog
   end  
   object Sep4: FarDlgLine
   end
-;  object Sep5: FarDlgLine
-;  end
   object OK: FarDlgButton
     Default=1
     NoBreak=1
@@ -260,6 +236,11 @@ object SetupDialog: FarDialog
     NoBreak=1
     CenterGroup=1
     Result=1
+  end
+  object Sound: FarDlgButton
+    NoBreak=1
+    CenterGroup=1
+    Result=3
   end
   object About: FarDlgButton
     CenterGroup=1
@@ -293,6 +274,39 @@ object KeysDialog: FarDialog
   object Cancel: FarDlgButton
     CenterGroup=1
     Result=-1
+  end
+end
+
+object SoundDialog: FarDialog
+  HelpTopic=SoundDialog
+  object Sound: FarDlgCheckbox
+    Persistent=1
+  end
+  object UseSystem: FarDlgRadioButton
+  end
+  object UseBASS: FarDlgRadioButton
+    Persistent=1
+  end
+  object AudioFile: FarDlgEdit
+    Persistent=1
+    Width=50
+  end  
+  object Sep1: FarDlgLine
+  end
+  object OK: FarDlgButton
+    Default=1
+    NoBreak=1
+    CenterGroup=1
+    Result=0
+  end
+  object Cancel: FarDlgButton
+    CenterGroup=1
+    NoBreak=1
+    Result=-1
+  end
+  object TestSound: FarDlgButton
+    CenterGroup=1
+    Result=1
   end
 end
 
