@@ -301,7 +301,7 @@ void FarPlugin::InitOptions()
   Options[L"readSpeedLimitValueDef"] = String(L"");
   Options[L"writeSpeedLimitDef"] = 0;
   Options[L"writeSpeedLimitLimitDef"] = String(L"");
-  Options[L"UseBASS"] = 1;
+  Options[L"UseBASS"] = 0;
   Options[L"AudioFile"] = String(L"");
 };
 
