@@ -1,11 +1,10 @@
+project(FileCopyEx3)
 cmake_minimum_required(VERSION 2.8)
 
 include(${CMAKE_ROOT}/Modules/CMakeDetermineSystem.cmake)
 message("system: ${CMAKE_SYSTEM_NAME}")
 
 #-------------------------------------------------------------------------------
-
-project(FileCopyEx3)
 
 if(NOT DEFINED CMAKE_BUILD_TYPE)
 set(CMAKE_BUILD_TYPE Debug)
