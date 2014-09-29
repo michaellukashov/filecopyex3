@@ -203,7 +203,22 @@ target_link_libraries(FileCopyEx3 ${FILECOPYEX_LIBRARIES})
 string(REPLACE "/" "\\" OUTPUT_DIR ${OUTPUT_DIR})
 string(REPLACE "/" "\\" DATA_DIR "${CMAKE_CURRENT_SOURCE_DIR}/data")
 
-if(MINGW)
+if(MSVC)
+
+add_custom_command(TARGET FileCopyEx3
+  POST_BUILD
+  COMMAND if not exist "${OUTPUT_DIR}" ( mkdir "${OUTPUT_DIR}" )
+  COMMAND cp -f -R --target-directory=${OUTPUT_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/data/*
+  COMMAND cp -f --target-directory=${OUTPUT_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/changelog.txt
+  COMMAND cp -f --target-directory=${OUTPUT_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt
+  COMMAND cp -f --target-directory=${OUTPUT_DIR} FileCopyEx3.dll
+  COMMAND if exist FileCopyEx3.pdb cp -f --target-directory=${OUTPUT_DIR} FileCopyEx3.pdb
+  COMMAND if exist FileCopyEx3.map cp -f --target-directory=${OUTPUT_DIR} FileCopyEx3.map
+  WORKING_DIRECTORY ${BUILD_DIR}
+  VERBATIM
+)
+
+else()
 
 add_custom_command(TARGET FileCopyEx3
   POST_BUILD
@@ -216,21 +231,6 @@ add_custom_command(TARGET FileCopyEx3
   COMMAND copy /Y ${DATA_DIR}\\*.diz ${OUTPUT_DIR}
 #  COMMAND copy /Y ${DATA_DIR}\\doc\\*.* ${OUTPUT_DIR}\\doc
   COMMAND copy /Y ${DATA_DIR}\\resource\\*.* ${OUTPUT_DIR}\\resource
-  WORKING_DIRECTORY ${BUILD_DIR}
-  VERBATIM
-)
-
-else()
-
-add_custom_command(TARGET FileCopyEx3
-  POST_BUILD
-  COMMAND if not exist "${OUTPUT_DIR}" ( mkdir "${OUTPUT_DIR}" )
-  COMMAND cp -f -R --target-directory=${OUTPUT_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/data/*
-  COMMAND cp -f --target-directory=${OUTPUT_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/changelog.txt
-  COMMAND cp -f --target-directory=${OUTPUT_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt
-  COMMAND cp -f --target-directory=${OUTPUT_DIR} FileCopyEx3.dll
-  COMMAND if exist FileCopyEx3.pdb cp -f --target-directory=${OUTPUT_DIR} FileCopyEx3.pdb
-  COMMAND if exist FileCopyEx3.map cp -f --target-directory=${OUTPUT_DIR} FileCopyEx3.map
   WORKING_DIRECTORY ${BUILD_DIR}
   VERBATIM
 )
