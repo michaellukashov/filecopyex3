@@ -33,16 +33,12 @@ Property::Property(const Property & other) :
 {
 }
 
-Property::Property(int v) : vFloat(0.)
+Property::Property(int v) : type(vtInt), vInt(v), vFloat(0.)
 {
-  type = vtInt;
-  vInt = v;
 }
 
-Property::Property(float v) : vInt(0)
+Property::Property(float v) : type(vtFloat), vInt(0), vFloat(v)
 {
-  type = vtFloat;
-  vFloat = v;
 }
 
 Property::Property(const String & v) : type(vtString), vInt(0), vFloat(0.0), vStr(v)

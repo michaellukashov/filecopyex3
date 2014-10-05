@@ -24,4 +24,3 @@ public:
   bool saveToFile(FILE * f, TextFormat tf = tfOEM) const;
   bool saveToFile(const String & fileName, TextFormat tf = tfOEM);
 };
-

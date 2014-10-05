@@ -29,4 +29,3 @@ protected:
 
   static void SetItemText(FarMenuItem * item, const String & text);
 };
-

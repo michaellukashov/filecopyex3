@@ -49,7 +49,7 @@ static PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Comm
   size_t Size = Info.PanelControl(hPlugin, Command, Param1, 0);
   PluginPanelItem * item = reinterpret_cast<PluginPanelItem *>(new char[Size]);
 
-  FarGetPluginPanelItem gpi = {sizeof(FarGetPluginPanelItem), Size, item};
+  FarGetPluginPanelItem gpi = { sizeof(FarGetPluginPanelItem), Size, item };
   Info.PanelControl(hPlugin, Command, Param1, &gpi);
   return item;
 }
