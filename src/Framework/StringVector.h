@@ -37,4 +37,3 @@ public:
 private:
   std::vector<String> data;
 };
-
