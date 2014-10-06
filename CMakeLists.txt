@@ -74,9 +74,9 @@ set(CMAKE_EXTRA_LINK_FLAGS "${CMAKE_EXTRA_LINK_FLAGS} /INCREMENTAL:NO /OPT:REF /
 #-------------------------------------------------------
 
 include_directories(
-  src
-  src/Framework
-  src/SDK
+#  src
+#  src/Framework
+#  src/SDK
 )
 
 #-------------------------------------------------------------------------------
