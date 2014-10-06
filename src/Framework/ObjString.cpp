@@ -87,7 +87,6 @@ String String::rtrim() const
     end--;
   }
   return substr(start, end - start + 1);
-
 }
 
 String String::trimquotes() const

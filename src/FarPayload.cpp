@@ -275,7 +275,6 @@ void InitObjMgr()
   objectManager->regClass(L"FarDlgPanel", &FarDlgPanelPayload::create, &FarDlgContainer::create);
 
   objectManager->regClass(L"FarDialog", &FarDialogPayload::create, &FarDialog::create);
-
 }
 
 void DoneObjMgr()

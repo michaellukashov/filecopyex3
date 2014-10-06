@@ -66,7 +66,6 @@ static void ShowErrorMessage(const String & s)
   String msgbuf = LOC(L"CopyDialog.Error") + L"\n" + s + L"\n";
 
   Info.Message(&MainGuid, &UnkGuid, FMSG_WARNING | FMSG_MB_OK | FMSG_ALLINONE, nullptr, (const wchar_t * const *)msgbuf.ptr(), 0, 0);
-
 }
 
 static int64_t GetPhysMemorySize()

@@ -138,7 +138,6 @@ class FarDlgPanelPayload : public FarDlgPayload
 {
 public:
   DEFINE_CLASS(L"FarDlgPanel", FarDlgPanelPayload)
-
 };
 
 class FarDlgCheckboxPayload : public FarDlgPayload

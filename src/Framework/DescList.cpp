@@ -147,7 +147,6 @@ void DescList::setFlag(const String & fn, uint32_t flag, uint32_t v)
       it->second.flags |= flag;
     }
   }
-
 }
 
 void DescList::SetMergeFlag(const String & fn, uint32_t v)

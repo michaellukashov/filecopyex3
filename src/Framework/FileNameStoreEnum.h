@@ -22,6 +22,5 @@ public:
   void Skip();
   String GetNext();
   String GetByNum(size_t num);
-
 };
 
