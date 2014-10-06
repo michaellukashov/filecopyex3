@@ -22,7 +22,6 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
 #include "Framework/StrUtils.h"
 #include "SDK/farcolor.hpp"
 #include "FarProgress.h"
@@ -208,7 +207,6 @@ String FarProgress::GetTitle()
   return buf;
 }
 
-
 void FarProgress::ShowScanProgress(const String & msg)
 {
   Hide();
@@ -264,7 +262,6 @@ void FarProgress::DrawScanProgress(int x1, int x2, int y, int64_t NumberOfFiles,
   String SizeFmtStr = LOC(L"Status.SizeString") + L" %s";
   wchar_t SizeStr[256];
   _snwprintf_s(SizeStr, _countof(SizeStr), _countof(SizeStr), (const wchar_t *)SizeFmtStr.ptr(), (const wchar_t *)FormatValue(TotalSize).ptr());
-
 
   int s = x2 - x1 - (int)wcslen(SizeStr) - (int)wcslen(FilesStr);
   String spacer;

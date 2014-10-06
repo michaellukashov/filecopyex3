@@ -64,7 +64,6 @@ void FarMenu::AddSep()
   items.push_back(item);
 }
 
-
 intptr_t FarMenu::Execute()
 {
   return Info.Menu(&MainGuid, &MenuGuid, -1, -1, 0, FMENU_WRAPMODE, Title.c_str(), nullptr, HelpTopic.c_str(), nullptr, nullptr, items.data(), items.size());

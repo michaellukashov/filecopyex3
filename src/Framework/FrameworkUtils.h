@@ -36,5 +36,3 @@ extern const String & LOC(const String &);
 extern ErrorHandler errorHandler;
 
 #define MAKEINT64(low, high) ((((int64_t)(high))<<32)|((int64_t)low))
-
-

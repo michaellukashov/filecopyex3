@@ -6,7 +6,6 @@ ObjectManager::~ObjectManager()
 {
 }
 
-
 void ObjectManager::regClass(const String & type, createPayloadFunc pf, createNodeFunc nf)
 {
   classes[type] = createFuncs(pf, nf);

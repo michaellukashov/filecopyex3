@@ -97,7 +97,6 @@ bool StringParent::loadFromFile(FILE * f)
   return true;
 }
 
-
 bool StringParent::loadFromFile(const String & fn)
 {
   FILE * f = nullptr;
@@ -110,7 +109,6 @@ bool StringParent::loadFromFile(const String & fn)
   fclose(f);
   return res;
 }
-
 
 bool StringParent::saveToFile(FILE * f, TextFormat tf) const
 {

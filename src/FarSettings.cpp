@@ -55,7 +55,6 @@ bool FarSettings::create()
   return true;
 }
 
-
 bool FarSettings::get(const String & name, String & value)
 {
   FarSettingsItem fsi = { sizeof(FarSettingsItem) };
@@ -98,7 +97,6 @@ bool FarSettings::list(ParamInfoVector & res)
   }
   return true;
 }
-
 
 bool saveOptions(const PropertyMap & options, FarSettings & settings)
 {

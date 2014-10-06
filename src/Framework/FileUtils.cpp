@@ -166,7 +166,6 @@ String GetFileNameRoot(const String & v)
 //    (_GetVolumePathName)GetProcAddress(hKernel, "GetVolumePathNameA");
 //#endif
 
-
 // Returns primary volume mount point for other volume mount points
 // E.g.: E:\ is mounted D:\mnt\drive_e\ and
 // function returns "E:\" for "D:\mnt\drive_e\"
@@ -214,7 +213,6 @@ bool GetPrimaryVolumeMountPoint(const String & VolumeMountPointForPath,
 
   return result;
 }
-
 
 bool GetSymLink(const String & _dir, String & res, uint32_t flags)
 {
@@ -301,7 +299,6 @@ bool GetSymLink(const String & _dir, String & res, uint32_t flags)
 
   return false;
 }
-
 
 String GetRealFileName(const String & _path, uint32_t flags)
 {
@@ -624,7 +621,6 @@ void Out(const String & s)
   ::WriteConsole(::GetStdHandle(STD_OUTPUT_HANDLE), (const void *)s.ptr(),
                (DWORD)s.len(), &cb, nullptr);
 }
-
 
 void FClose(HANDLE h)
 {

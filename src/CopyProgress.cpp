@@ -61,7 +61,6 @@ void CopyProgress::Stop()
   Info.RestoreScreen(hScreen);
 }
 
-
 void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t TotalBytes,
                             int64_t ReadTime, int64_t WriteTime,
                             int64_t ReadN, int64_t WriteN, int64_t TotalN,
@@ -170,7 +169,6 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
     SetTitle2(buf);
   }
 }
-
 
 void CopyProgress::DrawProgress(const String & pfx, int y, int64_t cb, int64_t total,
                                 int64_t time, int64_t n, int64_t totaln)

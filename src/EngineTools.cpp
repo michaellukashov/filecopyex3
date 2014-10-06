@@ -137,7 +137,6 @@ void FCopyACL(const String & src, const String & dst)
   CopyACL2(src, dst, SACL_SECURITY_INFORMATION);
 }
 
-
 HANDLE FOpen(const String & fn, DWORD mode, DWORD attr)
 {
   // new feature: ReadFilesOpenedForWriting checking (bug #17)
@@ -179,7 +178,6 @@ HANDLE FOpen(const String & fn, DWORD mode, DWORD attr)
     ::SetFilePointer(Handle, 0, nullptr, FILE_END);
   return Handle;
 }
-
 
 int64_t FSeek(HANDLE h, int64_t pos, int method)
 {

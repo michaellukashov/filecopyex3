@@ -54,12 +54,10 @@ static PluginPanelItem * GetPanelItem(HANDLE hPlugin, FILE_CONTROL_COMMANDS Comm
   return item;
 }
 
-
 static intptr_t warn(const String & s)
 {
   return ShowMessage(LOC(L"CopyDialog.Warning"), s + L"\n" + LOC(L"CopyDialog.WarnPrompt"), FMSG_MB_YESNO) == 0;
 }
-
 
 static void ShowErrorMessage(const String & s)
 {
@@ -70,7 +68,6 @@ static void ShowErrorMessage(const String & s)
   Info.Message(&MainGuid, &UnkGuid, FMSG_WARNING | FMSG_MB_OK | FMSG_ALLINONE, nullptr, (const wchar_t * const *)msgbuf.ptr(), 0, 0);
 
 }
-
 
 static int64_t GetPhysMemorySize()
 {
@@ -2521,7 +2518,6 @@ void Engine::FWError2(const String & Msg)
   FWError(Msg);
   ::SetEvent(UiFree);
 }
-
 
 TPanelItem::TPanelItem(size_t idx, bool active, bool selected)
 {

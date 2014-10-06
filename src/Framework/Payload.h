@@ -32,5 +32,3 @@ protected:
   static Payload* create() { return new type; }
 
 //virtual const String getType() { return ; }
-
-
