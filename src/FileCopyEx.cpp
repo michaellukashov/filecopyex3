@@ -63,7 +63,7 @@ void WINAPI SetStartupInfoW(const struct PluginStartupInfo * psi)
       plugin->Create();
     }
   }
-};
+}
 
 /*
 Функция GetPluginInfoW вызывается Far Manager для получения дополнительной информации о плагине.
@@ -116,4 +116,4 @@ void WINAPI ExitFARW(const struct ExitInfo * Info)
 {
   delete plugin;
   DoneObjMgr();
-};
+}

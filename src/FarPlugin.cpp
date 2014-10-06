@@ -256,7 +256,7 @@ void FarPlugin::InitOptions()
   Options[L"readSpeedLimitValueDef"] = String(L"");
   Options[L"writeSpeedLimitDef"] = 0;
   Options[L"writeSpeedLimitLimitDef"] = String(L"");
-};
+}
 
 void FarPlugin::KeyConfig()
 {

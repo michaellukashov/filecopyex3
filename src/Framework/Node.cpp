@@ -44,7 +44,7 @@ void Node::init(Payload * _payload, Node * _parent)
   {
     parent->childs.push_back(this);
   }
-};
+}
 
 Node::~Node()
 {
