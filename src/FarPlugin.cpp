@@ -102,20 +102,17 @@ static bool CallCopy(bool move, bool curOnly)
   return Result;
 }
 
-void beep(int b, bool useBASS)
+void beep(int b, bool useBASS, const String &file)
 {
-  PropertyMap & Options = plugin->Options();
-  String audioFile = Options[L"AudioFile"];
-  if (useBASS && !audioFile.IsEmpty())
+  if (useBASS && !file.IsEmpty())
   {
-    audioFile = audioFile.replace(L"\\", L"\\\\");
     String start = L"local function LoadBASS() "
       L"require('LuaBASS')"
       L"end;"
       L"if pcall(LoadBASS) then "
       L"LuaBASS.Init(1,44100,0);"
       L"local Handle = LuaBASS.StreamCreateFile('";
-    start += audioFile;
+    start += file.replace(L"\\", L"\\\\");
     start += L"',0,0,LuaBASS.Flags(LuaBASS.STREAM.BASS_STREAM_PRESCAN,LuaBASS.SAMPLE.BASS_SAMPLE_LOOP));"
       L"LuaBASS.ChannelPlay(Handle,false) "
       L"end";
@@ -145,7 +142,8 @@ void beep(int b, bool useBASS)
 
 void beep(int b)
 {
-  beep(b, plugin->Options()[L"UseBASS"]);
+  PropertyMap & Options = plugin->Options();
+  beep(b, Options[L"UseBASS"], Options[L"AudioFile"]);
 }
 
 void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
@@ -379,7 +377,7 @@ void FarPlugin::SoundConfig()
       dlg.SaveState(options);
       return;
     case 1:
-      beep(bn, dlg[L"UseBASS"](L"Selected"));
+      beep(bn, dlg[L"UseBASS"](L"Selected"), dlg[L"AudioFile"](L"Text"));
       if (++bn > 2)
       {
         bn = 0;
