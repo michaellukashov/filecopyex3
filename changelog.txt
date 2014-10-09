@@ -1,5 +1,7 @@
-FileCopyEx3 3.0.6.33 09.10.2014
+FileCopyEx3 3.0.6.34 10.10.2014
 
+* Improvement: show warning when trying to copy large file on disk having FAT filesystem
+  (http://forum.farmanager.com/viewtopic.php?p=123277#p123277)
 * Improvement: copy long (> 255 symbols) nested paths
 
 FileCopyEx3 3.0.5.29 01.09.2014
