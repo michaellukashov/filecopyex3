@@ -201,7 +201,7 @@ String GetLongFileName(const String & FileName)
   String Result = FileName;
   if (WinNT)
   {
-    if (Result.left(4).icmp(L"\\\\?\\"))
+    if (Result.left(2).icmp(L"\\\\") != 0)
       Result = String(L"\\\\?\\") + Result;
   }
   return Result;
