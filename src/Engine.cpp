@@ -1110,7 +1110,7 @@ void Engine::Delay(int64_t time, int64_t cb, volatile int64_t & counter, int64_t
   }
 }
 
-void Engine::FarToWin32FindData(const TPanelItem & tpi, WIN32_FIND_DATA & wfd)
+void Engine::FarToWin32FindData(const TPanelItem & tpi, OUT WIN32_FIND_DATA & wfd)
 {
   wfd.dwFileAttributes = (DWORD)tpi->FileAttributes;
   wfd.ftCreationTime = tpi->CreationTime;

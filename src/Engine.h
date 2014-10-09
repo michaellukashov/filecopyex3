@@ -159,7 +159,7 @@ private:
 
   static void FarToWin32FindData(
     const TPanelItem & tpi,
-    WIN32_FIND_DATA & wfd
+    OUT WIN32_FIND_DATA & wfd
   );
   String CurPathDesc;
   DWORD CurPathFlags, CurPathAddFlags;
