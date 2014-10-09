@@ -1655,7 +1655,7 @@ rep:
   }
 
   String curPath;
-  int haveCurPath = 0;
+  bool haveCurPath = 0;
 
   for (size_t Index = 0; Index < sortIndex.size(); Index++)
   {
