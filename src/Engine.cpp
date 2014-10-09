@@ -1757,6 +1757,9 @@ rep:
       return MRES_NONE; // not enough space
   }
 
+  if (!CheckFATRestrictions(srcPath, dstPath))
+    return MRES_NONE;
+
   if (CopyCount)
     Copy();
 
@@ -2387,6 +2390,14 @@ bool Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
     result = true;
 
   return result;
+}
+
+bool Engine::CheckFATRestrictions(const String & srcpathstr, const String & dstpathstr)
+{
+  if (!IsFAT(dstpathstr))
+    return true;
+  bool Result = true;
+  return Result;
 }
 
 #define check(a, b) a ? b : nullptr
