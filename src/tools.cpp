@@ -100,9 +100,9 @@ static bool GetPhysDrive(const String & _path, int & res)
 #define FILE_READ_ONLY_VOLUME 0x00080000
 #define FILE_NAMED_STREAMS    0x00040000
 
-uint32_t VolFlags(const String & _path)
+uint32_t VolFlags(const String & Path)
 {
-  String path = _path;
+  String path = Path;
   size_t sl = path.find_last_of(L"\\/");
   size_t ml = path.find_first_of(L"*?");
   if (ml != (size_t)-1 && ml < sl)

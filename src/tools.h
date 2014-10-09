@@ -82,7 +82,7 @@ bool RmDir(const String & fn);
 bool Newer(const FILETIME & ft1, const FILETIME & ft2);
 bool Newer(const String & fn1, const FILETIME & ft2);
 
-uint32_t VolFlags(const String & path);
+uint32_t VolFlags(const String & Path);
 intptr_t CheckParallel(const String & srcpath, const String & dstpath);
 
 String GetSymLink(const String & dir);
