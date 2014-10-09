@@ -57,6 +57,8 @@ HANDLE FOpen(const String & fn, DWORD mode, DWORD attr);
 int64_t FSeek(HANDLE h, int64_t pos, int method);
 int64_t FTell(HANDLE h);
 String GetLongFileName(const String & FileName);
+bool IsFAT(const String & Path);
+
 void SetFileSizeAndTime2(const String & fn, int64_t size,
   const FILETIME * creationTime, const FILETIME * lastAccessTime,
   const FILETIME * lastWriteTime);

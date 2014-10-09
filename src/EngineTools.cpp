@@ -278,3 +278,9 @@ size_t GetSectorSize(const String & path)
     return DEFAULT_SECTOR_SIZE;
   }
 }
+
+bool IsFAT(const String & Path)
+{
+  bool Result = (VolFlags(Path) & VF_FAT) != 0;
+  return Result;
+}
