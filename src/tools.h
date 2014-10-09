@@ -65,10 +65,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define VF_COMPRESSION 1
 #define VF_ENCRYPTION 2
 #define VF_RIGHTS 4
-#define VF_STREAMS 8
-#define VF_READONLY 16
-#define VF_UNICODE 32
-#define VF_CDROM 64
+#define VF_FAT 8
+#define VF_STREAMS 16
+#define VF_READONLY 32
+#define VF_UNICODE 64
+#define VF_CDROM 128
 
 template <class T>
 inline const T & Min(const T & a, const T & b) { return a < b ? a : b; }

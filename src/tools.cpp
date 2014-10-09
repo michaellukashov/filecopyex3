@@ -131,7 +131,9 @@ uint32_t VolFlags(const String & Path)
     if (flg & FILE_NAMED_STREAMS)
       res |= VF_STREAMS;
     // NT4 supports streams, but has no special flag for this fact
-    if (!_wcsicmp(sysname, TEXT("NTFS")))
+    if (!_wcsnicmp(sysname, TEXT("FAT"), 3))
+      res |= VF_FAT;
+    else if (!_wcsicmp(sysname, TEXT("NTFS")))
       res |= VF_STREAMS;
     if (flg & FILE_READ_ONLY_VOLUME)
       res |= VF_READONLY;
