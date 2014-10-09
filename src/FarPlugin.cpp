@@ -102,6 +102,50 @@ static bool CallCopy(bool move, bool curOnly)
   return Result;
 }
 
+void beep(int b, bool useBASS, const String &file)
+{
+  if (useBASS && !file.IsEmpty())
+  {
+    String start = L"local function LoadBASS() "
+      L"require('LuaBASS')"
+      L"end;"
+      L"if pcall(LoadBASS) then "
+      L"LuaBASS.Init(1,44100,0);"
+      L"local Handle = LuaBASS.StreamCreateFile('";
+    start += file.replace(L"\\", L"\\\\");
+    start += L"',0,0,LuaBASS.Flags(LuaBASS.STREAM.BASS_STREAM_PRESCAN,LuaBASS.SAMPLE.BASS_SAMPLE_LOOP));"
+      L"LuaBASS.ChannelPlay(Handle,false) "
+      L"end";
+    MacroExecuteString mes = { sizeof(mes) };
+    mes.Flags = KMFLAGS_LUA;
+    mes.SequenceText = start.c_str();
+    Info.MacroControl(&MainGuid, MCTL_EXECSTRING, 0, &mes);
+  }
+  else
+  {
+    switch (b)
+    {
+    case 0:
+      MessageBeep(MB_ICONWARNING);
+      break;
+
+    case 1:
+      MessageBeep(MB_ICONASTERISK);
+      break;
+
+    case 2:
+      MessageBeep(MB_OK);
+      break;
+    }
+  }
+}
+
+void beep(int b)
+{
+  PropertyMap & Options = plugin->Options();
+  beep(b, Options[L"UseBASS"], Options[L"AudioFile"]);
+}
+
 void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
 {
   intptr_t command = -1;
@@ -256,7 +300,9 @@ void FarPlugin::InitOptions()
   Options[L"readSpeedLimitValueDef"] = String(L"");
   Options[L"writeSpeedLimitDef"] = 0;
   Options[L"writeSpeedLimitLimitDef"] = String(L"");
-}
+  Options[L"UseBASS"] = 0;
+  Options[L"AudioFile"] = String(L"");
+};
 
 void FarPlugin::KeyConfig()
 {
@@ -311,6 +357,38 @@ void FarPlugin::KeyConfig()
   }
 }
 
+void FarPlugin::SoundConfig()
+{
+  static int bn = 0;
+  FarDialog & dlg = plugin->Dialogs()[L"SoundDialog"];
+  dlg.ResetControls();
+  dlg.LoadState(options);
+
+  bool useBASS = dlg[L"UseBASS"](L"Selected");
+  dlg[L"UseSystem"](L"Selected") = !useBASS;
+
+  intptr_t res;
+  while (true)
+  {
+    res = dlg.Execute();
+    switch (res)
+    {
+    case 0:
+      dlg.SaveState(options);
+      return;
+    case 1:
+      beep(bn, dlg[L"UseBASS"](L"Selected"), dlg[L"AudioFile"](L"Text"));
+      if (++bn > 2)
+      {
+        bn = 0;
+      }
+      break;
+    default:
+      return;
+    }
+  }
+}
+
 #define VersionStr0(a,b,c,d, bit) "version " #a "." #b "." #c "." #d " beta (" #bit " Unicode), " __DATE__
 #ifdef _WIN64
 #define VersionStr(a,b,c,d) VersionStr0(a,b,c,d, x64)
@@ -324,24 +402,6 @@ void FarPlugin::About()
   dlg.ResetControls();
   dlg[L"Label2"](L"Text") = String(VersionStr(PLUGIN_MAJOR, PLUGIN_MINOR, PLUGIN_SUBMINOR, PLUGIN_BUILD));
   dlg.Execute();
-}
-
-void beep(int b)
-{
-  switch (b)
-  {
-    case 0:
-      MessageBeep(MB_ICONWARNING);
-      break;
-
-    case 1:
-      MessageBeep(MB_ICONASTERISK);
-      break;
-
-    case 2:
-      MessageBeep(MB_OK);
-      break;
-  }
 }
 
 void FarPlugin::Config()
@@ -365,12 +425,7 @@ rep:
       About();
       goto rep;
     case 3:
-      static int bn = 0;
-      beep(bn);
-      if (++bn > 2)
-      {
-        bn = 0;
-      }
+      SoundConfig();
       goto rep;
   }
 }

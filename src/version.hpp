@@ -2,7 +2,7 @@
 
 #include "SDK/farversion.hpp"
 
-#define PLUGIN_MIN_FAR_VERSION MAKEFARVERSION(3, 0, 0, 3677, VS_RELEASE) // http://api.farmanager.com/ru/whatsnew.html
+#define PLUGIN_MIN_FAR_VERSION MAKEFARVERSION(3, 0, 0, 4040, VS_RELEASE) // http://api.farmanager.com/ru/whatsnew.html
 #define PLUGIN_VERSION_TXT "3.0.6.34"
 #define PLUGIN_MAJOR 3
 #define PLUGIN_MINOR 0

@@ -67,4 +67,5 @@ private:
 
   void About();
   static void KeyConfig();
+  void SoundConfig();
 };

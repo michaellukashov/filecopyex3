@@ -5,7 +5,7 @@
 /*
   plugin.hpp
 
-  Plugin API for Far Manager 3.0 build 3211
+  Plugin API for Far Manager 3.0 build 4040
 */
 
 /*
@@ -43,7 +43,7 @@ other possible license with no implications from the above license on them.
 #define FARMANAGERVERSION_MAJOR 3
 #define FARMANAGERVERSION_MINOR 0
 #define FARMANAGERVERSION_REVISION 0
-#define FARMANAGERVERSION_BUILD 3211
+#define FARMANAGERVERSION_BUILD 4040
 #define FARMANAGERVERSION_STAGE VS_RELEASE
 
 #ifndef RC_INVOKED
@@ -67,6 +67,8 @@ static const FARCOLORFLAGS
 	FCF_BG_4BIT       = 0x0000000000000002ULL,
 	FCF_4BITMASK      = 0x0000000000000003ULL, // FCF_FG_4BIT|FCF_BG_4BIT
 
+	FCF_RAWATTR_MASK  = 0x000000000000FF00ULL, // stored console attributes
+
 	FCF_EXTENDEDFLAGS = 0xFFFFFFFFFFFFFFFCULL, // ~FCF_4BITMASK
 
 	FCF_FG_BOLD       = 0x1000000000000000ULL,
@@ -82,6 +84,21 @@ struct FarColor
 	COLORREF ForegroundColor;
 	COLORREF BackgroundColor;
 	void* Reserved;
+
+#ifdef __cplusplus
+	bool operator ==(const FarColor& rhs) const
+	{
+		return Flags == rhs.Flags
+			&& ForegroundColor == rhs.ForegroundColor
+			&& BackgroundColor == rhs.BackgroundColor
+			&& Reserved == rhs.Reserved;
+	}
+
+	bool operator !=(const FarColor& rhs) const
+	{
+		return !(*this == rhs);
+	}
+#endif
 };
 
 #define INDEXMASK 0x0000000f
@@ -296,6 +313,8 @@ enum FARMESSAGE
 
 	DM_GETDIALOGINFO                = 66,
 
+	DM_GETDIALOGTITLE               = 67,
+
 	DN_FIRST                        = 4096,
 	DN_BTNCLICK                     = 4097,
 	DN_CTLCOLORDIALOG               = 4098,
@@ -319,6 +338,8 @@ enum FARMESSAGE
 	DN_CONTROLINPUT                 = 4116,
 	DN_CLOSE                        = 4117,
 	DN_GETVALUE                     = 4118,
+	DN_DROPDOWNOPENED               = 4119,
+	DN_DRAWDLGITEMDONE              = 4120,
 
 	DM_USER                         = 0x4000,
 
@@ -463,6 +484,18 @@ struct FAR_CHAR_INFO
 {
 	WCHAR Char;
 	struct FarColor Attributes;
+
+#ifdef __cplusplus
+	bool operator ==(const FAR_CHAR_INFO& rhs) const
+	{
+		return Char == rhs.Char && Attributes == rhs.Attributes;
+	}
+
+	bool operator !=(const FAR_CHAR_INFO& rhs) const
+	{
+		return !(*this == rhs);
+	}
+#endif
 };
 
 struct FarDialogItem
@@ -525,36 +558,6 @@ struct FarGetDialogItem
 	size_t Size;
 	struct FarDialogItem* Item;
 };
-
-#define Dlg_RedrawDialog(Info,hDlg)            Info.SendDlgMessage(hDlg,DM_REDRAW,0,0)
-
-#define Dlg_GetDlgData(Info,hDlg)              Info.SendDlgMessage(hDlg,DM_GETDLGDATA,0,0)
-#define Dlg_SetDlgData(Info,hDlg,Data)         Info.SendDlgMessage(hDlg,DM_SETDLGDATA,0,(intptr_t)Data)
-
-#define Dlg_GetDlgItemData(Info,hDlg,ID)       Info.SendDlgMessage(hDlg,DM_GETITEMDATA,0,0)
-#define Dlg_SetDlgItemData(Info,hDlg,ID,Data)  Info.SendDlgMessage(hDlg,DM_SETITEMDATA,0,(intptr_t)Data)
-
-#define DlgItem_GetFocus(Info,hDlg)            Info.SendDlgMessage(hDlg,DM_GETFOCUS,0,0)
-#define DlgItem_SetFocus(Info,hDlg,ID)         Info.SendDlgMessage(hDlg,DM_SETFOCUS,ID,0)
-#define DlgItem_Enable(Info,hDlg,ID)           Info.SendDlgMessage(hDlg,DM_ENABLE,ID,TRUE)
-#define DlgItem_Disable(Info,hDlg,ID)          Info.SendDlgMessage(hDlg,DM_ENABLE,ID,FALSE)
-#define DlgItem_IsEnable(Info,hDlg,ID)         Info.SendDlgMessage(hDlg,DM_ENABLE,ID,-1)
-#define DlgItem_SetText(Info,hDlg,ID,Str)      Info.SendDlgMessage(hDlg,DM_SETTEXTPTR,ID,(intptr_t)Str)
-
-#define DlgItem_GetCheck(Info,hDlg,ID)         Info.SendDlgMessage(hDlg,DM_GETCHECK,ID,0)
-#define DlgItem_SetCheck(Info,hDlg,ID,State)   Info.SendDlgMessage(hDlg,DM_SETCHECK,ID,State)
-
-#define DlgEdit_AddHistory(Info,hDlg,ID,Str)   Info.SendDlgMessage(hDlg,DM_ADDHISTORY,ID,(intptr_t)Str)
-
-#define DlgList_AddString(Info,hDlg,ID,Str)    Info.SendDlgMessage(hDlg,DM_LISTADDSTR,ID,(intptr_t)Str)
-#define DlgList_GetCurPos(Info,hDlg,ID)        Info.SendDlgMessage(hDlg,DM_LISTGETCURPOS,ID,0)
-#define DlgList_SetCurPos(Info,hDlg,ID,NewPos) {struct FarListPos LPos={sizeof(FarListPos),NewPos,-1};Info.SendDlgMessage(hDlg,DM_LISTSETCURPOS,ID,(intptr_t)&LPos);}
-#define DlgList_ClearList(Info,hDlg,ID)        Info.SendDlgMessage(hDlg,DM_LISTDELETE,ID,0)
-#define DlgList_DeleteItem(Info,hDlg,ID,Index) {struct FarListDelete FLDItem={sizeof(FarListDelete),Index,1}; Info.SendDlgMessage(hDlg,DM_LISTDELETE,ID,(intptr_t)&FLDItem);}
-#define DlgList_SortUp(Info,hDlg,ID)           Info.SendDlgMessage(hDlg,DM_LISTSORT,ID,0)
-#define DlgList_SortDown(Info,hDlg,ID)         Info.SendDlgMessage(hDlg,DM_LISTSORT,ID,1)
-#define DlgList_GetItemData(Info,hDlg,ID,Index)          Info.SendDlgMessage(hDlg,DM_LISTGETDATA,ID,Index)
-#define DlgList_SetItemStrAsData(Info,hDlg,ID,Index,Str) {struct FarListItemData FLID{sizeof(FarListItemData),Index,0,Str,0}; Info.SendDlgMessage(hDlg,DM_LISTSETDATA,ID,(intptr_t)&FLID);}
 
 typedef unsigned __int64 FARDIALOGFLAGS;
 static const FARDIALOGFLAGS
@@ -711,6 +714,31 @@ struct FarGetPluginPanelItem
 	struct PluginPanelItem* Item;
 };
 
+struct SortingPanelItem
+{
+	FILETIME CreationTime;
+	FILETIME LastAccessTime;
+	FILETIME LastWriteTime;
+	FILETIME ChangeTime;
+	unsigned __int64 FileSize;
+	unsigned __int64 AllocationSize;
+	const wchar_t *FileName;
+	const wchar_t *AlternateFileName;
+	const wchar_t *Description;
+	const wchar_t *Owner;
+	const wchar_t * const *CustomColumnData;
+	size_t CustomColumnNumber;
+	PLUGINPANELITEMFLAGS Flags;
+	struct UserDataItem UserData;
+	uintptr_t FileAttributes;
+	uintptr_t NumberOfLinks;
+	uintptr_t CRC32;
+	intptr_t Position;
+	intptr_t SortGroup;
+	uintptr_t NumberOfStreams;
+	unsigned __int64 StreamsSize;
+};
+
 typedef unsigned __int64 PANELINFOFLAGS;
 static const PANELINFOFLAGS
 	PFLAGS_SHOWHIDDEN         = 0x0000000000000001ULL,
@@ -841,6 +869,7 @@ enum FILE_CONTROL_COMMANDS
 	FCTL_GETPANELHOSTFILE           = 32,
 	FCTL_SETCASESENSITIVESORT       = 33,
 	FCTL_GETPANELPREFIX             = 34,
+	FCTL_SETACTIVEPANEL             = 35,
 };
 
 typedef void (WINAPI *FARAPITEXT)(
@@ -904,6 +933,12 @@ static const EDITOR_FLAGS
 	EF_DELETEONLYFILEONCLOSE = 0x0000000000000200ULL,
 	EF_LOCKED                = 0x0000000000000400ULL,
 	EF_DISABLESAVEPOS        = 0x0000000000000800ULL,
+	EF_OPENMODE_MASK         = 0x00000000F0000000ULL,
+	EF_OPENMODE_QUERY        = 0x0000000000000000ULL,
+	EF_OPENMODE_NEWIFOPEN    = 0x0000000010000000ULL,
+	EF_OPENMODE_USEEXISTING  = 0x0000000020000000ULL,
+	EF_OPENMODE_BREAKIFOPEN  = 0x0000000030000000ULL,
+	EF_OPENMODE_RELOADIFOPEN = 0x0000000040000000ULL,
 	EN_NONE                  = 0;
 
 enum EDITOR_EXITCODE
@@ -939,6 +974,7 @@ static const FARHELPFLAGS
 	FHELP_FARHELP     = 0x0000000000000001ULL,
 	FHELP_CUSTOMFILE  = 0x0000000000000002ULL,
 	FHELP_CUSTOMPATH  = 0x0000000000000004ULL,
+	FHELP_GUID        = 0x0000000000000008ULL,
 	FHELP_USECONTENTS = 0x0000000040000000ULL,
 	FHELP_NONE        = 0;
 
@@ -987,13 +1023,17 @@ enum FAR_MACRO_CONTROL_COMMANDS
 	MCTL_ADDMACRO          = 7,
 	MCTL_DELMACRO          = 8,
 	MCTL_GETLASTERROR      = 9,
+	MCTL_EXECSTRING        = 10,
 };
 
 typedef unsigned __int64 FARKEYMACROFLAGS;
 static const FARKEYMACROFLAGS
-	KMFLAGS_DISABLEOUTPUT       = 0x0000000000000001,
-	KMFLAGS_NOSENDKEYSTOPLUGINS = 0x0000000000000002,
 	KMFLAGS_SILENTCHECK         = 0x0000000000000001,
+	KMFLAGS_NOSENDKEYSTOPLUGINS = 0x0000000000000002,
+	KMFLAGS_ENABLEOUTPUT        = 0x0000000000000004,
+	KMFLAGS_LANGMASK            = 0x0000000000000070, // 3 bits reserved for 8 languages
+	KMFLAGS_LUA                 = 0x0000000000000000,
+	KMFLAGS_MOONSCRIPT          = 0x0000000000000010,
 	KMFLAGS_NONE                = 0;
 
 enum FARMACROSENDSTRINGCOMMAND
@@ -1004,23 +1044,23 @@ enum FARMACROSENDSTRINGCOMMAND
 
 enum FARMACROAREA
 {
-	MACROAREA_OTHER                      =   0,
-	MACROAREA_SHELL                      =   1,
-	MACROAREA_VIEWER                     =   2,
-	MACROAREA_EDITOR                     =   3,
-	MACROAREA_DIALOG                     =   4,
-	MACROAREA_SEARCH                     =   5,
-	MACROAREA_DISKS                      =   6,
-	MACROAREA_MAINMENU                   =   7,
-	MACROAREA_MENU                       =   8,
-	MACROAREA_HELP                       =   9,
-	MACROAREA_INFOPANEL                  =  10,
-	MACROAREA_QVIEWPANEL                 =  11,
-	MACROAREA_TREEPANEL                  =  12,
-	MACROAREA_FINDFOLDER                 =  13,
-	MACROAREA_USERMENU                   =  14,
-	MACROAREA_SHELLAUTOCOMPLETION        =  15,
-	MACROAREA_DIALOGAUTOCOMPLETION       =  16,
+	MACROAREA_OTHER                      =   0,   // Mode of copying text from the screen; vertical menus
+	MACROAREA_SHELL                      =   1,   // File panels
+	MACROAREA_VIEWER                     =   2,   // Internal viewer program
+	MACROAREA_EDITOR                     =   3,   // Editor
+	MACROAREA_DIALOG                     =   4,   // Dialogs
+	MACROAREA_SEARCH                     =   5,   // Quick search in panels
+	MACROAREA_DISKS                      =   6,   // Menu of disk selection
+	MACROAREA_MAINMENU                   =   7,   // Main menu
+	MACROAREA_MENU                       =   8,   // Other menus
+	MACROAREA_HELP                       =   9,   // Help system
+	MACROAREA_INFOPANEL                  =  10,   // Info panel
+	MACROAREA_QVIEWPANEL                 =  11,   // Quick view panel
+	MACROAREA_TREEPANEL                  =  12,   // Folders tree panel
+	MACROAREA_FINDFOLDER                 =  13,   // Find folder
+	MACROAREA_USERMENU                   =  14,   // User menu
+	MACROAREA_SHELLAUTOCOMPLETION        =  15,   // Autocompletion list in command line
+	MACROAREA_DIALOGAUTOCOMPLETION       =  16,   // Autocompletion list in dialogs
 
 	MACROAREA_COMMON                     = 255,
 };
@@ -1084,6 +1124,9 @@ enum FARMACROVARTYPE
 	FMVT_BOOLEAN                = 4,
 	FMVT_BINARY                 = 5,
 	FMVT_POINTER                = 6,
+	FMVT_NIL                    = 7,
+	FMVT_ARRAY                  = 8,
+	FMVT_PANEL                  = 9,
 };
 
 struct FarMacroValue
@@ -1101,32 +1144,29 @@ struct FarMacroValue
 			void *Data;
 			size_t Size;
 		} Binary;
+		struct
+		{
+			struct FarMacroValue *Values;
+			size_t Count;
+		} Array;
 	}
 #ifndef __cplusplus
 	Value
 #endif
 	;
-};
-
-enum MACROPLUGINRETURNTYPE
-{
-	MPRT_NORMALFINISH  = 0,
-	MPRT_ERRORFINISH   = 1,
-	MPRT_ERRORPARSE    = 2,
-	MPRT_KEYS          = 3,
-	MPRT_PRINT         = 4,
-	MPRT_PLUGINCALL    = 5,
-	MPRT_PLUGINMENU    = 6,
-	MPRT_PLUGINCONFIG  = 7,
-	MPRT_PLUGINCOMMAND = 8,
-	MPRT_COMMONCASE    = 9,
-};
-
-struct MacroPluginReturn
-{
-	size_t Count;
-	struct FarMacroValue *Values;
-	enum MACROPLUGINRETURNTYPE ReturnType;
+#ifdef __cplusplus
+	FarMacroValue()                   { Type=FMVT_NIL; }
+	FarMacroValue(int v)              { Type=FMVT_INTEGER; Integer=v; }
+	FarMacroValue(unsigned int v)     { Type=FMVT_INTEGER; Integer=v; }
+	FarMacroValue(__int64 v)          { Type=FMVT_INTEGER; Integer=v; }
+	FarMacroValue(unsigned __int64 v) { Type=FMVT_INTEGER; Integer=v; }
+	FarMacroValue(bool v)             { Type=FMVT_BOOLEAN; Boolean=v?1:0; }
+	FarMacroValue(double v)           { Type=FMVT_DOUBLE; Double=v; }
+	FarMacroValue(const wchar_t* v)   { Type=FMVT_STRING; String=v; }
+	FarMacroValue(void* v)            { Type=FMVT_POINTER; Pointer=v; }
+	FarMacroValue(const GUID& v)      { Type=FMVT_BINARY; Binary.Data=&const_cast<GUID&>(v); Binary.Size=sizeof(GUID); }
+	FarMacroValue(FarMacroValue* arr,size_t count) { Type=FMVT_ARRAY; Array.Values=arr; Array.Count=count; }
+#endif
 };
 
 struct FarMacroCall
@@ -1138,12 +1178,22 @@ struct FarMacroCall
 	void *CallbackData;
 };
 
-
 struct FarGetValue
 {
 	size_t StructSize;
 	intptr_t Type;
 	struct FarMacroValue Value;
+};
+
+struct MacroExecuteString
+{
+	size_t StructSize;
+	FARKEYMACROFLAGS Flags;
+	const wchar_t *SequenceText;
+	size_t InCount;
+	struct FarMacroValue *InValues;
+	size_t OutCount;
+	const struct FarMacroValue *OutValues;
 };
 
 typedef unsigned __int64 FARSETCOLORFLAGS;
@@ -1384,6 +1434,9 @@ enum EDITOR_CONTROL_COMMANDS
 	ECTL_UNDOREDO                   = 32,
 	ECTL_GETFILENAME                = 33,
 	ECTL_DELCOLOR                   = 34,
+	ECTL_SUBSCRIBECHANGEEVENT       = 36,
+	ECTL_UNSUBSCRIBECHANGEEVENT     = 37,
+	ECTL_GETTITLE                   = 38,
 };
 
 enum EDITOR_SETPARAMETER_TYPES
@@ -1563,7 +1616,6 @@ struct EditorConvertPos
 	intptr_t DestPos;
 };
 
-
 typedef unsigned __int64 EDITORCOLORFLAGS;
 static const EDITORCOLORFLAGS
 	ECF_TABMARKFIRST   = 0x0000000000000001ULL,
@@ -1612,6 +1664,12 @@ struct EditorChange
 	size_t StructSize;
 	enum EDITOR_CHANGETYPE Type;
 	intptr_t StringNumber;
+};
+
+struct EditorSubscribeChangeEvent
+{
+	size_t StructSize;
+	GUID PluginId;
 };
 
 typedef unsigned __int64 INPUTBOXFLAGS;
@@ -1914,8 +1972,8 @@ typedef size_t (WINAPI *FARSTDGETFILEOWNER)(const wchar_t *Computer,const wchar_
 typedef size_t (WINAPI *FARSTDGETNUMBEROFLINKS)(const wchar_t *Name);
 typedef int (WINAPI *FARSTDATOI)(const wchar_t *s);
 typedef __int64 (WINAPI *FARSTDATOI64)(const wchar_t *s);
-typedef wchar_t   *(WINAPI *FARSTDITOA64)(__int64 value, wchar_t *string, int radix);
-typedef wchar_t   *(WINAPI *FARSTDITOA)(int value, wchar_t *string, int radix);
+typedef wchar_t   *(WINAPI *FARSTDITOA64)(__int64 value, wchar_t *Str, int radix);
+typedef wchar_t   *(WINAPI *FARSTDITOA)(int value, wchar_t *Str, int radix);
 typedef wchar_t   *(WINAPI *FARSTDLTRIM)(wchar_t *Str);
 typedef wchar_t   *(WINAPI *FARSTDRTRIM)(wchar_t *Str);
 typedef wchar_t   *(WINAPI *FARSTDTRIM)(wchar_t *Str);
@@ -2000,6 +2058,7 @@ typedef unsigned __int64 MKLINK_FLAGS;
 static const MKLINK_FLAGS
 	MLF_SHOWERRMSG       = 0x0000000000010000ULL,
 	MLF_DONOTUPDATEPANEL = 0x0000000000020000ULL,
+	MLF_HOLDTARGET       = 0x0000000000040000ULL,
 	MLF_NONE             = 0;
 
 typedef BOOL (WINAPI *FARSTDMKLINK)(const wchar_t *Src,const wchar_t *Dest,enum LINK_TYPE Type, MKLINK_FLAGS Flags);
@@ -2124,6 +2183,7 @@ struct PluginStartupInfo
 	FARAPIMACROCONTROL     MacroControl;
 	FARAPISETTINGSCONTROL  SettingsControl;
 	void                  *Private;
+	void* Instance;
 };
 
 typedef HANDLE (WINAPI *FARAPICREATEFILE)(const wchar_t *Object,DWORD DesiredAccess,DWORD ShareMode,LPSECURITY_ATTRIBUTES SecurityAttributes,DWORD CreationDistribution,DWORD FlagsAndAttributes,HANDLE TemplateFile);
@@ -2146,12 +2206,33 @@ struct ArclitePrivateInfo
 	FARAPICREATEDIRECTORY CreateDirectory;
 };
 
+struct NetBoxPrivateInfo
+{
+	size_t StructSize;
+	FARAPICREATEFILE CreateFile;
+	FARAPIGETFILEATTRIBUTES GetFileAttributes;
+	FARAPISETFILEATTRIBUTES SetFileAttributes;
+	FARAPIMOVEFILEEX MoveFileEx;
+	FARAPIDELETEFILE DeleteFile;
+	FARAPIREMOVEDIRECTORY RemoveDirectory;
+	FARAPICREATEDIRECTORY CreateDirectory;
+};
+
+struct MacroPluginReturn
+{
+	intptr_t ReturnType;
+	size_t Count;
+	struct FarMacroValue *Values;
+};
+
 typedef intptr_t (WINAPI *FARAPICALLFAR)(intptr_t CheckCode, struct FarMacroCall* Data);
+typedef void (WINAPI *FARAPICALLPLUGIN)(struct MacroPluginReturn* Data, struct FarMacroCall** Target, int* Boolean);
 
 struct MacroPrivateInfo
 {
 	size_t StructSize;
 	FARAPICALLFAR CallFar;
+	FARAPICALLPLUGIN CallPlugin;
 };
 
 typedef unsigned __int64 PLUGIN_FLAGS;
@@ -2210,6 +2291,7 @@ struct GlobalInfo
 	const wchar_t *Title;
 	const wchar_t *Description;
 	const wchar_t *Author;
+	void* Instance;
 };
 
 struct PluginInfo
@@ -2220,6 +2302,7 @@ struct PluginInfo
 	struct PluginMenuItem PluginMenu;
 	struct PluginMenuItem PluginConfig;
 	const wchar_t *CommandPrefix;
+	void* Instance;
 };
 
 struct FarGetPluginInformation
@@ -2335,6 +2418,7 @@ struct OpenPanelInfo
 	const wchar_t               *ShortcutData;
 	unsigned __int64             FreeSize;
 	struct UserDataItem          UserData;
+	void* Instance;
 };
 
 struct AnalyseInfo
@@ -2344,6 +2428,7 @@ struct AnalyseInfo
 	void           *Buffer;
 	size_t          BufferSize;
 	OPERATION_MODES OpMode;
+	void* Instance;
 };
 
 struct OpenAnalyseInfo
@@ -2398,39 +2483,56 @@ enum OPENFROM
 
 enum MACROCALLTYPE
 {
-	MCT_MACROINIT          = 0,
-	MCT_MACROSTEP          = 1,
-	MCT_MACROFINAL         = 2,
-	MCT_MACROPARSE         = 3,
-	MCT_LOADMACROS         = 4,
-	MCT_ENUMMACROS         = 5,
-	MCT_WRITEMACROS        = 6,
-	MCT_GETMACRO           = 7,
-	MCT_PROCESSMACRO       = 8,
-	MCT_DELMACRO           = 9,
-	MCT_RUNSTARTMACRO      = 10,
+	MCT_MACROPARSE         = 0,
+	MCT_LOADMACROS         = 1,
+	MCT_ENUMMACROS         = 2,
+	MCT_WRITEMACROS        = 3,
+	MCT_GETMACRO           = 4,
+	MCT_RECORDEDMACRO      = 5,
+	MCT_DELMACRO           = 6,
+	MCT_RUNSTARTMACRO      = 7,
+	MCT_EXECSTRING         = 8,
+	MCT_PANELSORT          = 9,
+	MCT_GETCUSTOMSORTMODES = 10,
+	MCT_ADDMACRO           = 11,
+	MCT_KEYMACRO           = 12,
+};
+
+enum MACROPLUGINRETURNTYPE
+{
+	MPRT_NORMALFINISH  = 0,
+	MPRT_ERRORFINISH   = 1,
+	MPRT_ERRORPARSE    = 2,
+	MPRT_KEYS          = 3,
+	MPRT_PRINT         = 4,
+	MPRT_PLUGINCALL    = 5,
+	MPRT_PLUGINMENU    = 6,
+	MPRT_PLUGINCONFIG  = 7,
+	MPRT_PLUGINCOMMAND = 8,
+	MPRT_USERMENU      = 9,
+	MPRT_HASNOMACRO    = 10,
 };
 
 struct OpenMacroPluginInfo
 {
-	size_t StructSize;
 	enum MACROCALLTYPE CallType;
-	HANDLE Handle;
 	struct FarMacroCall *Data;
+	struct MacroPluginReturn Ret;
 };
 
 
 enum FAR_EVENTS
 {
-	FE_CHANGEVIEWMODE =0,
-	FE_REDRAW         =1,
-	FE_IDLE           =2,
-	FE_CLOSE          =3,
-	FE_BREAK          =4,
-	FE_COMMAND        =5,
+	FE_CHANGEVIEWMODE   =0,
+	FE_REDRAW           =1,
+	FE_IDLE             =2,
+	FE_CLOSE            =3,
+	FE_BREAK            =4,
+	FE_COMMAND          =5,
 
-	FE_GOTFOCUS       =6,
-	FE_KILLFOCUS      =7,
+	FE_GOTFOCUS         =6,
+	FE_KILLFOCUS        =7,
+	FE_CHANGESORTPARAMS =8,
 };
 
 struct OpenInfo
@@ -2439,6 +2541,7 @@ struct OpenInfo
 	enum OPENFROM OpenFrom;
 	const GUID* Guid;
 	intptr_t Data;
+	void* Instance;
 };
 
 struct SetDirectoryInfo
@@ -2449,6 +2552,7 @@ struct SetDirectoryInfo
 	intptr_t Reserved;
 	OPERATION_MODES OpMode;
 	struct UserDataItem UserData;
+	void* Instance;
 };
 
 struct SetFindListInfo
@@ -2457,6 +2561,7 @@ struct SetFindListInfo
 	HANDLE hPanel;
 	const struct PluginPanelItem *PanelItem;
 	size_t ItemsNumber;
+	void* Instance;
 };
 
 struct PutFilesInfo
@@ -2468,6 +2573,7 @@ struct PutFilesInfo
 	BOOL Move;
 	const wchar_t *SrcPath;
 	OPERATION_MODES OpMode;
+	void* Instance;
 };
 
 struct ProcessHostFileInfo
@@ -2477,6 +2583,7 @@ struct ProcessHostFileInfo
 	struct PluginPanelItem *PanelItem;
 	size_t ItemsNumber;
 	OPERATION_MODES OpMode;
+	void* Instance;
 };
 
 struct MakeDirectoryInfo
@@ -2485,6 +2592,7 @@ struct MakeDirectoryInfo
 	HANDLE hPanel;
 	const wchar_t *Name;
 	OPERATION_MODES OpMode;
+	void* Instance;
 };
 
 struct CompareInfo
@@ -2494,6 +2602,7 @@ struct CompareInfo
 	const struct PluginPanelItem *Item1;
 	const struct PluginPanelItem *Item2;
 	enum OPENPANELINFO_SORTMODES Mode;
+	void* Instance;
 };
 
 struct GetFindDataInfo
@@ -2503,6 +2612,7 @@ struct GetFindDataInfo
 	struct PluginPanelItem *PanelItem;
 	size_t ItemsNumber;
 	OPERATION_MODES OpMode;
+	void* Instance;
 };
 
 
@@ -2512,6 +2622,7 @@ struct FreeFindDataInfo
 	HANDLE hPanel;
 	struct PluginPanelItem *PanelItem;
 	size_t ItemsNumber;
+	void* Instance;
 };
 
 struct GetFilesInfo
@@ -2523,6 +2634,7 @@ struct GetFilesInfo
 	BOOL Move;
 	const wchar_t *DestPath;
 	OPERATION_MODES OpMode;
+	void* Instance;
 };
 
 struct DeleteFilesInfo
@@ -2532,6 +2644,7 @@ struct DeleteFilesInfo
 	struct PluginPanelItem *PanelItem;
 	size_t ItemsNumber;
 	OPERATION_MODES OpMode;
+	void* Instance;
 };
 
 struct ProcessPanelInputInfo
@@ -2539,12 +2652,14 @@ struct ProcessPanelInputInfo
 	size_t StructSize;
 	HANDLE hPanel;
 	INPUT_RECORD Rec;
+	void* Instance;
 };
 
 struct ProcessEditorInputInfo
 {
 	size_t StructSize;
 	INPUT_RECORD Rec;
+	void* Instance;
 };
 
 typedef unsigned __int64 PROCESSCONSOLEINPUT_FLAGS;
@@ -2557,11 +2672,13 @@ struct ProcessConsoleInputInfo
 	size_t StructSize;
 	PROCESSCONSOLEINPUT_FLAGS Flags;
 	INPUT_RECORD Rec;
+	void* Instance;
 };
 
 struct ExitInfo
 {
 	size_t StructSize;
+	void* Instance;
 };
 
 struct ProcessPanelEventInfo
@@ -2570,6 +2687,7 @@ struct ProcessPanelEventInfo
 	intptr_t Event;
 	void* Param;
 	HANDLE hPanel;
+	void* Instance;
 };
 
 struct ProcessEditorEventInfo
@@ -2578,6 +2696,7 @@ struct ProcessEditorEventInfo
 	intptr_t Event;
 	void* Param;
 	intptr_t EditorID;
+	void* Instance;
 };
 
 struct ProcessDialogEventInfo
@@ -2585,6 +2704,7 @@ struct ProcessDialogEventInfo
 	size_t StructSize;
 	intptr_t Event;
 	struct FarDialogEvent* Param;
+	void* Instance;
 };
 
 struct ProcessSynchroEventInfo
@@ -2592,6 +2712,7 @@ struct ProcessSynchroEventInfo
 	size_t StructSize;
 	intptr_t Event;
 	void* Param;
+	void* Instance;
 };
 
 struct ProcessViewerEventInfo
@@ -2600,25 +2721,32 @@ struct ProcessViewerEventInfo
 	intptr_t Event;
 	void* Param;
 	intptr_t ViewerID;
+	void* Instance;
 };
 
 struct ClosePanelInfo
 {
 	size_t StructSize;
 	HANDLE hPanel;
+	void* Instance;
 };
 
 struct CloseAnalyseInfo
 {
 	size_t StructSize;
 	HANDLE Handle;
+	void* Instance;
 };
 
 struct ConfigureInfo
 {
 	size_t StructSize;
 	const GUID* Guid;
+	void* Instance;
 };
+
+static const GUID FarGuid =
+{0x00000000, 0x0000, 0x0000, {0x00,0x00, 0x00,0x00,0x00,0x00,0x00,0x00}};
 
 #ifdef __cplusplus
 extern "C"
