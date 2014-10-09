@@ -43,7 +43,7 @@ FarProgress::FarProgress(void)
   ProgY = 0;
   WinType = WIN_NONE;
   hScreen = 0;
-  InverseBars = 0;
+  InverseBars = false;
   LastUpdate = 0;
   NeedToRedraw = false;
 }

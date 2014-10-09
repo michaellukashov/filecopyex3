@@ -45,7 +45,7 @@ public:
   void SetPercent(float);
   void SetNeedToRedraw(bool Value);
 
-  int InverseBars;
+  bool InverseBars;
 protected:
   FarColor clrFrame, clrTitle, clrBar, clrText, clrLabel;
   int ProgX1, ProgX2, ProgY, WinType;
