@@ -205,7 +205,9 @@ String GetLongFileName(const String & FileName)
   return Result;
 }
 
-void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void SetFileSizeAndTime2(const String & fn, int64_t size,
+  const FILETIME * creationTime, const FILETIME * lastAccessTime,
+  const FILETIME * lastWriteTime)
 {
   HANDLE h = FOpen(fn, OPEN_WRITE_BUF, 0);
   if (!h)
@@ -219,14 +221,16 @@ void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTim
   }
 }
 
-void SetFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void SetFileSizeAndTime2(HANDLE h, int64_t size, const FILETIME * creationTime,
+  const FILETIME * lastAccessTime, const FILETIME * lastWriteTime)
 {
   FSeek(h, size, FILE_BEGIN);
   ::SetEndOfFile(h);
   SetFileTime2(h, creationTime, lastAccessTime, lastWriteTime);
 }
 
-void SetFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void SetFileTime2(const String & fn, const FILETIME * creationTime,
+  const FILETIME * lastAccessTime, const FILETIME * lastWriteTime)
 {
   HANDLE h = FOpen(fn, OPEN_WRITE_BUF, 0);
   if (!h)
@@ -240,7 +244,8 @@ void SetFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAcc
   }
 }
 
-void SetFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime)
+void SetFileTime2(HANDLE h, const FILETIME * creationTime,
+  const FILETIME * lastAccessTime, const FILETIME * lastWriteTime)
 {
   ::SetFileTime(h, creationTime, lastAccessTime, lastWriteTime);
 }
@@ -253,7 +258,7 @@ size_t FRead(HANDLE h, void * buf, size_t size)
   return res;
 }
 
-size_t FWrite(HANDLE h, void * buf, size_t size)
+size_t FWrite(HANDLE h, const void * buf, size_t size)
 {
   ULONG res;
   if (!::WriteFile(h, buf, (DWORD)size, &res, nullptr))

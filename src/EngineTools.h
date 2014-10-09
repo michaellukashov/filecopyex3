@@ -57,10 +57,16 @@ HANDLE FOpen(const String & fn, DWORD mode, DWORD attr);
 int64_t FSeek(HANDLE h, int64_t pos, int method);
 int64_t FTell(HANDLE h);
 String GetLongFileName(const String & FileName);
-void SetFileSizeAndTime2(const String & fn, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
-void SetFileSizeAndTime2(HANDLE h, int64_t size, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
-void SetFileTime2(const String & fn, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
-void SetFileTime2(HANDLE h, FILETIME * creationTime, FILETIME * lastAccessTime, FILETIME * lastWriteTime);
+void SetFileSizeAndTime2(const String & fn, int64_t size,
+  const FILETIME * creationTime, const FILETIME * lastAccessTime,
+  const FILETIME * lastWriteTime);
+void SetFileSizeAndTime2(HANDLE h, int64_t size,
+  const FILETIME * creationTime, const FILETIME * lastAccessTime,
+  const FILETIME * lastWriteTime);
+void SetFileTime2(const String & fn, const FILETIME * creationTime,
+  const FILETIME * lastAccessTime, const FILETIME * lastWriteTime);
+void SetFileTime2(HANDLE h, const FILETIME * creationTime,
+  const FILETIME * lastAccessTime, const FILETIME * lastWriteTime);
 size_t FRead(HANDLE h, void * buf, size_t size);
-size_t FWrite(HANDLE h, void * buf, size_t size);
+size_t FWrite(HANDLE h, const void * buf, size_t size);
 size_t GetSectorSize(const String & path);
