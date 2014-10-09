@@ -200,3 +200,9 @@ FreeSpaceErrorDialog.AvailableSpace=Available space:
 FreeSpaceErrorDialog.RequiredSpace=Required space:
 FreeSpaceErrorDialog.Yes=&Yes
 FreeSpaceErrorDialog.No=&No
+
+FATErrorDialog.Title=Warning
+FATErrorDialog.Message=Cannot copy file "%s" on disk
+FATErrorDialog.AbortPrompt=Abort operation?
+FATErrorDialog.Yes=&Yes
+FATErrorDialog.No=&No

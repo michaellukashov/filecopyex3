@@ -551,3 +551,31 @@ object FreeSpaceErrorDialog: FarDialog
     end
   end
 end
+
+object FATErrorDialog: FarDialog
+  HelpTopic=FATErrorDialog
+  Warning=1
+  object Label1: FarDlgLabel
+    CenterGroup=1
+    Visible=1
+  end
+  object Label2: FarDlgLabel
+    CenterGroup=1
+    Visible=1
+  end
+  object Sep3: FarDlgLine
+  end
+  object YesNo: FarDlgPanel
+    Visible=1
+    object Yes: FarDlgButton
+      Default=1
+      NoBreak=1
+      CenterGroup=1
+      Result=0
+    end
+    object No: FarDlgButton
+      CenterGroup=1
+      Result=-1
+    end
+  end
+end
