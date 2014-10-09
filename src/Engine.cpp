@@ -2363,7 +2363,7 @@ bool Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
       dlg(L"Title") = LOC(L"FreeSpaceErrorDialog.Title");
       String disk_str = dstroot;
       if (disk_str.len() >= 2)
-        if (disk_str[1] == ':')
+        if (disk_str[1] == L':')
           disk_str = disk_str.left(2);
       dlg[L"Label1"](L"Text") = LOC(L"FreeSpaceErrorDialog.NotEnoughSpace") + L" " + disk_str;
       dlg[L"Label2"](L"Text") = Format(L"%-20s%12s", LOC(L"FreeSpaceErrorDialog.AvailableSpace").ptr(),
@@ -2417,7 +2417,7 @@ bool Engine::CheckFATRestrictions(const String & srcpathstr, const String & dstp
       dlg(L"Title") = LOC(L"FATErrorDialog.Title");
       String disk_str = GetFileRoot(dstpathstr);
       if (disk_str.len() >= 2)
-        if (disk_str[1] == ':')
+        if (disk_str[1] == L':')
           disk_str = disk_str.left(2);
       String fmt = LOC(L"FATErrorDialog.Message");
       String FileName = SrcNames.GetNameByNum(Index);

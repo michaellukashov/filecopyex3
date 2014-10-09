@@ -17,7 +17,7 @@ bool StringParent::loadFromFile(FILE * f)
   const size_t bsize = DEFAULT_SECTOR_SIZE, ssize = DEFAULT_SECTOR_SIZE;
   if (unicode)
   {
-    const wchar_t CR = '\r', LF = '\n';
+    const wchar_t CR = L'\r', LF = L'\n';
     wchar_t buffer[bsize + 1], string[ssize + 1];
     size_t bpos = 0, spos = 0;
     while (1)

@@ -60,7 +60,7 @@ intptr_t ShowMessageExHelp(const String & title, const String & msg,
   size_t nb = 0;
   for (const wchar_t * p = buttons.ptr(); *p; p++)
   {
-    if (*p == '\n')
+    if (*p == L'\n')
       nb++;
   }
   String msgbuf = title + L"\n" + msg + L"\n\x01\n" + buttons;
@@ -151,13 +151,13 @@ String SplitWidth(const String & s, intptr_t w)
   {
     wchar_t c = s[Index];
 
-    if (c == '\n' || c == '\r')
+    if (c == L'\n' || c == L'\r')
     {
       continue;
     }
-    if (c == ' ' && (curW > w))
+    if (c == L' ' && (curW > w))
     {
-      res += '\n';
+      res += L'\n';
       curW = 0;
       continue;
     }

@@ -27,9 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 static bool isbadchar(wchar_t c)
 {
-  return c == '\0' || c == '\t' ||
-    c == '\n' || c == '\r' ||
-    c == ' ';
+  return c == L'\0' || c == L'\t' ||
+    c == L'\n' || c == L'\r' ||
+    c == L' ';
 }
 
 String::String(const char * v)
@@ -92,11 +92,11 @@ String String::rtrim() const
 String String::trimquotes() const
 {
   intptr_t start = 0, end = len() - 1;
-  while (start <= end && ((*this)[start]) == '"')
+  while (start <= end && ((*this)[start]) == L'"')
   {
     start++;
   }
-  while (end >= start && ((*this)[end]) == '"')
+  while (end >= start && ((*this)[end]) == L'"')
   {
     end--;
   }

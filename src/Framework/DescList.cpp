@@ -42,7 +42,7 @@ bool DescList::LoadFromList(StringVector & list)
   {
     String s = list[Index];
     wchar_t c = s[0];
-    if (c != '\t' && c != ' ' && c != '>' && c)
+    if (c != L'\t' && c != L' ' && c != L'>' && c)
     {
       if (!fn.empty())
       {
@@ -50,7 +50,7 @@ bool DescList::LoadFromList(StringVector & list)
         fn.Clear();
         desc.Clear();
       }
-      if (c == '"')
+      if (c == L'"')
       {
         size_t lf = s.substr(1).find('"');
         if (lf != (size_t)-1)

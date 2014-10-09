@@ -66,7 +66,7 @@ String ChangeFileExt(const String & v, const String & ext)
 
 inline String CutEndSlash(const String & v)
 {
-  if (v[v.len() - 1] == '\\' || v[v.len() - 1] == '/')
+  if (v[v.len() - 1] == L'\\' || v[v.len() - 1] == L'/')
   {
     return v.left(v.len() - 1);
   }
@@ -83,7 +83,7 @@ String AddEndSlash(const String & v)
     return L"\\";
   }
   wchar_t endChar = v[v.len() - 1];
-  if (endChar == '\\' || endChar == '/')
+  if (endChar == L'\\' || endChar == L'/')
   {
     return v;
   }
@@ -222,7 +222,7 @@ bool GetSymLink(const String & _dir, String & res, uint32_t flags)
   DWORD sz = _countof(buf);
   res = dir;
 
-  if (flags & gslExpandSubst && (dir.len() == 2) && (dir[1] == ':') &&
+  if (flags & gslExpandSubst && (dir.len() == 2) && (dir[1] == L':') &&
       ::QueryDosDevice(dir.ptr(), buf, _countof(buf)) > 0)
   {
     String r = buf;
@@ -290,7 +290,7 @@ bool GetSymLink(const String & _dir, String & res, uint32_t flags)
     }
   }
 
-  if (flags & gslExpandNetMappings && (dir.len() == 2) && (dir[1] == ':') &&
+  if (flags & gslExpandNetMappings && (dir.len() == 2) && (dir[1] == L':') &&
       ::WNetGetConnection(dir.ptr(), buf, &sz) == 0)
   {
     res = CutEndSlash(buf);
@@ -306,7 +306,7 @@ String GetRealFileName(const String & _path, uint32_t flags)
 rep:
   for (intptr_t Index = path.len() - 1; Index >= 0; Index--)
   {
-    if (path[Index] == '\\')
+    if (path[Index] == L'\\')
     {
       String res;
       if (GetSymLink(path.substr(0, Index), res,
@@ -350,7 +350,7 @@ String ApplyFileMask(const String & _name, const String & _mask)
   const wchar_t * next = name + _name.len() - 1;
   String strName;
   String strNameExt;
-  while (next >= name && *next != '.')
+  while (next >= name && *next != L'.')
     next--;
   if (next < name)
   {
@@ -366,7 +366,7 @@ String ApplyFileMask(const String & _name, const String & _mask)
   const wchar_t * mext = mask + _mask.len() - 1;
   String strMask;
   String strMaskExt;
-  while (mext >= mask && *mext != '.')
+  while (mext >= mask && *mext != L'.')
     mext--;
   if (mext < mask)
   {
@@ -423,7 +423,7 @@ String ApplyFileMask(const String & _name, const String & _mask)
 
 String ApplyFileMaskPath(const String & name, const String & mask)
 {
-  if (mask[mask.len() - 1] == '\\' || mask[mask.len() - 1] == '/')
+  if (mask[mask.len() - 1] == L'\\' || mask[mask.len() - 1] == L'/')
     return mask + ExtractFileName(name);
   DWORD a = ::GetFileAttributes(mask.ptr());
   if (a != INVALID_FILE_ATTRIBUTES && a & FILE_ATTRIBUTE_DIRECTORY)
@@ -604,7 +604,7 @@ void ForceDirectories(const String & s)
   wchar_t * sptr = ptr;
   while (*ptr)
   {
-    if (*ptr == '\\' || *ptr == '/')
+    if (*ptr == L'\\' || *ptr == L'/')
     {
       wchar_t t = *ptr;
       *ptr = 0;
