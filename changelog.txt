@@ -1,7 +1,13 @@
-FileCopyEx3 3.0.6.34 10.10.2014
+FileCopyEx3 3.0.6.35 10.10.2014
 
+* Improvement: add option for notifications on long operations complete using bass.dll
+  Thanks to Igor Yudintsev
+  (http://forum.farmanager.com/viewtopic.php?p=123000#p123000)
 * Improvement: show warning when trying to copy large file on disk having FAT filesystem
   (http://forum.farmanager.com/viewtopic.php?p=123277#p123277)
+* Bugfix: fix copy to network share
+  Thanks to Igor Yudintsev
+  (https://github.com/michaellukashov/filecopyex3/pull/16)
 * Improvement: copy long (> 255 symbols) nested paths
 
 FileCopyEx3 3.0.5.29 01.09.2014
