@@ -102,8 +102,9 @@ private:
   size_t BufSize;
   int64_t ReadSpeedLimit, WriteSpeedLimit;
   int ReadAlign;
-  int _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
-      _HideDescs, _UpdateRODescs, _InverseBars, _PreallocMin, _UnbuffMin;
+  bool _CopyDescs, _ClearROFromCD, _DescsInDirs, _ConfirmBreak,
+      _HideDescs, _UpdateRODescs, _InverseBars;
+  int _PreallocMin, _UnbuffMin;
   bool copyCreationTime, copyLastAccessTime, copyLastWriteTime;
   bool Aborted, KeepFiles;
   intptr_t volatile LastFile, FileCount, CopyCount;

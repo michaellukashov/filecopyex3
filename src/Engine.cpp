@@ -82,13 +82,13 @@ Engine::Engine() :
   FlushEnd(nullptr),
   UiFree(nullptr)
 {
-  _CopyDescs = 0;
-  _ClearROFromCD = 0;
-  _DescsInDirs = 0;
-  _ConfirmBreak = 0;
-  _HideDescs = 0;
-  _UpdateRODescs = 0;
-  _InverseBars = 0;
+  _CopyDescs = false;
+  _ClearROFromCD = false;
+  _DescsInDirs = false;
+  _ConfirmBreak = false;
+  _HideDescs = false;
+  _UpdateRODescs = false;
+  _InverseBars = false;
   _PreallocMin = 0;
   _UnbuffMin = 0;
   copyCreationTime = false;
@@ -1233,15 +1233,15 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
 {
   PropertyMap & Options = plugin->Options();
 
-  _CopyDescs    = Options[L"CopyDescs"];
-  _DescsInDirs  = Options[L"DescsInSubdirs"];
-  _ConfirmBreak = Options[L"ConfirmBreak"];
+  _CopyDescs    = (bool)Options[L"CopyDescs"];
+  _DescsInDirs  = (bool)Options[L"DescsInSubdirs"];
+  _ConfirmBreak = (bool)Options[L"ConfirmBreak"];
   _PreallocMin  = Options[L"PreallocMin"];
   _UnbuffMin    = Options[L"UnbuffMin"];
 
-  _ClearROFromCD = 1;
-  _HideDescs = 0;
-  _UpdateRODescs = 0;
+  _ClearROFromCD = true;
+  _HideDescs = false;
+  _UpdateRODescs = false;
 
   FarDialog & dlg = plugin->Dialogs()[L"CopyDialog"];
   dlg.ResetControls();
