@@ -113,7 +113,7 @@ void beep(int b, bool useBASS, const String &file)
       L"LuaBASS.Init(1,44100,0);"
       L"local Handle = LuaBASS.StreamCreateFile('";
     start += file.replace(L"\\", L"\\\\");
-    start += L"',0,0,LuaBASS.Flags(LuaBASS.STREAM.BASS_STREAM_PRESCAN,LuaBASS.SAMPLE.BASS_SAMPLE_LOOP));"
+    start += L"',0,0,LuaBASS.Flags(LuaBASS.STREAM.BASS_STREAM_PRESCAN));"
       L"LuaBASS.ChannelPlay(Handle,false) "
       L"end";
     MacroExecuteString mes = { sizeof(mes) };
