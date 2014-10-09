@@ -2397,6 +2397,48 @@ bool Engine::CheckFATRestrictions(const String & srcpathstr, const String & dstp
   if (!IsFAT(dstpathstr))
     return true;
   bool Result = true;
+  // check for big files
+  FileNameStoreEnum Src(&SrcNames);
+  for (size_t Index = 0; Index < Src.Count(); Index++)
+  {
+    FileStruct & info = Files[Index];
+    if (info.Flags & FLG_SKIPPED ||
+        info.Flags & FLG_COPIED ||
+        info.Flags & FLG_DESCFILE)
+      continue;
+    if (info.Size >= (int64_t)4 * 1024 * 1024 * 1024)
+    {
+      ::WaitForSingleObject(UiFree, INFINITE);
+
+      FarDialog & dlg = plugin->Dialogs()[L"FATErrorDialog"];
+      dlg.ResetControls();
+      CopyProgressBox.SetNeedToRedraw(true);
+
+      dlg(L"Title") = LOC(L"FATErrorDialog.Title");
+      String disk_str = GetFileRoot(dstpathstr);
+      if (disk_str.len() >= 2)
+        if (disk_str[1] == ':')
+          disk_str = disk_str.left(2);
+      String fmt = LOC(L"FATErrorDialog.Message");
+      String FileName = SrcNames.GetNameByNum(Index);
+      String msg = Format(fmt.ptr(), FileName.ptr());
+      dlg[L"Label1"](L"Text") = msg + L" " + disk_str;
+      dlg[L"Label2"](L"Text") = LOC(L"FATErrorDialog.AbortPrompt");
+
+      intptr_t dlgres = dlg.Execute();
+
+      HANDLE h = ::GetStdHandle(STD_INPUT_HANDLE);
+      ::FlushConsoleInputBuffer(h);
+      ::SetEvent(UiFree);
+
+      if (dlgres == RES_YES)
+        Result = false;
+      else
+        Result = true;
+
+      break;
+    }
+  }
   return Result;
 }
 
