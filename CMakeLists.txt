@@ -39,7 +39,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DWIN32 -D_WINDOWS -D_WINDLL -D_USRDL /MP2 -
 set(FLAGS_DEBUG "-D_DEBUG /Gm- /MTd /GS"
 )
 
-set(FLAGS_RELEASE "-U_DEBUG -DNDEBUG /GL /Gm- /MT -Ox -Ob1 -Oi -Os -GF -GS- -Gy /fp:fast /GA"
+set(FLAGS_RELEASE "-U_DEBUG -DNDEBUG /GL /Gm- /MT -Ox -Ob1 -Oi -Os -GF -GS- -Gy /fp:fast"
 )
 
 else()
