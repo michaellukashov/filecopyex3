@@ -10,7 +10,8 @@ public:
   FarSettings();
   ~FarSettings();
 
-  bool create();
+  bool attach();
+  void detach();
   bool get(const String & name, String & value);
   bool set(const String & name, const String & value);
 
@@ -34,10 +35,10 @@ public:
   bool list(ParamInfoVector & res);
 private:
   HANDLE handle;
-  size_t dirId;
+  intptr_t dirId;
+  int nAttachments;
 
   intptr_t control(FAR_SETTINGS_CONTROL_COMMANDS cmd, void * param = nullptr);
-  void clean();
 };
 
 bool saveOptions(const PropertyMap & options, FarSettings & settings);

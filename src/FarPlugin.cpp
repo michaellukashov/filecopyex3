@@ -67,7 +67,6 @@ void FarPlugin::Create()
     exit(0);
   }
   InitOptions();
-  settings.create();
   LoadOptions();
 
   descs.AddString(L"Descript.ion");
