@@ -22,7 +22,8 @@ intptr_t FarSettings::control(FAR_SETTINGS_CONTROL_COMMANDS cmd, void * param)
 
 void FarSettings::detach()
 {
-  if (--nAttachments == 0) {
+  if (--nAttachments == 0)
+  {
     if (handle != INVALID_HANDLE_VALUE)
     {
       control(SCTL_FREE);
@@ -92,7 +93,8 @@ bool FarSettings::list(ParamInfoVector & res)
   FarSettingsEnum fse = { sizeof(FarSettingsEnum) };
   fse.Root = dirId;
   bool ok = control(SCTL_ENUM, &fse) != 0;
-  if (ok) {
+  if (ok)
+  {
     res.clear();
     for (size_t Index = 0; Index < fse.Count; Index++)
     {
@@ -109,7 +111,8 @@ bool FarSettings::list(ParamInfoVector & res)
 bool saveOptions(const PropertyMap & options, FarSettings & settings)
 {
   bool ok = settings.attach();
-  if (ok) {
+  if (ok)
+  {
     for (PropertyMap::const_iterator it = options.begin(); it != options.end(); ++it)
     {
       if (!settings.set(it->first, it->second.operator const String()))
@@ -125,10 +128,12 @@ bool saveOptions(const PropertyMap & options, FarSettings & settings)
 bool loadOptions(PropertyMap & options, FarSettings & settings)
 {
   bool ok = settings.attach();
-  if (ok) {
+  if (ok)
+  {
     FarSettings::ParamInfoVector v;
     ok = settings.list(v);
-    if (ok) {
+    if (ok)
+    {
       for (FarSettings::ParamInfoVector::iterator it = v.begin(); it != v.end(); ++it)
       {
         String & name = it->name;
