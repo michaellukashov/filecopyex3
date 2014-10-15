@@ -313,10 +313,10 @@ void FarPlugin::KeyConfig()
   FarDialog & dlg = plugin->Dialogs()[L"KeysDialog"];
   dlg.ResetControls();
 
-  bool bind = Binded(L"F5") && Binded(L"F6") && Binded(L"ShiftF5") && Binded(L"ShiftF6");
-  bool altShift = bind && Binded(L"AltShiftF5") && Binded(L"AltShiftF6");
-  bool ctrlShift = bind && Binded(L"CtrlShiftF5") && Binded(L"CtrlShiftF6");
-  bool ctrlAlt = bind && Binded(L"CtrlAltF5") && Binded(L"CtrlAltF6");
+  bool bind = Bound(L"F5") && Bound(L"F6") && Bound(L"ShiftF5") && Bound(L"ShiftF6");
+  bool altShift = bind && Bound(L"AltShiftF5") && Bound(L"AltShiftF6");
+  bool ctrlShift = bind && Bound(L"CtrlShiftF5") && Bound(L"CtrlShiftF6");
+  bool ctrlAlt = bind && Bound(L"CtrlAltF5") && Bound(L"CtrlAltF6");
   if (!altShift && !ctrlShift && !ctrlAlt)
     altShift = true;
 

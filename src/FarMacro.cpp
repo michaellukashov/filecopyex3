@@ -43,7 +43,7 @@ void Bind(const String & key, const String & code, const String & desc, int id)
   options[key] = Property(L"true");
 }
 
-int Binded(const String & key)
+int Bound(const String & key)
 {
   FarSettings & settings = plugin->Settings();
   String value;
