@@ -36,7 +36,7 @@ BOOL __stdcall DllMain(HANDLE hInst, ULONG reason, LPVOID)
     _CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) | _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     OSVERSIONINFO osv;
     osv.dwOSVersionInfoSize = sizeof(osv);
-    GetVersionEx(&osv);
+    ::GetVersionEx(&osv);
     WinNT = osv.dwPlatformId == VER_PLATFORM_WIN32_NT;
     WinNT4 = WinNT && osv.dwMajorVersion == 4;
     Win2K = WinNT && osv.dwMajorVersion >= 5;
