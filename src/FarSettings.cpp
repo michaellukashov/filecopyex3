@@ -11,7 +11,7 @@ FarSettings::FarSettings() :
 
 FarSettings::~FarSettings()
 {
-  while (nAttachments-- != 0)
+  while (nAttachments != 0)
     detach();
 }
 
@@ -148,4 +148,3 @@ bool loadOptions(PropertyMap & options, FarSettings & settings)
   }
   return ok;
 }
-
