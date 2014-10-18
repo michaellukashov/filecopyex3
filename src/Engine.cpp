@@ -2300,17 +2300,20 @@ intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String 
       CopyProgressBox.SetNeedToRedraw(true);
 
       dlg[L"Edit"](L"Text") = ExtractFileName(Dst);
-rep1:
-      if (dlg.Execute() == 0)
+      bool Repeat1 = true;
+      while (Repeat1)
       {
-        ren = AddEndSlash(ExtractFilePath(Dst)) + dlg[L"Edit"](L"Text");
-        if (ExistsN(ren, 0))
-          goto rep1;
-        Repeat = false;
-      }
-      else
-      {
-        Repeat = true;
+        Repeat1 = false;
+        if (dlg.Execute() == 0)
+        {
+          ren = AddEndSlash(ExtractFilePath(Dst)) + dlg[L"Edit"](L"Text");
+          if (ExistsN(ren, 0))
+            Repeat1 = true;
+        }
+        else
+        {
+          Repeat = true;
+        }
       }
     }
   }
