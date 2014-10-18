@@ -409,22 +409,27 @@ void FarPlugin::Config()
   dlg.ResetControls();
   dlg.LoadState(options);
 
-rep:
-  intptr_t res = dlg.Execute();
-  switch (res)
+  bool Repeat = true;
+  while (Repeat)
   {
-    case 0:
-      dlg.SaveState(options);
-      SaveOptions();
-      break;
-    case 1:
-      KeyConfig();
-      goto rep;
-    case 2:
-      About();
-      goto rep;
-    case 3:
-      SoundConfig();
-      goto rep;
+    Repeat = false;
+    intptr_t res = dlg.Execute();
+    switch (res)
+    {
+      case 0:
+        dlg.SaveState(options);
+        SaveOptions();
+        Repeat = false;
+        break;
+      case 1:
+        KeyConfig();
+        break;
+      case 2:
+        About();
+        break;
+      case 3:
+        SoundConfig();
+        break;
+    }
   }
 }
