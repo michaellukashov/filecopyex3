@@ -1430,206 +1430,235 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
   advdlg[L"WriteSpeedLimit"](L"Selected") = Options[L"writeSpeedLimitDef"];
   advdlg[L"WriteSpeedLimitValue"](L"Text") = Options[L"writeSpeedLimitLimitDef"];
 
-rep:
-
-  intptr_t dres = dlg.Execute();
-
-  switch (dres)
+  bool Repeat = true;
+  while (Repeat)
   {
-    case 2:
-    {
-      plugin->Config();
-      goto rep;
-    }
+    Repeat = false;
+    bool Cont = true;
+    intptr_t dres = dlg.Execute();
 
-    case 1:
+    switch (dres)
     {
-      intptr_t advRes = advdlg.Execute();
-
-      if (advRes == 1)
+      case 2:
       {
-        Options[L"copyCreationTime"] = advdlg[L"creationTime"](L"Selected");
-        Options[L"copyLastAccessTime"] = advdlg[L"lastAccessTime"](L"Selected");
-        Options[L"copyLastWriteTime"] = advdlg[L"lastWriteTime"](L"Selected");
-        Options[L"compressDef"] = advdlg[L"Compress"](L"Selected");
-        Options[L"encryptDef"] = advdlg[L"Encrypt"](L"Selected");
-        Options[L"readSpeedLimitDef"] = advdlg[L"ReadSpeedLimit"](L"Selected");
-        Options[L"readSpeedLimitValueDef"] = advdlg[L"ReadSpeedLimitValue"](L"Text");
-        Options[L"writeSpeedLimitDef"] = advdlg[L"WriteSpeedLimit"](L"Selected");
-        Options[L"writeSpeedLimitLimitDef"] = advdlg[L"WriteSpeedLimitValue"](L"Text");
-        plugin->SaveOptions();
+        plugin->Config();
+        Repeat = true;
+        Cont = false;
+        break;
       }
 
-      if (advRes == 0 || advRes == 1)
+      case 1:
       {
-        adv = 1;
-        bool resume = advdlg[L"ResumeFiles"](L"Selected");
-        dlg[L"Label2"](L"Disable") = resume;
-        dlg[L"Ask"](L"Disable") = resume;
-        dlg[L"Skip"](L"Disable") = resume;
-        dlg[L"Overwrite"](L"Disable") = resume;
-        dlg[L"Append"](L"Disable") = resume;
-        dlg[L"Rename"](L"Disable") = resume;
-        dlg[L"SkipIfNewer"](L"Disable") = resume;
-        if (resume)
+        intptr_t advRes = advdlg.Execute();
+
+        if (advRes == 1)
         {
-          dlg[L"SkipIfNewer"](L"Selected") = 0;
+          Options[L"copyCreationTime"] = advdlg[L"creationTime"](L"Selected");
+          Options[L"copyLastAccessTime"] = advdlg[L"lastAccessTime"](L"Selected");
+          Options[L"copyLastWriteTime"] = advdlg[L"lastWriteTime"](L"Selected");
+          Options[L"compressDef"] = advdlg[L"Compress"](L"Selected");
+          Options[L"encryptDef"] = advdlg[L"Encrypt"](L"Selected");
+          Options[L"readSpeedLimitDef"] = advdlg[L"ReadSpeedLimit"](L"Selected");
+          Options[L"readSpeedLimitValueDef"] = advdlg[L"ReadSpeedLimitValue"](L"Text");
+          Options[L"writeSpeedLimitDef"] = advdlg[L"WriteSpeedLimit"](L"Selected");
+          Options[L"writeSpeedLimitLimitDef"] = advdlg[L"WriteSpeedLimitValue"](L"Text");
+          plugin->SaveOptions();
+        }
+
+        if (advRes == 0 || advRes == 1)
+        {
+          adv = 1;
+          bool resume = advdlg[L"ResumeFiles"](L"Selected");
+          dlg[L"Label2"](L"Disable") = resume;
+          dlg[L"Ask"](L"Disable") = resume;
+          dlg[L"Skip"](L"Disable") = resume;
+          dlg[L"Overwrite"](L"Disable") = resume;
+          dlg[L"Append"](L"Disable") = resume;
+          dlg[L"Rename"](L"Disable") = resume;
+          dlg[L"SkipIfNewer"](L"Disable") = resume;
+          if (resume)
+          {
+            dlg[L"SkipIfNewer"](L"Selected") = 0;
+          }
+        }
+        Repeat = true;
+        Cont = false;
+        break;
+      }
+      case -1:
+      {
+        return MRES_NONE;
+      }
+    }
+    if (!Cont)
+      break;
+
+    String tmpDstText = dlg[L"DestPath"](L"Text");
+
+    String dstText = tmpDstText.trim().trimquotes();
+
+    if (!dstText.left(4).icmp(L"nul\\"))
+      dstText = L"nul";
+
+    dstText = dstText.replace(L"\"", L"");
+
+    if (dstText == L"plugin:")
+    {
+      if (allowPlug)
+      {
+        return MRES_STDCOPY_RET;
+      }
+      else
+      {
+        ShowMessage(dlg(L"Text"), LOC(L"CopyDialog.InvalidPath"), FMSG_MB_OK);
+        Repeat = true;
+        break;
+      }
+    }
+
+    String relDstPath = ExpandEnv(dstText.replace(L"/", L"\\"));
+    dstPath.Clear();
+
+    wchar_t CurrentDir[MAX_FILENAME];
+    // Get absolute path for relative dstpath
+    FSF.GetCurrentDirectory(_countof(CurrentDir), CurrentDir);
+    // srcpath.ptr() for temporary file panel is empty
+    if (relDstPath.icmp(L"nul") != 0)
+    {
+      dstPath = convertPath(CPM_REAL, relDstPath);
+    }
+    else
+    {
+      dstPath = relDstPath;
+    }
+
+    CompressMode = EncryptMode = ATTR_INHERIT;
+    Streams = Rights = FALSE;
+
+    if (WinNT)
+    {
+      Rights = advdlg[L"Rights"](L"Selected");
+      Streams = advdlg[L"Streams"](L"Selected");
+      CompressMode = advdlg[L"Compress"](L"Selected");
+      if (Win2K)
+      {
+        EncryptMode = advdlg[L"Encrypt"](L"Selected");
+        if (EncryptMode != ATTR_INHERIT)
+          CompressMode = ATTR_INHERIT;
+      }
+    }
+
+    copyCreationTime = advdlg[L"creationTime"](L"Selected");
+    copyLastAccessTime = advdlg[L"lastAccessTime"](L"Selected");
+    copyLastWriteTime = advdlg[L"lastWriteTime"](L"Selected");
+
+    Parallel = dlg[L"ParallelCopy"](L"Selected");
+    SkipNewer = dlg[L"SkipIfNewer"](L"Selected");
+    SkippedToTemp = advdlg[L"SkippedToTemp"](L"Selected");
+    ReadSpeedLimit = WriteSpeedLimit = 0;
+    if ((bool)advdlg[L"ReadSpeedLimit"](L"Selected"))
+    {
+      ReadSpeedLimit = (int64_t)advdlg[L"ReadSpeedLimitValue"](L"Text") * 1024;
+    }
+    if ((bool)advdlg[L"WriteSpeedLimit"](L"Selected"))
+    {
+      WriteSpeedLimit = (int64_t)advdlg[L"WriteSpeedLimitValue"](L"Text") * 1024;
+    }
+
+    OverwriteMode = OM_PROMPT;
+    if (advdlg[L"ResumeFiles"](L"Selected"))
+    {
+      OverwriteMode = OM_RESUME;
+    }
+    else if (dlg[L"Overwrite"](L"Selected"))
+    {
+      OverwriteMode = OM_OVERWRITE;
+    }
+    else if (dlg[L"Skip"](L"Selected"))
+    {
+      OverwriteMode = OM_SKIP;
+    }
+    else if (dlg[L"Append"](L"Selected"))
+    {
+      OverwriteMode = OM_APPEND;
+    }
+    else if (dlg[L"Rename"](L"Selected"))
+    {
+      OverwriteMode = OM_RENAME;
+    }
+
+    if (!dstPath.icmp(L"nul"))
+    {
+      OverwriteMode = OM_OVERWRITE;
+      CompressMode = EncryptMode = ATTR_INHERIT;
+      Streams = Rights = 0;
+    }
+    else
+    {
+      uint32_t vf = VolFlags(dstPath);
+      if (vf != (uint32_t)-1)
+      {
+        if (!(vf & VF_STREAMS) && !adv)
+          Streams = 0;
+        if (!(vf & VF_RIGHTS) && !adv)
+          Rights = 0;
+        if (!(vf & VF_COMPRESSION) && !adv)
+          CompressMode = ATTR_INHERIT;
+        if (!(vf & VF_ENCRYPTION) && !adv)
+          EncryptMode = ATTR_INHERIT;
+
+        if (vf & VF_READONLY)
+        {
+          if (!warn(LOC(L"CopyDialog.ReadOnlyWarn")))
+          {
+            Repeat = true;
+            break;
+          }
+        }
+        if (!(vf & VF_COMPRESSION) && CompressMode == ATTR_ON)
+        {
+          if (!warn(LOC(L"CopyDialog.CompressWarn")))
+          {
+            Repeat = true;
+            break;
+          }
+          CompressMode = ATTR_INHERIT;
+        }
+        if (!(vf & VF_ENCRYPTION) && EncryptMode == ATTR_ON)
+        {
+          if (!warn(LOC(L"CopyDialog.EncryptWarn")))
+          {
+            Repeat = true;
+            break;
+          }
+          EncryptMode = ATTR_INHERIT;
+        }
+        if (!(vf & VF_STREAMS) && Streams)
+        {
+          if (!warn(LOC(L"CopyDialog.StreamsWarn")))
+          {
+            Repeat = true;
+            break;
+          }
+          Streams = 0;
+        }
+        if (!(vf & VF_RIGHTS) && Rights == ATTR_ON)
+        {
+          if (!warn(LOC(L"CopyDialog.RightsWarn")))
+          {
+            Repeat = true;
+            break;
+          }
+          Rights = 0;
         }
       }
-      goto rep;
-    }
-    case -1:
-    {
-      return MRES_NONE;
-    }
-  }
-
-  String tmpDstText = dlg[L"DestPath"](L"Text");
-
-  String dstText = tmpDstText.trim().trimquotes();
-
-  if (!dstText.left(4).icmp(L"nul\\"))
-    dstText = L"nul";
-
-  dstText = dstText.replace(L"\"", L"");
-
-  if (dstText == L"plugin:")
-  {
-    if (allowPlug)
-    {
-      return MRES_STDCOPY_RET;
-    }
-    else
-    {
-      ShowMessage(dlg(L"Text"), LOC(L"CopyDialog.InvalidPath"), FMSG_MB_OK);
-      goto rep;
-    }
-  }
-
-  String relDstPath = ExpandEnv(dstText.replace(L"/", L"\\"));
-  dstPath.Clear();
-
-  wchar_t CurrentDir[MAX_FILENAME];
-  // Get absolute path for relative dstpath
-  FSF.GetCurrentDirectory(_countof(CurrentDir), CurrentDir);
-  // srcpath.ptr() for temporary file panel is empty
-  if (relDstPath.icmp(L"nul") != 0)
-  {
-    dstPath = convertPath(CPM_REAL, relDstPath);
-  }
-  else
-  {
-    dstPath = relDstPath;
-  }
-
-  CompressMode = EncryptMode = ATTR_INHERIT;
-  Streams = Rights = FALSE;
-
-  if (WinNT)
-  {
-    Rights = advdlg[L"Rights"](L"Selected");
-    Streams = advdlg[L"Streams"](L"Selected");
-    CompressMode = advdlg[L"Compress"](L"Selected");
-    if (Win2K)
-    {
-      EncryptMode = advdlg[L"Encrypt"](L"Selected");
-      if (EncryptMode != ATTR_INHERIT)
-        CompressMode = ATTR_INHERIT;
-    }
-  }
-
-  copyCreationTime = advdlg[L"creationTime"](L"Selected");
-  copyLastAccessTime = advdlg[L"lastAccessTime"](L"Selected");
-  copyLastWriteTime = advdlg[L"lastWriteTime"](L"Selected");
-
-  Parallel = dlg[L"ParallelCopy"](L"Selected");
-  SkipNewer = dlg[L"SkipIfNewer"](L"Selected");
-  SkippedToTemp = advdlg[L"SkippedToTemp"](L"Selected");
-  ReadSpeedLimit = WriteSpeedLimit = 0;
-  if ((bool)advdlg[L"ReadSpeedLimit"](L"Selected"))
-  {
-    ReadSpeedLimit = (int64_t)advdlg[L"ReadSpeedLimitValue"](L"Text") * 1024;
-  }
-  if ((bool)advdlg[L"WriteSpeedLimit"](L"Selected"))
-  {
-    WriteSpeedLimit = (int64_t)advdlg[L"WriteSpeedLimitValue"](L"Text") * 1024;
-  }
-
-  OverwriteMode = OM_PROMPT;
-  if (advdlg[L"ResumeFiles"](L"Selected"))
-  {
-    OverwriteMode = OM_RESUME;
-  }
-  else if (dlg[L"Overwrite"](L"Selected"))
-  {
-    OverwriteMode = OM_OVERWRITE;
-  }
-  else if (dlg[L"Skip"](L"Selected"))
-  {
-    OverwriteMode = OM_SKIP;
-  }
-  else if (dlg[L"Append"](L"Selected"))
-  {
-    OverwriteMode = OM_APPEND;
-  }
-  else if (dlg[L"Rename"](L"Selected"))
-  {
-    OverwriteMode = OM_RENAME;
-  }
-
-  if (!dstPath.icmp(L"nul"))
-  {
-    OverwriteMode = OM_OVERWRITE;
-    CompressMode = EncryptMode = ATTR_INHERIT;
-    Streams = Rights = 0;
-  }
-  else
-  {
-    uint32_t vf = VolFlags(dstPath);
-    if (vf != (uint32_t)-1)
-    {
-      if (!(vf & VF_STREAMS) && !adv)
-        Streams = 0;
-      if (!(vf & VF_RIGHTS) && !adv)
-        Rights = 0;
-      if (!(vf & VF_COMPRESSION) && !adv)
-        CompressMode = ATTR_INHERIT;
-      if (!(vf & VF_ENCRYPTION) && !adv)
-        EncryptMode = ATTR_INHERIT;
-
-      if (vf & VF_READONLY)
-        if (!warn(LOC(L"CopyDialog.ReadOnlyWarn")))
-          goto rep;
-      if (!(vf & VF_COMPRESSION) && CompressMode == ATTR_ON)
+      else
       {
-        if (!warn(LOC(L"CopyDialog.CompressWarn")))
-          goto rep;
-        CompressMode = ATTR_INHERIT;
+        //if (!warn(LOC(L"CopyDialog.InvalidPathWarn")))
+        ShowErrorMessage(LOC(L"CopyDialog.InvalidPathWarn"));
+        Repeat = true;
+        break;
       }
-      if (!(vf & VF_ENCRYPTION) && EncryptMode == ATTR_ON)
-      {
-        if (!warn(LOC(L"CopyDialog.EncryptWarn")))
-          goto rep;
-        EncryptMode = ATTR_INHERIT;
-      }
-      if (!(vf & VF_STREAMS) && Streams)
-      {
-        if (!warn(LOC(L"CopyDialog.StreamsWarn")))
-          goto rep;
-        Streams = 0;
-      }
-      if (!(vf & VF_RIGHTS) && Rights == ATTR_ON)
-      {
-        if (!warn(LOC(L"CopyDialog.RightsWarn")))
-          goto rep;
-        Rights = 0;
-      }
-    }
-    else
-    {
-      //if (!warn(LOC(L"CopyDialog.InvalidPathWarn")))
-      ShowErrorMessage(LOC(L"CopyDialog.InvalidPathWarn"));
-      goto rep;
     }
   }
 
