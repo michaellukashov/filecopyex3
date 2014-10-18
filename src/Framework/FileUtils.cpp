@@ -303,18 +303,25 @@ bool GetSymLink(const String & _dir, String & res, uint32_t flags)
 String GetRealFileName(const String & _path, uint32_t flags)
 {
   String path = AddEndSlash(_path);
-rep:
-  for (intptr_t Index = path.len() - 1; Index >= 0; Index--)
+  bool Repeat = true;
+  while (Repeat)
   {
-    if (path[Index] == L'\\')
+    Repeat = false;
+    for (intptr_t Index = path.len() - 1; Index >= 0; Index--)
     {
-      String res;
-      if (GetSymLink(path.substr(0, Index), res,
-                     gslExpandSubst | gslExpandReparsePoints | gslExpandMountPoints |
-                     ((flags & rfnNoNetExpand) ? 0 : gslExpandNetMappings)))
+      if (path[Index] == L'\\')
       {
-        path = AddEndSlash(res + path.substr(Index));
-        goto rep;
+        String res;
+        if (GetSymLink(path.substr(0, Index), res,
+                       gslExpandSubst | gslExpandReparsePoints | gslExpandMountPoints |
+                       ((flags & rfnNoNetExpand) ? 0 : gslExpandNetMappings)))
+        {
+          path = AddEndSlash(res + path.substr(Index));
+        }
+        else
+        {
+          Repeat = false;
+        }
       }
     }
   }
