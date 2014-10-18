@@ -1965,76 +1965,80 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
   {
     if (Move)
     {
-retry:
-      if (FMoveFile(src, dst, false))
+      bool Retry = true;
+      while (Retry)
       {
-        it->Flags |= FLG_COPIED | FLG_DELETED;
-        goto fin;
-      }
-      DWORD err = ::GetLastError();
-      if (err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
-      {
-        if (OverwriteMode == OM_RESUME)
+        Retry = false;
+        if (FMoveFile(src, dst, false))
         {
-          if (FileSize(dst) >= it->Size)
-          {
-            it->Flags |= FLG_SKIPPED;
-            goto fin;
-          }
+          it->Flags |= FLG_COPIED | FLG_DELETED;
+          goto fin;
         }
-        else
+        DWORD err = ::GetLastError();
+        if (err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
         {
-          String ren;
-          intptr_t res, j = 0;
-          if (SkipNewer && Newer(dst, lastWriteTime))
+          if (OverwriteMode == OM_RESUME)
           {
-            res = OM_SKIP;
-          }
-          else if (OverwriteMode == OM_PROMPT)
-          {
-            res = CheckOverwrite(-1, src, dst, ren);
+            if (FileSize(dst) >= it->Size)
+            {
+              it->Flags |= FLG_SKIPPED;
+              goto fin;
+            }
           }
           else
           {
-            res = OverwriteMode;
-          }
-          switch (res)
-          {
-            case OM_SKIP:
-              it->Flags |= FLG_SKIPPED;
-              goto fin;
-              break;
-
-            case OM_OVERWRITE:
-              owmode = OM_OVERWRITE;
-              if (FMoveFile(src, dst, true))
-              {
-                it->Flags |= FLG_COPIED | FLG_DELETED;
+            String ren;
+            intptr_t res, j = 0;
+            if (SkipNewer && Newer(dst, lastWriteTime))
+            {
+              res = OM_SKIP;
+            }
+            else if (OverwriteMode == OM_PROMPT)
+            {
+              res = CheckOverwrite(-1, src, dst, ren);
+            }
+            else
+            {
+              res = OverwriteMode;
+            }
+            switch (res)
+            {
+              case OM_SKIP:
+                it->Flags |= FLG_SKIPPED;
                 goto fin;
-              }
-              break;
+                break;
 
-            case OM_APPEND:
-              owmode = OM_APPEND;
-              break;
+              case OM_OVERWRITE:
+                owmode = OM_OVERWRITE;
+                if (FMoveFile(src, dst, true))
+                {
+                  it->Flags |= FLG_COPIED | FLG_DELETED;
+                  goto fin;
+                }
+                break;
 
-            case OM_RENAME:
-              if (OverwriteMode != OM_RENAME)
-              {
-                dst = ren;
-              }
-              else
-              {
-                while (ExistsN(dst, j))
-                  j++;
-                dst = DupName(dst, j);
-              }
-              goto retry;
-              break;
+              case OM_APPEND:
+                owmode = OM_APPEND;
+                break;
 
-            case OM_CANCEL:
-              return false;
-              break;
+              case OM_RENAME:
+                if (OverwriteMode != OM_RENAME)
+                {
+                  dst = ren;
+                }
+                else
+                {
+                  while (ExistsN(dst, j))
+                    j++;
+                  dst = DupName(dst, j);
+                }
+                Retry = true;
+                break;
+
+              case OM_CANCEL:
+                return false;
+                break;
+            }
           }
         }
       }
