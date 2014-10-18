@@ -614,65 +614,72 @@ bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
         size_t write_block_size1 = write_block_size;
         if (info.Flags & FLG_BUFFERED)
           write_block_size = Min(write_block_size, (size_t)(info.Size - info.Written));
-retry:
-        int64_t start_time = GetTime();
-        size_t written = FWrite(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, write_block_size);
-
-        if (written < write_block_size)
+        int64_t start_time = 0;
+        size_t written = 0;
+        bool Retry = true;
+        while (Retry)
         {
-          ::WaitForSingleObject(UiFree, INFINITE);
-          uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
-          intptr_t res = EngineError(LOC(L"Error.Write"), DstName, ::GetLastError(), flg,
-                                L"", L"Error.Write");
-          ::SetEvent(UiFree);
-          if (res == RES_RETRY)
+          Retry = false;
+          start_time = GetTime();
+          written = FWrite(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, write_block_size);
+
+          if (written < write_block_size)
           {
-            if (flg & eerReopen)
+            ::WaitForSingleObject(UiFree, INFINITE);
+            uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
+            intptr_t res = EngineError(LOC(L"Error.Write"), DstName, ::GetLastError(), flg,
+                                  L"", L"Error.Write");
+            ::SetEvent(UiFree);
+            if (res == RES_RETRY)
             {
-              int64_t Pos = info.Written;
-              if (info.OverMode == OM_RESUME)
-                Pos += info.ResumePos;
-              FClose(ABuffInfo->OutFile);
-              bool ReopenRetry = true;
-              while (ReopenRetry)
+              if (flg & eerReopen)
               {
-                ReopenRetry = false;
-                uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-                ABuffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
-                if (!ABuffInfo->OutFile)
+                int64_t Pos = info.Written;
+                if (info.OverMode == OM_RESUME)
+                  Pos += info.ResumePos;
+                FClose(ABuffInfo->OutFile);
+                bool ReopenRetry = true;
+                while (ReopenRetry)
                 {
-                  ::WaitForSingleObject(UiFree, INFINITE);
-                  uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
-                  intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
-                                        DstName, ::GetLastError(), flg, L"", L"Error.OutputFileCreate");
-                  ::SetEvent(UiFree);
-                  ReopenRetry = (res == RES_RETRY);
-                  if (!ReopenRetry)
+                  ReopenRetry = false;
+                  uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
+                  ABuffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
+                  if (!ABuffInfo->OutFile)
                   {
-                    info.Flags |= FLG_SKIPPED | FLG_ERROR;
-                    if (flg & eerKeepFiles)
-                      info.Flags |= FLG_KEEPFILE;
-                    ABuffInfo->OutFile = INVALID_HANDLE_VALUE;
-                    if (res == RES_ABORT)
-                      Aborted = true;
-                    goto skip;
+                    ::WaitForSingleObject(UiFree, INFINITE);
+                    uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
+                    intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
+                                          DstName, ::GetLastError(), flg, L"", L"Error.OutputFileCreate");
+                    ::SetEvent(UiFree);
+                    ReopenRetry = (res == RES_RETRY);
+                    if (!ReopenRetry)
+                    {
+                      info.Flags |= FLG_SKIPPED | FLG_ERROR;
+                      if (flg & eerKeepFiles)
+                        info.Flags |= FLG_KEEPFILE;
+                      ABuffInfo->OutFile = INVALID_HANDLE_VALUE;
+                      if (res == RES_ABORT)
+                        Aborted = true;
+                      goto skip;
+                    }
                   }
                 }
+                if (FSeek(ABuffInfo->OutFile, Pos, FILE_BEGIN) == -1)
+                  FWError2(Format(L"FSeek to %d failed, code %d", Pos,
+                                 (int)::GetLastError()));
               }
-              if (FSeek(ABuffInfo->OutFile, Pos, FILE_BEGIN) == -1)
-                FWError2(Format(L"FSeek to %d failed, code %d", Pos,
-                               (int)::GetLastError()));
+              Retry = true;
+              break;
             }
-            goto retry;
-          }
-          else
-          {
-            info.Flags |= FLG_SKIPPED | FLG_ERROR;
-            if (flg & eerKeepFiles)
-              info.Flags |= FLG_KEEPFILE;
-            if (res == RES_ABORT)
-              Aborted = true;
-            goto skip;
+            else
+            {
+              info.Flags |= FLG_SKIPPED | FLG_ERROR;
+              if (flg & eerKeepFiles)
+                info.Flags |= FLG_KEEPFILE;
+              if (res == RES_ABORT)
+                Aborted = true;
+              goto skip;
+            }
           }
         }
 
