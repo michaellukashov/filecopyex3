@@ -468,110 +468,114 @@ void Engine::CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct 
       info.OverMode = OverwriteMode;
     if (info.OverMode == OM_RENAME && info.RenameNum)
       DstName = DupName(DstName, info.RenameNum);
-    if (info.OverMode == OM_PROMPT)
+    bool Repeat = true;
+    while (Repeat)
     {
-rep:
-      String renn;
-      info.OverMode = CheckOverwrite2(fnum, SrcName, DstName, renn);
-      if (info.OverMode == OM_RENAME)
-        DstName = renn;
-    }
-  }
-  else
-    info.OverMode = OM_OVERWRITE;
-
-  if (EncryptMode == ATTR_ON)
-    info.Attr |= FILE_ATTRIBUTE_ENCRYPTED;
-  else
-    info.Attr &= ~FILE_ATTRIBUTE_ENCRYPTED;
-
-  buffInfo->SrcName = SrcName;
-  buffInfo->DstName = DstName;
-
-  bool OpenRetry = true;
-  while (OpenRetry)
-  {
-    OpenRetry = false;
-    uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-    switch (info.OverMode)
-    {
-      case OM_OVERWRITE:
-      case OM_RENAME:
-        if (TryToOpenDstFile)
-        {
-          buffInfo->OutFile = FOpen(DstName, OPEN_CREATE | oflg, info.Attr);
-        }
-        break;
-      case OM_APPEND:
-        info.Flags |= FLG_BUFFERED;
-        if (TryToOpenDstFile)
-        {
-          oflg |= OPEN_BUF;
-            buffInfo->OutFile = FOpen(DstName, OPEN_APPEND | oflg, 0);
-        }
-        break;
-      case OM_RESUME:
-        if (TryToOpenDstFile)
-        {
-          buffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
-          if (FSeek(buffInfo->OutFile, info.ResumePos, FILE_BEGIN) == -1)
-            FWError2(Format(L"FSeek to %d failed, code %d", info.ResumePos,
-                           (int)::GetLastError()));
-        }
-        break;
-      case OM_SKIP:
-        info.Flags |= FLG_SKIPPED;
-        break;
-      case OM_PROMPT:
-      case OM_CANCEL:
-        if (AskAbort())
-          info.Flags |= FLG_SKIPPED;
-        else
-          goto rep;
-        break;
-    }
-
-    ShowReadName(SrcName);
-    ShowWriteName(DstName);
-
-    if (!(info.Flags & FLG_SKIPPED))
-    {
-      if (buffInfo->OutFile)
+      Repeat = false;
+      if (info.OverMode == OM_PROMPT)
       {
-        FCompress(buffInfo->OutFile, CompressMode);
-        //Encrypt(bi->OutFile, EncryptMode);
-        buffInfo->OrgSize = FileSize(buffInfo->OutFile);
+        String renn;
+        info.OverMode = CheckOverwrite2(fnum, SrcName, DstName, renn);
+        if (info.OverMode == OM_RENAME)
+          DstName = renn;
+      }
+      else
+        info.OverMode = OM_OVERWRITE;
 
-        int64_t size = info.OverMode == OM_APPEND ? buffInfo->OrgSize + info.Size : info.Size;
-        if (size >= (int64_t)_PreallocMin * 1024 &&
-            FGetCompression(buffInfo->OutFile) == 0)
+      if (EncryptMode == ATTR_ON)
+        info.Attr |= FILE_ATTRIBUTE_ENCRYPTED;
+      else
+        info.Attr &= ~FILE_ATTRIBUTE_ENCRYPTED;
+
+      buffInfo->SrcName = SrcName;
+      buffInfo->DstName = DstName;
+
+      bool OpenRetry = true;
+      while (OpenRetry)
+      {
+        OpenRetry = false;
+        uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
+        switch (info.OverMode)
         {
-          int64_t sp;
-          if (!(info.Flags & FLG_BUFFERED))
-          {
-            sp = size / info.SectorSize;
-            if (size % info.SectorSize)
-              sp++;
-            sp *= info.SectorSize;
-          }
-          else
-            sp = size;
-          int64_t bp = FTell(buffInfo->OutFile);
-          FSeek(buffInfo->OutFile, sp, FILE_BEGIN);
-          SetEndOfFile(buffInfo->OutFile);
-          FSeek(buffInfo->OutFile, bp, FILE_BEGIN);
+          case OM_OVERWRITE:
+          case OM_RENAME:
+            if (TryToOpenDstFile)
+            {
+              buffInfo->OutFile = FOpen(DstName, OPEN_CREATE | oflg, info.Attr);
+            }
+            break;
+          case OM_APPEND:
+            info.Flags |= FLG_BUFFERED;
+            if (TryToOpenDstFile)
+            {
+              oflg |= OPEN_BUF;
+                buffInfo->OutFile = FOpen(DstName, OPEN_APPEND | oflg, 0);
+            }
+            break;
+          case OM_RESUME:
+            if (TryToOpenDstFile)
+            {
+              buffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
+              if (FSeek(buffInfo->OutFile, info.ResumePos, FILE_BEGIN) == -1)
+                FWError2(Format(L"FSeek to %d failed, code %d", info.ResumePos,
+                               (int)::GetLastError()));
+            }
+            break;
+          case OM_SKIP:
+            info.Flags |= FLG_SKIPPED;
+            break;
+          case OM_PROMPT:
+          case OM_CANCEL:
+            if (AskAbort())
+              info.Flags |= FLG_SKIPPED;
+            else
+              Repeat = true;
+            break;
         }
       }
-      else if (TryToOpenDstFile)
+
+      ShowReadName(SrcName);
+      ShowWriteName(DstName);
+
+      if (!(info.Flags & FLG_SKIPPED))
       {
-        ::WaitForSingleObject(UiFree, INFINITE);
-        uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-        intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, ::GetLastError(),
-                              flg, L"", L"Error.OutputFileCreate");
-        ::SetEvent(UiFree);
-        OpenRetry = (res == RES_RETRY);
-        if (res == RES_ABORT)
-          Aborted = true;
+        if (buffInfo->OutFile)
+        {
+          FCompress(buffInfo->OutFile, CompressMode);
+          //Encrypt(bi->OutFile, EncryptMode);
+          buffInfo->OrgSize = FileSize(buffInfo->OutFile);
+
+          int64_t size = info.OverMode == OM_APPEND ? buffInfo->OrgSize + info.Size : info.Size;
+          if (size >= (int64_t)_PreallocMin * 1024 &&
+              FGetCompression(buffInfo->OutFile) == 0)
+          {
+            int64_t sp;
+            if (!(info.Flags & FLG_BUFFERED))
+            {
+              sp = size / info.SectorSize;
+              if (size % info.SectorSize)
+                sp++;
+              sp *= info.SectorSize;
+            }
+            else
+              sp = size;
+            int64_t bp = FTell(buffInfo->OutFile);
+            FSeek(buffInfo->OutFile, sp, FILE_BEGIN);
+            SetEndOfFile(buffInfo->OutFile);
+            FSeek(buffInfo->OutFile, bp, FILE_BEGIN);
+          }
+        }
+        else if (TryToOpenDstFile)
+        {
+          ::WaitForSingleObject(UiFree, INFINITE);
+          uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
+          intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, ::GetLastError(),
+                                flg, L"", L"Error.OutputFileCreate");
+          ::SetEvent(UiFree);
+          OpenRetry = (res == RES_RETRY);
+          if (res == RES_ABORT)
+            Aborted = true;
+        }
       }
     }
   }
