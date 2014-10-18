@@ -852,33 +852,40 @@ void Engine::Copy()
     }
     info.SectorSize = SectorSize;
 
-open_retry:
-    HANDLE InputFileHandle = FOpen(SrcName, OPEN_READ, 0);
-    ShowReadName(SrcName);
-
-    if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
+    bool OpenRetry = true;
+    HANDLE InputFileHandle = INVALID_HANDLE_VALUE;
+    intptr_t res = RES_NO;
+    while (OpenRetry)
     {
-      CheckDstFileExists(buffInfo, Index, info, SrcName, false, DstName);
-    }
+      OpenRetry = false;
+      InputFileHandle = FOpen(SrcName, OPEN_READ, 0);
+      ShowReadName(SrcName);
 
-    if (!InputFileHandle)
-    {
-      ::WaitForSingleObject(UiFree, INFINITE);
-      uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-      intptr_t res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, ::GetLastError(),
-                            flg, L"", L"Error.InputFileOpen");
-      ::SetEvent(UiFree);
-      if (res == RES_RETRY)
-        goto open_retry;
-      else
+      if (!buffInfo->OutFile && !(info.Flags & FLG_SKIPPED))
       {
-        info.Flags |= FLG_SKIPPED | FLG_ERROR;
-        if (res == RES_ABORT)
-          goto abort;
-        else
-          continue;
+        CheckDstFileExists(buffInfo, Index, info, SrcName, false, DstName);
+      }
+
+      if (!InputFileHandle)
+      {
+        ::WaitForSingleObject(UiFree, INFINITE);
+        uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
+        res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, ::GetLastError(),
+                              flg, L"", L"Error.InputFileOpen");
+        ::SetEvent(UiFree);
+        OpenRetry = (res == RES_RETRY);
+        if (!OpenRetry)
+        {
+          info.Flags |= FLG_SKIPPED | FLG_ERROR;
+          if (res == RES_ABORT)
+            goto abort;
+          else
+            break;
+        }
       }
     }
+    if (!OpenRetry && (res != RES_ABORT))
+      continue;
 
     if (OverwriteMode == OM_RESUME)
     {
