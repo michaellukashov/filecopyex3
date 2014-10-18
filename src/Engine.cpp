@@ -2259,51 +2259,60 @@ intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String 
   bool OldSkipNewer = SkipNewer;
 
   intptr_t res = OM_PROMPT, ores = -1;
-rep:
-  switch (dlg.Execute())
-  {
-    case 0:
-      res = OM_OVERWRITE;
-      break;
-    case 1:
-      res = OM_SKIP;
-      break;
-    case 2:
-      res = OM_APPEND;
-      break;
-    case 3:
-      res = OM_RENAME;
-      break;
-    case -1:
-      return OM_CANCEL;
-  }
-
   int AcceptForAll = dlg[L"AcceptForAll"](L"Selected");
-  SkipNewer = dlg[L"SkipIfNewer"](L"Selected");
-  SkippedToTemp = dlg[L"SkippedToTemp"](L"Selected");
-
-  if (SkipNewer && Newer(fd.ftLastWriteTime, fs.ftLastWriteTime))
+  bool Repeat = true;
+  while (Repeat)
   {
-    ores = res;
-    res = OM_SKIP;
-  }
-
-  if (res == OM_RENAME && !AcceptForAll)
-  {
-    FarDialog & dlg = plugin->Dialogs()[L"RenameDialog"];
-    dlg.ResetControls();
-    CopyProgressBox.SetNeedToRedraw(true);
-
-    dlg[L"Edit"](L"Text") = ExtractFileName(Dst);
-rep1:
-    if (dlg.Execute() == 0)
+    Repeat = false;
+    switch (dlg.Execute())
     {
-      ren = AddEndSlash(ExtractFilePath(Dst)) + dlg[L"Edit"](L"Text");
-      if (ExistsN(ren, 0))
-        goto rep1;
+      case 0:
+        res = OM_OVERWRITE;
+        break;
+      case 1:
+        res = OM_SKIP;
+        break;
+      case 2:
+        res = OM_APPEND;
+        break;
+      case 3:
+        res = OM_RENAME;
+        break;
+      case -1:
+        return OM_CANCEL;
     }
-    else
-      goto rep;
+
+    AcceptForAll = dlg[L"AcceptForAll"](L"Selected");
+    SkipNewer = dlg[L"SkipIfNewer"](L"Selected");
+    SkippedToTemp = dlg[L"SkippedToTemp"](L"Selected");
+
+    if (SkipNewer && Newer(fd.ftLastWriteTime, fs.ftLastWriteTime))
+    {
+      ores = res;
+      res = OM_SKIP;
+    }
+    Repeat = false;
+
+    if (res == OM_RENAME && !AcceptForAll)
+    {
+      FarDialog & dlg = plugin->Dialogs()[L"RenameDialog"];
+      dlg.ResetControls();
+      CopyProgressBox.SetNeedToRedraw(true);
+
+      dlg[L"Edit"](L"Text") = ExtractFileName(Dst);
+rep1:
+      if (dlg.Execute() == 0)
+      {
+        ren = AddEndSlash(ExtractFilePath(Dst)) + dlg[L"Edit"](L"Text");
+        if (ExistsN(ren, 0))
+          goto rep1;
+        Repeat = false;
+      }
+      else
+      {
+        Repeat = true;
+      }
+    }
   }
 
   if (AcceptForAll || SkipNewer != OldSkipNewer)
