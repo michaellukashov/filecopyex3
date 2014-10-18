@@ -637,26 +637,26 @@ retry:
               while (ReopenRetry)
               {
                 ReopenRetry = false;
-              uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-              ABuffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
-              if (!ABuffInfo->OutFile)
-              {
-                ::WaitForSingleObject(UiFree, INFINITE);
-                uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
-                intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
-                                      DstName, ::GetLastError(), flg, L"", L"Error.OutputFileCreate");
-                ::SetEvent(UiFree);
-                if (res == RES_RETRY)
-                  goto reopen_retry;
-                else
+                uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
+                ABuffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
+                if (!ABuffInfo->OutFile)
                 {
-                  info.Flags |= FLG_SKIPPED | FLG_ERROR;
-                  if (flg & eerKeepFiles)
-                    info.Flags |= FLG_KEEPFILE;
-                  ABuffInfo->OutFile = INVALID_HANDLE_VALUE;
-                  if (res == RES_ABORT)
-                    Aborted = true;
-                  goto skip;
+                  ::WaitForSingleObject(UiFree, INFINITE);
+                  uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
+                  intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
+                                        DstName, ::GetLastError(), flg, L"", L"Error.OutputFileCreate");
+                  ::SetEvent(UiFree);
+                  ReopenRetry = (res == RES_RETRY);
+                  if (!ReopenRetry)
+                  {
+                    info.Flags |= FLG_SKIPPED | FLG_ERROR;
+                    if (flg & eerKeepFiles)
+                      info.Flags |= FLG_KEEPFILE;
+                    ABuffInfo->OutFile = INVALID_HANDLE_VALUE;
+                    if (res == RES_ABORT)
+                      Aborted = true;
+                    goto skip;
+                  }
                 }
               }
               if (FSeek(ABuffInfo->OutFile, Pos, FILE_BEGIN) == -1)
@@ -921,6 +921,7 @@ retry:
               bool ReopenRetry = true;
               while (ReopenRetry)
               {
+                ReopenRetry = false;
                 InputFileHandle = FOpen(SrcName, OPEN_READ, 0);
                 if (!InputFileHandle)
                 {
