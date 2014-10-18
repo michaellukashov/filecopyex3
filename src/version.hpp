@@ -13,4 +13,4 @@
 #define PLUGIN_NAME L"FileCopyEx3"
 #define PLUGIN_TITLE L"FileCopyEx3"
 #define PLUGIN_FILENAME L"FileCopyEx3.dll"
-#define PLUGIN_AUTHOR L"Michael Lukashov, Ruslan Petrenko, djdron, craZZy, Max Antipin and others"
+#define PLUGIN_AUTHOR L"Michael Lukashov, Igor Yudintsev, djdron, craZZy, Max Antipin and others"
