@@ -283,28 +283,27 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
 
     if (Move)
     {
-del_retry:
-      if (FileExists(SrcName) && !FDelete(SrcName))
+      bool DelRetry = true;
+      while (DelRetry)
       {
-        ::WaitForSingleObject(UiFree, INFINITE);
-        uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-        intptr_t res = EngineError(LOC(L"Error.FileDelete"), SrcName, ::GetLastError(), flg, L"", L"Error.FileDelete");
-        ::SetEvent(UiFree);
-        if (res == RES_RETRY)
+        DelRetry = false;
+        if (FileExists(SrcName) && !FDelete(SrcName))
         {
-          goto del_retry;
-        }
-        else
-        {
+          ::WaitForSingleObject(UiFree, INFINITE);
+          uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
+          intptr_t res = EngineError(LOC(L"Error.FileDelete"), SrcName, ::GetLastError(), flg, L"", L"Error.FileDelete");
+          ::SetEvent(UiFree);
+          DelRetry = (res == RES_RETRY);
           if (res == RES_ABORT)
           {
             Aborted = true;
           }
         }
-      }
-      else
-      {
-        info.Flags |= FLG_DELETED;
+        else
+        {
+          info.Flags |= FLG_DELETED;
+          DelRetry = false;
+        }
       }
     }
 
