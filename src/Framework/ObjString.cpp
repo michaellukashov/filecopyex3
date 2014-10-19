@@ -52,7 +52,7 @@ String String::substr(size_t s, size_t l) const
   {
     return String();
   }
-  return str.substr(s, l);
+  return String(str.substr(s, l));
 }
 
 String String::trim() const

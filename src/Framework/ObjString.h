@@ -33,10 +33,11 @@ class String
 {
 public:
   String() {}
+  String(const String & str) : str(str.str) {}
 
   explicit String(const char * v);
 
-  String(wchar_t ch, size_t len)
+  explicit String(wchar_t ch, size_t len)
   {
     str.resize(len, ch);
   }
@@ -45,11 +46,11 @@ public:
   {
   }
 
-  String(const wchar_t * v, size_t len) : str(v, len)
+  explicit String(const wchar_t * v, size_t len) : str(v, len)
   {
   }
 
-  String(const std::wstring & v) : str(v)
+  explicit String(const std::wstring & v) : str(v)
   {
   }
 
@@ -101,7 +102,7 @@ public:
   inline bool operator>=(const String & v) const { return cmp(v) >= 0; }
   inline void operator+=(const String & v) { str += v.str; }
   inline void operator+=(wchar_t c) { str += c; }
-  const String operator+(const String & v) const { return str + v.str; }
+  const String operator+(const String & v) const { return String(str + v.str); }
 
   inline size_t len() const { return str.length(); }
   inline bool empty() const { return str.empty(); }
