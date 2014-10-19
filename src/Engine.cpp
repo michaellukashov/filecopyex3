@@ -470,8 +470,7 @@ void Engine::CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct 
       DstName = DupName(DstName, info.RenameNum);
     if (info.OverMode == OM_PROMPT)
     {
-      String renn;
-      CheckOverwrite3(fnum, DstName, info, SrcName, renn);
+      CheckOverwrite3(fnum, DstName, info, SrcName);
     }
   }
   else
@@ -529,8 +528,7 @@ void Engine::CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct 
             info.Flags |= FLG_SKIPPED;
           else
           {
-            String renn;
-            CheckOverwrite3(fnum, DstName, info, SrcName, renn);
+            CheckOverwrite3(fnum, DstName, info, SrcName);
             Repeat = true;
           }
           break;
@@ -585,8 +583,9 @@ void Engine::CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct 
   }
 }
 
-void Engine::CheckOverwrite3(intptr_t fnum, String & DstName, FileStruct & info, const String& SrcName, String & renn)
+void Engine::CheckOverwrite3(intptr_t fnum, String & DstName, FileStruct & info, const String& SrcName)
 {
+  String renn;
   info.OverMode = CheckOverwrite2(fnum, SrcName, DstName, renn);
   if (info.OverMode == OM_RENAME)
     DstName = renn;
