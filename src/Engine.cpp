@@ -604,107 +604,119 @@ bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
     if (!(info.Flags & FLG_SKIPPED) && !ABuffInfo->OutFile)
       info.Flags |= FLG_SKIPPED | FLG_ERROR;
 
-    if (!(info.Flags & FLG_SKIPPED))
+    bool Skipped = false;
+    while(1)
     {
-      while (Pos < ABuffInfo->BuffInf[PosInStr].WritePos)
+      if (!(info.Flags & FLG_SKIPPED))
       {
-        if (CheckEscape() || Aborted)
+        while (Pos < ABuffInfo->BuffInf[PosInStr].WritePos)
         {
-          info.Flags |= FLG_SKIPPED;
-          goto skip;
-        }
-
-        size_t write_block_size = Min(ABuffInfo->BuffInf[PosInStr].WritePos - Pos, WriteBlock);
-        size_t write_block_size1 = write_block_size;
-        if (info.Flags & FLG_BUFFERED)
-          write_block_size = Min(write_block_size, (size_t)(info.Size - info.Written));
-        int64_t start_time = 0;
-        size_t written = 0;
-        bool Retry = true;
-        while (Retry)
-        {
-          Retry = false;
-          start_time = GetTime();
-          written = FWrite(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, write_block_size);
-
-          if (written < write_block_size)
+          if (CheckEscape() || Aborted)
           {
-            ::WaitForSingleObject(UiFree, INFINITE);
-            uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
-            intptr_t res = EngineError(LOC(L"Error.Write"), DstName, ::GetLastError(), flg,
-                                  L"", L"Error.Write");
-            ::SetEvent(UiFree);
-            if (res == RES_RETRY)
+            info.Flags |= FLG_SKIPPED;
+            Skipped = true;
+            break;
+          }
+
+          size_t write_block_size = Min(ABuffInfo->BuffInf[PosInStr].WritePos - Pos, WriteBlock);
+          size_t write_block_size1 = write_block_size;
+          if (info.Flags & FLG_BUFFERED)
+            write_block_size = Min(write_block_size, (size_t)(info.Size - info.Written));
+          int64_t start_time = 0;
+          size_t written = 0;
+          bool Retry = true;
+          while (Retry)
+          {
+            Retry = false;
+            start_time = GetTime();
+            written = FWrite(ABuffInfo->OutFile, ABuffInfo->Buffer + Pos, write_block_size);
+
+            if (written < write_block_size)
             {
-              if (flg & eerReopen)
+              ::WaitForSingleObject(UiFree, INFINITE);
+              uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
+              intptr_t res = EngineError(LOC(L"Error.Write"), DstName, ::GetLastError(), flg,
+                                    L"", L"Error.Write");
+              ::SetEvent(UiFree);
+              if (res == RES_RETRY)
               {
-                int64_t Pos = info.Written;
-                if (info.OverMode == OM_RESUME)
-                  Pos += info.ResumePos;
-                FClose(ABuffInfo->OutFile);
-                bool ReopenRetry = true;
-                while (ReopenRetry)
+                if (flg & eerReopen)
                 {
-                  ReopenRetry = false;
-                  uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
-                  ABuffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
-                  if (!ABuffInfo->OutFile)
+                  int64_t Pos = info.Written;
+                  if (info.OverMode == OM_RESUME)
+                    Pos += info.ResumePos;
+                  FClose(ABuffInfo->OutFile);
+                  bool ReopenRetry = true;
+                  while (ReopenRetry)
                   {
-                    ::WaitForSingleObject(UiFree, INFINITE);
-                    uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
-                    intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
-                                          DstName, ::GetLastError(), flg, L"", L"Error.OutputFileCreate");
-                    ::SetEvent(UiFree);
-                    ReopenRetry = (res == RES_RETRY);
-                    if (!ReopenRetry)
+                    ReopenRetry = false;
+                    uint32_t oflg = info.Flags & FLG_BUFFERED ? OPEN_BUF : 0;
+                    ABuffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
+                    if (!ABuffInfo->OutFile)
                     {
-                      info.Flags |= FLG_SKIPPED | FLG_ERROR;
-                      if (flg & eerKeepFiles)
-                        info.Flags |= FLG_KEEPFILE;
-                      ABuffInfo->OutFile = INVALID_HANDLE_VALUE;
-                      if (res == RES_ABORT)
-                        Aborted = true;
-                      goto skip;
+                      ::WaitForSingleObject(UiFree, INFINITE);
+                      uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
+                      intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
+                                            DstName, ::GetLastError(), flg, L"", L"Error.OutputFileCreate");
+                      ::SetEvent(UiFree);
+                      ReopenRetry = (res == RES_RETRY);
+                      if (!ReopenRetry)
+                      {
+                        info.Flags |= FLG_SKIPPED | FLG_ERROR;
+                        if (flg & eerKeepFiles)
+                          info.Flags |= FLG_KEEPFILE;
+                        ABuffInfo->OutFile = INVALID_HANDLE_VALUE;
+                        if (res == RES_ABORT)
+                          Aborted = true;
+                        Skipped = true;
+                        break;
+                      }
                     }
                   }
+                  if (Aborted || Skipped)
+                    break;
+                  if (FSeek(ABuffInfo->OutFile, Pos, FILE_BEGIN) == -1)
+                    FWError2(Format(L"FSeek to %d failed, code %d", Pos,
+                                   (int)::GetLastError()));
                 }
-                if (FSeek(ABuffInfo->OutFile, Pos, FILE_BEGIN) == -1)
-                  FWError2(Format(L"FSeek to %d failed, code %d", Pos,
-                                 (int)::GetLastError()));
+                Retry = true;
+                break;
               }
-              Retry = true;
-              break;
-            }
-            else
-            {
-              info.Flags |= FLG_SKIPPED | FLG_ERROR;
-              if (flg & eerKeepFiles)
-                info.Flags |= FLG_KEEPFILE;
-              if (res == RES_ABORT)
-                Aborted = true;
-              goto skip;
+              else
+              {
+                info.Flags |= FLG_SKIPPED | FLG_ERROR;
+                if (flg & eerKeepFiles)
+                  info.Flags |= FLG_KEEPFILE;
+                if (res == RES_ABORT)
+                  Aborted = true;
+                Skipped = true;
+                break;
+              }
             }
           }
+          if (Aborted || Skipped)
+            break;
+
+          int64_t write_time = GetTime() - start_time;
+          WriteTime += write_time;
+          info.Written += written;
+          WriteCb += written;
+          Pos += written;
+          if (!FirstWrite)
+            FirstWrite = GetTime() - StartTime;
+
+          Delay(write_time, written, WriteTime, WriteSpeedLimit);
+          ShowReadName(SrcName);
+          ShowWriteName(DstName);
+          ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
+
+          if (write_block_size < write_block_size1)
+            Pos = ABuffInfo->BuffInf[PosInStr].WritePos;
         }
-
-        int64_t write_time = GetTime() - start_time;
-        WriteTime += write_time;
-        info.Written += written;
-        WriteCb += written;
-        Pos += written;
-        if (!FirstWrite)
-          FirstWrite = GetTime() - StartTime;
-
-        Delay(write_time, written, WriteTime, WriteSpeedLimit);
-        ShowReadName(SrcName);
-        ShowWriteName(DstName);
-        ShowProgress(ReadCb, WriteCb, TotalBytes, ReadTime, WriteTime, ReadN, WriteN, TotalN);
-
-        if (write_block_size < write_block_size1)
-          Pos = ABuffInfo->BuffInf[PosInStr].WritePos;
+        if (Aborted || Skipped)
+          break;
       }
-
-skip: ;
+      break;
     }
     Pos = ABuffInfo->BuffInf[PosInStr].NextPos;
 
