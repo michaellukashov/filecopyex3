@@ -797,11 +797,19 @@ void Engine::Copy()
     String SrcName = Src.GetNext();
     String DstName = Dst.GetNext();
 
+    HANDLE InputFileHandle = INVALID_HANDLE_VALUE;
     FileStruct & info = Files[Index];
     if (info.Flags & FLG_SKIPPED ||
         info.Flags & FLG_COPIED ||
         info.Flags & FLG_DESCFILE)
       continue;
+
+    auto AbortOperation = [&]()
+    {
+      info.Flags |= FLG_SKIPPED;
+      FClose(InputFileHandle);
+      Aborted = true;
+    };
 
     if (info.Flags & FLG_DIR_PRE)
     {
@@ -864,7 +872,6 @@ void Engine::Copy()
     info.SectorSize = SectorSize;
 
     bool OpenRetry = true;
-    HANDLE InputFileHandle = INVALID_HANDLE_VALUE;
     intptr_t res = RES_NO;
     while (OpenRetry)
     {
@@ -889,12 +896,17 @@ void Engine::Copy()
         {
           info.Flags |= FLG_SKIPPED | FLG_ERROR;
           if (res == RES_ABORT)
-            goto abort;
+          {
+            AbortOperation();
+            break;
+          }
           else
             break;
         }
       }
     }
+    if (Aborted)
+      break;
     if (!OpenRetry && (res != RES_ABORT))
       continue;
 
@@ -960,12 +972,17 @@ void Engine::Copy()
                       if (flg & eerKeepFiles)
                         info.Flags |= FLG_KEEPFILE;
                       if (res == RES_ABORT)
-                        goto abort;
+                      {
+                        AbortOperation();
+                        break;
+                      }
                       else
                         goto skip;
                     }
                   }
                 }
+                if (Aborted)
+                  break;
                 if (FSeek(InputFileHandle, Pos, FILE_BEGIN) == -1)
                   FWError2(Format(L"FSeek to %d failed, code %d", Pos,
                                  (int)::GetLastError()));
@@ -979,12 +996,17 @@ void Engine::Copy()
               if (flg & eerKeepFiles)
                 info.Flags |= FLG_KEEPFILE;
               if (res == RES_ABORT)
-                goto abort;
+              {
+                AbortOperation();
+                break;
+              }
               else
                 goto skip;
             }
           }
         }
+        if (Aborted)
+          break;
 
         int64_t read_time = GetTime() - start_time;
         ReadTime += read_time;
@@ -997,10 +1019,15 @@ void Engine::Copy()
         ShowReadName(SrcName);
 
         if (CheckEscape())
-          goto abort;
+        {
+          AbortOperation();
+          break;
+        }
         if (read < read_block_size)
           break;
       }
+      if (Aborted)
+        break;
 
 skip:
       size_t abp = BuffPos;
@@ -1017,12 +1044,18 @@ skip:
         if (!Parallel)
         {
           if (!FlushBuff(buffInfo))
-            goto abort;
+          {
+            AbortOperation();
+            break;
+          }
         }
         else
         {
           if (!WaitForFlushEnd())
-            goto abort;
+          {
+            AbortOperation();
+            break;
+          }
           SwapBufs(buffInfo, wbuffInfo);
           BGFlush();
         }
@@ -1036,15 +1069,14 @@ skip:
         break;
       }
     }
+    if (Aborted)
+      break;
 
     FClose(InputFileHandle);
     ReadN++;
     continue;
 
-abort:
-    info.Flags |= FLG_SKIPPED;
-    FClose(InputFileHandle);
-    Aborted = true;
+    AbortOperation();
     break;
   }
 
