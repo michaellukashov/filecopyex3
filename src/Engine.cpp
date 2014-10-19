@@ -2122,7 +2122,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
         RememberStruct Remember;
         while (1)
         {
-          if (wcscmp(fd.cFileName, PARENTDIRECTORY) && wcscmp(fd.cFileName, THISDIRECTORY))
+          if ((wcscmp(fd.cFileName, PARENTDIRECTORY) != 0) && (wcscmp(fd.cFileName, THISDIRECTORY) != 0))
           {
             intptr_t idx;
             if (_CopyDescs && _DescsInDirs &&
