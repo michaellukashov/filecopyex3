@@ -101,7 +101,7 @@ static bool CallCopy(bool move, bool curOnly)
   return Result;
 }
 
-void beep(int b, bool useBASS, const String &file)
+void Beep(int b, bool useBASS, const String &file)
 {
   if (useBASS && !file.IsEmpty())
   {
@@ -139,10 +139,10 @@ void beep(int b, bool useBASS, const String &file)
   }
 }
 
-void beep(int b)
+void Beep(int b)
 {
   PropertyMap & Options = plugin->Options();
-  beep(b, Options[L"UseBASS"], Options[L"AudioFile"]);
+  Beep(b, Options[L"UseBASS"], Options[L"AudioFile"]);
 }
 
 void FarPlugin::OpenPlugin(const struct OpenInfo * OInfo)
@@ -376,7 +376,7 @@ void FarPlugin::SoundConfig()
       dlg.SaveState(options);
       return;
     case 1:
-      beep(bn, dlg[L"UseBASS"](L"Selected"), dlg[L"AudioFile"](L"Text"));
+      Beep(bn, dlg[L"UseBASS"](L"Selected"), dlg[L"AudioFile"](L"Text"));
       if (++bn > 2)
       {
         bn = 0;

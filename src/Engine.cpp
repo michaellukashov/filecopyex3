@@ -1543,7 +1543,7 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
     // srcpath.ptr() for temporary file panel is empty
     if (relDstPath.icmp(L"nul") != 0)
     {
-      dstPath = convertPath(CPM_REAL, relDstPath);
+      dstPath = ConvertPath(CPM_REAL, relDstPath);
     }
     else
     {
@@ -1828,11 +1828,11 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
   if ((bool)Options[L"Sound"] && !Aborted)
   {
     if (GetTime() - Start > 30 * 60 * TicksPerSec())
-      beep(2);
+      Beep(2);
     else if (GetTime() - Start > 10 * 60 * TicksPerSec())
-      beep(1);
+      Beep(1);
     else if (GetTime() - Start > 30 * TicksPerSec())
-      beep(0);
+      Beep(0);
   }
 
 fin:

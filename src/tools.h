@@ -88,11 +88,11 @@ intptr_t CheckParallel(const String & srcpath, const String & dstpath);
 
 String GetSymLink(const String & dir);
 
-void beep(int);
+void Beep(int);
 
 void DebugLog(const wchar_t * DebugMsg, ...);
 
-String convertPath(enum CONVERTPATHMODES mode, const String & src);
+String ConvertPath(enum CONVERTPATHMODES mode, const String & src);
 
 inline int64_t GetTime()
 {
