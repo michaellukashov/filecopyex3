@@ -1095,44 +1095,6 @@ void Engine::Copy()
 
       if (!SkipOperation())
         break;
-//      size_t abp = BuffPos;
-//      if (abp % SectorSize)
-//        abp = (abp / SectorSize + 1) * SectorSize;
-//      buffInfo->BuffInf[FilesInBuff].WritePos = abp;
-//      if (BuffPos % ReadAlign)
-//        BuffPos = (BuffPos / ReadAlign + 1) * ReadAlign;
-//      buffInfo->BuffInf[FilesInBuff].NextPos = BuffPos;
-//      buffInfo->BuffInf[FilesInBuff].FileNumber = (intptr_t)Index;
-//      if (BuffPos == buffInfo->BuffSize)
-//      {
-//        buffInfo->BuffInf[FilesInBuff].EndFlag = false;
-//        if (!Parallel)
-//        {
-//          if (!FlushBuff(buffInfo))
-//          {
-//            AbortOperation();
-//            break;
-//          }
-//        }
-//        else
-//        {
-//          if (!WaitForFlushEnd())
-//          {
-//            AbortOperation();
-//            break;
-//          }
-//          SwapBufs(buffInfo, wbuffInfo);
-//          BGFlush();
-//        }
-//        BuffPos = 0;
-//        FilesInBuff = 0;
-//      }
-//      else
-//      {
-//        buffInfo->BuffInf[FilesInBuff].EndFlag = true;
-//        FilesInBuff++;
-//        break;
-//      }
     }
     if (Aborted || Skipped)
       break;
