@@ -152,4 +152,3 @@ private:
   std::wstring str;
 };
 
-extern const String emptyString;

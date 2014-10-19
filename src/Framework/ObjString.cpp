@@ -143,8 +143,6 @@ String String::toLower() const
   return res;
 }
 
-const String emptyString;
-
 size_t npos_minus1(size_t pos)
 {
   return (pos == std::string::npos) ? (size_t)-1 : pos;
