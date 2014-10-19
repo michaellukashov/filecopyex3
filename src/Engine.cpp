@@ -2019,7 +2019,8 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
         if (FMoveFile(src, dst, false))
         {
           it->Flags |= FLG_COPIED | FLG_DELETED;
-          goto fin;
+          AddFile2(src, Level, attr, dst);
+          return true;
         }
         DWORD err = ::GetLastError();
         if (err == ERROR_ALREADY_EXISTS && !(attr & FILE_ATTRIBUTE_DIRECTORY))
@@ -2029,7 +2030,8 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
             if (FileSize(dst) >= it->Size)
             {
               it->Flags |= FLG_SKIPPED;
-              goto fin;
+              AddFile2(src, Level, attr, dst);
+              return true;
             }
           }
           else
@@ -2052,7 +2054,8 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
             {
               case OM_SKIP:
                 it->Flags |= FLG_SKIPPED;
-                goto fin;
+                AddFile2(src, Level, attr, dst);
+                return true;
                 break;
 
               case OM_OVERWRITE:
@@ -2060,7 +2063,8 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
                 if (FMoveFile(src, dst, true))
                 {
                   it->Flags |= FLG_COPIED | FLG_DELETED;
-                  goto fin;
+                  AddFile2(src, Level, attr, dst);
+                  return true;
                 }
                 break;
 
@@ -2218,9 +2222,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
     }
   }
 
-fin:
   AddFile2(src, Level, attr, dst);
-
   return true;
 }
 
