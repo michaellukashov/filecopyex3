@@ -2219,6 +2219,13 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
   }
 
 fin:
+  AddFile2(src, Level, attr, dst);
+
+  return true;
+}
+
+void Engine::AddFile2(const String & src, intptr_t Level, DWORD attr, const String & dst)
+{
   if (attr & FILE_ATTRIBUTE_DIRECTORY)
   {
     FileStruct info;
@@ -2231,8 +2238,6 @@ fin:
     SrcNames.AddRel(FileName::levelMinus, ExtractFileName(src));
     DstNames.AddRel(FileName::levelMinus, ExtractFileName(dst));
   }
-
-  return true;
 }
 
 void Engine::SetOverwriteMode(intptr_t Start)

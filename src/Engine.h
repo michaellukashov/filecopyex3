@@ -150,6 +150,7 @@ private:
   void SetOverwriteMode(intptr_t);
   bool AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
   bool AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
+  void AddFile2(const String & src, intptr_t Level, DWORD attr, const String & dst);
   void AddTopLevelDir(const String & dir, const String & dstmask, DWORD Flags, FileName::Direction d);
   static void RememberFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, RememberStruct &);
   bool AddRemembered(RememberStruct &);
