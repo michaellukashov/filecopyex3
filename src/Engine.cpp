@@ -2389,7 +2389,7 @@ intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String 
   bool OldSkipNewer = SkipNewer;
 
   intptr_t res = OM_PROMPT, ores = -1;
-  int AcceptForAll = dlg[L"AcceptForAll"](L"Selected");
+  bool AcceptForAll = (bool)dlg[L"AcceptForAll"](L"Selected");
   bool Repeat = true;
   while (Repeat)
   {
@@ -2412,7 +2412,7 @@ intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String 
         return OM_CANCEL;
     }
 
-    AcceptForAll = dlg[L"AcceptForAll"](L"Selected");
+    AcceptForAll = (bool)dlg[L"AcceptForAll"](L"Selected");
     SkipNewer = dlg[L"SkipIfNewer"](L"Selected");
     SkippedToTemp = dlg[L"SkippedToTemp"](L"Selected");
 
