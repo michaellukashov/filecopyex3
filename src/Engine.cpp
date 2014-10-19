@@ -1733,11 +1733,11 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
     if (!haveCurPath || filePath.icmp(curPath))
     {
       if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath))
-        goto fin;
+        return MainFinalize(panel_info_active);
       curPath = filePath;
       haveCurPath = 1;
       if (!DirStart(!curPath.empty() ? curPath : srcPath, dstPath))
-        goto fin;
+        return MainFinalize(panel_info_active);
     }
 
     if (file.find('\\') == -1)
@@ -1766,12 +1766,12 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
     FarToWin32FindData(pit, wfd);
     if (!AddFile(file, dst, wfd, CurPathAddFlags, 1, Idx))
     {
-      goto fin;
+      return MainFinalize(panel_info_active);
     }
   }
 
   if (haveCurPath && !DirEnd(!curPath.empty() ? curPath : srcPath, dstPath))
-    goto fin;
+    return MainFinalize(panel_info_active);
 
   if (OverwriteMode == OM_RESUME)
   {
@@ -1835,7 +1835,6 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
       Beep(0);
   }
 
-fin:
   return MainFinalize(panel_info_active);
 }
 
