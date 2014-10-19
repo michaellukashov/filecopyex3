@@ -57,7 +57,8 @@ String String::substr(size_t s, size_t l) const
 
 String String::trim() const
 {
-  intptr_t start = 0, end = len() - 1;
+  intptr_t start = 0;
+  intptr_t end = len() - 1;
   while (start <= end && isbadchar((*this)[start]))
   {
     start++;
@@ -71,7 +72,8 @@ String String::trim() const
 
 String String::ltrim() const
 {
-  intptr_t start = 0, end = len() - 1;
+  intptr_t start = 0;
+  intptr_t end = len() - 1;
   while (start <= end && isbadchar((*this)[start]))
   {
     start++;
@@ -81,7 +83,8 @@ String String::ltrim() const
 
 String String::rtrim() const
 {
-  intptr_t start = 0, end = len() - 1;
+  intptr_t start = 0;
+  intptr_t end = len() - 1;
   while (end >= start && isbadchar((*this)[end]))
   {
     end--;
@@ -91,7 +94,8 @@ String String::rtrim() const
 
 String String::trimquotes() const
 {
-  intptr_t start = 0, end = len() - 1;
+  intptr_t start = 0;
+  intptr_t end = len() - 1;
   while (start <= end && ((*this)[start]) == L'"')
   {
     start++;

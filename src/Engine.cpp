@@ -2109,7 +2109,8 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
           else
           {
             String ren;
-            intptr_t res, j = 0;
+            intptr_t res = 0;
+            intptr_t j = 0;
             if (SkipNewer && Newer(dst, lastWriteTime))
             {
               res = OM_SKIP;
@@ -2388,7 +2389,8 @@ intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String 
   dlg[L"SkippedToTemp"](L"Selected") = SkippedToTemp;
   bool OldSkipNewer = SkipNewer;
 
-  intptr_t res = OM_PROMPT, ores = -1;
+  intptr_t res = OM_PROMPT;
+  intptr_t ores = -1;
   bool AcceptForAll = (bool)dlg[L"AcceptForAll"](L"Selected");
   bool Repeat = true;
   while (Repeat)

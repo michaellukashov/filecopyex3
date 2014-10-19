@@ -35,7 +35,8 @@ class FarDialogClass;
 
 struct RetCode
 {
-  intptr_t itemNo, retCode;
+  intptr_t itemNo;
+  intptr_t retCode;
 };
 
 class FarDialog;

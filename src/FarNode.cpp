@@ -93,7 +93,8 @@ struct _group
 void FarDlgContainer::DefSize(intptr_t & sumw, intptr_t & sumh, intptr_t & fit)
 {
   sumw = sumh = 0;
-  intptr_t groupw = 0, grouph = 0;
+  intptr_t groupw = 0;
+  intptr_t grouph = 0;
   fit = getPayload()(L"FitWidth").operator int();
   for (size_t Index = 0; Index < childs.size(); Index++)
   {
@@ -118,7 +119,8 @@ void FarDlgContainer::DefSize(intptr_t & sumw, intptr_t & sumh, intptr_t & fit)
 
 void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<RetCode>& RetCodes, intptr_t curX, intptr_t curY, intptr_t curW)
 {
-  intptr_t sumw = 0, sumh = 0;
+  intptr_t sumw = 0;
+  intptr_t sumh = 0;
   std::vector<_group> Groups;
   _group group;
   group.start = group.w = group.h = group.nfit = 0;
@@ -150,7 +152,8 @@ void FarDlgContainer::AddToItems(std::vector<FarDialogItem>& Items, std::vector<
       }
     }
   }
-  intptr_t x = curX, y = curY;
+  intptr_t x = curX;
+  intptr_t y = curY;
   for (size_t j = 0; j < Groups.size(); j++)
   {
     for (intptr_t Index = Groups[j].start; Index <= Groups[j].end; Index++)

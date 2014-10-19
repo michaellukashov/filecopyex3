@@ -38,7 +38,9 @@ struct FileStruct
   FILETIME creationTime, lastAccessTime, lastWriteTime;
   intptr_t RenameNum;
   intptr_t OverMode;
-  intptr_t Level, PanelIndex, SectorSize;
+  intptr_t Level;
+  intptr_t PanelIndex;
+  intptr_t SectorSize;
   DWORD Attr;
   DWORD Flags;
 };
