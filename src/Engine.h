@@ -147,6 +147,7 @@ private:
 
   intptr_t CheckOverwrite(intptr_t, const String &, const String &, String &);
   intptr_t CheckOverwrite2(intptr_t, const String &, const String &, String &);
+  void CheckOverwrite3(intptr_t fnum, String & DstName, FileStruct & info, const String& SrcName, String & renn);
   void SetOverwriteMode(intptr_t);
   bool AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
   bool AddFile(const String & Src, const String & Dst, WIN32_FIND_DATA & fd, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);
