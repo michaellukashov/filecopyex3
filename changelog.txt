@@ -1,4 +1,5 @@
-FileCopyEx3 3.0.7.36 14.10.2014
+FileCopyEx3 3.0.7.37 19.10.2014
+
 * Fix use of plugin settings by two and more instances of the app
   Thanks to Igor Yudintsev
   (https://github.com/michaellukashov/filecopyex3/pull/21)
