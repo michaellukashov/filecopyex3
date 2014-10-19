@@ -965,8 +965,6 @@ void Engine::Copy()
     }
     if (Aborted || Skipped)
       break;
-    if (!OpenRetry && (res != RES_ABORT))
-      continue;
 
     if (OverwriteMode == OM_RESUME)
     {
