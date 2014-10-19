@@ -1365,7 +1365,7 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
 
     String fileName = pit->FileName;
     String currentFileName = ExtractFileName(fileName);
-    if (currentFileName == L"..")
+    if (currentFileName == PARENTDIRECTORY)
       return MRES_NONE;
     String fmt;
     if (!move)
@@ -1724,7 +1724,7 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
     size_t Idx = sortIndex[Index];
     TPanelItem pit(Idx);
     String file = pit->FileName;
-    if (file == L"..")
+    if (file == PARENTDIRECTORY)
     {
       continue;
     }
@@ -2122,7 +2122,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
         RememberStruct Remember;
         while (1)
         {
-          if (wcscmp(fd.cFileName, L"..") && wcscmp(fd.cFileName, L"."))
+          if (wcscmp(fd.cFileName, PARENTDIRECTORY) && wcscmp(fd.cFileName, THISDIRECTORY))
           {
             intptr_t idx;
             if (_CopyDescs && _DescsInDirs &&

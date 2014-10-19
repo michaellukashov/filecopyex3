@@ -29,6 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "CopyProgress.h"
 #include "Framework/FileNameStoreEnum.h"
 
+#define PARENTDIRECTORY L".."
+#define THISDIRECTORY L"."
+
 struct FileStruct
 {
   int64_t Size, Read, Written, ResumePos;
