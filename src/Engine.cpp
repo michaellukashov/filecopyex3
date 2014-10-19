@@ -816,11 +816,57 @@ void Engine::Copy()
         info.Flags & FLG_DESCFILE)
       continue;
 
-    auto AbortOperation = [&]()
+    bool Skipped = false;
+
+    auto AbortOperation = [&]() -> void
     {
       info.Flags |= FLG_SKIPPED;
       FClose(InputFileHandle);
       Aborted = true;
+    };
+
+    auto SkipOperation = [&]() -> bool
+    {
+      Skipped = true;
+      size_t abp = BuffPos;
+      if (abp % SectorSize)
+        abp = (abp / SectorSize + 1) * SectorSize;
+      buffInfo->BuffInf[FilesInBuff].WritePos = abp;
+      if (BuffPos % ReadAlign)
+        BuffPos = (BuffPos / ReadAlign + 1) * ReadAlign;
+      buffInfo->BuffInf[FilesInBuff].NextPos = BuffPos;
+      buffInfo->BuffInf[FilesInBuff].FileNumber = (intptr_t)Index;
+      if (BuffPos == buffInfo->BuffSize)
+      {
+        buffInfo->BuffInf[FilesInBuff].EndFlag = false;
+        if (!Parallel)
+        {
+          if (!FlushBuff(buffInfo))
+          {
+            AbortOperation();
+            return false;
+          }
+        }
+        else
+        {
+          if (!WaitForFlushEnd())
+          {
+            AbortOperation();
+            return false;
+          }
+          SwapBufs(buffInfo, wbuffInfo);
+          BGFlush();
+        }
+        BuffPos = 0;
+        FilesInBuff = 0;
+      }
+      else
+      {
+        buffInfo->BuffInf[FilesInBuff].EndFlag = true;
+        FilesInBuff++;
+        return false;
+      }
+      return true;
     };
 
     if (info.Flags & FLG_DIR_PRE)
@@ -917,7 +963,7 @@ void Engine::Copy()
         }
       }
     }
-    if (Aborted)
+    if (Aborted || Skipped)
       break;
     if (!OpenRetry && (res != RES_ABORT))
       continue;
@@ -989,11 +1035,14 @@ void Engine::Copy()
                         break;
                       }
                       else
-                        goto skip;
+                      {
+                        SkipOperation();
+                        break;
+                      }
                     }
                   }
                 }
-                if (Aborted)
+                if (Aborted || Skipped)
                   break;
                 if (FSeek(InputFileHandle, Pos, FILE_BEGIN) == -1)
                   FWError2(Format(L"FSeek to %d failed, code %d", Pos,
@@ -1013,11 +1062,14 @@ void Engine::Copy()
                 break;
               }
               else
-                goto skip;
+              {
+                SkipOperation();
+                break;
+              }
             }
           }
         }
-        if (Aborted)
+        if (Aborted || Skipped)
           break;
 
         int64_t read_time = GetTime() - start_time;
@@ -1038,50 +1090,51 @@ void Engine::Copy()
         if (read < read_block_size)
           break;
       }
-      if (Aborted)
+      if (Aborted || Skipped)
         break;
 
-skip:
-      size_t abp = BuffPos;
-      if (abp % SectorSize)
-        abp = (abp / SectorSize + 1) * SectorSize;
-      buffInfo->BuffInf[FilesInBuff].WritePos = abp;
-      if (BuffPos % ReadAlign)
-        BuffPos = (BuffPos / ReadAlign + 1) * ReadAlign;
-      buffInfo->BuffInf[FilesInBuff].NextPos = BuffPos;
-      buffInfo->BuffInf[FilesInBuff].FileNumber = (intptr_t)Index;
-      if (BuffPos == buffInfo->BuffSize)
-      {
-        buffInfo->BuffInf[FilesInBuff].EndFlag = false;
-        if (!Parallel)
-        {
-          if (!FlushBuff(buffInfo))
-          {
-            AbortOperation();
-            break;
-          }
-        }
-        else
-        {
-          if (!WaitForFlushEnd())
-          {
-            AbortOperation();
-            break;
-          }
-          SwapBufs(buffInfo, wbuffInfo);
-          BGFlush();
-        }
-        BuffPos = 0;
-        FilesInBuff = 0;
-      }
-      else
-      {
-        buffInfo->BuffInf[FilesInBuff].EndFlag = true;
-        FilesInBuff++;
+      if (!SkipOperation())
         break;
-      }
+//      size_t abp = BuffPos;
+//      if (abp % SectorSize)
+//        abp = (abp / SectorSize + 1) * SectorSize;
+//      buffInfo->BuffInf[FilesInBuff].WritePos = abp;
+//      if (BuffPos % ReadAlign)
+//        BuffPos = (BuffPos / ReadAlign + 1) * ReadAlign;
+//      buffInfo->BuffInf[FilesInBuff].NextPos = BuffPos;
+//      buffInfo->BuffInf[FilesInBuff].FileNumber = (intptr_t)Index;
+//      if (BuffPos == buffInfo->BuffSize)
+//      {
+//        buffInfo->BuffInf[FilesInBuff].EndFlag = false;
+//        if (!Parallel)
+//        {
+//          if (!FlushBuff(buffInfo))
+//          {
+//            AbortOperation();
+//            break;
+//          }
+//        }
+//        else
+//        {
+//          if (!WaitForFlushEnd())
+//          {
+//            AbortOperation();
+//            break;
+//          }
+//          SwapBufs(buffInfo, wbuffInfo);
+//          BGFlush();
+//        }
+//        BuffPos = 0;
+//        FilesInBuff = 0;
+//      }
+//      else
+//      {
+//        buffInfo->BuffInf[FilesInBuff].EndFlag = true;
+//        FilesInBuff++;
+//        break;
+//      }
     }
-    if (Aborted)
+    if (Aborted || Skipped)
       break;
 
     FClose(InputFileHandle);
