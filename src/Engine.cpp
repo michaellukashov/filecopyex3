@@ -827,7 +827,6 @@ void Engine::Copy()
 
     auto SkipOperation = [&]() -> bool
     {
-      Skipped = true;
       size_t abp = BuffPos;
       if (abp % SectorSize)
         abp = (abp / SectorSize + 1) * SectorSize;
@@ -1035,6 +1034,7 @@ void Engine::Copy()
                       else
                       {
                         SkipOperation();
+                        Skipped = true;
                         break;
                       }
                     }
@@ -1062,6 +1062,7 @@ void Engine::Copy()
               else
               {
                 SkipOperation();
+                Skipped = true;
                 break;
               }
             }
