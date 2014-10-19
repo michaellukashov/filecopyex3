@@ -1836,8 +1836,12 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
   }
 
 fin:
-  ScanFoldersProgressBox.Hide();
+  return MainFinalize(panel_info_active);
+}
 
+Engine::MResult Engine::MainFinalize(PanelInfo & panel_info_active)
+{
+  ScanFoldersProgressBox.Hide();
   if (!Move)
   {
     Info.PanelControl(PANEL_ACTIVE, FCTL_BEGINSELECTION, 0, nullptr);

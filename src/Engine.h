@@ -178,4 +178,5 @@ private:
   bool CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
                           const String & srcpathstr, const String & dstpathstr);
   bool CheckFATRestrictions(const String & srcpathstr, const String & dstpathstr);
+  MResult MainFinalize(PanelInfo & panel_info_active);
 };
