@@ -2109,7 +2109,6 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
           {
             String ren;
             intptr_t res = 0;
-            intptr_t j = 0;
             if (SkipNewer && Newer(dst, lastWriteTime))
             {
               res = OM_SKIP;
@@ -2151,6 +2150,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
                 }
                 else
                 {
+                  intptr_t j = 0;
                   while (ExistsN(dst, j))
                     j++;
                   dst = DupName(dst, j);
