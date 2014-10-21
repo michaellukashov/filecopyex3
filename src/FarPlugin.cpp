@@ -366,10 +366,9 @@ void FarPlugin::SoundConfig()
   bool useBASS = dlg[L"UseBASS"](L"Selected");
   dlg[L"UseSystem"](L"Selected") = !useBASS;
 
-  intptr_t res;
   while (true)
   {
-    res = dlg.Execute();
+    intptr_t res = dlg.Execute();
     switch (res)
     {
     case 0:
