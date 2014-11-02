@@ -583,7 +583,7 @@ void Engine::CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct 
   }
 }
 
-void Engine::CheckOverwrite3(intptr_t fnum, String & DstName, FileStruct & info, const String& SrcName)
+void Engine::CheckOverwrite3(intptr_t fnum, String & DstName, FileStruct & info, const String & SrcName)
 {
   String renn;
   info.OverMode = CheckOverwrite2(fnum, SrcName, DstName, renn);
