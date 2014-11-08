@@ -971,6 +971,10 @@ void Engine::Copy()
             break;
         }
       }
+      else if (info.Flags & FLG_SKIPPED)
+      {
+        AbortOperation();
+      }
     }
     if (Aborted || Skipped)
       break;
