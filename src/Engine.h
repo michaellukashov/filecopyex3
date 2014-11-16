@@ -36,7 +36,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 struct FileStruct
 {
   int64_t Size, Read, Written, ResumePos;
-  FILETIME creationTime, lastAccessTime, lastWriteTime;
+  FILETIME CreationTime, LastAccessTime, LastWriteTime;
   intptr_t RenameNum;
   TOverwriteMode OverMode;
   intptr_t Level;

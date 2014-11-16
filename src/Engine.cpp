@@ -253,7 +253,7 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
   {
     if (info.Flags & FLG_BUFFERED)
     {
-      this->SetFileTime(Handle, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+      this->SetFileTime(Handle, &info.CreationTime, &info.LastAccessTime, &info.LastWriteTime);
     }
   }
 
@@ -268,11 +268,11 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
     {
       if (info.OverMode == OM_APPEND)
       {
-        SetFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+        SetFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Size, &info.CreationTime, &info.LastAccessTime, &info.LastWriteTime);
       }
       else
       {
-        SetFileSizeAndTime(DstName, info.Size, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+        SetFileSizeAndTime(DstName, info.Size, &info.CreationTime, &info.LastAccessTime, &info.LastWriteTime);
       }
     }
 
@@ -346,18 +346,18 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
       {
         if (KeepFiles || (info.Flags & FLG_KEEPFILE))
         {
-          SetFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          SetFileSizeAndTime(DstName, ABuffInfo->OrgSize + info.Written, &info.CreationTime, &info.LastAccessTime, &info.LastWriteTime);
         }
         else
         {
-          SetFileSizeAndTime(DstName, ABuffInfo->OrgSize, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          SetFileSizeAndTime(DstName, ABuffInfo->OrgSize, &info.CreationTime, &info.LastAccessTime, &info.LastWriteTime);
         }
       }
       else
       {
         if (KeepFiles || (info.Flags & FLG_KEEPFILE))
         {
-          SetFileSizeAndTime(DstName, info.Written, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+          SetFileSizeAndTime(DstName, info.Written, &info.CreationTime, &info.LastAccessTime, &info.LastWriteTime);
         }
         else
         {
@@ -897,7 +897,7 @@ void Engine::Copy()
           FCompress(hd, CompressMode);
           if (!(info.Flags & FLG_DIR_FORCE))
           {
-            this->SetFileTime(hd, &info.creationTime, &info.lastAccessTime, &info.lastWriteTime);
+            this->SetFileTime(hd, &info.CreationTime, &info.LastAccessTime, &info.LastWriteTime);
           }
           ::CloseHandle(hd);
         }
@@ -1281,9 +1281,9 @@ void Engine::AddTopLevelDir(const String & dir, const String & dstMask, DWORD fl
   {
     ::FindClose(Handle);
     info.Attr = fd.dwFileAttributes;
-    info.creationTime = fd.ftCreationTime;
-    info.lastAccessTime = fd.ftLastAccessTime;
-    info.lastWriteTime = fd.ftLastWriteTime;
+    info.CreationTime = fd.ftCreationTime;
+    info.LastAccessTime = fd.ftLastAccessTime;
+    info.LastWriteTime = fd.ftLastWriteTime;
   }
   Files.push_back(info);
 }
@@ -2051,9 +2051,9 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
 
   it->Size = sz1;
   it->Attr = attr;
-  it->creationTime = creationTime;
-  it->lastAccessTime = lastAccessTime;
-  it->lastWriteTime = lastWriteTime;
+  it->CreationTime = creationTime;
+  it->LastAccessTime = lastAccessTime;
+  it->LastWriteTime = lastWriteTime;
 
   it->Level = Level;
   it->PanelIndex = PanelIndex;
@@ -2334,7 +2334,7 @@ void Engine::SetOverwriteMode(intptr_t Start)
     }
     if (!(info.Flags & FLG_SKIPPED) && !(info.Flags & FLG_DIR_PRE) && !(info.Flags & FLG_DIR_POST) && FileExists(fn))
     {
-      if (SkipNewer && Newer(fn, info.lastWriteTime))
+      if (SkipNewer && Newer(fn, info.LastWriteTime))
       {
         TotalBytes -= info.Size;
         TotalN--;
