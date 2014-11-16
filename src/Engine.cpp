@@ -973,10 +973,11 @@ void Engine::Copy()
       }
       else if (info.Flags & FLG_SKIPPED)
       {
-        AbortOperation();
+        SkipOperation();
+        Skipped = true;
       }
     }
-    if (Aborted || Skipped)
+    if (Aborted)
       break;
 
     if (OverwriteMode == OM_RESUME)
@@ -1109,10 +1110,10 @@ void Engine::Copy()
       if (!SkipOperation())
         break;
     }
-    if (Aborted || Skipped)
+    FClose(InputFileHandle);
+    if (Aborted)
       break;
 
-    FClose(InputFileHandle);
     ReadN++;
     continue;
 
