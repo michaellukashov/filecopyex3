@@ -272,8 +272,8 @@ void FarPlugin::UpdateConfiguration()
 void FarPlugin::InitOptions()
 {
   PropertyMap & Options = this->Options();
-  Options[L"BufPercent"] = 1;
-  Options[L"BufSize"] = 0;
+  Options[L"BufPercent"] = 0;
+  Options[L"BufSize"] = 1;
   Options[L"BufPercentVal"] = 15;
   Options[L"BufSizeVal"] = DEFAULT_SECTOR_SIZE;
   Options[L"OverwriteDef"] = 0;
