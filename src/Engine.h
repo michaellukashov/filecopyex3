@@ -27,6 +27,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include <vector>
 
 #include "CopyProgress.h"
+#include "Tools.h"
 #include "Framework/FileNameStoreEnum.h"
 
 #define PARENTDIRECTORY L".."
@@ -37,7 +38,7 @@ struct FileStruct
   int64_t Size, Read, Written, ResumePos;
   FILETIME creationTime, lastAccessTime, lastWriteTime;
   intptr_t RenameNum;
-  intptr_t OverMode;
+  TOverwriteMode OverMode;
   intptr_t Level;
   intptr_t PanelIndex;
   intptr_t SectorSize;
@@ -103,7 +104,7 @@ private:
   bool Parallel, SkipNewer, SkippedToTemp;
   int Streams, Rights,
       CompressMode, EncryptMode;
-  intptr_t OverwriteMode;
+  TOverwriteMode OverwriteMode;
   size_t BufSize;
   int64_t ReadSpeedLimit, WriteSpeedLimit;
   int ReadAlign;
@@ -147,8 +148,8 @@ private:
   int CheckOverwrite(intptr_t fnum, String & ren);
   static void Delay(int64_t, int64_t, volatile int64_t &, int64_t);
 
-  intptr_t CheckOverwrite(intptr_t, const String &, const String &, String &);
-  intptr_t CheckOverwrite2(intptr_t, const String &, const String &, String &);
+  TOverwriteMode CheckOverwrite(intptr_t, const String &, const String &, String &);
+  TOverwriteMode CheckOverwrite2(intptr_t, const String &, const String &, String &);
   void CheckOverwrite3(intptr_t fnum, String & DstName, FileStruct & info, const String & SrcName);
   void SetOverwriteMode(intptr_t);
   bool AddFile(const String & _src, const String & _dst, DWORD Attr, int64_t Size, const FILETIME & creationTime, const FILETIME & lastAccessTime, const FILETIME & lastWriteTime, DWORD Flags, intptr_t Level, intptr_t PanelIndex = -1);

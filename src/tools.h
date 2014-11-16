@@ -31,13 +31,16 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define ATTR_ON 1
 #define ATTR_INHERIT 2
 
-#define OM_CANCEL               -1
-#define OM_PROMPT               0
-#define OM_OVERWRITE            1
-#define OM_SKIP                 2
-#define OM_APPEND               3
-#define OM_RENAME               4
-#define OM_RESUME               5
+enum TOverwriteMode
+{
+  OM_CANCEL =             -1,
+  OM_PROMPT =             0,
+  OM_OVERWRITE =          1,
+  OM_SKIP =               2,
+  OM_APPEND =             3,
+  OM_RENAME =             4,
+  OM_RESUME =             5,
+};
 
 #define FLG_COPIED 1
 #define FLG_DELETED 2

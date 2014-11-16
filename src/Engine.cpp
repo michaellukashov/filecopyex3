@@ -1196,10 +1196,10 @@ void Engine::ShowProgress(int64_t read, int64_t write, int64_t total,
   ::SetEvent(UiFree);
 }
 
-intptr_t Engine::CheckOverwrite2(intptr_t fnum, const String & src, const String & dst, String & ren)
+TOverwriteMode Engine::CheckOverwrite2(intptr_t fnum, const String & src, const String & dst, String & ren)
 {
   ::WaitForSingleObject(UiFree, INFINITE);
-  intptr_t res = CheckOverwrite(fnum, src, dst, ren);
+  TOverwriteMode res = CheckOverwrite(fnum, src, dst, ren);
   ::SetEvent(UiFree);
   return res;
 }
@@ -2083,7 +2083,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
     return true;
   }
 
-  uint32_t owmode = OM_PROMPT;
+  TOverwriteMode owmode = OM_PROMPT;
   if (!(flags & AF_STREAM))
   {
     if (Move)
@@ -2365,7 +2365,7 @@ void Engine::SetOverwriteMode(intptr_t Start)
   }
 }
 
-intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String & Dst, String & ren)
+TOverwriteMode Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String & Dst, String & ren)
 {
   FarDialog & dlg = plugin->Dialogs()[L"OverwriteDialog"];
   dlg.ResetControls();
@@ -2393,8 +2393,8 @@ intptr_t Engine::CheckOverwrite(intptr_t fnum, const String & Src, const String 
   dlg[L"SkippedToTemp"](L"Selected") = SkippedToTemp;
   bool OldSkipNewer = SkipNewer;
 
-  intptr_t res = OM_PROMPT;
-  intptr_t ores = -1;
+  TOverwriteMode res = OM_PROMPT;
+  TOverwriteMode ores = OM_CANCEL;
   bool AcceptForAll = (bool)dlg[L"AcceptForAll"](L"Selected");
   bool Repeat = true;
   while (Repeat)
