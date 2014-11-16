@@ -631,7 +631,10 @@ void Out(const String & s)
 
 void FClose(HANDLE h)
 {
-  ::CloseHandle(h);
+  if (h != INVALID_HANDLE_VALUE && h != nullptr)
+  {
+    ::CloseHandle(h);
+  }
 }
 
 bool FDelete(const String & fn)
