@@ -54,7 +54,8 @@ private:
                 bool ParallelMode, int64_t FirstWriteTime,
                 int64_t StartTime, size_t BufferSize);
 
-  int64_t lastupdate, lastupdate_read, lastupdate_write, interval, clastupdate, cinterval;
+  int64_t LastUpdate, LastUpdateRead, LastUpdateWrite, Interval;
+  int64_t CopyLastUpdate, CopyInterval;
 
   int X1, Y1, X2, Y2;
   bool Move;

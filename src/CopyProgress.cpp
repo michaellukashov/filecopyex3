@@ -32,10 +32,10 @@ const int W = 64, H = 13, MG = 5;
 
 CopyProgress::CopyProgress(void)
 {
-  lastupdate = lastupdate_read = lastupdate_write = 0;
-  interval = TicksPerSec() / 10;
-  clastupdate = 0;
-  cinterval = TicksPerSec();
+  LastUpdate = LastUpdateRead = LastUpdateWrite = 0;
+  Interval = TicksPerSec() / 10;
+  CopyLastUpdate = 0;
+  CopyInterval = TicksPerSec();
   int w, h;
   GetConSize(w, h);
   X1 = (w - W + 1) / 2;
@@ -156,9 +156,9 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   Text(X2 - MG - buf1.len() + 1, Y1 + 10, &clrText, buf1);
 
   int64_t tm = GetTime();
-  if (tm - clastupdate > cinterval)
+  if (tm - CopyLastUpdate > CopyInterval)
   {
-    clastupdate = tm;
+    CopyLastUpdate = tm;
     int pc = TotalBytes ? (int)((float)(ReadBytes + WriteBytes) / (TotalBytes * 2) * 100) : 0;
     if (pc < 0)
       pc = 0;
@@ -195,10 +195,10 @@ void CopyProgress::DrawName(const String & fn, int y)
 void CopyProgress::ShowReadName(const String & fn)
 {
   int64_t tm = GetTime();
-  if (tm - lastupdate_read > interval)
+  if (tm - LastUpdateRead > Interval)
   {
     RedrawWindowIfNeeded();
-    lastupdate_read = tm;
+    LastUpdateRead = tm;
     DrawName(fn, 4);
     Info.Text(0, 0, 0, nullptr);
   }
@@ -207,10 +207,10 @@ void CopyProgress::ShowReadName(const String & fn)
 void CopyProgress::ShowWriteName(const String & fn)
 {
   int64_t tm = GetTime();
-  if (tm - lastupdate_write > interval)
+  if (tm - LastUpdateWrite > Interval)
   {
     RedrawWindowIfNeeded();
-    lastupdate_write = tm;
+    LastUpdateWrite = tm;
     DrawName(fn, 8);
     Info.Text(0, 0, 0, nullptr);
   }
@@ -223,10 +223,10 @@ void CopyProgress::ShowProgress(int64_t read, int64_t write, int64_t total,
                                 int64_t FirstWrite, int64_t StartTime, size_t BufferSize)
 {
   int64_t tm = GetTime();
-  if (tm - lastupdate > interval)
+  if (tm - LastUpdate > Interval)
   {
     RedrawWindowIfNeeded();
-    lastupdate = tm;
+    LastUpdate = tm;
     DrawProgress(LOC(L"Engine.Reading"), 2, read, total, readTime, readN, totalN);
     DrawProgress(LOC(L"Engine.Writing"), 6, write, total, writeTime, writeN, totalN);
     DrawTime(read, write, total, readTime, writeTime, readN, writeN, totalN,
