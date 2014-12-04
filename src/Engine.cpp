@@ -2084,7 +2084,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
   }
 
   TOverwriteMode owmode = OM_PROMPT;
-  if (!(flags & AF_STREAM))
+  /*if (!(flags & AF_STREAM))
   {
     if (Move)
     {
@@ -2171,7 +2171,7 @@ bool Engine::AddFile(const String & _src, const String & _dst, DWORD attr, int64
         }
       }
     }
-  }
+  }*/
 
   CopyCount++;
   TotalN++;
