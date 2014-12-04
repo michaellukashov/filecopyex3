@@ -336,7 +336,7 @@ String GetRealFileName(const String & _path, uint32_t flags)
       }
     }
   }
-  return CutEndSlash(path);
+  return CutEndSlash(GetLongFileName(path));
 }
 
 String GetFileRoot(const String & _path)
@@ -457,7 +457,8 @@ String ApplyFileMaskPath(const String & name, const String & mask)
 
 bool FileExists(const String & name)
 {
-  return (::GetFileAttributes(name.ptr()) != INVALID_FILE_ATTRIBUTES);
+  bool Result = (::GetFileAttributes(GetLongFileName(name).ptr()) != INVALID_FILE_ATTRIBUTES);
+  return Result;
 }
 
 int64_t FileSize(HANDLE h)
@@ -650,11 +651,12 @@ void FClose(HANDLE h)
 
 bool FDelete(const String & fn)
 {
-  DWORD attr = ::GetFileAttributes(fn.ptr());
-  ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
-  if (!::DeleteFile(fn.ptr()))
+  String FileName = GetLongFileName(fn);
+  DWORD attr = ::GetFileAttributes(FileName.ptr());
+  ::SetFileAttributes(FileName.ptr(), FILE_ATTRIBUTE_NORMAL);
+  if (!::DeleteFile(FileName.ptr()))
   {
-    ::SetFileAttributes(fn.ptr(), attr);
+    ::SetFileAttributes(FileName.ptr(), attr);
     return false;
   }
   return true;
