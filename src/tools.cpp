@@ -218,11 +218,12 @@ bool Newer(const String & fn1, const FILETIME & ft2)
 
 bool RmDir(const String & fn)
 {
-  DWORD attr = ::GetFileAttributes(fn.ptr());
-  ::SetFileAttributes(fn.ptr(), FILE_ATTRIBUTE_NORMAL);
-  if (!::RemoveDirectory(fn.ptr()))
+  String DirName = GetLongFileName(fn);
+  DWORD attr = ::GetFileAttributes(DirName.ptr());
+  ::SetFileAttributes(DirName.ptr(), FILE_ATTRIBUTE_NORMAL);
+  if (!::RemoveDirectory(DirName.ptr()))
   {
-    ::SetFileAttributes(fn.ptr(), attr);
+    ::SetFileAttributes(DirName.ptr(), attr);
     return false;
   }
   return true;
