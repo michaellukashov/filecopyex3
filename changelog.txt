@@ -1,3 +1,7 @@
+FileCopyEx3 3.0.8.39 04.12.2014
+* Bugfix: incorrect handling of directories whose name ends with dot symbol
+  (http://forum.farmanager.com/viewtopic.php?p=126208#p126208)
+
 FileCopyEx3 3.0.7.38 16.11.2014
 
 * Use memory buffer 4MB by default for file operations
