@@ -27,6 +27,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "StrUtils.h"
 #include "FrameworkUtils.h"
 
+String GetLongFileName(const String & FileName)
+{
+  String Result = FileName;
+  if (WinNT)
+  {
+    if (Result.left(2).icmp(L"\\\\") != 0)
+      Result = String(L"\\\\?\\") + Result;
+  }
+  return Result;
+}
+
 inline String ExtractFileName(const String & v)
 {
   return v.substr(v.find_last_of(L"\\/") + 1);

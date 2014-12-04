@@ -40,6 +40,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define LO32(i) (int)(i & 0xFFFFFFFF)
 #define HI32(i) (int)(i >> 32)
 
+String GetLongFileName(const String & FileName);
 String ExtractFileName(const String &);
 String ExtractFilePath(const String &);
 String ExtractFileExt(const String &);
