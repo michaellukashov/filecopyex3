@@ -27,10 +27,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "FarPlugin.h"
 #include "taskbarIcon.h"
 
-#define WIN_NONE          0
-#define WIN_MESSAGE       1
-#define WIN_PROGRESS      2
-#define WIN_SCAN_PROGRESS 3
+const int WIN_NONE          = 0;
+const int WIN_MESSAGE       = 1;
+const int WIN_PROGRESS      = 2;
+const int WIN_SCAN_PROGRESS = 3;
 
 class FarProgress
 {

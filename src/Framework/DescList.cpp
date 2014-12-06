@@ -87,8 +87,8 @@ bool DescList::LoadFromList(StringVector & list)
   return true;
 }
 
-#define dlNoMerge 1
-#define dlNoSave 2
+const int dlNoMerge = 1;
+const int dlNoSave = 2;
 
 bool DescList::SaveToFile(const String & fn)
 {

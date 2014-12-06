@@ -97,8 +97,13 @@ static bool GetPhysDrive(const String & _path, int & res)
   return false;
 }
 
-#define FILE_READ_ONLY_VOLUME 0x00080000
-#define FILE_NAMED_STREAMS    0x00040000
+#if !defined(FILE_READ_ONLY_VOLUME)
+static int FILE_READ_ONLY_VOLUME = 0x00080000;
+#endif
+
+#if !defined(FILE_NAMED_STREAMS)
+static int FILE_NAMED_STREAMS    = 0x00040000;
+#endif
 
 uint32_t VolFlags(const String & Path)
 {

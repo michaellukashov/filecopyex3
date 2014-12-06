@@ -27,15 +27,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "StdHdr.h"
 #include "ObjString.h"
 
-#define MAX_FILENAME 4096
-#define DEFAULT_SECTOR_SIZE 4096
+const int MAX_FILENAME = 4096;
+const int DEFAULT_SECTOR_SIZE = 4096;
 
-#define OPEN_BUF 128
-#define OPEN_READ 1
-#define OPEN_CREATE 2
-#define OPEN_APPEND 4
-#define OPEN_WRITE 8
-#define OPEN_WRITE_BUF OPEN_WRITE|OPEN_BUF
+const int OPEN_BUF = 128;
+const int OPEN_READ = 1;
+const int OPEN_CREATE = 2;
+const int OPEN_APPEND = 4;
+const int OPEN_WRITE = 8;
+const int OPEN_WRITE_BUF = OPEN_WRITE | OPEN_BUF;
 
 #define LO32(i) (int)(i & 0xFFFFFFFF)
 #define HI32(i) (int)(i >> 32)
@@ -48,12 +48,12 @@ String CutEndSlash(const String &);
 String AddEndSlash(const String &);
 String ChangeFileExt(const String &, const String &);
 
-#define gslExpandSubst 1
-#define gslExpandNetMappings 2
-#define gslExpandReparsePoints 4
-#define gslExpandMountPoints 8
+const int gslExpandSubst = 1;
+const int gslExpandNetMappings = 2;
+const int gslExpandReparsePoints = 4;
+const int gslExpandMountPoints = 8;
 
-#define rfnNoNetExpand 1
+const int rfnNoNetExpand = 1;
 
 extern HANDLE FOpen(const String & fn, DWORD mode, DWORD attr);
 void FClose(HANDLE h);

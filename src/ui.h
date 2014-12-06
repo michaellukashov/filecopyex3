@@ -32,8 +32,8 @@ intptr_t ShowMessageHelp(const String &, const String &, uint32_t, const String 
 intptr_t ShowMessageEx(const String &, const String &, const String &, uint32_t);
 intptr_t ShowMessageExHelp(const String &, const String &, const String &, uint32_t, const String &);
 
-#define RES_RETRY 1
-#define RES_SKIP 0
+const int RES_RETRY = 1;
+const int RES_SKIP = 0;
 
 void Error(const String &, intptr_t code);
 void Error2(const String &, const String &, intptr_t code);
