@@ -42,37 +42,37 @@ enum TOverwriteMode
   OM_RESUME =             5,
 };
 
-#define FLG_COPIED 1
-#define FLG_DELETED 2
-#define FLG_SKIPPED 4
-#define FLG_ERROR 8
-#define FLG_SKIPNEWER 16
-#define FLG_NEEDDEL 32
-#define FLG_DECSIZE 64
-#define FLG_DIR_PRE 256
-#define FLG_DIR_POST 512
-#define FLG_DESCFILE 1024
-#define FLG_DESC_INVERSE 2048
-#define FLG_DIR_NOREMOVE 4096
-#define FLG_DIR_FORCE 8192
-#define FLG_KEEPFILE 16384
-#define FLG_BUFFERED 32768
-#define FLG_TOP_DIR 65536
+const int FLG_COPIED = 1;
+const int FLG_DELETED = 2;
+const int FLG_SKIPPED = 4;
+const int FLG_ERROR = 8;
+const int FLG_SKIPNEWER = 16;
+const int FLG_NEEDDEL = 32;
+const int FLG_DECSIZE = 64;
+const int FLG_DIR_PRE = 256;
+const int FLG_DIR_POST = 512;
+const int FLG_DESCFILE = 1024;
+const int FLG_DESC_INVERSE = 2048;
+const int FLG_DIR_NOREMOVE = 4096;
+const int FLG_DIR_FORCE = 8192;
+const int FLG_KEEPFILE = 16384;
+const int FLG_BUFFERED = 32768;
+const int FLG_TOP_DIR = 65536;
 
-#define AF_CLEAR_RO 2
-#define AF_STREAM 4
-#define AF_TOPLEVEL 8
-#define AF_DESCFILE 16
-#define AF_DESC_INVERSE 32
+const int AF_CLEAR_RO = 2;
+const int AF_STREAM = 4;
+const int AF_TOPLEVEL = 8;
+const int AF_DESCFILE = 16;
+const int AF_DESC_INVERSE = 32;
 
-#define VF_COMPRESSION 1
-#define VF_ENCRYPTION 2
-#define VF_RIGHTS 4
-#define VF_FAT 8
-#define VF_STREAMS 16
-#define VF_READONLY 32
-#define VF_UNICODE 64
-#define VF_CDROM 128
+const int VF_COMPRESSION = 1;
+const int VF_ENCRYPTION = 2;
+const int VF_RIGHTS = 4;
+const int VF_FAT = 8;
+const int VF_STREAMS = 16;
+const int VF_READONLY = 32;
+const int VF_UNICODE = 64;
+const int VF_CDROM = 128;
 
 template <class T>
 inline const T & Min(const T & a, const T & b) { return a < b ? a : b; }
