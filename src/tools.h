@@ -27,9 +27,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "SDK/plugin.hpp"
 #include "framework/ObjString.h"
 
-#define ATTR_OFF 0
-#define ATTR_ON 1
-#define ATTR_INHERIT 2
+const int ATTR_OFF = 0;
+const int ATTR_ON = 1;
+const int ATTR_INHERIT = 2;
 
 enum TOverwriteMode
 {
