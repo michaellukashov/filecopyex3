@@ -29,22 +29,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define msgw() 50
 
-#define eeShowReopen 1
-#define eeShowKeepFiles 2
-#define eeYesNo 4
-#define eeRetrySkipAbort 8
-#define eerReopen 16
-#define eerKeepFiles 32
-#define eeOneLine 64
-#define eeAutoSkipAll 128
-#define eeAutoRetry 256
+const int eeShowReopen = 1;
+const int eeShowKeepFiles = 2;
+const int eeYesNo = 4;
+const int eeRetrySkipAbort = 8;
+const int eerReopen = 16;
+const int eerKeepFiles = 32;
+const int eeOneLine = 64;
+const int eeAutoSkipAll = 128;
+const int eeAutoRetry = 256;
 
-#define RES_ABORT 101
-#define RES_YES 0
-#define RES_NO -1
+const int RES_ABORT = 101;
+const int RES_YES = 0;
+const int RES_NO = -1;
 
-#define errfSkipAll 1024
-#define errfKeepFiles 2048
+const int errfSkipAll = 1024;
+const int errfKeepFiles = 2048;
 
 void * Alloc(size_t size);
 void Free(void * ptr);
