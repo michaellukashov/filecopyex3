@@ -441,18 +441,19 @@ String ApplyFileMask(const String & _name, const String & _mask)
 
 String ApplyFileMaskPath(const String & name, const String & mask)
 {
-  if (mask[mask.len() - 1] == L'\\' || mask[mask.len() - 1] == L'/')
-    return mask + ExtractFileName(name);
-  DWORD a = ::GetFileAttributes(mask.ptr());
+  String Mask = GetLongFileName(mask);
+  if (Mask.len() > 0 && (Mask[Mask.len() - 1] == L'\\' || Mask[Mask.len() - 1] == L'/'))
+    return Mask + ExtractFileName(name);
+  DWORD a = ::GetFileAttributes(Mask.ptr());
   if (a != INVALID_FILE_ATTRIBUTES && a & FILE_ATTRIBUTE_DIRECTORY)
   {
-    String res = mask;
-    if (name.icmp(mask))
+    String res = Mask;
+    if (name.icmp(Mask))
       res += String(L"\\") + ExtractFileName(name);
     return res;
   }
-  return AddEndSlash(ExtractFilePath(mask)) +
-         ApplyFileMask(ExtractFileName(name), ExtractFileName(mask));
+  return AddEndSlash(ExtractFilePath(Mask)) +
+         ApplyFileMask(ExtractFileName(name), ExtractFileName(Mask));
 }
 
 bool FileExists(const String & name)
