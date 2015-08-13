@@ -76,7 +76,7 @@ set(CMAKE_EXTRA_LINK_FLAGS "${CMAKE_EXTRA_LINK_FLAGS} /INCREMENTAL:NO /OPT:REF /
 include_directories(
 #  src
 #  src/Framework
-#  src/SDK
+#  src/AsyncFramework
 )
 
 #-------------------------------------------------------------------------------
@@ -110,6 +110,13 @@ set(FILECOPYEX_SOURCES
   src/Framework/FileNameStoreEnum.cpp
   src/Framework/DescList.cpp
   src/Framework/FrameworkUtils.cpp
+
+  src/AsyncFramework/WaitableEvent.cpp
+  src/AsyncFramework/stdafx.cpp
+  src/AsyncFramework/CriticalSection.cpp
+  src/AsyncFramework/JobScheduler.cpp
+  src/AsyncFramework/Thread.cpp
+  src/AsyncFramework/JobBase.cpp
 
   FileCopyEx3.rc
 )

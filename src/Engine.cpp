@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "Framework/ObjString.h"
 #include "Framework/FileUtils.h"
 #include "Framework/StrUtils.h"
+#include "AsyncFramework/AsyncCall.h"
 #include "Common.h"
 #include "Engine.h"
 #include "guid.hpp"
@@ -78,9 +79,7 @@ static int64_t GetPhysMemorySize()
 Engine::Engine() :
   FlushSrc(&SrcNames),
   FlushDst(&DstNames),
-  BGThread(nullptr),
-  FlushEnd(nullptr),
-  UiFree(nullptr)
+  flushScheduler(1, 0, true)
 {
   _CopyDescs = false;
   _ClearROFromCD = false;
@@ -176,17 +175,14 @@ bool Engine::AskAbort(bool ShowKeepFilesCheckBox)
 {
   if (_ConfirmBreak)
   {
-    ::WaitForSingleObject(UiFree, INFINITE);
-
     uint32_t flg = eeYesNo | eeOneLine;
     if (ShowKeepFilesCheckBox)
       flg |= eeShowKeepFiles;
 
-    intptr_t res = EngineError(LOC(L"CopyError.StopPrompt"), L"", 0, flg, LOC(L"CopyError.StopTitle"));
+    intptr_t res = EngineError2(LOC(L"CopyError.StopPrompt"), L"", 0, flg, LOC(L"CopyError.StopTitle"));
 
     HANDLE h = ::GetStdHandle(STD_INPUT_HANDLE);
     ::FlushConsoleInputBuffer(h);
-    ::SetEvent(UiFree);
 
     Aborted = (res == 0);
     if (Aborted)
@@ -208,8 +204,10 @@ bool Engine::CheckEscape(bool ShowKeepFilesCheckBox)
   //  return FALSE;
   //}
   //_LastCheckEscape = tm;
-  if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT)
+
+  if (UiFree.WaitForTimeout(0))
     return false;
+  UiFree.Reset();
 
   bool escape = false;
   HANDLE h = ::GetStdHandle(STD_INPUT_HANDLE);
@@ -233,7 +231,7 @@ bool Engine::CheckEscape(bool ShowKeepFilesCheckBox)
       }
   }
 
-  ::SetEvent(UiFree);
+  UiFree.Set();
 
   if (escape && !AskAbort(ShowKeepFilesCheckBox))
     escape = false;
@@ -289,14 +287,14 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
         DelRetry = false;
         if (FileExists(SrcName) && !FDelete(SrcName))
         {
-          ::WaitForSingleObject(UiFree, INFINITE);
           uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-          intptr_t res = EngineError(LOC(L"Error.FileDelete"), SrcName, ::GetLastError(), flg, L"", L"Error.FileDelete");
-          ::SetEvent(UiFree);
-          DelRetry = (res == RES_RETRY);
+          intptr_t res = EngineError2(LOC(L"Error.FileDelete"), SrcName, ::GetLastError(), flg, L"", L"Error.FileDelete");
+          if (res != RES_RETRY)
+            DelRetry = false;
           if (res == RES_ABORT)
           {
             Aborted = true;
+            DelRetry = false;
           }
         }
         else
@@ -570,11 +568,9 @@ void Engine::CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct 
       }
       else if (TryToOpenDstFile)
       {
-        ::WaitForSingleObject(UiFree, INFINITE);
         uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-        intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"), DstName, ::GetLastError(),
+        intptr_t res = EngineError2(LOC(L"Error.OutputFileCreate"), DstName, ::GetLastError(),
                               flg, L"", L"Error.OutputFileCreate");
-        ::SetEvent(UiFree);
         OpenRetry = (res == RES_RETRY);
         if (res == RES_ABORT)
           Aborted = true;
@@ -588,7 +584,7 @@ void Engine::CheckOverwrite3(intptr_t fnum, String & DstName, FileStruct & info,
   String renn;
   info.OverMode = CheckOverwrite2(fnum, SrcName, DstName, renn);
   if (info.OverMode == OM_RENAME)
-    DstName = renn;
+    DstName = GetLongFileName(renn);
 }
 
 bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
@@ -643,11 +639,9 @@ bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
 
             if (written < write_block_size)
             {
-              ::WaitForSingleObject(UiFree, INFINITE);
               uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
-              intptr_t res = EngineError(LOC(L"Error.Write"), DstName, ::GetLastError(), flg,
+              intptr_t res = EngineError2(LOC(L"Error.Write"), DstName, ::GetLastError(), flg,
                                     L"", L"Error.Write");
-              ::SetEvent(UiFree);
               if (res == RES_RETRY)
               {
                 if (flg & eerReopen)
@@ -664,11 +658,9 @@ bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
                     ABuffInfo->OutFile = FOpen(DstName, OPEN_WRITE | oflg, 0);
                     if (!ABuffInfo->OutFile)
                     {
-                      ::WaitForSingleObject(UiFree, INFINITE);
                       uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
-                      intptr_t res = EngineError(LOC(L"Error.OutputFileCreate"),
+                      intptr_t res = EngineError2(LOC(L"Error.OutputFileCreate"),
                                             DstName, ::GetLastError(), flg, L"", L"Error.OutputFileCreate");
-                      ::SetEvent(UiFree);
                       ReopenRetry = (res == RES_RETRY);
                       if (!ReopenRetry)
                       {
@@ -744,32 +736,26 @@ bool Engine::FlushBuff(TBuffInfo * ABuffInfo)
     PosInStr++;
   }
 
-  if (Parallel)
-    ::SetEvent(FlushEnd);
   return !Aborted;
-}
-
-uint32_t __stdcall FlushThread(void * p)
-{
-  Engine * eng = static_cast<Engine *>(p);
-  return eng->FlushBuff(eng->wbuffInfo);
 }
 
 void Engine::BGFlush()
 {
-  BGThread = (HANDLE)_beginthreadex(nullptr, 0, FlushThread, this, 0, nullptr);
+  auto f = [=]()
+  {
+    FlushBuff(wbuffInfo);
+  };
+  new async::CAsyncCall(f, &flushScheduler);
 }
 
 bool Engine::WaitForFlushEnd()
 {
-  while (::WaitForSingleObject(FlushEnd, 200) == WAIT_TIMEOUT)
+  while (!flushScheduler.WaitForEmptyQueueOrTimeout(200))
   {
     if (CheckEscape())
       return false;
   }
-  ::WaitForSingleObject(BGThread, INFINITE);
-  ::CloseHandle(BGThread);
-  BGThread = nullptr;
+  flushScheduler.WaitForEmptyQueue();
   return true;
 }
 
@@ -798,13 +784,12 @@ void Engine::Copy()
       UninitBuf(buffInfo);
       return;
     }
-    FlushEnd = ::CreateEvent(nullptr, FALSE, TRUE, nullptr);
   }
 
   size_t BuffPos = 0;
   size_t FilesInBuff = 0;
 
-  UiFree = ::CreateEvent(nullptr, FALSE, TRUE, nullptr);
+  UiFree.Set();
 
   CopyProgressBox.InverseBars = _InverseBars;
   if (FileCount)
@@ -953,11 +938,9 @@ void Engine::Copy()
 
       if (!InputFileHandle)
       {
-        ::WaitForSingleObject(UiFree, INFINITE);
         uint32_t flg = eeRetrySkipAbort | eeAutoSkipAll;
-        res = EngineError(LOC(L"Error.InputFileOpen"), SrcName, ::GetLastError(),
+        intptr_t res = EngineError2(LOC(L"Error.InputFileOpen"), SrcName, ::GetLastError(),
                               flg, L"", L"Error.InputFileOpen");
-        ::SetEvent(UiFree);
         OpenRetry = (res == RES_RETRY);
         if (!OpenRetry)
         {
@@ -1010,11 +993,9 @@ void Engine::Copy()
 
           if (read == -1)
           {
-            ::WaitForSingleObject(UiFree, INFINITE);
             uint32_t flg = eeShowReopen | eeShowKeepFiles | eeRetrySkipAbort | eeAutoSkipAll;
-            intptr_t res = EngineError(LOC(L"Error.Read"), SrcName, ::GetLastError(), flg,
+            intptr_t res = EngineError2(LOC(L"Error.Read"), SrcName, ::GetLastError(), flg,
                                   L"", L"Error.Read");
-            ::SetEvent(UiFree);
             if (res == RES_RETRY)
             {
               if (flg & eerReopen)
@@ -1030,11 +1011,9 @@ void Engine::Copy()
                   InputFileHandle = FOpen(SrcName, OPEN_READ, 0);
                   if (!InputFileHandle)
                   {
-                    ::WaitForSingleObject(UiFree, INFINITE);
                     uint32_t flg = eeShowKeepFiles | eeRetrySkipAbort/* | eeAutoSkipAll*/;
-                    intptr_t res = EngineError(LOC(L"Error.InputFileOpen"), SrcName,
+                    intptr_t res = EngineError2(LOC(L"Error.InputFileOpen"), SrcName,
                                           ::GetLastError(), flg, L"", L"Error.InputFileOpen");
-                    ::SetEvent(UiFree);
                     ReopenRetry = (res == RES_RETRY);
                     if (!ReopenRetry)
                     {
@@ -1108,6 +1087,7 @@ void Engine::Copy()
         break;
 
       if (!SkipOperation())
+
         break;
     }
     FClose(InputFileHandle);
@@ -1138,7 +1118,6 @@ void Engine::Copy()
   if (Parallel)
   {
     UninitBuf(wbuffInfo);
-    ::CloseHandle(FlushEnd);
   }
   UninitBuf(buffInfo);
 
@@ -1164,43 +1143,47 @@ void Engine::Copy()
   }
   buffInfo = nullptr;
   wbuffInfo = nullptr;
-  ::CloseHandle(UiFree);
+  UiFree.Reset();
 }
 
 void Engine::ShowReadName(const String & fn)
 {
-  if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT)
+  if (UiFree.TestTimeout())
     return;
+  UiFree.Reset();
   CopyProgressBox.ShowReadName(fn);
-  ::SetEvent(UiFree);
+  UiFree.Set();
 }
 
 void Engine::ShowWriteName(const String & fn)
 {
-  if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT)
+  if (UiFree.TestTimeout())
     return;
+  UiFree.Reset();
   CopyProgressBox.ShowWriteName(fn);
-  ::SetEvent(UiFree);
+  UiFree.Set();
 }
 
 void Engine::ShowProgress(int64_t read, int64_t write, int64_t total,
                           int64_t readTime, int64_t writeTime,
                           int64_t readN, int64_t writeN, int64_t totalN)
 {
-  if (::WaitForSingleObject(UiFree, 0) == WAIT_TIMEOUT)
+  if (UiFree.TestTimeout())
     return;
+  UiFree.Reset();
 
   CopyProgressBox.ShowProgress(read, write, total, readTime, writeTime,
                                readN, writeN, totalN, Parallel, FirstWrite,
                                StartTime, BufSize);
-  ::SetEvent(UiFree);
+  UiFree.Set();
 }
 
 TOverwriteMode Engine::CheckOverwrite2(intptr_t fnum, const String & src, const String & dst, String & ren)
 {
-  ::WaitForSingleObject(UiFree, INFINITE);
+  UiFree.WaitFor();
+  UiFree.Reset();
   TOverwriteMode res = CheckOverwrite(fnum, src, dst, ren);
-  ::SetEvent(UiFree);
+  UiFree.Set();
   return res;
 }
 
@@ -1581,6 +1564,8 @@ Engine::MResult Engine::Main(bool move, bool curOnly)
         return MRES_NONE;
       }
     }
+		if (Repeat)
+			continue;
     if (!Cont)
       break;
 
@@ -2371,7 +2356,8 @@ TOverwriteMode Engine::CheckOverwrite(intptr_t fnum, const String & Src, const S
   dlg.ResetControls();
   CopyProgressBox.SetNeedToRedraw(true);
 
-  dlg[L"Label2"](L"Text") = Dst;
+  dlg[L"Label2"](L"Text") = GetShortFileName(Dst);
+	String d = dlg[L"Label2"](L"Text");
   String ssz, dsz, stime, dtime, buf;
 
   WIN32_FIND_DATA fd, fs;
@@ -2435,7 +2421,7 @@ TOverwriteMode Engine::CheckOverwrite(intptr_t fnum, const String & Src, const S
       dlg.ResetControls();
       CopyProgressBox.SetNeedToRedraw(true);
 
-      dlg[L"Edit"](L"Text") = ExtractFileName(Dst);
+      dlg[L"Edit"](L"Text") = ExtractFileName(GetShortFileName(Dst));
       bool Repeat1 = true;
       while (Repeat1)
       {
@@ -2517,14 +2503,15 @@ bool Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
   {
     if (FreeBytesAvailable.QuadPart < (ULONGLONG)TotalBytesToProcess)
     {
-      ::WaitForSingleObject(UiFree, INFINITE);
+      UiFree.WaitForTimeout(0);
+      UiFree.Reset();
 
       FarDialog & dlg = plugin->Dialogs()[L"FreeSpaceErrorDialog"];
       dlg.ResetControls();
       CopyProgressBox.SetNeedToRedraw(true);
 
       dlg(L"Title") = LOC(L"FreeSpaceErrorDialog.Title");
-      String disk_str = dstroot;
+      String disk_str = GetShortFileName(dstroot);
       if (disk_str.len() >= 2)
         if (disk_str[1] == L':')
           disk_str = disk_str.left(2);
@@ -2539,7 +2526,7 @@ bool Engine::CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
 
       HANDLE h = ::GetStdHandle(STD_INPUT_HANDLE);
       ::FlushConsoleInputBuffer(h);
-      ::SetEvent(UiFree);
+      UiFree.Set();
 
       if (dlgres == RES_YES)
         result = false;
@@ -2571,7 +2558,8 @@ bool Engine::CheckFATRestrictions(const String & srcpathstr, const String & dstp
       continue;
     if (info.Size >= (int64_t)4 * 1024 * 1024 * 1024)
     {
-      ::WaitForSingleObject(UiFree, INFINITE);
+      UiFree.WaitFor();
+      UiFree.Reset();
 
       FarDialog & dlg = plugin->Dialogs()[L"FATErrorDialog"];
       dlg.ResetControls();
@@ -2592,7 +2580,7 @@ bool Engine::CheckFATRestrictions(const String & srcpathstr, const String & dstp
 
       HANDLE h = ::GetStdHandle(STD_INPUT_HANDLE);
       ::FlushConsoleInputBuffer(h);
-      ::SetEvent(UiFree);
+      UiFree.Set();
 
       if (dlgres == RES_YES)
         Result = false;
@@ -2727,11 +2715,21 @@ intptr_t Engine::EngineError(const String & s, const String & fn, int code, uint
   return -1;
 }
 
+intptr_t Engine::EngineError2(const String & s, const String & fn, int code, uint32_t & flg, const String & title, const String & type_id)
+{
+  UiFree.WaitFor();
+  UiFree.Reset();
+  intptr_t res = EngineError(s, fn, code, flg, title, type_id);
+  UiFree.Set();
+  return res;
+}
+
 void Engine::FWError2(const String & Msg)
 {
-  ::WaitForSingleObject(UiFree, INFINITE);
+  UiFree.WaitFor();
+  UiFree.Reset();
   FWError(Msg);
-  ::SetEvent(UiFree);
+  UiFree.Set();
 }
 
 TPanelItem::TPanelItem(size_t idx, bool active, bool selected)

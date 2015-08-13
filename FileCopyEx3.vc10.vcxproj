@@ -102,7 +102,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/AsyncFramework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINXP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -149,7 +149,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/AsyncFramework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINXP;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -195,7 +195,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Full</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/AsyncFramework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINXP;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -238,7 +238,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Full</Optimization>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>src/AsyncFramework;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINXP;_HAS_EXCEPTIONS=0;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <StringPooling>true</StringPooling>
       <ExceptionHandling>Sync</ExceptionHandling>
@@ -307,6 +307,12 @@
     <ClCompile Include="src\taskbarIcon.cpp" />
     <ClCompile Include="src\tools.cpp" />
     <ClCompile Include="src\ui.cpp" />
+    <ClCompile Include="src\AsyncFramework\WaitableEvent.cpp" />
+    <ClCompile Include="src\AsyncFramework\stdafx.cpp" />
+    <ClCompile Include="src\AsyncFramework\CriticalSection.cpp" />
+    <ClCompile Include="src\AsyncFramework\JobScheduler.cpp" />
+    <ClCompile Include="src\AsyncFramework\Thread.cpp" />
+    <ClCompile Include="src\AsyncFramework\JobBase.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Common.h" />
@@ -343,6 +349,15 @@
     <ClInclude Include="src\tools.h" />
     <ClInclude Include="src\ui.h" />
     <ClInclude Include="src\version.hpp" />
+    <ClInclude Include="src\AsyncFramework\stdafx.h" />
+    <ClInclude Include="src\AsyncFramework\IJob.h" />
+    <ClInclude Include="src\AsyncFramework\CriticalSection.h" />
+    <ClInclude Include="src\AsyncFramework\Future.h" />
+    <ClInclude Include="src\AsyncFramework\AsyncCall.h" />
+    <ClInclude Include="src\AsyncFramework\JobScheduler.h" />
+    <ClInclude Include="src\AsyncFramework\Thread.h" />
+    <ClInclude Include="src\AsyncFramework\JobBase.h" />
+    <ClInclude Include="src\AsyncFramework\WaitableEvent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

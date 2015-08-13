@@ -29,6 +29,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "CopyProgress.h"
 #include "Tools.h"
 #include "Framework/FileNameStoreEnum.h"
+#include "AsyncFramework/WaitableEvent.h"
+#include "AsyncFramework/Thread.h"
+#include "AsyncFramework/JobScheduler.h"
 
 #define PARENTDIRECTORY L".."
 #define THISDIRECTORY L"."
@@ -102,7 +105,7 @@ private:
   std::vector<FileStruct> Files;
   FileNameStoreEnum FlushSrc, FlushDst;
   bool Parallel, SkipNewer, SkippedToTemp;
-  int Streams, Rights,
+  volatile int Streams, Rights,
       CompressMode, EncryptMode;
   TOverwriteMode OverwriteMode;
   size_t BufSize;
@@ -119,7 +122,8 @@ private:
 //  int64_t _LastCheckEscape, _CheckEscapeInterval;
 
   TBuffInfo * wbuffInfo, * buffInfo;
-  HANDLE BGThread, FlushEnd, UiFree;
+  async::CJobScheduler flushScheduler;
+  async::CWaitableEvent UiFree;
 
   CopyProgress CopyProgressBox;
   FarProgress ScanFoldersProgressBox;
@@ -132,13 +136,12 @@ private:
   void SwapBufs(TBuffInfo * src, TBuffInfo * dst);
   bool CheckEscape(bool ShowKeepFilesCheckBox = true);
   bool AskAbort(bool ShowKeepFilesCheckBox = true);
-  bool FlushBuff(TBuffInfo * buffInfo);
+  bool FlushBuff(TBuffInfo * ABuffInfo);
   void CheckDstFileExists(TBuffInfo * buffInfo, intptr_t fnum, FileStruct & info,
     const String & SrcName, const bool TryToOpenDstFile,
     String & DstName);
   void BGFlush();
   bool WaitForFlushEnd();
-  friend uint32_t __stdcall FlushThread(void * p);
   void FinalizeBuf(TBuffInfo * buffInfo);
   void ProcessDesc(intptr_t fnum);
   void ShowReadName(const String &);
@@ -177,6 +180,8 @@ private:
   std::map<String, int> errTypes;
   intptr_t EngineError(const String & s, const String & fn, int code, uint32_t & flg,
                   const String & title = L"", const String & type_id = L"");
+  intptr_t EngineError2(const String & s, const String & fn, int code, uint32_t & flg,
+                       const String & title = L"", const String & type_id = L"");
   void FWError2(const String & Msg);
 
   bool CheckFreeDiskSpace(int64_t TotalBytesToProcess, bool MoveMode,
