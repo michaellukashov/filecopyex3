@@ -1,5 +1,6 @@
-FileCopyEx3 3.0.8.39 07.12.2014
+FileCopyEx3 3.0.8.40 13.08.2015
 
+* UI improvements
 * Bugfix: incorrect handling of directories whose name ends with dot symbol
   (http://forum.farmanager.com/viewtopic.php?p=126208#p126208)
 
