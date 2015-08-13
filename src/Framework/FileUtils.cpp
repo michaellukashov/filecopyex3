@@ -38,6 +38,17 @@ String GetLongFileName(const String & FileName)
   return Result;
 }
 
+String GetShortFileName(const String & FileName)
+{
+	String Result = FileName;
+	if (WinNT)
+	{
+		if (Result.left(4).icmp(L"\\\\?\\") == 0)
+			Result = Result.substr(4, Result.len() - 4);
+	}
+	return Result;
+}
+
 inline String ExtractFileName(const String & v)
 {
   return v.substr(v.find_last_of(L"\\/") + 1);

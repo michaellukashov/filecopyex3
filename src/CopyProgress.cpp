@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 #include "Framework/StrUtils.h"
+#include "Framework/FileUtils.h"
 #include "Common.h"
 #include "CopyProgress.h"
 #include "tools.h"

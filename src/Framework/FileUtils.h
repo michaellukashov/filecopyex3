@@ -41,6 +41,7 @@ const int OPEN_WRITE_BUF = OPEN_WRITE | OPEN_BUF;
 #define HI32(i) (int)(i >> 32)
 
 String GetLongFileName(const String & FileName);
+String GetShortFileName(const String & FileName);
 String ExtractFileName(const String &);
 String ExtractFilePath(const String &);
 String ExtractFileExt(const String &);
