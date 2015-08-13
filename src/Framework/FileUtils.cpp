@@ -642,11 +642,12 @@ void Out(const String & s)
                (DWORD)s.len(), &cb, nullptr);
 }
 
-void FClose(HANDLE h)
+void FClose(HANDLE & h)
 {
   if (h != INVALID_HANDLE_VALUE && h != nullptr)
   {
     ::CloseHandle(h);
+    h = INVALID_HANDLE_VALUE;
   }
 }
 
