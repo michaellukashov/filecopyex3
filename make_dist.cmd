@@ -31,7 +31,7 @@ if exist *.lng copy *.lng %PKGDIRARCH% > NUL
 if exist *.hlf copy *.hlf %PKGDIRARCH% > NUL
 if exist *.md copy *.md %PKGDIRARCH% > NUL
 if exist LICENSE.txt copy LICENSE.txt %PKGDIRARCH% > NUL
-if exist changelog.txt copy changelog.txt %PKGDIRARCH% > NUL
+if exist ChangeLog copy ChangeLog %PKGDIRARCH% > NUL
 
 REM if not exist "%PKGDIRARCH%\doc" ( mkdir "%PKGDIRARCH%\doc" )
 if not exist "%PKGDIRARCH%\resource" ( mkdir "%PKGDIRARCH%\resource" )
