@@ -37,6 +37,7 @@ public:
   Property(const Property & other);
   Property(int);
   Property(float);
+  Property(bool);
   Property(const String &);
 
   Property & operator = (const Property & p);

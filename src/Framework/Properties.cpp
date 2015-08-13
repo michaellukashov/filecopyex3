@@ -41,6 +41,10 @@ Property::Property(float v) : type(vtFloat), vInt(0), vFloat(v)
 {
 }
 
+Property::Property(bool v) : type(vtInt), vInt((int)v), vFloat(0.)
+{
+}
+
 Property::Property(const String & v) : type(vtString), vInt(0), vFloat(0.0), vStr(v)
 {
 }
