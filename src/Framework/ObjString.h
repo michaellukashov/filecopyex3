@@ -34,6 +34,7 @@ class String
 public:
   String() {}
   String(const String & str) : str(str.str) {}
+  String & operator =(const String & str) { this->str = str.str; return *this; }
 
   explicit String(const char * v);
 
