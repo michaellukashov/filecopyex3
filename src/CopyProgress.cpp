@@ -28,7 +28,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #include "tools.h"
 #include "ui.h"
 
-const int W = 64, H = 13, MG = 5;
+const int CopyProgressDialogWidth = 64, CopyProgressDialogHeight = 13, CopyProgressDialogMargin = 5;
 
 CopyProgress::CopyProgress(void)
 {
@@ -38,9 +38,9 @@ CopyProgress::CopyProgress(void)
   CopyInterval = TicksPerSec();
   int w, h;
   GetConSize(w, h);
-  X1 = (w - W + 1) / 2;
-  Y1 = (h - H - 1) / 2;
-  X2 = X1 + W - 1, Y2 = Y1 + H - 1;
+  X1 = (w - CopyProgressDialogWidth + 1) / 2;
+  Y1 = (h - CopyProgressDialogHeight - 1) / 2;
+  X2 = X1 + CopyProgressDialogWidth - 1, Y2 = Y1 + CopyProgressDialogHeight - 1;
   Move = false;
 }
 
@@ -133,7 +133,7 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   //DebugLog(_T("Total: %4.1f  Elapsed: %4.1f  Remain: %4.1f\n"), TotalTime, ElapsedTime, RemainingTime);
   //DebugLog(_T("---------------------------------------------------------------------------\n"));
 
-  intptr_t l = X1 + MG;
+  intptr_t l = X1 + CopyProgressDialogMargin;
 
   String buf;
   buf = LOC(L"Engine.Total");
@@ -152,8 +152,8 @@ void CopyProgress::DrawTime(int64_t ReadBytes, int64_t WriteBytes, int64_t Total
   String buf1;
   buf = String(L"        ") + LOC(L"Engine.Remaining");
   buf1 = Format(L" %2.2d:%2.2d", (int)RemainingTime / 60, (int)RemainingTime % 60);
-  Text(X2 - MG - buf1.len() - buf.len() + 1, Y1 + 10, &clrLabel, buf);
-  Text(X2 - MG - buf1.len() + 1, Y1 + 10, &clrText, buf1);
+  Text(X2 - CopyProgressDialogMargin - buf1.len() - buf.len() + 1, Y1 + 10, &clrLabel, buf);
+  Text(X2 - CopyProgressDialogMargin - buf1.len() + 1, Y1 + 10, &clrText, buf1);
 
   int64_t tm = GetTime();
   if (tm - CopyLastUpdate > CopyInterval)
@@ -175,21 +175,21 @@ void CopyProgress::DrawProgress(const String & pfx, int y, int64_t cb, int64_t t
 {
   if (cb > total)
     cb = total;
-  Text(X1 + MG, Y1 + y, &clrLabel, pfx);
+  Text(X1 + CopyProgressDialogMargin, Y1 + y, &clrLabel, pfx);
   String buf;
-  buf = FormatWidth(FormatProgress(cb, total), W - MG * 2 - pfx.len());
-  Text(X1 + MG + pfx.len() + 1, Y1 + y, &clrText, buf);
+  buf = FormatWidth(FormatProgress(cb, total), CopyProgressDialogWidth - CopyProgressDialogMargin * 2 - pfx.len());
+  Text(X1 + CopyProgressDialogMargin + pfx.len() + 1, Y1 + y, &clrText, buf);
 
-  FarProgress::DrawProgress(X1 + MG, X2 - MG, Y1 + y + 1, total ? ((float)cb / total) : 0);
+  FarProgress::DrawProgress(X1 + CopyProgressDialogMargin, X2 - CopyProgressDialogMargin, Y1 + y + 1, total ? ((float)cb / total) : 0);
 
   int64_t rate = (int64_t)(time ? (float)cb / time * TicksPerSec() : 0);
   buf = FormatSpeed(rate);
-  Text(X2 - MG - buf.len() + 1, Y1 + y, &clrText, buf);
+  Text(X2 - CopyProgressDialogMargin - buf.len() + 1, Y1 + y, &clrText, buf);
 }
 
 void CopyProgress::DrawName(const String & fn, int y)
 {
-  Text(X1 + MG, Y1 + y, &clrText, FormatWidth(fn, W - MG * 2));
+  Text(X1 + CopyProgressDialogMargin, Y1 + y, &clrText, FormatWidth(fn, CopyProgressDialogWidth - CopyProgressDialogMargin * 2));
 }
 
 void CopyProgress::ShowReadName(const String & fn)
@@ -199,7 +199,7 @@ void CopyProgress::ShowReadName(const String & fn)
   {
     RedrawWindowIfNeeded();
     LastUpdateRead = tm;
-    DrawName(fn, 4);
+    DrawName(GetShortFileName(fn), 4);
     Info.Text(0, 0, 0, nullptr);
   }
 }
@@ -211,7 +211,7 @@ void CopyProgress::ShowWriteName(const String & fn)
   {
     RedrawWindowIfNeeded();
     LastUpdateWrite = tm;
-    DrawName(fn, 8);
+    DrawName(GetShortFileName(fn), 8);
     Info.Text(0, 0, 0, nullptr);
   }
 }
@@ -249,11 +249,11 @@ void CopyProgress::RedrawWindow()
   DrawWindow(X1, Y1, X2, Y2, Move ? LOC(L"Engine.Moving") : LOC(L"Engine.Copying"));
   wchar_t buf[512];
   wchar_t * p = buf;
-  for (int Index = 0; Index < W - MG * 2 + 2; Index++)
+  for (int Index = 0; Index < CopyProgressDialogWidth - CopyProgressDialogMargin * 2 + 2; Index++)
     *p++ = 0x2500; //'─'
   *p = 0;
-  Info.Text(X1 + MG - 1, Y1 + 5, &clrFrame, buf);
-  Info.Text(X1 + MG - 1, Y1 + 9, &clrFrame, buf);
+  Info.Text(X1 + CopyProgressDialogMargin - 1, Y1 + 5, &clrFrame, buf);
+  Info.Text(X1 + CopyProgressDialogMargin - 1, Y1 + 9, &clrFrame, buf);
   Info.Text(0, 0, 0, nullptr);
   Info.RestoreScreen(nullptr);
   TitleBuf = GetTitle();
