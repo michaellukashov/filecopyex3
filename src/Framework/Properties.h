@@ -50,7 +50,7 @@ public:
 
   bool operator==(int v) const { return v == (int) * this; }
   bool operator==(bool v) const { return v == (bool) * this; }
-  bool operator==(float v) const { return v == (float) * this; }
+  bool operator==(float v) const { return fabs(v - (float) * this) < 0.00001; }
   bool operator==(const String & v) const { return v.cmp(this->operator const String()) == 0; }
   bool operator==(const Property & v) const;
 
