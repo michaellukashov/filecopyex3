@@ -255,6 +255,7 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
     }
   }
 
+  const bool WasOpen = (Handle != INVALID_HANDLE_VALUE);
   FClose(Handle);
 
   if (!(info.Flags & FLG_SKIPPED))
@@ -337,8 +338,7 @@ void Engine::FinalizeBuf(TBuffInfo * ABuffInfo)
       TotalN--;
       info.Flags |= FLG_DECSIZE;
     }
-
-    if (Handle != INVALID_HANDLE_VALUE)
+    if (WasOpen)
     {
       if (info.OverMode == OM_APPEND || info.OverMode == OM_RESUME)
       {
